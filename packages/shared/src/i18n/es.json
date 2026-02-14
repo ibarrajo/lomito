@@ -50,7 +50,11 @@
     "filterByStatus": "Filtrar por estado",
     "viewDetails": "Ver detalles",
     "reportedOn": "Reportado el",
-    "loadingCases": "Cargando casos..."
+    "loadingCases": "Cargando casos...",
+    "allCategories": "Todos",
+    "allStatuses": "Todos",
+    "casesInView": "{{count}} casos",
+    "clusterCount": "{{count}}"
   },
   "report": {
     "newReport": "Nuevo reporte",

@@ -30,6 +30,40 @@ declare module '@rnmapbox/maps' {
     children?: ReactNode;
   }
 
+  export interface ShapeSourceProps {
+    id: string;
+    shape: GeoJSON.FeatureCollection | GeoJSON.Feature | GeoJSON.Geometry;
+    cluster?: boolean;
+    clusterRadius?: number;
+    clusterMaxZoomLevel?: number;
+    onPress?: (event: unknown) => void;
+    children?: ReactNode;
+  }
+
+  export interface CircleLayerProps {
+    id: string;
+    style?: {
+      circleRadius?: number | unknown[];
+      circleColor?: string | unknown[];
+      circleOpacity?: number;
+      circleStrokeWidth?: number;
+      circleStrokeColor?: string;
+    };
+    filter?: unknown[];
+  }
+
+  export interface SymbolLayerProps {
+    id: string;
+    style?: {
+      textField?: string | unknown[];
+      textSize?: number;
+      textColor?: string;
+      textFont?: string[];
+      textAllowOverlap?: boolean;
+    };
+    filter?: unknown[];
+  }
+
   export const StyleURL: {
     Street: string;
     Outdoors: string;
@@ -42,6 +76,9 @@ declare module '@rnmapbox/maps' {
   export const Camera: ComponentType<CameraProps>;
   export const MapView: ComponentType<MapViewProps>;
   export const PointAnnotation: ComponentType<PointAnnotationProps>;
+  export const ShapeSource: ComponentType<ShapeSourceProps>;
+  export const CircleLayer: ComponentType<CircleLayerProps>;
+  export const SymbolLayer: ComponentType<SymbolLayerProps>;
 
   export function setAccessToken(token: string): void;
 
@@ -50,6 +87,9 @@ declare module '@rnmapbox/maps' {
     Camera: typeof Camera;
     MapView: typeof MapView;
     PointAnnotation: typeof PointAnnotation;
+    ShapeSource: typeof ShapeSource;
+    CircleLayer: typeof CircleLayer;
+    SymbolLayer: typeof SymbolLayer;
     StyleURL: typeof StyleURL;
   };
 

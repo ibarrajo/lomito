@@ -14,6 +14,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\""
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.16",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.56.0",

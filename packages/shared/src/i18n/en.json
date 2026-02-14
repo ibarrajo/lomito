@@ -50,7 +50,11 @@
     "filterByStatus": "Filter by status",
     "viewDetails": "View details",
     "reportedOn": "Reported on",
-    "loadingCases": "Loading cases..."
+    "loadingCases": "Loading cases...",
+    "allCategories": "All",
+    "allStatuses": "All",
+    "casesInView": "{{count}} cases",
+    "clusterCount": "{{count}}"
   },
   "report": {
     "newReport": "New report",

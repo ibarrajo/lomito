@@ -1,14 +1,19 @@
 /**
  * Map Screen
- * Full-screen map with case pins and summary cards.
+ * Full-screen map with case pins, clustering, filters, and summary cards.
  */
 
 import { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
-import { CasePin } from '../../components/map/case-pin';
+import { ClusterLayer } from '../../components/map/cluster-layer';
 import { CaseSummaryCard } from '../../components/map/case-summary-card';
+import { FilterBar } from '../../components/map/filter-bar';
+import { useMapFilters } from '../../hooks/use-map-filters';
 import { supabase } from '../../lib/supabase';
+import { colors, spacing, shadowStyles } from '@lomito/ui/src/theme/tokens';
+import { useTranslation } from 'react-i18next';
 import type { CaseCategory, CaseStatus, AnimalType } from '@lomito/shared/types/database';
 
 interface CaseSummary {
@@ -22,20 +27,35 @@ interface CaseSummary {
 }
 
 export default function MapScreen() {
+  const { t } = useTranslation();
+  const router = useRouter();
   const [cases, setCases] = useState<CaseSummary[]>([]);
   const [selectedCase, setSelectedCase] = useState<CaseSummary | null>(null);
 
+  const {
+    selectedCategories,
+    selectedStatuses,
+    toggleCategory,
+    toggleStatus,
+    buildQuery,
+  } = useMapFilters();
+
   useEffect(() => {
     fetchCases();
-  }, []);
+  }, [selectedCategories, selectedStatuses]);
 
   async function fetchCases() {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('cases')
         .select('id, category, animal_type, description, status, location, created_at')
         .order('created_at', { ascending: false })
         .limit(100);
+
+      // Apply filters
+      query = buildQuery(query);
+
+      const { data, error } = await query;
 
       if (error) {
         console.error('Error fetching cases:', error);
@@ -50,8 +70,28 @@ export default function MapScreen() {
     }
   }
 
-  function handlePinPress(caseData: CaseSummary) {
-    setSelectedCase(caseData);
+  function convertToGeoJSON(): GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory }> {
+    return {
+      type: 'FeatureCollection',
+      features: cases.map((caseData) => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: caseData.location.coordinates,
+        },
+        properties: {
+          id: caseData.id,
+          category: caseData.category,
+        },
+      })),
+    };
+  }
+
+  function handlePinPress(caseId: string) {
+    const caseData = cases.find((c) => c.id === caseId);
+    if (caseData) {
+      setSelectedCase(caseData);
+    }
   }
 
   function handleCloseCard() {
@@ -64,19 +104,23 @@ export default function MapScreen() {
     // router.push(`/cases/${caseId}`);
   }
 
+  function handleNewReport() {
+    router.push('/report/new');
+  }
+
+  const geoJSONData = convertToGeoJSON();
+
   return (
     <View style={styles.container}>
+      <FilterBar
+        selectedCategories={selectedCategories}
+        selectedStatuses={selectedStatuses}
+        onToggleCategory={toggleCategory}
+        onToggleStatus={toggleStatus}
+      />
+
       <MapView>
-        {cases.map((caseData) => (
-          <CasePin
-            key={caseData.id}
-            id={caseData.id}
-            category={caseData.category}
-            longitude={caseData.location.coordinates[0]}
-            latitude={caseData.location.coordinates[1]}
-            onPress={() => handlePinPress(caseData)}
-          />
-        ))}
+        <ClusterLayer cases={geoJSONData} onPinPress={handlePinPress} />
       </MapView>
 
       {selectedCase && (
@@ -86,6 +130,16 @@ export default function MapScreen() {
           onViewDetails={handleViewDetails}
         />
       )}
+
+      {/* FAB for New Report */}
+      <Pressable
+        style={styles.fab}
+        onPress={handleNewReport}
+        accessibilityLabel={t('report.newReport')}
+        accessibilityRole="button"
+      >
+        <Text style={styles.fabText}>+</Text>
+      </Pressable>
     </View>
   );
 }
@@ -93,5 +147,23 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: spacing.xl,
+    right: spacing.md,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadowStyles.elevated,
+  },
+  fabText: {
+    color: colors.white,
+    fontSize: 32,
+    fontWeight: '300',
+    lineHeight: 32,
   },
 });
