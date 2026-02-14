@@ -23,6 +23,7 @@
   },
   "nav": {
     "map": "Map",
+    "dashboard": "Dashboard",
     "profile": "Profile",
     "settings": "Settings",
     "notifications": "Notifications",
@@ -228,5 +229,43 @@
     "responseRequired": "Response is required",
     "responseError": "Error posting response",
     "responseDescription": "Write the official response that will be publicly visible"
+  },
+  "about": {
+    "title": "About Lomito",
+    "mission": "Our Mission",
+    "missionText": "Lomito is an open-source civic platform empowering communities to report and track animal welfare issues, hold authorities accountable, and create lasting change for street animals in Mexico.",
+    "team": "Our Team",
+    "teamText": "Lomito is built and maintained by a community of developers, designers, and animal welfare advocates.",
+    "openSource": "Open Source",
+    "openSourceText": "Lomito is fully open source. Contributions welcome!",
+    "contact": "Contact Us",
+    "website": "Website",
+    "github": "GitHub",
+    "version": "Version {{version}}"
+  },
+  "donate": {
+    "title": "Donate",
+    "amount": "Amount",
+    "customAmount": "Custom amount",
+    "paymentMethod": "Payment method",
+    "card": "Credit/Debit Card",
+    "oxxo": "OXXO (Cash)",
+    "spei": "SPEI (Bank Transfer)",
+    "processing": "Processing payment...",
+    "thankYou": "Thank you for your donation!",
+    "error": "Payment error",
+    "minAmount": "Minimum $10 MXN"
+  },
+  "dashboard": {
+    "title": "Impact Dashboard",
+    "totalCases": "Total cases",
+    "resolvedRate": "Resolution rate",
+    "byCategory": "By category",
+    "avgResolution": "Avg. resolution time",
+    "totalDonations": "Total donations",
+    "days": "days",
+    "pending": "Pending",
+    "inProgress": "In progress",
+    "resolved": "Resolved"
   }
 }

@@ -23,6 +23,7 @@
   },
   "nav": {
     "map": "Mapa",
+    "dashboard": "Tablero",
     "profile": "Perfil",
     "settings": "Configuración",
     "notifications": "Notificaciones",
@@ -228,5 +229,43 @@
     "responseRequired": "La respuesta es requerida",
     "responseError": "Error al publicar respuesta",
     "responseDescription": "Escribe la respuesta oficial que será visible públicamente"
+  },
+  "about": {
+    "title": "Acerca de Lomito",
+    "mission": "Nuestra Misión",
+    "missionText": "Lomito es una plataforma cívica de código abierto que empodera a las comunidades para reportar y dar seguimiento a problemas de bienestar animal, responsabilizar a las autoridades y crear un cambio duradero para los animales callejeros en México.",
+    "team": "Nuestro Equipo",
+    "teamText": "Lomito está construido y mantenido por una comunidad de desarrolladores, diseñadores y defensores del bienestar animal.",
+    "openSource": "Código Abierto",
+    "openSourceText": "Lomito es completamente de código abierto. ¡Contribuciones bienvenidas!",
+    "contact": "Contáctanos",
+    "website": "Sitio Web",
+    "github": "GitHub",
+    "version": "Versión {{version}}"
+  },
+  "donate": {
+    "title": "Donar",
+    "amount": "Monto",
+    "customAmount": "Monto personalizado",
+    "paymentMethod": "Método de pago",
+    "card": "Tarjeta de crédito/débito",
+    "oxxo": "OXXO (Efectivo)",
+    "spei": "SPEI (Transferencia)",
+    "processing": "Procesando pago...",
+    "thankYou": "¡Gracias por tu donación!",
+    "error": "Error en el pago",
+    "minAmount": "Mínimo $10 MXN"
+  },
+  "dashboard": {
+    "title": "Tablero de impacto",
+    "totalCases": "Total de casos",
+    "resolvedRate": "Tasa de resolución",
+    "byCategory": "Por categoría",
+    "avgResolution": "Tiempo promedio de resolución",
+    "totalDonations": "Total de donaciones",
+    "days": "días",
+    "pending": "Pendientes",
+    "inProgress": "En progreso",
+    "resolved": "Resueltos"
   }
 }
