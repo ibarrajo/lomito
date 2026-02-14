@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   },
   stepDot: {
     backgroundColor: colors.neutral200,
-    borderRadius: 4,
+    borderRadius: spacing.xs,
     flex: 1,
     height: 4,
   },

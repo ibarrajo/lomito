@@ -26,7 +26,55 @@ const ACTION_ICONS: Record<TimelineAction, string> = {
   flagged: '⚠',
   resolved: '✓',
   archived: '📦',
+  marked_unresponsive: '⏰',
 };
+
+function getTimelineDescription(action: TimelineAction, details: Record<string, unknown>, t: (key: string, options?: Record<string, unknown>) => string): string {
+  switch (action) {
+    case 'created':
+      return t('timeline.created');
+    case 'verified':
+      return t('timeline.verified');
+    case 'rejected': {
+      const reason = details.reason as string | undefined;
+      return reason ? t('timeline.rejectedWithReason', { reason }) : t('timeline.rejected');
+    }
+    case 'escalated': {
+      const jurisdictionName = details.jurisdiction_name as string | undefined;
+      return jurisdictionName
+        ? t('timeline.escalatedTo', { jurisdiction: jurisdictionName })
+        : t('timeline.escalated');
+    }
+    case 'government_response': {
+      const responseText = details.response_text as string | undefined;
+      if (responseText) {
+        const truncated = responseText.length > 100
+          ? `${responseText.substring(0, 100)}...`
+          : responseText;
+        return t('timeline.governmentResponse', { response: truncated });
+      }
+      return t('timeline.governmentResponseGeneric');
+    }
+    case 'status_changed': {
+      const newStatus = details.new_status as string | undefined;
+      const oldStatus = details.old_status as string | undefined;
+      if (newStatus && oldStatus) {
+        return t('timeline.statusChangedFromTo', { from: t(`status.${oldStatus}`), to: t(`status.${newStatus}`) });
+      } else if (newStatus) {
+        return t('timeline.statusChangedTo', { status: t(`status.${newStatus}`) });
+      }
+      return t('timeline.statusChanged');
+    }
+    case 'flagged':
+      return t('timeline.flagged');
+    case 'marked_unresponsive': {
+      const days = details.days as number | undefined;
+      return days ? t('timeline.markedUnresponsive', { days }) : t('timeline.markedUnresponsiveGeneric');
+    }
+    default:
+      return t(`timelineAction.${action}`);
+  }
+}
 
 export function Timeline({ events }: TimelineProps) {
   const { t } = useTranslation();
@@ -54,12 +102,13 @@ export function Timeline({ events }: TimelineProps) {
             minute: '2-digit',
           },
         );
+        const description = getTimelineDescription(event.action, event.details, t);
 
         return (
           <View
             key={event.id}
             style={styles.eventContainer}
-            accessibilityLabel={`${t(`timelineAction.${event.action}`)} - ${formattedDate}`}
+            accessibilityLabel={`${description} - ${formattedDate}`}
           >
             {/* Icon and line */}
             <View style={styles.iconColumn}>
@@ -72,16 +121,11 @@ export function Timeline({ events }: TimelineProps) {
             {/* Event details */}
             <View style={styles.eventDetails}>
               <Body style={styles.eventAction}>
-                {t(`timelineAction.${event.action}`)}
+                {description}
               </Body>
               <Caption color={colors.neutral500} style={styles.eventTime}>
                 {formattedDate}
               </Caption>
-              {event.details && Object.keys(event.details).length > 0 && (
-                <Caption color={colors.neutral700} style={styles.eventMeta}>
-                  {JSON.stringify(event.details)}
-                </Caption>
-              )}
             </View>
           </View>
         );
@@ -120,7 +164,7 @@ const styles = StyleSheet.create({
   iconCircle: {
     alignItems: 'center',
     backgroundColor: colors.primary,
-    borderRadius: 16,
+    borderRadius: spacing.md,
     height: 32,
     justifyContent: 'center',
     width: 32,

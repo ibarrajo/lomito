@@ -6,7 +6,7 @@
 import { View, StyleSheet, Alert, Pressable, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Flag } from 'lucide-react-native';
-import { colors, spacing, iconSizes } from '@lomito/ui/theme/tokens';
+import { colors, spacing, iconSizes, borderRadius, typography } from '@lomito/ui/theme/tokens';
 import { useFlagCase } from '../../hooks/use-flag-case';
 import { useAuth } from '../../hooks/use-auth';
 
@@ -103,7 +103,7 @@ export function FlagButton({ caseId, reporterId }: FlagButtonProps) {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: borderRadius.button,
     justifyContent: 'center',
     minHeight: 44,
     minWidth: 44,
@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
   },
   disabledText: {
     color: colors.neutral400,
-    fontSize: 12,
+    fontSize: typography.caption.fontSize,
   },
 });

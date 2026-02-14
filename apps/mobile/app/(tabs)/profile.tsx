@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 import { H1, H2, Body, Caption } from '@lomito/ui/components/typography';
 import { Badge } from '@lomito/ui/components/badge';
 import { Skeleton } from '@lomito/ui/components/skeleton';
-import { colors, spacing, borderRadius } from '@lomito/ui/theme/tokens';
+import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { useMyCases } from '../../hooks/use-my-cases';
 import { MyCaseCard } from '../../components/profile/my-case-card';
@@ -196,8 +196,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
   avatarText: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: typography.display.fontSize,
+    fontWeight: typography.display.fontWeight,
   },
   container: {
     backgroundColor: colors.white,

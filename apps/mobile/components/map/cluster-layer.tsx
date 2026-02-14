@@ -6,7 +6,7 @@
 import { memo, useCallback } from 'react';
 import MapboxGL from '../../lib/mapbox';
 import { colors } from '@lomito/ui/src/theme/tokens';
-import type { CaseCategory } from '@lomito/shared/types/database';
+import type { CaseCategory, CaseStatus } from '@lomito/shared/types/database';
 
 interface CaseFeature {
   type: 'Feature';
@@ -17,11 +17,12 @@ interface CaseFeature {
   properties: {
     id: string;
     category: CaseCategory;
+    status: CaseStatus;
   };
 }
 
 interface ClusterLayerProps {
-  cases: GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory }>;
+  cases: GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory; status: CaseStatus }>;
   onPinPress?: (caseId: string) => void;
 }
 
@@ -89,10 +90,30 @@ export const ClusterLayer = memo(function ClusterLayer({ cases, onPinPress }: Cl
             'stray', colors.category.stray.pin,
             'missing', colors.category.missing.pin,
             colors.neutral500, // default
-          ],
+          ] as unknown as string,
           circleRadius: 12,
-          circleStrokeWidth: 2,
-          circleStrokeColor: 'rgba(255, 255, 255, 0.9)',
+          circleStrokeWidth: [
+            'case',
+            ['==', ['get', 'status'], 'resolved'], 3,
+            ['==', ['get', 'status'], 'verified'], 2,
+            ['==', ['get', 'status'], 'in_progress'], 2,
+            2, // default for pending
+          ] as unknown as number,
+          circleStrokeColor: [
+            'case',
+            ['==', ['get', 'status'], 'resolved'], colors.success,
+            ['==', ['get', 'status'], 'verified'], colors.success,
+            ['==', ['get', 'status'], 'in_progress'], colors.info,
+            ['==', ['get', 'status'], 'rejected'], colors.neutral400,
+            ['==', ['get', 'status'], 'archived'], colors.neutral400,
+            'rgba(255, 255, 255, 0.9)', // default for pending
+          ] as unknown as string,
+          circleOpacity: [
+            'case',
+            ['==', ['get', 'status'], 'rejected'], 0.5,
+            ['==', ['get', 'status'], 'archived'], 0.5,
+            1.0, // default
+          ] as unknown as number,
         }}
       />
     </MapboxGL.ShapeSource>

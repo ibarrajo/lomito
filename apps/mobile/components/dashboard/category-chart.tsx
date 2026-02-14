@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   colorDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
+    borderRadius: spacing.xs,
     marginRight: spacing.sm,
   },
   label: {
@@ -123,13 +123,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 24,
     backgroundColor: colors.neutral200,
-    borderRadius: 4,
+    borderRadius: spacing.xs,
     overflow: 'hidden',
     marginHorizontal: spacing.sm,
   },
   bar: {
     height: '100%',
-    borderRadius: 4,
+    borderRadius: spacing.xs,
   },
   count: {
     width: 40,

@@ -14,7 +14,7 @@ import { FilterBar } from '../../components/map/filter-bar';
 import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { supabase } from '../../lib/supabase';
-import { colors, spacing, shadowStyles, iconSizes } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, shadowStyles, iconSizes, typography } from '@lomito/ui/src/theme/tokens';
 import { useTranslation } from 'react-i18next';
 import type { CaseCategory, CaseStatus, AnimalType } from '@lomito/shared/types/database';
 
@@ -85,7 +85,7 @@ export default function MapScreen() {
     fetchCases();
   }, [fetchCases]);
 
-  const geoJSONData = useMemo<GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory }>>(
+  const geoJSONData = useMemo<GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory; status: CaseStatus }>>(
     () => ({
       type: 'FeatureCollection',
       features: cases.map((caseData) => ({
@@ -97,6 +97,7 @@ export default function MapScreen() {
         properties: {
           id: caseData.id,
           category: caseData.category,
+          status: caseData.status,
         },
       })),
     }),
@@ -230,8 +231,8 @@ const styles = StyleSheet.create({
   },
   fabText: {
     color: colors.white,
-    fontSize: 32,
+    fontSize: typography.display.fontSize,
     fontWeight: '300',
-    lineHeight: 32,
+    lineHeight: typography.display.fontSize,
   },
 });

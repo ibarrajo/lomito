@@ -131,7 +131,10 @@
     "folio": "Folio",
     "reportedBy": "Reported by",
     "noPhotos": "No photos",
-    "noTimeline": "No timeline events yet"
+    "noTimeline": "No timeline events yet",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "following": "Following"
   },
   "timelineAction": {
     "created": "Report created",
@@ -145,7 +148,24 @@
     "media_added": "Photos added",
     "flagged": "Report flagged",
     "resolved": "Case resolved",
-    "archived": "Case archived"
+    "archived": "Case archived",
+    "marked_unresponsive": "Marked unresponsive"
+  },
+  "timeline": {
+    "created": "Report submitted",
+    "verified": "Report verified by moderator",
+    "rejected": "Report rejected",
+    "rejectedWithReason": "Report rejected: {{reason}}",
+    "escalated": "Escalated to authorities",
+    "escalatedTo": "Escalated to {{jurisdiction}}",
+    "governmentResponse": "Official response: {{response}}",
+    "governmentResponseGeneric": "Official response posted",
+    "statusChanged": "Status changed",
+    "statusChangedTo": "Status changed to {{status}}",
+    "statusChangedFromTo": "Status changed from {{from}} to {{to}}",
+    "flagged": "Report flagged",
+    "markedUnresponsive": "Government marked unresponsive after {{days}} days",
+    "markedUnresponsiveGeneric": "Government marked unresponsive"
   },
   "moderation": {
     "queue": "Review Queue",

@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonPressed: {
-    backgroundColor: '#CC6119',
+    backgroundColor: colors.primaryDark,
   },
   buttonText: {
     color: colors.white,

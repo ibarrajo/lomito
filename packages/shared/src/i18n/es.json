@@ -131,7 +131,10 @@
     "folio": "Folio",
     "reportedBy": "Reportado por",
     "noPhotos": "Sin fotos",
-    "noTimeline": "Sin eventos en el historial"
+    "noTimeline": "Sin eventos en el historial",
+    "follow": "Seguir",
+    "unfollow": "Dejar de seguir",
+    "following": "Siguiendo"
   },
   "timelineAction": {
     "created": "Reporte creado",
@@ -145,7 +148,24 @@
     "media_added": "Fotos agregadas",
     "flagged": "Reporte señalado",
     "resolved": "Caso resuelto",
-    "archived": "Caso archivado"
+    "archived": "Caso archivado",
+    "marked_unresponsive": "Marcado como sin respuesta"
+  },
+  "timeline": {
+    "created": "Reporte enviado",
+    "verified": "Reporte verificado por moderador",
+    "rejected": "Reporte rechazado",
+    "rejectedWithReason": "Reporte rechazado: {{reason}}",
+    "escalated": "Escalado a autoridades",
+    "escalatedTo": "Escalado a {{jurisdiction}}",
+    "governmentResponse": "Respuesta oficial: {{response}}",
+    "governmentResponseGeneric": "Respuesta oficial publicada",
+    "statusChanged": "Estado cambiado",
+    "statusChangedTo": "Estado cambiado a {{status}}",
+    "statusChangedFromTo": "Estado cambiado de {{from}} a {{to}}",
+    "flagged": "Reporte señalado",
+    "markedUnresponsive": "Gobierno marcado sin respuesta después de {{days}} días",
+    "markedUnresponsiveGeneric": "Gobierno marcado sin respuesta"
   },
   "moderation": {
     "queue": "Cola de revisión",

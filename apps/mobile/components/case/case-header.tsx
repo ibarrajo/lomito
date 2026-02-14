@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     marginLeft: spacing.xs,
   },
   urgencyDot: {
-    borderRadius: 4,
+    borderRadius: spacing.xs,
     height: 8,
     marginRight: spacing.sm,
     marginTop: 6,

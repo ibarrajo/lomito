@@ -1,6 +1,6 @@
 import { View, Text, Switch, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, spacing, typography } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, typography, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { useNotificationPrefs } from '../../hooks/use-notification-prefs';
 import { useUserProfile } from '../../hooks/use-user-profile';
 
@@ -105,7 +105,7 @@ export function NotificationPrefs() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
-    borderRadius: 12,
+    borderRadius: borderRadius.card,
     marginBottom: spacing.lg,
     padding: spacing.md,
   },

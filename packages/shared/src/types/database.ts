@@ -21,7 +21,8 @@ export type TimelineAction =
   | 'media_added'
   | 'flagged'
   | 'resolved'
-  | 'archived';
+  | 'archived'
+  | 'marked_unresponsive';
 
 export interface NotificationPreferences {
   push_enabled: boolean;

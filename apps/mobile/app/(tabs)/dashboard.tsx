@@ -15,7 +15,7 @@ import {
 } from 'lucide-react-native';
 import { H1, Body } from '@lomito/ui/src/components/typography';
 import { Skeleton } from '@lomito/ui/src/components/skeleton';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { useDashboardStats } from '../../hooks/use-dashboard-stats';
 import { StatCard } from '../../components/dashboard/stat-card';
 import { CategoryChart } from '../../components/dashboard/category-chart';
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     padding: spacing.lg,
     backgroundColor: colors.errorBackground,
-    borderRadius: 8,
+    borderRadius: borderRadius.button,
   },
   row: {
     flexDirection: 'row',

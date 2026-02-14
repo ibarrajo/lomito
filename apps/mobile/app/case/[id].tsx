@@ -3,7 +3,7 @@
  * Shows full case information including photos, timeline, and map.
  */
 
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Pressable, Text } from 'react-native';
 import { useLocalSearchParams, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { H1, Body } from '@lomito/ui/components/typography';
@@ -11,6 +11,7 @@ import { colors, spacing } from '@lomito/ui/theme/tokens';
 import { Skeleton } from '@lomito/ui/components/skeleton';
 import { useCase } from '../../hooks/use-case';
 import { useUserProfile } from '../../hooks/use-user-profile';
+import { useCaseSubscription } from '../../hooks/use-case-subscription';
 import { CaseHeader } from '../../components/case/case-header';
 import { PhotoGallery } from '../../components/case/photo-gallery';
 import { CaseMap } from '../../components/case/case-map';
@@ -24,6 +25,7 @@ export default function CaseDetailScreen() {
   const { t } = useTranslation();
   const { caseData, media, timeline, loading, error, refetch } = useCase(id ?? '');
   const { profile } = useUserProfile();
+  const { isSubscribed, loading: subscriptionLoading, toggle: toggleSubscription } = useCaseSubscription(id ?? '');
 
   if (loading) {
     return (
@@ -67,6 +69,10 @@ export default function CaseDetailScreen() {
 
   const [longitude, latitude] = caseData.location.coordinates;
 
+  const handleFollowPress = () => {
+    toggleSubscription();
+  };
+
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -74,7 +80,20 @@ export default function CaseDetailScreen() {
           title: t('case.details'),
           headerBackTitle: t('common.back'),
           headerRight: () => (
-            <FlagButton caseId={caseData.id} reporterId={caseData.reporter_id} />
+            <View style={styles.headerButtons}>
+              <Pressable
+                onPress={handleFollowPress}
+                disabled={subscriptionLoading}
+                style={styles.followButton}
+                accessibilityLabel={isSubscribed ? t('case.unfollow') : t('case.follow')}
+                accessibilityRole="button"
+              >
+                <Text style={styles.followIcon}>
+                  {isSubscribed ? '❤️' : '🤍'}
+                </Text>
+              </Pressable>
+              <FlagButton caseId={caseData.id} reporterId={caseData.reporter_id} />
+            </View>
           ),
         }}
       />
@@ -166,6 +185,17 @@ const styles = StyleSheet.create({
   escalationStatusSection: {
     marginTop: spacing.md,
     paddingHorizontal: spacing.md,
+  },
+  followButton: {
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.xs,
+  },
+  followIcon: {
+    fontSize: 20,
+  },
+  headerButtons: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   loadingContainer: {
     paddingHorizontal: spacing.md,

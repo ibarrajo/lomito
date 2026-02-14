@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   selectedIndicator: {
     width: 20,
     height: 20,
-    borderRadius: 10,
+    borderRadius: borderRadius.card,
     backgroundColor: colors.primary,
   },
 });

@@ -8,7 +8,7 @@ import { View, StyleSheet } from 'react-native';
 import type { LucideIcon } from 'lucide-react-native';
 import { Card } from '@lomito/ui/src/components/card';
 import { H1, BodySmall } from '@lomito/ui/src/components/typography';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 
 interface StatCardProps {
   icon: LucideIcon;
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 12,
+    borderRadius: borderRadius.card,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md,

@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   pin: {
     borderColor: colors.white,
-    borderRadius: 12,
+    borderRadius: borderRadius.card,
     borderWidth: 2,
     height: 24,
     width: 24,

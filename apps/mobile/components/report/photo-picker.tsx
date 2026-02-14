@@ -4,12 +4,12 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { Image as ImageIcon, X } from 'lucide-react-native';
-import { BodySmall } from '@lomito/ui';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { BodySmall, Skeleton } from '@lomito/ui';
+import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { useImagePicker } from '../../hooks/use-image-picker';
 
 const MAX_PHOTOS = 5;
@@ -82,7 +82,7 @@ export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
             accessibilityRole="button"
           >
             {loading ? (
-              <ActivityIndicator size="small" color={colors.primary} />
+              <Skeleton width={80} height={24} borderRadius={spacing.xs} />
             ) : (
               <>
                 <View style={styles.addPhotoIconContainer}>
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     backgroundColor: colors.neutral100,
     borderColor: colors.neutral200,
-    borderRadius: 8,
+    borderRadius: borderRadius.button,
     borderStyle: 'dashed',
     borderWidth: 2,
     justifyContent: 'center',
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   photo: {
-    borderRadius: 8,
+    borderRadius: borderRadius.button,
     height: '100%',
     width: '100%',
   },
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   removeButton: {
     alignItems: 'center',
     backgroundColor: colors.error,
-    borderRadius: 12,
+    borderRadius: borderRadius.card,
     height: 24,
     justifyContent: 'center',
     position: 'absolute',

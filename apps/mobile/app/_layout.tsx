@@ -4,7 +4,7 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet } from 'react-native';
 import { ThemeProvider, Skeleton } from '@lomito/ui';
-import { colors } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../hooks/use-auth';
 import { useNotifications } from '../hooks/use-notifications';
 import { PerformanceMonitor } from '../lib/performance';
@@ -83,12 +83,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.md,
   },
   skeletonTop: {
-    marginBottom: 32,
+    marginBottom: spacing.xl,
   },
   skeletonItem: {
-    marginBottom: 16,
+    marginBottom: spacing.md,
   },
 });

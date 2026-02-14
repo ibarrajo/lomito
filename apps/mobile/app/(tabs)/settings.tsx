@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
-import { colors, spacing, typography } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, typography, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
 import { NotificationPrefs } from '../../components/settings/notification-prefs';
 
@@ -47,51 +47,51 @@ export default function SettingsScreen() {
         <NotificationPrefs />
 
         <View style={styles.section}>
-          <TouchableOpacity
+          <Pressable
             style={styles.navLink}
             onPress={() => router.push('/about')}
             accessibilityLabel={t('about.title')}
             accessibilityRole="button"
           >
             <Text style={styles.navLinkText}>{t('about.title')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Pressable>
+          <Pressable
             style={styles.navLink}
             onPress={() => router.push('/donate')}
             accessibilityLabel={t('donate.title')}
             accessibilityRole="button"
           >
             <Text style={styles.navLinkText}>{t('donate.title')}</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         <View style={styles.section}>
-          <TouchableOpacity
+          <Pressable
             style={styles.navLink}
             onPress={() => router.push('/legal/privacy')}
             accessibilityLabel={t('legal.privacy')}
             accessibilityRole="button"
           >
             <Text style={styles.navLinkText}>{t('legal.privacy')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Pressable>
+          <Pressable
             style={styles.navLink}
             onPress={() => router.push('/legal/terms')}
             accessibilityLabel={t('legal.terms')}
             accessibilityRole="button"
           >
             <Text style={styles.navLinkText}>{t('legal.terms')}</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
-        <TouchableOpacity
+        <Pressable
           style={styles.signOutButton}
           onPress={handleSignOut}
           accessibilityLabel={t('settings.signOut')}
           accessibilityRole="button"
         >
           <Text style={styles.signOutButtonText}>{t('settings.signOut')}</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: colors.white,
-    borderRadius: 12,
+    borderRadius: borderRadius.card,
     marginTop: spacing.md,
     paddingVertical: spacing.xs,
   },
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   signOutButton: {
     alignItems: 'center',
     backgroundColor: colors.error,
-    borderRadius: 8,
+    borderRadius: borderRadius.button,
     justifyContent: 'center',
     marginTop: spacing.xl,
     paddingVertical: spacing.md,

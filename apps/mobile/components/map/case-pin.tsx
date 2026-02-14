@@ -5,11 +5,11 @@
 
 import { View, StyleSheet } from 'react-native';
 import MapboxGL from '../../lib/mapbox';
-import { colors } from '@lomito/ui/src/theme/tokens';
+import { colors, borderRadius } from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types/database';
 
 const PIN_BORDER_COLOR = 'rgba(255, 255, 255, 0.9)';
-const PIN_SHADOW_COLOR = '#000';
+const PIN_SHADOW_COLOR = colors.neutral900;
 
 interface CasePinProps {
   id: string;
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   pin: {
     alignItems: 'center',
     borderColor: PIN_BORDER_COLOR,
-    borderRadius: 12,
+    borderRadius: borderRadius.card,
     borderWidth: 2,
     height: 24,
     justifyContent: 'center',
