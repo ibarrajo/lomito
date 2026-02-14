@@ -5,6 +5,9 @@
     "retry": "Reintentar",
     "cancel": "Cancelar",
     "save": "Guardar",
+    "saving": "Guardando...",
+    "submit": "Enviar",
+    "submitting": "Enviando...",
     "delete": "Eliminar",
     "confirm": "Confirmar",
     "back": "Atrás",
@@ -185,5 +188,13 @@
     "flaggedCases": "Alertas de casos señalados",
     "notificationPrefs": "Preferencias de notificación",
     "signOut": "Cerrar sesión"
+  },
+  "escalation": {
+    "escalate": "Escalar a autoridades",
+    "confirmEscalate": "¿Enviar este caso a la autoridad jurisdiccional?",
+    "escalated": "Escalado",
+    "escalatedAt": "Escalado el {{date}}",
+    "pendingResponse": "Pendiente respuesta del gobierno",
+    "responded": "Gobierno respondió"
   }
 }

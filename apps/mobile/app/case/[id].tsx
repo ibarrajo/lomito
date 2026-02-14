@@ -10,16 +10,19 @@ import { H1, Body } from '@lomito/ui/components/typography';
 import { colors, spacing } from '@lomito/ui/theme/tokens';
 import { Skeleton } from '@lomito/ui/components/skeleton';
 import { useCase } from '../../hooks/use-case';
+import { useUserProfile } from '../../hooks/use-user-profile';
 import { CaseHeader } from '../../components/case/case-header';
 import { PhotoGallery } from '../../components/case/photo-gallery';
 import { CaseMap } from '../../components/case/case-map';
 import { Timeline } from '../../components/case/timeline';
 import { FlagButton } from '../../components/case/flag-button';
+import { EscalateButton } from '../../components/case/escalate-button';
 
 export default function CaseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
-  const { caseData, media, timeline, loading, error } = useCase(id ?? '');
+  const { caseData, media, timeline, loading, error, refetch } = useCase(id ?? '');
+  const { profile } = useUserProfile();
 
   if (loading) {
     return (
@@ -82,6 +85,19 @@ export default function CaseDetailScreen() {
         {/* Case Header */}
         <CaseHeader caseData={caseData} />
 
+        {/* Escalate Button */}
+        {profile && (
+          <View style={styles.escalateSection}>
+            <EscalateButton
+              caseId={caseData.id}
+              status={caseData.status}
+              escalatedAt={caseData.escalated_at}
+              userRole={profile.role}
+              onEscalated={refetch}
+            />
+          </View>
+        )}
+
         {/* Description */}
         {caseData.description && (
           <View style={styles.section}>
@@ -128,6 +144,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+    paddingHorizontal: spacing.md,
+  },
+  escalateSection: {
+    marginTop: spacing.md,
     paddingHorizontal: spacing.md,
   },
   loadingContainer: {

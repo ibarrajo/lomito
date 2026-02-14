@@ -70,6 +70,9 @@ export interface Case {
   status: CaseStatus;
   flag_count: number;
   folio: string | null;
+  escalated_at: string | null;
+  escalation_email_id: string | null;
+  government_response_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -142,12 +145,15 @@ export interface Database {
       };
       cases: {
         Row: Case;
-        Insert: Omit<Case, 'id' | 'jurisdiction_id' | 'status' | 'flag_count' | 'folio' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<Case, 'id' | 'jurisdiction_id' | 'status' | 'flag_count' | 'folio' | 'escalated_at' | 'escalation_email_id' | 'government_response_at' | 'created_at' | 'updated_at'> & {
           id?: string;
           jurisdiction_id?: string | null;
           status?: CaseStatus;
           flag_count?: number;
           folio?: string | null;
+          escalated_at?: string | null;
+          escalation_email_id?: string | null;
+          government_response_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -161,6 +167,9 @@ export interface Database {
           status?: CaseStatus;
           flag_count?: number;
           folio?: string | null;
+          escalated_at?: string | null;
+          escalation_email_id?: string | null;
+          government_response_at?: string | null;
           updated_at?: string;
         };
       };

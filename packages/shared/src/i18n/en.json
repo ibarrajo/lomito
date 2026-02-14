@@ -185,5 +185,13 @@
     "flaggedCases": "Flagged case alerts",
     "notificationPrefs": "Notification preferences",
     "signOut": "Sign out"
+  },
+  "escalation": {
+    "escalate": "Escalate to authorities",
+    "confirmEscalate": "Send this case to the jurisdiction authority?",
+    "escalated": "Escalated",
+    "escalatedAt": "Escalated on {{date}}",
+    "pendingResponse": "Pending government response",
+    "responded": "Government responded"
   }
 }
