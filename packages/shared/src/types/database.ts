@@ -121,6 +121,15 @@ export interface CaseFlag {
   created_at: string;
 }
 
+export interface InboundEmail {
+  id: string;
+  case_id: string;
+  from_email: string;
+  subject: string | null;
+  body_text: string;
+  received_at: string;
+}
+
 // Supabase Database type for client typing
 export interface Database {
   public: {
@@ -211,6 +220,14 @@ export interface Database {
         Insert: Omit<CaseFlag, 'id' | 'created_at'> & {
           id?: string;
           created_at?: string;
+        };
+        Update: never;
+      };
+      inbound_emails: {
+        Row: InboundEmail;
+        Insert: Omit<InboundEmail, 'id' | 'received_at'> & {
+          id?: string;
+          received_at?: string;
         };
         Update: never;
       };

@@ -26,7 +26,8 @@
     "profile": "Perfil",
     "settings": "Configuración",
     "notifications": "Notificaciones",
-    "moderation": "Moderación"
+    "moderation": "Moderación",
+    "government": "Gobierno"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -195,6 +196,32 @@
     "escalated": "Escalado",
     "escalatedAt": "Escalado el {{date}}",
     "pendingResponse": "Pendiente respuesta del gobierno",
-    "responded": "Gobierno respondió"
+    "responded": "Gobierno respondió",
+    "governmentReplied": "El gobierno respondió",
+    "replyReceived": "Respuesta recibida el {{date}}"
+  },
+  "government": {
+    "portal": "Portal gubernamental",
+    "assignFolio": "Asignar folio",
+    "postResponse": "Publicar respuesta",
+    "officialResponse": "Respuesta oficial",
+    "responsePlaceholder": "Escribe la respuesta oficial...",
+    "folioAssigned": "Folio asignado",
+    "noCases": "No hay casos en tu jurisdicción",
+    "escalatedDaysAgo": "Escalado hace {{count}} días",
+    "escalatedDaysAgo_one": "Escalado hace {{count}} día",
+    "escalatedDaysAgo_other": "Escalado hace {{count}} días",
+    "notEscalated": "No escalado",
+    "folioPlaceholder": "Ingresa número de folio",
+    "updateStatus": "Actualizar estado",
+    "escalated": "Escalados",
+    "pendingResponse": "Pendiente de respuesta",
+    "selectStatus": "Selecciona el nuevo estado",
+    "folioRequired": "El folio es requerido",
+    "folioError": "Error al asignar folio",
+    "folioDescription": "Asigna un número de folio o identificador del sistema gubernamental",
+    "responseRequired": "La respuesta es requerida",
+    "responseError": "Error al publicar respuesta",
+    "responseDescription": "Escribe la respuesta oficial que será visible públicamente"
   }
 }

@@ -5,6 +5,9 @@
     "retry": "Retry",
     "cancel": "Cancel",
     "save": "Save",
+    "saving": "Saving...",
+    "submit": "Submit",
+    "submitting": "Submitting...",
     "delete": "Delete",
     "confirm": "Confirm",
     "back": "Back",
@@ -23,7 +26,8 @@
     "profile": "Profile",
     "settings": "Settings",
     "notifications": "Notifications",
-    "moderation": "Moderation"
+    "moderation": "Moderation",
+    "government": "Government"
   },
   "auth": {
     "login": "Log in",
@@ -192,6 +196,32 @@
     "escalated": "Escalated",
     "escalatedAt": "Escalated on {{date}}",
     "pendingResponse": "Pending government response",
-    "responded": "Government responded"
+    "responded": "Government responded",
+    "governmentReplied": "Government replied",
+    "replyReceived": "Reply received on {{date}}"
+  },
+  "government": {
+    "portal": "Government Portal",
+    "assignFolio": "Assign folio",
+    "postResponse": "Post response",
+    "officialResponse": "Official response",
+    "responsePlaceholder": "Write the official response...",
+    "folioAssigned": "Folio assigned",
+    "noCases": "No cases in your jurisdiction",
+    "escalatedDaysAgo": "Escalated {{count}} days ago",
+    "escalatedDaysAgo_one": "Escalated {{count}} day ago",
+    "escalatedDaysAgo_other": "Escalated {{count}} days ago",
+    "notEscalated": "Not escalated",
+    "folioPlaceholder": "Enter folio number",
+    "updateStatus": "Update status",
+    "escalated": "Escalated",
+    "pendingResponse": "Pending response",
+    "selectStatus": "Select the new status",
+    "folioRequired": "Folio is required",
+    "folioError": "Error assigning folio",
+    "folioDescription": "Assign a folio or tracking number from the government system",
+    "responseRequired": "Response is required",
+    "responseError": "Error posting response",
+    "responseDescription": "Write the official response that will be publicly visible"
   }
 }
