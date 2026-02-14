@@ -1,6 +1,4 @@
-/* eslint-disable import/no-unresolved -- @rnmapbox/maps will be installed in a later task */
 import MapboxGL from '@rnmapbox/maps';
-/* eslint-enable import/no-unresolved */
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
 

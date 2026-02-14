@@ -28,11 +28,5 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
-  },
-  "dependencies": {
-    "date-fns": "^4.1.0",
-    "expo-image-manipulator": "~14.0.8",
-    "expo-image-picker": "~17.0.10",
-    "expo-web-browser": "^15.0.10"
   }
 }
