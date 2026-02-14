@@ -120,89 +120,98 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 2: Core Reporting
 
 ### P2-T1: Report submission flow
-- **Depends on:** P1-T7 (map), P1-T6 (auth)
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 2), CLAUDE.md (Database Schema)
-- **Deliverables:**
-  - `apps/mobile/app/report/new.tsx` — Multi-step report form screen (step 1: category + animal type, step 2: map pin drop for location, step 3: description + urgency, step 4: review + submit)
-  - `apps/mobile/app/report/_layout.tsx` — Stack layout for report flow
-  - `apps/mobile/hooks/use-create-case.ts` — Hook: inserts into `cases` table via Supabase, handles loading/error state
-  - `apps/mobile/components/report/category-picker.tsx` — Grid of category cards (abuse, stray, missing) with icons and colors from tokens
-  - `apps/mobile/components/report/animal-type-picker.tsx` — Animal type selector (dog, cat, bird, other)
-  - `apps/mobile/components/report/urgency-picker.tsx` — Urgency level selector (low, medium, high, critical) with color coding
-  - `apps/mobile/components/report/location-picker.tsx` — Mapbox map with draggable pin for location selection, shows current address
-  - `apps/mobile/components/report/review-step.tsx` — Summary of report before submission with edit links back to previous steps
-  - i18n: add `report.step1Title`, `report.step2Title`, `report.step3Title`, `report.step4Title`, `report.selectCategory`, `report.selectAnimalType`, `report.selectUrgency`, `report.dropPin`, `report.reviewSubmit` keys to both es.json and en.json
 - **Commit:** `feat(report): implement multi-step case report submission flow`
-- [ ] Done
+- [x] Done
 
 ### P2-T2: Image compression pipeline
-- **Depends on:** P2-T1
-- **Spec:** CLAUDE.md (Performance Budgets, Key Technical Decisions #4)
-- **Deliverables:**
-  - `apps/mobile/lib/image-compression.ts` — Compress images: max 1200px longest edge, JPEG quality 0.8, strip EXIF GPS data. Use `expo-image-manipulator` for resize/compress.
-  - `apps/mobile/lib/image-upload.ts` — Upload compressed images to Supabase Storage bucket `case-media`, returns public URL. Generates thumbnail (400px).
-  - `apps/mobile/hooks/use-image-picker.ts` — Hook wrapping `expo-image-picker`: pick from camera or gallery, compress, return local URI + metadata
-  - `apps/mobile/components/report/photo-picker.tsx` — Photo attachment UI: grid of thumbnails (max 5), add button, remove button, shows compression progress
-  - Update `apps/mobile/app/report/new.tsx` — Add photo step between step 3 (description) and step 4 (review), show photo thumbnails in review
-  - i18n: add `report.addPhotos`, `report.maxPhotos`, `report.compressing`, `report.removePhoto` keys to both JSON files
 - **Commit:** `feat(report): add client-side image compression and upload pipeline`
-- [ ] Done
+- [x] Done
 
 ### P2-T3: Case detail screen
-- **Depends on:** P2-T1
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 2)
-- **Deliverables:**
-  - `apps/mobile/app/case/[id].tsx` — Case detail screen with dynamic route
-  - `apps/mobile/hooks/use-case.ts` — Hook: fetches case by ID with media and timeline, realtime subscription on case_timeline
-  - `apps/mobile/components/case/photo-gallery.tsx` — Horizontal scrollable photo gallery using `expo-image` with blurhash placeholders, tap to fullscreen
-  - `apps/mobile/components/case/timeline.tsx` — Vertical timeline of case events from case_timeline table, icon + text per action type, timestamp
-  - `apps/mobile/components/case/case-header.tsx` — Category badge, status badge, animal type, urgency indicator, folio number, jurisdiction name
-  - `apps/mobile/components/case/case-map.tsx` — Small static map showing case location pin
-  - i18n: add `case.details`, `case.timeline`, `case.photos`, `case.jurisdiction`, `case.folio`, `case.reportedBy`, `case.noPhotos`, `case.noTimeline` keys to both JSON files
 - **Commit:** `feat(case): add case detail screen with photo gallery and timeline`
-- [ ] Done
+- [x] Done
 
 ### P2-T4: Map filters and clustering
-- **Depends on:** P1-T7
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 2)
-- **Deliverables:**
-  - `apps/mobile/components/map/filter-bar.tsx` — Horizontal scrollable filter bar above map: category pills (all, abuse, stray, missing), status pills (all, pending, verified, in_progress, resolved)
-  - `apps/mobile/hooks/use-map-filters.ts` — Hook: manages filter state (selectedCategories, selectedStatuses), applies to Supabase query
-  - `apps/mobile/components/map/cluster-layer.tsx` — Mapbox clustering: group nearby pins into circles with count, gradient from dominant category color, expand on tap
-  - Update `apps/mobile/app/(tabs)/index.tsx` — Integrate filter bar and clustering, re-fetch cases when filters change, viewport-bounded queries using map bounds
-  - i18n: add `map.allCategories`, `map.allStatuses`, `map.casesInView`, `map.clusterCount` keys to both JSON files
 - **Commit:** `feat(map): add filter bar and pin clustering`
-- [ ] Done
+- [x] Done
 
 ### P2-T5: Jurisdiction boundary overlays
-- **Depends on:** P1-T4 (schema), P1-T7 (map)
-- **Spec:** `.claude/rules/database.md` (PostGIS section)
-- **Deliverables:**
-  - `apps/mobile/hooks/use-jurisdictions.ts` — Hook: fetches jurisdiction boundary polygons from Supabase, simplifies with ST_Simplify for current zoom level
-  - `apps/mobile/components/map/jurisdiction-layer.tsx` — Mapbox FillLayer + LineLayer rendering jurisdiction boundaries as semi-transparent overlays with labeled names
-  - `supabase/functions/jurisdiction-boundaries/index.ts` — Edge Function: returns simplified GeoJSON for jurisdictions within a bounding box, zoom-adaptive simplification
-  - Update `apps/mobile/app/(tabs)/index.tsx` — Add jurisdiction overlay toggle, show jurisdiction name on boundary tap
-  - i18n: add `map.showBoundaries`, `map.hideBoundaries`, `map.jurisdictionInfo` keys to both JSON files
 - **Commit:** `feat(map): add jurisdiction boundary overlays with zoom-adaptive simplification`
-- [ ] Done
+- [x] Done
 
 ---
 
 ## Phase 3: Moderation + Notifications
 
 ### P3-T1: Moderator review queue
+- **Commit:** `feat(moderation): add moderator review queue with verify/reject/flag actions`
+- [x] Done
+
 ### P3-T2: Community flagging
+- **Commit:** `feat(moderation): add community flagging with auto-hide at 3 flags`
+- [x] Done
+
 ### P3-T3: Push notifications (FCM)
+- **Commit:** `feat(notifications): add push notifications for case updates`
+- [x] Done
+
 ### P3-T4: Notification preferences
+- **Commit:** `feat(settings): add notification preference toggles`
+- [x] Done
 
 ---
 
 ## Phase 4: Government Integration
 
 ### P4-T1: Email escalation system
+- **Depends on:** P3-T1 (moderation), P1-T4 (schema)
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "structured emails to authorities with per-case reply-to")
+- **Deliverables:**
+  - `supabase/functions/escalate-case/index.ts` — Edge Function: sends structured email to jurisdiction authority. Includes case summary, photos, location map link, reply-to address per case (e.g., `case-{id}@reply.lomito.org`). Uses Resend API.
+  - `apps/mobile/hooks/use-escalate-case.ts` — Hook: triggers escalation for a case, tracks escalation state (not_escalated, escalated, responded)
+  - `apps/mobile/components/case/escalate-button.tsx` — Button on case detail (moderator/admin only): "Escalate to authorities" with confirmation dialog
+  - `supabase/migrations/20250214000009_escalation_fields.sql` — ALTER TABLE cases ADD COLUMN escalated_at TIMESTAMPTZ, ADD COLUMN escalation_email_id TEXT, ADD COLUMN government_response_at TIMESTAMPTZ; ALTER TABLE jurisdictions ADD COLUMN reply_to_prefix TEXT
+  - Update `apps/mobile/app/case/[id].tsx` — Add EscalateButton for moderators when case is verified
+  - i18n: add `escalation.escalate`, `escalation.confirmEscalate`, `escalation.escalated`, `escalation.escalatedAt`, `escalation.pendingResponse`, `escalation.responded` keys to both JSON files
+- **Commit:** `feat(escalation): add email escalation to jurisdiction authorities`
+- [ ] Done
+
 ### P4-T2: Inbound email parsing
+- **Depends on:** P4-T1
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "Inbound email parsing for government replies")
+- **Deliverables:**
+  - `supabase/functions/inbound-email/index.ts` — Edge Function webhook: receives inbound emails from Resend webhook, parses reply-to address to extract case ID, creates timeline event with government response, updates case government_response_at
+  - `supabase/migrations/20250214000010_inbound_email_log.sql` — CREATE TABLE inbound_emails (id UUID, case_id UUID, from_email TEXT, subject TEXT, body_text TEXT, received_at TIMESTAMPTZ). RLS: admin only.
+  - i18n: add `escalation.governmentReplied`, `escalation.replyReceived` keys to both JSON files
+- **Commit:** `feat(escalation): add inbound email parsing for government replies`
+- [ ] Done
+
 ### P4-T3: Government account portal
+- **Depends on:** P4-T1, P3-T1 (moderation queue pattern)
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "Government portal: case list, status updates, folio assignment")
+- **Deliverables:**
+  - `apps/mobile/app/(tabs)/government.tsx` — Government tab screen: list of cases in assigned jurisdictions, filterable by status, sorted by escalation urgency
+  - `apps/mobile/hooks/use-government-cases.ts` — Hook: fetches cases scoped to government user's jurisdictions, includes escalation status
+  - `apps/mobile/components/government/case-action-card.tsx` — Card with case summary + actions: update status, assign folio number, post official response
+  - `apps/mobile/components/government/folio-input.tsx` — Modal for entering government folio/tracking number
+  - `apps/mobile/components/government/official-response.tsx` — TextInput for posting official government response (creates timeline event)
+  - `apps/mobile/hooks/use-government-actions.ts` — Hook: assignFolio, postResponse, updateStatus functions
+  - Update `apps/mobile/app/(tabs)/_layout.tsx` — Add government tab (visible only for 'government' or 'admin' role)
+  - i18n: add `government.portal`, `government.assignFolio`, `government.postResponse`, `government.officialResponse`, `government.responsePlaceholder`, `government.folioAssigned`, `government.noCases` keys to both JSON files
+- **Commit:** `feat(government): add government portal with case management and folio assignment`
+- [ ] Done
+
 ### P4-T4: Auto-escalation timers
+- **Depends on:** P4-T1
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "Auto-escalation flags 5/15/30 day no-response")
+- **Deliverables:**
+  - `supabase/functions/auto-escalation-check/index.ts` — Edge Function (cron-triggered): checks all escalated cases with no government_response_at. At 5 days: timeline event "reminder sent". At 15 days: timeline event "second reminder". At 30 days: timeline event "marked unresponsive", sets case flag.
+  - `supabase/migrations/20250214000011_escalation_reminders.sql` — ALTER TABLE cases ADD COLUMN escalation_reminder_count INTEGER DEFAULT 0, ADD COLUMN marked_unresponsive BOOLEAN DEFAULT false
+  - `apps/mobile/components/case/escalation-status.tsx` — Component showing escalation status on case detail: days since escalation, reminder count, unresponsive badge
+  - Update `apps/mobile/app/case/[id].tsx` — Add EscalationStatus component below case header for escalated cases
+  - i18n: add `escalation.daysSinceEscalation`, `escalation.reminderSent`, `escalation.unresponsive`, `escalation.daysNoResponse` keys to both JSON files
+- **Commit:** `feat(escalation): add auto-escalation timers with 5/15/30 day reminders`
+- [ ] Done
 
 ---
 
