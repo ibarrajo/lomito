@@ -3,11 +3,22 @@
   "compilerOptions": {
     "jsx": "react-native",
     "paths": {
-      "@lomito/shared": ["../../packages/shared/src"],
-      "@lomito/shared/*": ["../../packages/shared/src/*"],
-      "@lomito/ui": ["../../packages/ui/src"],
-      "@lomito/ui/*": ["../../packages/ui/src/*"]
+      "@lomito/shared": [
+        "../../packages/shared/src"
+      ],
+      "@lomito/shared/*": [
+        "../../packages/shared/src/*"
+      ],
+      "@lomito/ui": [
+        "../../packages/ui/src"
+      ],
+      "@lomito/ui/*": [
+        "../../packages/ui/src/*"
+      ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

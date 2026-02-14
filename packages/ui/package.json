@@ -7,7 +7,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "*",
     "react-native": "*",
     "react-native-reanimated": "*"

@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useRef } from 'react';
-import { View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import mapboxgl from 'mapbox-gl';
 import { TIJUANA_CENTER, DEFAULT_ZOOM } from '../../lib/mapbox.web';
 import type { ReactNode } from 'react';
@@ -27,9 +27,10 @@ interface MapViewProps {
 export function MapView({ onMapReady, onRegionDidChange }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const hasToken = Boolean(mapboxgl.accessToken);
 
   useEffect(() => {
-    if (!mapContainerRef.current || mapRef.current) return;
+    if (!hasToken || !mapContainerRef.current || mapRef.current) return;
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
@@ -63,7 +64,18 @@ export function MapView({ onMapReady, onRegionDidChange }: MapViewProps) {
       map.remove();
       mapRef.current = null;
     };
-  }, [onMapReady, onRegionDidChange]);
+  }, [hasToken, onMapReady, onRegionDidChange]);
+
+  if (!hasToken) {
+    return (
+      <View style={styles.placeholder}>
+        <Text style={styles.placeholderTitle}>Map</Text>
+        <Text style={styles.placeholderText}>
+          Set EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN in .env to enable the map.
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -71,3 +83,24 @@ export function MapView({ onMapReady, onRegionDidChange }: MapViewProps) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  placeholder: {
+    flex: 1,
+    backgroundColor: '#E8E0D8',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
+  placeholderTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#1F2328',
+    marginBottom: 8,
+  },
+  placeholderText: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+});
