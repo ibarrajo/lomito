@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { useState } from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { colors, spacing, typography, borderRadius } from '@lomito/ui/src/theme/tokens';
-import { H1, Body, Caption } from '@lomito/ui';
+import { H1, Body, Caption, AppModal } from '@lomito/ui';
 import { useAuth } from '../../hooks/use-auth';
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { NotificationPrefs } from '../../components/settings/notification-prefs';
@@ -13,32 +14,22 @@ export default function SettingsScreen() {
   const { session, signOut } = useAuth();
   const { profile } = useUserProfile();
   const router = useRouter();
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [errorModal, setErrorModal] = useState<string | null>(null);
 
   const handleSignOut = () => {
-    Alert.alert(
-      t('settings.signOut'),
-      t('auth.logout'),
-      [
-        {
-          style: 'cancel',
-          text: t('common.cancel'),
-        },
-        {
-          onPress: async () => {
-            try {
-              await signOut();
-              router.replace('/auth/login');
-            } catch (error) {
-              console.error('Error signing out:', error);
-              Alert.alert(t('common.error'), t('settings.signOutError'));
-            }
-          },
-          style: 'destructive',
-          text: t('settings.signOut'),
-        },
-      ],
-      { cancelable: true },
-    );
+    setShowSignOutConfirm(true);
+  };
+
+  const confirmSignOut = async () => {
+    setShowSignOutConfirm(false);
+    try {
+      await signOut();
+      router.replace('/auth/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      setErrorModal(t('settings.signOutError'));
+    }
   };
 
   return (
@@ -111,6 +102,25 @@ export default function SettingsScreen() {
           <Text style={styles.signOutButtonText}>{t('settings.signOut')}</Text>
         </Pressable>
       </View>
+
+      <AppModal
+        visible={showSignOutConfirm}
+        title={t('settings.signOut')}
+        message={t('auth.logout')}
+        actions={[
+          { label: t('common.cancel'), onPress: () => setShowSignOutConfirm(false) },
+          { label: t('settings.signOut'), onPress: confirmSignOut },
+        ]}
+        onClose={() => setShowSignOutConfirm(false)}
+      />
+
+      <AppModal
+        visible={!!errorModal}
+        title={t('common.error')}
+        message={errorModal ?? undefined}
+        actions={[{ label: t('common.ok'), onPress: () => setErrorModal(null) }]}
+        onClose={() => setErrorModal(null)}
+      />
     </View>
   );
 }

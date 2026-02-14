@@ -1,6 +1,6 @@
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Caption, Container } from '@lomito/ui';
+import { Container } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { TERMS_OF_SERVICE_ES } from '@lomito/shared/src/legal/terms-es';
 import { TERMS_OF_SERVICE_EN } from '@lomito/shared/src/legal/terms-en';
@@ -21,14 +21,6 @@ export default function TermsScreen() {
         accessibilityLabel={t('legal.terms')}
       >
         <Container maxWidth={720}>
-          <Caption
-            style={styles.lastUpdated}
-            color={colors.neutral500}
-            accessibilityLabel={t('legal.lastUpdated', { date: 'February 2026' })}
-          >
-            {t('legal.lastUpdated', { date: 'February 2026' })}
-          </Caption>
-
           <LegalTextRenderer text={termsText} />
         </Container>
         <PageFooter />
@@ -47,10 +39,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
   },
-  lastUpdated: {
-    marginBottom: spacing.md,
-  },
-  scrollView: {
+scrollView: {
     flex: 1,
   },
 });

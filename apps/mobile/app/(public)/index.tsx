@@ -47,7 +47,7 @@ export default function LandingPage() {
                   accessibilityLabel={t('landing.ctaViewMap')}
                   accessibilityRole="button"
                 >
-                  <Text style={styles.ctaSecondaryText}>{t('auth.login')}</Text>
+                  <Text style={styles.ctaSecondaryText}>{t('landing.ctaViewMap')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

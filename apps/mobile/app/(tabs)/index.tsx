@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text, Pressable, Alert } from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
 import { ClusterLayer } from '../../components/map/cluster-layer';
@@ -15,6 +15,7 @@ import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { supabase } from '../../lib/supabase';
 import { colors, spacing, shadowStyles, iconSizes, typography } from '@lomito/ui/src/theme/tokens';
+import { AppModal } from '@lomito/ui';
 import { useTranslation } from 'react-i18next';
 import type { CaseCategory, CaseStatus, AnimalType } from '@lomito/shared/types/database';
 
@@ -41,6 +42,7 @@ export default function MapScreen() {
     north: number;
   } | null>(null);
   const [mapZoom, setMapZoom] = useState(12);
+  const [jurisdictionModal, setJurisdictionModal] = useState<string | null>(null);
 
   const {
     selectedCategories,
@@ -139,11 +141,7 @@ export default function MapScreen() {
   }, []);
 
   const handleJurisdictionPress = useCallback((_jurisdictionId: string, jurisdictionName: string) => {
-    Alert.alert(
-      t('map.jurisdictionInfo', { name: jurisdictionName }),
-      '',
-      [{ text: t('common.ok') }]
-    );
+    setJurisdictionModal(t('map.jurisdictionInfo', { name: jurisdictionName }));
   }, [t]);
 
   return (
@@ -193,6 +191,13 @@ export default function MapScreen() {
       >
         <Text style={styles.fabText}>+</Text>
       </Pressable>
+
+      <AppModal
+        visible={!!jurisdictionModal}
+        title={jurisdictionModal ?? ''}
+        actions={[{ label: t('common.ok'), onPress: () => setJurisdictionModal(null) }]}
+        onClose={() => setJurisdictionModal(null)}
+      />
     </View>
   );
 }

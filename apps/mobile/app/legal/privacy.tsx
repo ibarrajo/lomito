@@ -1,6 +1,6 @@
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Caption, Container } from '@lomito/ui';
+import { Container } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { PRIVACY_NOTICE_ES } from '@lomito/shared/src/legal/privacy-es';
 import { PRIVACY_NOTICE_EN } from '@lomito/shared/src/legal/privacy-en';
@@ -21,14 +21,6 @@ export default function PrivacyScreen() {
         accessibilityLabel={t('legal.privacy')}
       >
         <Container maxWidth={720}>
-          <Caption
-            style={styles.lastUpdated}
-            color={colors.neutral500}
-            accessibilityLabel={t('legal.lastUpdated', { date: 'Febrero 2026' })}
-          >
-            {t('legal.lastUpdated', { date: 'February 2026' })}
-          </Caption>
-
           <LegalTextRenderer text={privacyText} />
         </Container>
         <PageFooter />
@@ -47,10 +39,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
   },
-  lastUpdated: {
-    marginBottom: spacing.md,
-  },
-  scrollView: {
+scrollView: {
     flex: 1,
   },
 });

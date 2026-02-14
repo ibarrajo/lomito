@@ -12,12 +12,12 @@ import {
   ScrollView,
   Pressable,
   Text,
-  Alert,
 } from 'react-native';
 import { Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { H1, Body } from '@lomito/ui/components/typography';
 import { Skeleton } from '@lomito/ui/components/skeleton';
+import { AppModal } from '@lomito/ui';
 import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
 import { useGovernmentCases } from '../../hooks/use-government-cases';
 import { useGovernmentActions } from '../../hooks/use-government-actions';
@@ -37,6 +37,7 @@ export default function GovernmentScreen() {
 
   const { cases, loading, error, refetch } = useGovernmentCases({ statusFilter });
   const { assignFolio, postResponse, updateStatus } = useGovernmentActions();
+  const [statusModalCaseId, setStatusModalCaseId] = useState<string | null>(null);
 
   const selectedCase = selectedCaseId
     ? cases.find((c) => c.id === selectedCaseId)
@@ -53,31 +54,7 @@ export default function GovernmentScreen() {
   }
 
   function handleUpdateStatus(caseId: string) {
-    // Show action sheet with status options
-    Alert.alert(
-      t('government.updateStatus'),
-      t('government.selectStatus'),
-      [
-        {
-          text: t('status.in_progress'),
-          onPress: () => updateStatusAndRefresh(caseId, 'in_progress'),
-        },
-        {
-          text: t('status.resolved'),
-          onPress: () => updateStatusAndRefresh(caseId, 'resolved'),
-        },
-        {
-          text: t('status.archived'),
-          onPress: () => updateStatusAndRefresh(caseId, 'archived'),
-          style: 'destructive',
-        },
-        {
-          text: t('common.cancel'),
-          style: 'cancel',
-        },
-      ],
-      { cancelable: true }
-    );
+    setStatusModalCaseId(caseId);
   }
 
   async function updateStatusAndRefresh(caseId: string, newStatus: CaseStatus) {
@@ -250,6 +227,34 @@ export default function GovernmentScreen() {
           setResponseModalVisible(false);
           setSelectedCaseId(null);
         }}
+      />
+
+      {/* Status update modal */}
+      <AppModal
+        visible={!!statusModalCaseId}
+        title={t('government.updateStatus')}
+        message={t('government.selectStatus')}
+        actions={[
+          {
+            label: t('status.in_progress'),
+            onPress: () => {
+              if (statusModalCaseId) updateStatusAndRefresh(statusModalCaseId, 'in_progress');
+              setStatusModalCaseId(null);
+            },
+          },
+          {
+            label: t('status.resolved'),
+            onPress: () => {
+              if (statusModalCaseId) updateStatusAndRefresh(statusModalCaseId, 'resolved');
+              setStatusModalCaseId(null);
+            },
+          },
+          {
+            label: t('common.cancel'),
+            onPress: () => setStatusModalCaseId(null),
+          },
+        ]}
+        onClose={() => setStatusModalCaseId(null)}
       />
     </View>
   );

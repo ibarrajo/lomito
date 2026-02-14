@@ -4,9 +4,10 @@
  */
 
 import { useState } from 'react';
-import { View, TextInput, StyleSheet, Alert, Modal, Pressable, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Modal, Pressable, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { H3, Body } from '@lomito/ui/components/typography';
+import { AppModal } from '@lomito/ui';
 import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
 
 interface FolioInputProps {
@@ -27,10 +28,11 @@ export function FolioInput({
   const { t } = useTranslation();
   const [folio, setFolio] = useState(currentFolio || '');
   const [saving, setSaving] = useState(false);
+  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
 
   async function handleSave() {
     if (!folio.trim()) {
-      Alert.alert(t('common.error'), t('government.folioRequired'));
+      setModal({ title: t('common.error'), message: t('government.folioRequired') });
       return;
     }
 
@@ -40,7 +42,7 @@ export function FolioInput({
       onDismiss();
       setFolio('');
     } catch (error) {
-      Alert.alert(t('common.error'), t('government.folioError'));
+      setModal({ title: t('common.error'), message: t('government.folioError') });
     } finally {
       setSaving(false);
     }
@@ -52,57 +54,78 @@ export function FolioInput({
   }
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={handleDismiss}
-    >
-      <Pressable style={styles.overlay} onPress={handleDismiss}>
-        <Pressable style={styles.modal} onPress={(e) => e.stopPropagation()}>
-          <H3 style={styles.title}>{t('government.assignFolio')}</H3>
-          <Body style={styles.description}>{t('government.folioDescription')}</Body>
+    <>
+      <Modal
+        visible={visible}
+        transparent
+        animationType="fade"
+        onRequestClose={handleDismiss}
+      >
+        <Pressable style={styles.overlay} onPress={handleDismiss}>
+          <Pressable style={styles.modal} onPress={(e) => e.stopPropagation()}>
+            <H3 style={styles.title}>{t('government.assignFolio')}</H3>
+            <Body style={styles.description}>{t('government.folioDescription')}</Body>
 
-          <TextInput
-            style={styles.input}
-            value={folio}
-            onChangeText={setFolio}
-            placeholder={t('government.folioPlaceholder')}
-            placeholderTextColor={colors.neutral400}
-            autoCapitalize="characters"
-            autoCorrect={false}
-            editable={!saving}
-            accessibilityLabel={t('government.folioPlaceholder')}
-          />
+            <TextInput
+              style={styles.input}
+              value={folio}
+              onChangeText={setFolio}
+              placeholder={t('government.folioPlaceholder')}
+              placeholderTextColor={colors.neutral400}
+              autoCapitalize="characters"
+              autoCorrect={false}
+              editable={!saving}
+              accessibilityLabel={t('government.folioPlaceholder')}
+            />
 
-          <View style={styles.buttons}>
-            <Pressable
-              style={[styles.button, styles.cancelButton]}
-              onPress={handleDismiss}
-              disabled={saving}
-              accessibilityRole="button"
-              accessibilityLabel={t('common.cancel')}
-            >
-              <Text style={[styles.buttonText, styles.cancelButtonText]}>
-                {t('common.cancel')}
-              </Text>
-            </Pressable>
+            <View style={styles.buttons}>
+              <Pressable
+                style={[styles.button, styles.cancelButton]}
+                onPress={handleDismiss}
+                disabled={saving}
+                accessibilityRole="button"
+                accessibilityLabel={t('common.cancel')}
+              >
+                <Text style={[styles.buttonText, styles.cancelButtonText]}>
+                  {t('common.cancel')}
+                </Text>
+              </Pressable>
 
-            <Pressable
-              style={[styles.button, styles.saveButton]}
-              onPress={handleSave}
-              disabled={saving || !folio.trim()}
-              accessibilityRole="button"
-              accessibilityLabel={t('common.save')}
-            >
-              <Text style={[styles.buttonText, styles.saveButtonText]}>
-                {saving ? t('common.saving') : t('common.save')}
-              </Text>
-            </Pressable>
-          </View>
+              <Pressable
+                style={[styles.button, styles.saveButton]}
+                onPress={handleSave}
+                disabled={saving || !folio.trim()}
+                accessibilityRole="button"
+                accessibilityLabel={t('common.save')}
+              >
+                <Text style={[styles.buttonText, styles.saveButtonText]}>
+                  {saving ? t('common.saving') : t('common.save')}
+                </Text>
+              </Pressable>
+            </View>
+          </Pressable>
         </Pressable>
-      </Pressable>
-    </Modal>
+      </Modal>
+
+      <AppModal
+        visible={!!modal}
+        title={modal?.title ?? ''}
+        message={modal?.message}
+        actions={[{
+          label: t('common.ok'),
+          onPress: () => {
+            const onDismiss = modal?.onDismiss;
+            setModal(null);
+            onDismiss?.();
+          },
+        }]}
+        onClose={() => {
+          const onDismiss = modal?.onDismiss;
+          setModal(null);
+          onDismiss?.();
+        }}
+      />
+    </>
   );
 }
 

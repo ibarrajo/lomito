@@ -3,11 +3,13 @@
  * List of pending cases for moderators to review and take action on
  */
 
-import { View, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { View, FlatList, StyleSheet, RefreshControl, Modal, Pressable } from 'react-native';
 import { Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { H1, Body } from '@lomito/ui/components/typography';
+import { AppModal, TextInput, Button } from '@lomito/ui';
 import { Skeleton } from '@lomito/ui/components/skeleton';
+import { borderRadius } from '@lomito/ui/theme/tokens';
 import { colors, spacing } from '@lomito/ui/theme/tokens';
 import { useModerationQueue } from '../../hooks/use-moderation-queue';
 import { useReviewActions } from '../../components/moderation/review-actions';
@@ -16,7 +18,24 @@ import { CaseReviewCard } from '../../components/moderation/case-review-card';
 export default function ModerationScreen() {
   const { t } = useTranslation();
   const { cases, loading, error, refetch } = useModerationQueue();
-  const { handleVerify, handleReject, handleFlag } = useReviewActions(refetch);
+  const {
+    handleVerify,
+    handleReject,
+    handleFlag,
+    modal,
+    setModal,
+    confirmVerify,
+    setConfirmVerify,
+    confirmReject,
+    setConfirmReject,
+    rejectReason,
+    setRejectReason,
+    confirmRejectAction,
+    confirmFlag,
+    setConfirmFlag,
+    confirmVerifyAction,
+    confirmFlagAction,
+  } = useReviewActions(refetch);
 
   if (loading && cases.length === 0) {
     return (
@@ -106,6 +125,98 @@ export default function ModerationScreen() {
         }
         showsVerticalScrollIndicator={false}
       />
+
+      <AppModal
+        visible={!!confirmVerify}
+        title={t('moderation.confirmVerify')}
+        actions={[
+          {
+            label: t('moderation.verify'),
+            onPress: confirmVerifyAction,
+          },
+          {
+            label: t('common.cancel'),
+            onPress: () => setConfirmVerify(null),
+            variant: 'ghost',
+          },
+        ]}
+        onClose={() => setConfirmVerify(null)}
+      />
+
+      <AppModal
+        visible={!!confirmFlag}
+        title={t('moderation.confirmFlag')}
+        actions={[
+          {
+            label: t('moderation.flag'),
+            onPress: confirmFlagAction,
+          },
+          {
+            label: t('common.cancel'),
+            onPress: () => setConfirmFlag(null),
+            variant: 'ghost',
+          },
+        ]}
+        onClose={() => setConfirmFlag(null)}
+      />
+
+      {/* Reject modal with reason text input */}
+      <Modal
+        visible={!!confirmReject}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setConfirmReject(null)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setConfirmReject(null)}
+        >
+          <View style={styles.modalContent}>
+            <Body style={styles.modalTitle}>{t('moderation.confirmReject')}</Body>
+            <TextInput
+              label={t('moderation.rejectReason')}
+              value={rejectReason}
+              onChangeText={setRejectReason}
+              placeholder={t('moderation.rejectReason')}
+              accessibilityLabel={t('moderation.rejectReason')}
+            />
+            <View style={styles.modalActions}>
+              <Button
+                onPress={() => setConfirmReject(null)}
+                variant="ghost"
+                accessibilityLabel={t('common.cancel')}
+              >
+                {t('common.cancel')}
+              </Button>
+              <Button
+                onPress={confirmRejectAction}
+                accessibilityLabel={t('moderation.reject')}
+              >
+                {t('moderation.reject')}
+              </Button>
+            </View>
+          </View>
+        </Pressable>
+      </Modal>
+
+      <AppModal
+        visible={!!modal}
+        title={modal?.title ?? ''}
+        message={modal?.message}
+        actions={[{
+          label: t('common.ok'),
+          onPress: () => {
+            const onDismiss = modal?.onDismiss;
+            setModal(null);
+            onDismiss?.();
+          },
+        }]}
+        onClose={() => {
+          const onDismiss = modal?.onDismiss;
+          setModal(null);
+          onDismiss?.();
+        }}
+      />
     </View>
   );
 }
@@ -142,6 +253,29 @@ const styles = StyleSheet.create({
   loadingContainer: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.lg,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'flex-end',
+    marginTop: spacing.md,
+  },
+  modalContent: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.card,
+    maxWidth: 400,
+    padding: spacing.lg,
+    width: '90%',
+  },
+  modalOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  modalTitle: {
+    fontWeight: '600',
+    marginBottom: spacing.md,
   },
   spacer: {
     height: spacing.md,

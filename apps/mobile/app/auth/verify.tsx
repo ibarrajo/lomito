@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { View, StyleSheet, Alert, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Button, TextInput, H1, Body } from '@lomito/ui';
+import { Button, TextInput, H1, Body, AppModal } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
 
@@ -15,15 +15,16 @@ export default function VerifyScreen() {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
+  const [modal, setModal] = useState<{ title: string; message: string } | null>(null);
 
   const handleVerify = async () => {
     if (!phone) {
-      Alert.alert(t('common.error'), t('auth.phoneRequired'));
+      setModal({ title: t('common.error'), message: t('auth.phoneRequired') });
       return;
     }
 
     if (!code.trim() || code.length !== 6) {
-      Alert.alert(t('common.error'), t('auth.codeInvalid'));
+      setModal({ title: t('common.error'), message: t('auth.codeInvalid') });
       return;
     }
 
@@ -32,7 +33,7 @@ export default function VerifyScreen() {
       await verifyOtp(phone, code);
       // Auth state change listener will handle navigation
     } catch (error) {
-      Alert.alert(t('common.error'), (error as Error).message);
+      setModal({ title: t('common.error'), message: (error as Error).message });
     } finally {
       setLoading(false);
     }
@@ -40,16 +41,16 @@ export default function VerifyScreen() {
 
   const handleResend = async () => {
     if (!phone) {
-      Alert.alert(t('common.error'), t('auth.phoneRequired'));
+      setModal({ title: t('common.error'), message: t('auth.phoneRequired') });
       return;
     }
 
     setResending(true);
     try {
       await signInWithOtp(phone);
-      Alert.alert(t('common.done'), t('auth.codeSent'));
+      setModal({ title: t('common.done'), message: t('auth.codeSent') });
     } catch (error) {
-      Alert.alert(t('common.error'), (error as Error).message);
+      setModal({ title: t('common.error'), message: (error as Error).message });
     } finally {
       setResending(false);
     }
@@ -128,6 +129,17 @@ export default function VerifyScreen() {
           {t('common.back')}
         </Body>
       </Pressable>
+
+      <AppModal
+        visible={!!modal}
+        title={modal?.title ?? ''}
+        message={modal?.message}
+        actions={[{
+          label: t('common.ok'),
+          onPress: () => setModal(null),
+        }]}
+        onClose={() => setModal(null)}
+      />
     </View>
   );
 }

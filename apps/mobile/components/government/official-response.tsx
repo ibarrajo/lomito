@@ -4,9 +4,10 @@
  */
 
 import { useState } from 'react';
-import { View, TextInput, StyleSheet, Alert, Modal, Pressable, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Modal, Pressable, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { H3, Body } from '@lomito/ui/components/typography';
+import { AppModal } from '@lomito/ui';
 import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
 
 interface OfficialResponseProps {
@@ -25,10 +26,11 @@ export function OfficialResponse({
   const { t } = useTranslation();
   const [response, setResponse] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
 
   async function handleSubmit() {
     if (!response.trim()) {
-      Alert.alert(t('common.error'), t('government.responseRequired'));
+      setModal({ title: t('common.error'), message: t('government.responseRequired') });
       return;
     }
 
@@ -38,7 +40,7 @@ export function OfficialResponse({
       onDismiss();
       setResponse('');
     } catch (error) {
-      Alert.alert(t('common.error'), t('government.responseError'));
+      setModal({ title: t('common.error'), message: t('government.responseError') });
     } finally {
       setSubmitting(false);
     }
@@ -50,58 +52,79 @@ export function OfficialResponse({
   }
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={handleDismiss}
-    >
-      <Pressable style={styles.overlay} onPress={handleDismiss}>
-        <Pressable style={styles.modal} onPress={(e) => e.stopPropagation()}>
-          <H3 style={styles.title}>{t('government.officialResponse')}</H3>
-          <Body style={styles.description}>{t('government.responseDescription')}</Body>
+    <>
+      <Modal
+        visible={visible}
+        transparent
+        animationType="fade"
+        onRequestClose={handleDismiss}
+      >
+        <Pressable style={styles.overlay} onPress={handleDismiss}>
+          <Pressable style={styles.modal} onPress={(e) => e.stopPropagation()}>
+            <H3 style={styles.title}>{t('government.officialResponse')}</H3>
+            <Body style={styles.description}>{t('government.responseDescription')}</Body>
 
-          <TextInput
-            style={styles.input}
-            value={response}
-            onChangeText={setResponse}
-            placeholder={t('government.responsePlaceholder')}
-            placeholderTextColor={colors.neutral400}
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-            editable={!submitting}
-            accessibilityLabel={t('government.responsePlaceholder')}
-          />
+            <TextInput
+              style={styles.input}
+              value={response}
+              onChangeText={setResponse}
+              placeholder={t('government.responsePlaceholder')}
+              placeholderTextColor={colors.neutral400}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+              editable={!submitting}
+              accessibilityLabel={t('government.responsePlaceholder')}
+            />
 
-          <View style={styles.buttons}>
-            <Pressable
-              style={[styles.button, styles.cancelButton]}
-              onPress={handleDismiss}
-              disabled={submitting}
-              accessibilityRole="button"
-              accessibilityLabel={t('common.cancel')}
-            >
-              <Text style={[styles.buttonText, styles.cancelButtonText]}>
-                {t('common.cancel')}
-              </Text>
-            </Pressable>
+            <View style={styles.buttons}>
+              <Pressable
+                style={[styles.button, styles.cancelButton]}
+                onPress={handleDismiss}
+                disabled={submitting}
+                accessibilityRole="button"
+                accessibilityLabel={t('common.cancel')}
+              >
+                <Text style={[styles.buttonText, styles.cancelButtonText]}>
+                  {t('common.cancel')}
+                </Text>
+              </Pressable>
 
-            <Pressable
-              style={[styles.button, styles.submitButton]}
-              onPress={handleSubmit}
-              disabled={submitting || !response.trim()}
-              accessibilityRole="button"
-              accessibilityLabel={t('common.submit')}
-            >
-              <Text style={[styles.buttonText, styles.submitButtonText]}>
-                {submitting ? t('common.submitting') : t('common.submit')}
-              </Text>
-            </Pressable>
-          </View>
+              <Pressable
+                style={[styles.button, styles.submitButton]}
+                onPress={handleSubmit}
+                disabled={submitting || !response.trim()}
+                accessibilityRole="button"
+                accessibilityLabel={t('common.submit')}
+              >
+                <Text style={[styles.buttonText, styles.submitButtonText]}>
+                  {submitting ? t('common.submitting') : t('common.submit')}
+                </Text>
+              </Pressable>
+            </View>
+          </Pressable>
         </Pressable>
-      </Pressable>
-    </Modal>
+      </Modal>
+
+      <AppModal
+        visible={!!modal}
+        title={modal?.title ?? ''}
+        message={modal?.message}
+        actions={[{
+          label: t('common.ok'),
+          onPress: () => {
+            const onDismiss = modal?.onDismiss;
+            setModal(null);
+            onDismiss?.();
+          },
+        }]}
+        onClose={() => {
+          const onDismiss = modal?.onDismiss;
+          setModal(null);
+          onDismiss?.();
+        }}
+      />
+    </>
   );
 }
 
