@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Map, User, Shield, Settings } from 'lucide-react-native';
+import { Map, User, Shield, Settings, Building2 } from 'lucide-react-native';
 import { colors, iconSizes } from '@lomito/ui/src/theme/tokens';
 import { useUserProfile } from '../../hooks/use-user-profile';
 
@@ -9,6 +9,7 @@ export default function TabLayout() {
   const { profile, loading } = useUserProfile();
 
   const isModerator = profile?.role === 'moderator' || profile?.role === 'admin';
+  const isGovernment = profile?.role === 'government' || profile?.role === 'admin';
 
   return (
     <Tabs
@@ -34,6 +35,17 @@ export default function TabLayout() {
             title: t('nav.moderation'),
             tabBarIcon: ({ color }) => (
               <Shield size={iconSizes.default} color={color} />
+            ),
+          }}
+        />
+      )}
+      {!loading && isGovernment && (
+        <Tabs.Screen
+          name="government"
+          options={{
+            title: t('nav.government'),
+            tabBarIcon: ({ color }) => (
+              <Building2 size={iconSizes.default} color={color} />
             ),
           }}
         />
