@@ -106,5 +106,29 @@
     "resolved": "Resuelto",
     "rejected": "Rechazado",
     "archived": "Archivado"
+  },
+  "case": {
+    "details": "Detalles del caso",
+    "timeline": "Historial",
+    "photos": "Fotos",
+    "jurisdiction": "Jurisdicción",
+    "folio": "Folio",
+    "reportedBy": "Reportado por",
+    "noPhotos": "Sin fotos",
+    "noTimeline": "Sin eventos en el historial"
+  },
+  "timelineAction": {
+    "created": "Reporte creado",
+    "verified": "Reporte verificado",
+    "rejected": "Reporte rechazado",
+    "status_changed": "Estado actualizado",
+    "assigned": "Caso asignado",
+    "escalated": "Escalado a autoridades",
+    "government_response": "Respuesta del gobierno",
+    "comment": "Comentario agregado",
+    "media_added": "Fotos agregadas",
+    "flagged": "Reporte señalado",
+    "resolved": "Caso resuelto",
+    "archived": "Caso archivado"
   }
 }
