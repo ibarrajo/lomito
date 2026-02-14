@@ -22,7 +22,8 @@
     "map": "Mapa",
     "profile": "Perfil",
     "settings": "Configuración",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "moderation": "Moderación"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -140,5 +141,39 @@
     "flagged": "Reporte señalado",
     "resolved": "Caso resuelto",
     "archived": "Caso archivado"
+  },
+  "moderation": {
+    "queue": "Cola de revisión",
+    "pendingCases": "Casos pendientes",
+    "verify": "Verificar",
+    "reject": "Rechazar",
+    "flag": "Señalar",
+    "rejectReason": "Motivo del rechazo",
+    "confirmVerify": "¿Verificar este reporte?",
+    "confirmReject": "¿Rechazar este reporte?",
+    "confirmFlag": "¿Señalar este reporte?",
+    "noPending": "No hay casos pendientes",
+    "verifySuccess": "Reporte verificado",
+    "rejectSuccess": "Reporte rechazado",
+    "flagSuccess": "Reporte señalado",
+    "actionError": "Error al procesar la acción"
+  },
+  "flag": {
+    "report": "Señalar reporte",
+    "reason": "¿Por qué señalas esto?",
+    "spam": "Spam",
+    "inappropriate": "Contenido inapropiado",
+    "duplicate": "Reporte duplicado",
+    "other": "Otro",
+    "confirmFlag": "¿Señalar este reporte?",
+    "alreadyFlagged": "Ya señalado",
+    "thankYou": "Gracias por tu reporte"
+  },
+  "notifications": {
+    "permissionTitle": "Activar notificaciones",
+    "permissionMessage": "Recibe actualizaciones cuando revisen tus casos",
+    "caseUpdated": "Caso actualizado",
+    "caseVerified": "Tu reporte ha sido verificado",
+    "caseResolved": "El caso ha sido resuelto"
   }
 }

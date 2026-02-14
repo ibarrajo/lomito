@@ -14,6 +14,7 @@ import { CaseHeader } from '../../components/case/case-header';
 import { PhotoGallery } from '../../components/case/photo-gallery';
 import { CaseMap } from '../../components/case/case-map';
 import { Timeline } from '../../components/case/timeline';
+import { FlagButton } from '../../components/case/flag-button';
 
 export default function CaseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -68,6 +69,9 @@ export default function CaseDetailScreen() {
         options={{
           title: t('case.details'),
           headerBackTitle: t('common.back'),
+          headerRight: () => (
+            <FlagButton caseId={caseData.id} reporterId={caseData.reporter_id} />
+          ),
         }}
       />
       <ScrollView

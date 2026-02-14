@@ -30,6 +30,7 @@ export interface Profile {
   municipality: string | null;
   role: UserRole;
   avatar_url: string | null;
+  push_token: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -101,6 +102,14 @@ export interface Donation {
   created_at: string;
 }
 
+export interface CaseFlag {
+  id: string;
+  case_id: string;
+  reporter_id: string;
+  reason: string;
+  created_at: string;
+}
+
 // Supabase Database type for client typing
 export interface Database {
   public: {
@@ -133,7 +142,18 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Omit<Case, 'id' | 'reporter_id' | 'created_at' | 'updated_at'>>;
+        Update: {
+          category?: CaseCategory;
+          animal_type?: AnimalType;
+          description?: string;
+          location?: { type: 'Point'; coordinates: [number, number] };
+          jurisdiction_id?: string | null;
+          urgency?: UrgencyLevel;
+          status?: CaseStatus;
+          flag_count?: number;
+          folio?: string | null;
+          updated_at?: string;
+        };
       };
       case_media: {
         Row: CaseMedia;
@@ -145,7 +165,11 @@ export interface Database {
       };
       case_timeline: {
         Row: CaseTimeline;
-        Insert: Omit<CaseTimeline, 'id' | 'created_at'> & {
+        Insert: {
+          case_id: string;
+          actor_id: string | null;
+          action: TimelineAction;
+          details?: Record<string, unknown>;
           id?: string;
           created_at?: string;
         };
@@ -163,6 +187,14 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<Donation, 'id' | 'created_at'>>;
+      };
+      case_flags: {
+        Row: CaseFlag;
+        Insert: Omit<CaseFlag, 'id' | 'created_at'> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: never;
       };
     };
     Enums: {

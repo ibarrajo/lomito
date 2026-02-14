@@ -22,7 +22,8 @@
     "map": "Map",
     "profile": "Profile",
     "settings": "Settings",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "moderation": "Moderation"
   },
   "auth": {
     "login": "Log in",
@@ -140,5 +141,39 @@
     "flagged": "Report flagged",
     "resolved": "Case resolved",
     "archived": "Case archived"
+  },
+  "moderation": {
+    "queue": "Review Queue",
+    "pendingCases": "Pending Cases",
+    "verify": "Verify",
+    "reject": "Reject",
+    "flag": "Flag",
+    "rejectReason": "Reason for rejection",
+    "confirmVerify": "Verify this report?",
+    "confirmReject": "Reject this report?",
+    "confirmFlag": "Flag this report?",
+    "noPending": "No pending cases",
+    "verifySuccess": "Report verified",
+    "rejectSuccess": "Report rejected",
+    "flagSuccess": "Report flagged",
+    "actionError": "Error processing action"
+  },
+  "flag": {
+    "report": "Flag report",
+    "reason": "Why are you flagging this?",
+    "spam": "Spam",
+    "inappropriate": "Inappropriate content",
+    "duplicate": "Duplicate report",
+    "other": "Other",
+    "confirmFlag": "Flag this report?",
+    "alreadyFlagged": "Already flagged",
+    "thankYou": "Thank you for your report"
+  },
+  "notifications": {
+    "permissionTitle": "Enable Notifications",
+    "permissionMessage": "Get updates when your cases are reviewed",
+    "caseUpdated": "Case updated",
+    "caseVerified": "Your report has been verified",
+    "caseResolved": "Case has been resolved"
   }
 }
