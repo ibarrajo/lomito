@@ -1,0 +1,36 @@
+project_dir: null  # Override via LOMITO_PROJECT_DIR env var
+orchestration_file: docs/plans/ORCHESTRATION.md
+issues_file: docs/plans/ISSUES.md
+checkpoint_dir: ~/.claude/tasks/lomito
+log_dir: .agent-logs
+
+models:
+  planner: anthropic/claude-opus-4-20250514
+  implementer: anthropic/claude-opus-4-20250514
+  reviewer: anthropic/claude-opus-4-20250514
+  committer: google/gemini-2.0-flash
+
+fallback_chain:
+  - provider: anthropic
+    model: claude-opus-4-20250514
+  - provider: google
+    model: gemini-2.0-flash
+  - provider: openai
+    model: gpt-4
+
+retry:
+  max_review_retries: 3
+  fallback_wait_seconds: 60
+  request_timeout_seconds: 120
+
+tools:
+  allowed_commands:
+    - git
+    - npm
+    - npx
+    - tsc
+    - eslint
+    - prettier
+    - node
+    - python
+  working_dir: null  # Defaults to project_dir
