@@ -5,6 +5,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
 interface ResendWebhookPayload {
   type: string;
   created_at: string;
@@ -23,54 +28,103 @@ function extractCaseId(emailAddress: string): string | null {
   return match ? match[1] : null;
 }
 
-// Validate webhook signature if RESEND_WEBHOOK_SECRET is set
-function validateWebhookSignature(
-  req: Request,
+/**
+ * Validates webhook signature using HMAC-SHA256
+ * Resend uses Svix webhooks which send svix-signature header
+ * Format: "v1,signature1 v1,signature2 ..."
+ */
+async function validateWebhookSignature(
+  rawBody: string,
+  signature: string | null,
+  timestamp: string | null,
   secret: string | null,
-): boolean {
+): Promise<boolean> {
   if (!secret) {
-    // Signature validation is optional if secret is not configured
+    console.warn('INBOUND_EMAIL_WEBHOOK_SECRET not configured, skipping signature validation');
     return true;
   }
 
-  const signature = req.headers.get('svix-signature');
-  if (!signature) {
+  if (!signature || !timestamp) {
     return false;
   }
 
-  // In production, implement proper webhook signature verification
-  // For now, we'll use a simple presence check
-  // Resend uses Svix for webhooks, see: https://svix.com/docs/webhooks/
-  return true;
+  // Parse signature header (Svix format: "v1,sig1 v1,sig2")
+  const signatures = signature.split(' ').map((s) => {
+    const parts = s.split(',');
+    return parts.length === 2 && parts[0] === 'v1' ? parts[1] : null;
+  }).filter((s) => s !== null);
+
+  if (signatures.length === 0) {
+    return false;
+  }
+
+  // Build the message to sign: "{timestamp}.{body}"
+  const message = `${timestamp}.${rawBody}`;
+
+  // Compute HMAC-SHA256
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+
+  const signatureBytes = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(message),
+  );
+
+  // Convert to base64
+  const computedSignature = btoa(String.fromCharCode(...new Uint8Array(signatureBytes)));
+
+  // Check if computed signature matches any of the provided signatures
+  return signatures.some((sig) => sig === computedSignature);
 }
 
 serve(async (req) => {
   try {
+    // Handle CORS preflight
+    if (req.method === 'OPTIONS') {
+      return new Response('ok', {
+        headers: corsHeaders,
+      });
+    }
+
     // Only accept POST requests
     if (req.method !== 'POST') {
       return new Response(
         JSON.stringify({ error: 'Method not allowed' }),
         {
           status: 405,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
 
+    // Get raw body for signature validation
+    const rawBody = await req.text();
+
     // Validate webhook signature if secret is configured
-    const webhookSecret = Deno.env.get('RESEND_WEBHOOK_SECRET') ?? null;
-    if (!validateWebhookSignature(req, webhookSecret)) {
+    const webhookSecret = Deno.env.get('INBOUND_EMAIL_WEBHOOK_SECRET') ?? null;
+    const signature = req.headers.get('svix-signature');
+    const timestamp = req.headers.get('svix-timestamp');
+
+    const isValidSignature = await validateWebhookSignature(rawBody, signature, timestamp, webhookSecret);
+    if (!isValidSignature) {
       return new Response(
         JSON.stringify({ error: 'Invalid webhook signature' }),
         {
           status: 401,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
 
     // Parse webhook payload
-    const payload: ResendWebhookPayload = await req.json();
+    const payload: ResendWebhookPayload = JSON.parse(rawBody);
 
     // We only care about email.received events
     if (payload.type !== 'email.received') {
@@ -78,7 +132,7 @@ serve(async (req) => {
         JSON.stringify({ success: true, skipped: true }),
         {
           status: 200,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -98,7 +152,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'No valid case ID found in recipient address' }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -120,7 +174,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Case not found' }),
         {
           status: 404,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -130,7 +184,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Case was not escalated' }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -152,7 +206,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Failed to log inbound email' }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -199,7 +253,7 @@ serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   } catch (error) {
@@ -210,7 +264,7 @@ serve(async (req) => {
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   }

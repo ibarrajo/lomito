@@ -7,8 +7,14 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0';
 
 const MERCADO_PAGO_ACCESS_TOKEN = Deno.env.get('MERCADO_PAGO_ACCESS_TOKEN') ?? '';
+const MERCADO_PAGO_WEBHOOK_SECRET = Deno.env.get('MERCADO_PAGO_WEBHOOK_SECRET') ?? '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
 
 interface MercadoPagoPayment {
   id: number;
@@ -19,12 +25,82 @@ interface MercadoPagoPayment {
   payment_method_id: string;
 }
 
+/**
+ * Validates Mercado Pago webhook signature using HMAC-SHA256
+ * Signature format: "ts=...,v1=..."
+ */
+async function validateMercadoPagoSignature(
+  req: Request,
+  dataId: string,
+): Promise<boolean> {
+  if (!MERCADO_PAGO_WEBHOOK_SECRET) {
+    console.warn('MERCADO_PAGO_WEBHOOK_SECRET not configured, skipping signature validation');
+    return true;
+  }
+
+  const signature = req.headers.get('x-signature');
+  const requestId = req.headers.get('x-request-id');
+
+  if (!signature || !requestId) {
+    return false;
+  }
+
+  // Parse signature header: "ts=1234567890,v1=abc123..."
+  const parts = signature.split(',').reduce((acc, part) => {
+    const [key, value] = part.split('=');
+    if (key && value) {
+      acc[key.trim()] = value.trim();
+    }
+    return acc;
+  }, {} as Record<string, string>);
+
+  const timestamp = parts.ts;
+  const hash = parts.v1;
+
+  if (!timestamp || !hash) {
+    return false;
+  }
+
+  // Build the message to sign: "id:{data.id};request-id:{requestId};ts:{ts};"
+  const message = `id:${dataId};request-id:${requestId};ts:${timestamp};`;
+
+  // Compute HMAC-SHA256
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(MERCADO_PAGO_WEBHOOK_SECRET),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+
+  const signatureBytes = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(message),
+  );
+
+  // Convert to hex string
+  const computedHash = Array.from(new Uint8Array(signatureBytes))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  return computedHash === hash;
+}
+
 serve(async (req) => {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', {
+      headers: corsHeaders,
+    });
+  }
+
   // Only accept POST requests
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 
@@ -38,7 +114,17 @@ serve(async (req) => {
       console.error('Missing topic or id in webhook payload');
       return new Response(JSON.stringify({ error: 'Invalid payload' }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Validate webhook signature
+    const isValidSignature = await validateMercadoPagoSignature(req, id);
+    if (!isValidSignature) {
+      console.error('Invalid webhook signature');
+      return new Response(JSON.stringify({ error: 'Invalid signature' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -46,7 +132,7 @@ serve(async (req) => {
     if (topic !== 'payment') {
       return new Response(JSON.stringify({ message: 'Ignored non-payment notification' }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -63,7 +149,7 @@ serve(async (req) => {
       console.error('Failed to fetch payment from Mercado Pago:', await mpResponse.text());
       return new Response(JSON.stringify({ error: 'Failed to fetch payment details' }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -94,7 +180,7 @@ serve(async (req) => {
       console.error('Error updating donation status:', updateError);
       return new Response(JSON.stringify({ error: 'Failed to update donation' }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -108,14 +194,14 @@ serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   } catch (error) {
     console.error('Unexpected error in webhook:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 });

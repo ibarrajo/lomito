@@ -202,16 +202,17 @@ function buildEmailHtml(
   `.trim();
 }
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
 serve(async (req) => {
   try {
-    // CORS headers
+    // CORS preflight
     if (req.method === 'OPTIONS') {
       return new Response('ok', {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST',
-          'Access-Control-Allow-Headers': 'authorization, content-type',
-        },
+        headers: corsHeaders,
       });
     }
 
@@ -224,7 +225,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Missing required field: caseId' }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -257,7 +258,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Case not found' }),
         {
           status: 404,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -268,7 +269,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Case already escalated' }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -283,7 +284,7 @@ serve(async (req) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -296,7 +297,7 @@ serve(async (req) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -339,7 +340,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Resend API key not configured' }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -370,7 +371,7 @@ serve(async (req) => {
         }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -390,7 +391,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Failed to update case' }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -430,7 +431,7 @@ serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   } catch (error) {
@@ -441,7 +442,7 @@ serve(async (req) => {
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   }
