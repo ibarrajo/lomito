@@ -6,11 +6,15 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { ThemeProvider } from '@lomito/ui';
 import { colors } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../hooks/use-auth';
+import { useNotifications } from '../hooks/use-notifications';
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+
+  // Initialize notifications only when user is authenticated
+  useNotifications();
 
   useEffect(() => {
     if (loading) return;
