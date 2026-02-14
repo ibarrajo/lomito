@@ -9,27 +9,62 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#D4662B"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "org.lomito.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Lomito needs your location to show animal welfare cases near you and to automatically detect your jurisdiction when submitting a report.",
+        "NSCameraUsageDescription": "Lomito needs access to your camera to take photos of animal welfare issues when creating a report.",
+        "NSPhotoLibraryUsageDescription": "Lomito needs access to your photo library to attach photos to your reports."
+      }
     },
     "android": {
+      "package": "org.lomito.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#D4662B"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",
-      "expo-font"
-    ]
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Lomito needs your location to show animal welfare cases near you and to automatically detect your jurisdiction when submitting a report."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Lomito needs access to your photo library to attach photos to your reports.",
+          "cameraPermission": "Lomito needs access to your camera to take photos of animal welfare issues when creating a report."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "TBD"
+      }
+    }
   }
 }
