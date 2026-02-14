@@ -11,6 +11,7 @@ interface TypographyProps {
   style?: TextStyle;
   color?: string;
   accessibilityLabel?: string;
+  numberOfLines?: number;
 }
 
 export function H1({
@@ -69,11 +70,13 @@ export function Body({
   style,
   color = colors.neutral700,
   accessibilityLabel,
+  numberOfLines,
 }: TypographyProps) {
   return (
     <Text
       style={[styles.body, { color }, style]}
       accessibilityLabel={accessibilityLabel}
+      numberOfLines={numberOfLines}
     >
       {children}
     </Text>

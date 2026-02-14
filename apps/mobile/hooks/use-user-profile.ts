@@ -1,0 +1,72 @@
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import type { UserRole } from '@lomito/shared/types/database';
+
+interface UserProfile {
+  id: string;
+  full_name: string;
+  phone: string | null;
+  municipality: string | null;
+  role: UserRole;
+  avatar_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface UseUserProfileResult {
+  profile: UserProfile | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export function useUserProfile(): UseUserProfileResult {
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+
+        const { data, error: queryError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (queryError) {
+          console.error('Error fetching user profile:', queryError);
+          setError(queryError.message);
+          return;
+        }
+
+        if (data) {
+          setProfile(data as UserProfile);
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching profile:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProfile();
+  }, []);
+
+  return {
+    profile,
+    loading,
+    error,
+  };
+}
