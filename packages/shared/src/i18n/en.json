@@ -252,9 +252,13 @@
     "oxxo": "OXXO (Cash)",
     "spei": "SPEI (Bank Transfer)",
     "processing": "Processing payment...",
+    "processingMessage": "Your payment is being processed. You will receive a confirmation soon.",
     "thankYou": "Thank you for your donation!",
     "error": "Payment error",
-    "minAmount": "Minimum $10 MXN"
+    "minAmount": "Minimum $10 MXN",
+    "cardInfo": "Pay securely with credit or debit card through Mercado Pago.",
+    "oxxoInfo": "Generate a payment code to pay in cash at any OXXO store.",
+    "speiInfo": "Make a direct bank transfer using SPEI from your bank."
   },
   "dashboard": {
     "title": "Impact Dashboard",
@@ -267,5 +271,10 @@
     "pending": "Pending",
     "inProgress": "In progress",
     "resolved": "Resolved"
+  },
+  "legal": {
+    "privacy": "Privacy Notice",
+    "terms": "Terms of Service",
+    "lastUpdated": "Last updated: {{date}}"
   }
 }

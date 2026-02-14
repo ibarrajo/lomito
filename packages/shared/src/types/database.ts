@@ -112,6 +112,8 @@ export interface Donation {
   donor_id: string | null;
   recurring: boolean;
   external_id: string | null;
+  status: string;
+  payment_url: string | null;
   created_at: string;
 }
 
@@ -215,9 +217,11 @@ export interface Database {
       };
       donations: {
         Row: Donation;
-        Insert: Omit<Donation, 'id' | 'created_at'> & {
+        Insert: Omit<Donation, 'id' | 'created_at' | 'status' | 'payment_url'> & {
           id?: string;
           created_at?: string;
+          status?: string;
+          payment_url?: string | null;
         };
         Update: Partial<Omit<Donation, 'id' | 'created_at'>>;
       };
@@ -248,6 +252,22 @@ export interface Database {
       jurisdiction_level: JurisdictionLevel;
       donation_method: DonationMethod;
       timeline_action: TimelineAction;
+    };
+    Functions: {
+      get_dashboard_stats: {
+        Args: Record<string, never>;
+        Returns: {
+          total_cases: number;
+          resolved_cases: number;
+          pending_cases: number;
+          in_progress_cases: number;
+          abuse_cases: number;
+          stray_cases: number;
+          missing_cases: number;
+          total_donations: number;
+          avg_resolution_days: number;
+        };
+      };
     };
   };
 }

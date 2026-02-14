@@ -252,9 +252,13 @@
     "oxxo": "OXXO (Efectivo)",
     "spei": "SPEI (Transferencia)",
     "processing": "Procesando pago...",
+    "processingMessage": "Tu pago está siendo procesado. Recibirás una confirmación pronto.",
     "thankYou": "¡Gracias por tu donación!",
     "error": "Error en el pago",
-    "minAmount": "Mínimo $10 MXN"
+    "minAmount": "Mínimo $10 MXN",
+    "cardInfo": "Paga de forma segura con tarjeta de crédito o débito a través de Mercado Pago.",
+    "oxxoInfo": "Genera un código de pago para pagar en efectivo en cualquier tienda OXXO.",
+    "speiInfo": "Realiza una transferencia bancaria directa usando SPEI desde tu banco."
   },
   "dashboard": {
     "title": "Tablero de impacto",
@@ -267,5 +271,10 @@
     "pending": "Pendientes",
     "inProgress": "En progreso",
     "resolved": "Resueltos"
+  },
+  "legal": {
+    "privacy": "Aviso de Privacidad",
+    "terms": "Términos de Servicio",
+    "lastUpdated": "Última actualización: {{date}}"
   }
 }
