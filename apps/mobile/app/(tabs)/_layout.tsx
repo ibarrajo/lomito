@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Map, User, Shield, Settings, Building2 } from 'lucide-react-native';
+import { Map, User, Shield, Settings, Building2, BarChart3 } from 'lucide-react-native';
 import { colors, iconSizes } from '@lomito/ui/src/theme/tokens';
 import { useUserProfile } from '../../hooks/use-user-profile';
 
@@ -25,6 +25,15 @@ export default function TabLayout() {
           title: t('nav.map'),
           tabBarIcon: ({ color }) => (
             <Map size={iconSizes.default} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: t('nav.dashboard'),
+          tabBarIcon: ({ color }) => (
+            <BarChart3 size={iconSizes.default} color={color} />
           ),
         }}
       />
