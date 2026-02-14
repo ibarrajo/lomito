@@ -17,6 +17,7 @@ import { CaseMap } from '../../components/case/case-map';
 import { Timeline } from '../../components/case/timeline';
 import { FlagButton } from '../../components/case/flag-button';
 import { EscalateButton } from '../../components/case/escalate-button';
+import { EscalationStatus } from '../../components/case/escalation-status';
 
 export default function CaseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -98,6 +99,18 @@ export default function CaseDetailScreen() {
           </View>
         )}
 
+        {/* Escalation Status */}
+        {caseData.escalated_at && (
+          <View style={styles.escalationStatusSection}>
+            <EscalationStatus
+              escalatedAt={caseData.escalated_at}
+              escalationReminderCount={caseData.escalation_reminder_count || 0}
+              markedUnresponsive={caseData.marked_unresponsive || false}
+              governmentResponseAt={caseData.government_response_at}
+            />
+          </View>
+        )}
+
         {/* Description */}
         {caseData.description && (
           <View style={styles.section}>
@@ -147,6 +160,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
   },
   escalateSection: {
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+  },
+  escalationStatusSection: {
     marginTop: spacing.md,
     paddingHorizontal: spacing.md,
   },

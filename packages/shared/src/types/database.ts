@@ -72,6 +72,8 @@ export interface Case {
   folio: string | null;
   escalated_at: string | null;
   escalation_email_id: string | null;
+  escalation_reminder_count: number;
+  marked_unresponsive: boolean;
   government_response_at: string | null;
   created_at: string;
   updated_at: string;
@@ -154,7 +156,7 @@ export interface Database {
       };
       cases: {
         Row: Case;
-        Insert: Omit<Case, 'id' | 'jurisdiction_id' | 'status' | 'flag_count' | 'folio' | 'escalated_at' | 'escalation_email_id' | 'government_response_at' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<Case, 'id' | 'jurisdiction_id' | 'status' | 'flag_count' | 'folio' | 'escalated_at' | 'escalation_email_id' | 'escalation_reminder_count' | 'marked_unresponsive' | 'government_response_at' | 'created_at' | 'updated_at'> & {
           id?: string;
           jurisdiction_id?: string | null;
           status?: CaseStatus;
@@ -162,6 +164,8 @@ export interface Database {
           folio?: string | null;
           escalated_at?: string | null;
           escalation_email_id?: string | null;
+          escalation_reminder_count?: number;
+          marked_unresponsive?: boolean;
           government_response_at?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -178,6 +182,8 @@ export interface Database {
           folio?: string | null;
           escalated_at?: string | null;
           escalation_email_id?: string | null;
+          escalation_reminder_count?: number;
+          marked_unresponsive?: boolean;
           government_response_at?: string | null;
           updated_at?: string;
         };

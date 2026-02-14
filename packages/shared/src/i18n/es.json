@@ -198,7 +198,12 @@
     "pendingResponse": "Pendiente respuesta del gobierno",
     "responded": "Gobierno respondió",
     "governmentReplied": "El gobierno respondió",
-    "replyReceived": "Respuesta recibida el {{date}}"
+    "replyReceived": "Respuesta recibida el {{date}}",
+    "daysSinceEscalation": "{{count}} días desde escalación",
+    "reminderSent": "{{count}} recordatorios enviados",
+    "unresponsive": "Sin respuesta",
+    "daysNoResponse": "{{count}} días sin respuesta",
+    "remindersSent": "{{count}} recordatorio(s) enviado(s)"
   },
   "government": {
     "portal": "Portal gubernamental",

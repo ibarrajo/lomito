@@ -198,7 +198,12 @@
     "pendingResponse": "Pending government response",
     "responded": "Government responded",
     "governmentReplied": "Government replied",
-    "replyReceived": "Reply received on {{date}}"
+    "replyReceived": "Reply received on {{date}}",
+    "daysSinceEscalation": "{{count}} days since escalation",
+    "reminderSent": "{{count}} reminders sent",
+    "unresponsive": "Unresponsive",
+    "daysNoResponse": "{{count}} days without response",
+    "remindersSent": "{{count}} reminder(s) sent"
   },
   "government": {
     "portal": "Government Portal",
