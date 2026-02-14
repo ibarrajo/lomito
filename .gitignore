@@ -75,3 +75,11 @@ logs/
 .cache/
 .turbo/
 .next/
+
+# Python / Agent runner
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+.agent-logs/
