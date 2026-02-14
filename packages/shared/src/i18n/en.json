@@ -276,5 +276,19 @@
     "privacy": "Privacy Notice",
     "terms": "Terms of Service",
     "lastUpdated": "Last updated: {{date}}"
+  },
+  "profile": {
+    "title": "Profile",
+    "myReports": "My Reports",
+    "myReportsCount": "{{count}} reports",
+    "myReportsCount_one": "{{count}} report",
+    "myReportsCount_other": "{{count}} reports",
+    "noReports": "No reports yet",
+    "noReportsMessage": "You haven't submitted any reports yet.",
+    "role": "Role",
+    "citizen": "Citizen",
+    "moderator": "Moderator",
+    "government": "Government",
+    "admin": "Administrator"
   }
 }
