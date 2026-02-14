@@ -164,62 +164,99 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 4: Government Integration
 
 ### P4-T1: Email escalation system
-- **Depends on:** P3-T1 (moderation), P1-T4 (schema)
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "structured emails to authorities with per-case reply-to")
-- **Deliverables:**
-  - `supabase/functions/escalate-case/index.ts` — Edge Function: sends structured email to jurisdiction authority. Includes case summary, photos, location map link, reply-to address per case (e.g., `case-{id}@reply.lomito.org`). Uses Resend API.
-  - `apps/mobile/hooks/use-escalate-case.ts` — Hook: triggers escalation for a case, tracks escalation state (not_escalated, escalated, responded)
-  - `apps/mobile/components/case/escalate-button.tsx` — Button on case detail (moderator/admin only): "Escalate to authorities" with confirmation dialog
-  - `supabase/migrations/20250214000009_escalation_fields.sql` — ALTER TABLE cases ADD COLUMN escalated_at TIMESTAMPTZ, ADD COLUMN escalation_email_id TEXT, ADD COLUMN government_response_at TIMESTAMPTZ; ALTER TABLE jurisdictions ADD COLUMN reply_to_prefix TEXT
-  - Update `apps/mobile/app/case/[id].tsx` — Add EscalateButton for moderators when case is verified
-  - i18n: add `escalation.escalate`, `escalation.confirmEscalate`, `escalation.escalated`, `escalation.escalatedAt`, `escalation.pendingResponse`, `escalation.responded` keys to both JSON files
 - **Commit:** `feat(escalation): add email escalation to jurisdiction authorities`
-- [ ] Done
+- [x] Done
 
 ### P4-T2: Inbound email parsing
-- **Depends on:** P4-T1
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "Inbound email parsing for government replies")
-- **Deliverables:**
-  - `supabase/functions/inbound-email/index.ts` — Edge Function webhook: receives inbound emails from Resend webhook, parses reply-to address to extract case ID, creates timeline event with government response, updates case government_response_at
-  - `supabase/migrations/20250214000010_inbound_email_log.sql` — CREATE TABLE inbound_emails (id UUID, case_id UUID, from_email TEXT, subject TEXT, body_text TEXT, received_at TIMESTAMPTZ). RLS: admin only.
-  - i18n: add `escalation.governmentReplied`, `escalation.replyReceived` keys to both JSON files
 - **Commit:** `feat(escalation): add inbound email parsing for government replies`
-- [ ] Done
+- [x] Done
 
 ### P4-T3: Government account portal
-- **Depends on:** P4-T1, P3-T1 (moderation queue pattern)
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "Government portal: case list, status updates, folio assignment")
-- **Deliverables:**
-  - `apps/mobile/app/(tabs)/government.tsx` — Government tab screen: list of cases in assigned jurisdictions, filterable by status, sorted by escalation urgency
-  - `apps/mobile/hooks/use-government-cases.ts` — Hook: fetches cases scoped to government user's jurisdictions, includes escalation status
-  - `apps/mobile/components/government/case-action-card.tsx` — Card with case summary + actions: update status, assign folio number, post official response
-  - `apps/mobile/components/government/folio-input.tsx` — Modal for entering government folio/tracking number
-  - `apps/mobile/components/government/official-response.tsx` — TextInput for posting official government response (creates timeline event)
-  - `apps/mobile/hooks/use-government-actions.ts` — Hook: assignFolio, postResponse, updateStatus functions
-  - Update `apps/mobile/app/(tabs)/_layout.tsx` — Add government tab (visible only for 'government' or 'admin' role)
-  - i18n: add `government.portal`, `government.assignFolio`, `government.postResponse`, `government.officialResponse`, `government.responsePlaceholder`, `government.folioAssigned`, `government.noCases` keys to both JSON files
 - **Commit:** `feat(government): add government portal with case management and folio assignment`
-- [ ] Done
+- [x] Done
 
 ### P4-T4: Auto-escalation timers
-- **Depends on:** P4-T1
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 4 — "Auto-escalation flags 5/15/30 day no-response")
-- **Deliverables:**
-  - `supabase/functions/auto-escalation-check/index.ts` — Edge Function (cron-triggered): checks all escalated cases with no government_response_at. At 5 days: timeline event "reminder sent". At 15 days: timeline event "second reminder". At 30 days: timeline event "marked unresponsive", sets case flag.
-  - `supabase/migrations/20250214000011_escalation_reminders.sql` — ALTER TABLE cases ADD COLUMN escalation_reminder_count INTEGER DEFAULT 0, ADD COLUMN marked_unresponsive BOOLEAN DEFAULT false
-  - `apps/mobile/components/case/escalation-status.tsx` — Component showing escalation status on case detail: days since escalation, reminder count, unresponsive badge
-  - Update `apps/mobile/app/case/[id].tsx` — Add EscalationStatus component below case header for escalated cases
-  - i18n: add `escalation.daysSinceEscalation`, `escalation.reminderSent`, `escalation.unresponsive`, `escalation.daysNoResponse` keys to both JSON files
 - **Commit:** `feat(escalation): add auto-escalation timers with 5/15/30 day reminders`
-- [ ] Done
+- [x] Done
 
 ---
 
 ## Phase 5: Launch Readiness
 
 ### P5-T1: Mercado Pago donations
+- **Depends on:** P1-T4 (schema), P1-T6 (auth)
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5 — "Mercado Pago donation integration")
+- **Deliverables:**
+  - `supabase/functions/create-donation/index.ts` — Edge Function: creates Mercado Pago payment preference (checkout link). Supports OXXO, SPEI, credit/debit card. Returns checkout URL.
+  - `supabase/functions/donation-webhook/index.ts` — Edge Function: receives Mercado Pago IPN webhook, updates donation status in DB, inserts success/failure record
+  - `apps/mobile/app/donate.tsx` — Donation screen: amount picker (preset + custom), payment method selector, opens Mercado Pago checkout via WebBrowser
+  - `apps/mobile/hooks/use-donate.ts` — Hook: createDonation, tracks payment state
+  - `apps/mobile/components/donate/amount-picker.tsx` — Preset amounts ($50, $100, $200, $500 MXN) + custom input
+  - `apps/mobile/components/donate/payment-methods.tsx` — Payment method selector (card, OXXO, SPEI)
+  - i18n: add `donate.title`, `donate.amount`, `donate.customAmount`, `donate.paymentMethod`, `donate.processing`, `donate.thankYou`, `donate.error` keys to both JSON files
+- **Commit:** `feat(donations): add Mercado Pago donation flow with OXXO and SPEI support`
+- [ ] Done
+
 ### P5-T2: Public impact dashboard
+- **Depends on:** P1-T4 (schema)
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5 — "Public impact dashboard")
+- **Deliverables:**
+  - `apps/mobile/app/(tabs)/dashboard.tsx` — Dashboard tab screen: public-facing stats and charts
+  - `apps/mobile/hooks/use-dashboard-stats.ts` — Hook: fetches aggregated stats via Supabase RPC (total cases, resolved %, by category, by jurisdiction, avg resolution time, donation total)
+  - `supabase/migrations/20250214000012_dashboard_stats_function.sql` — SQL function returning aggregated stats (avoids exposing raw data)
+  - `apps/mobile/components/dashboard/stat-card.tsx` — Card displaying single stat with icon, value, label
+  - `apps/mobile/components/dashboard/category-chart.tsx` — Simple bar chart showing cases by category (abuse, stray, missing)
+  - `apps/mobile/components/dashboard/resolution-rate.tsx` — Circular progress indicator showing resolution percentage
+  - Update `apps/mobile/app/(tabs)/_layout.tsx` — Add Dashboard tab with `BarChart3` icon
+  - i18n: add `dashboard.title`, `dashboard.totalCases`, `dashboard.resolvedRate`, `dashboard.byCategory`, `dashboard.byJurisdiction`, `dashboard.avgResolution`, `dashboard.totalDonations` keys to both JSON files
+- **Commit:** `feat(dashboard): add public impact dashboard with stats and charts`
+- [ ] Done
+
 ### P5-T3: About Us page
+- **Depends on:** P1-T3 (UI components)
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5)
+- **Deliverables:**
+  - `apps/mobile/app/about.tsx` — About Us screen: mission statement, team info, open source links, contact, social media
+  - `apps/mobile/components/about/mission-section.tsx` — Mission statement with Lomito branding
+  - `apps/mobile/components/about/team-section.tsx` — Team/org info cards
+  - `apps/mobile/components/about/links-section.tsx` — External links: GitHub repo, website, contact email, social media
+  - i18n: add `about.title`, `about.mission`, `about.missionText`, `about.team`, `about.openSource`, `about.contact`, `about.website` keys to both JSON files
+- **Commit:** `feat(about): add About Us page with mission, team, and links`
+- [ ] Done
+
 ### P5-T4: Legal documents
+- **Depends on:** P1-T5 (i18n)
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5 — "Legal documents: privacy notice, TOS, security policy")
+- **Deliverables:**
+  - `apps/mobile/app/legal/privacy.tsx` — Privacy notice screen (renders markdown/text content)
+  - `apps/mobile/app/legal/terms.tsx` — Terms of service screen
+  - `apps/mobile/app/legal/_layout.tsx` — Stack layout for legal screens
+  - `packages/shared/src/legal/privacy-es.ts` — Privacy notice text (Spanish, LFPDP compliant)
+  - `packages/shared/src/legal/privacy-en.ts` — Privacy notice text (English)
+  - `packages/shared/src/legal/terms-es.ts` — Terms of service (Spanish)
+  - `packages/shared/src/legal/terms-en.ts` — Terms of service (English)
+  - i18n: add `legal.privacy`, `legal.terms`, `legal.lastUpdated` keys to both JSON files
+- **Commit:** `feat(legal): add privacy notice and terms of service screens`
+- [ ] Done
+
 ### P5-T5: Performance audit
+- **Depends on:** all previous phases
+- **Spec:** CLAUDE.md (Performance Budgets)
+- **Deliverables:**
+  - `apps/mobile/lib/performance.ts` — Performance monitoring utilities: measure cold start, screen transition times, API call durations
+  - Review and optimize: lazy loading for screens, memoization audit (useMemo/useCallback), image optimization check, bundle size analysis
+  - `docs/audit/performance-report.md` — Performance audit report with findings and optimizations applied
+- **Commit:** `perf: performance audit and optimizations`
+- [ ] Done
+
 ### P5-T6: App Store + Play Store submission
+- **Depends on:** P5-T5, P5-T4
+- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5)
+- **Deliverables:**
+  - `apps/mobile/app.json` — Updated with store metadata: name, description, version, icon, splash, iOS/Android config
+  - `apps/mobile/eas.json` — EAS Build configuration for production builds
+  - `docs/store/app-store-listing.md` — App Store listing text (English + Spanish)
+  - `docs/store/play-store-listing.md` — Play Store listing text (English + Spanish)
+  - `docs/store/screenshots.md` — Screenshot requirements checklist
+- **Commit:** `chore: prepare App Store and Play Store submission assets`
+- [ ] Done
