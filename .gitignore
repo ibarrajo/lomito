@@ -30,6 +30,9 @@ android/
 *.swp
 *.swo
 
+# Development
+.worktrees/
+
 # OS
 .DS_Store
 Thumbs.db
