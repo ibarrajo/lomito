@@ -2,8 +2,8 @@ import '../../../packages/shared/src/i18n/config';
 import { useEffect } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { ThemeProvider } from '@lomito/ui';
+import { View, StyleSheet } from 'react-native';
+import { ThemeProvider, Skeleton } from '@lomito/ui';
 import { colors } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../hooks/use-auth';
 import { useNotifications } from '../hooks/use-notifications';
@@ -42,7 +42,11 @@ function RootLayoutNav() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.primary} />
+        <Skeleton width="100%" height={60} style={styles.skeletonTop} />
+        <Skeleton width="90%" height={40} style={styles.skeletonItem} />
+        <Skeleton width="85%" height={40} style={styles.skeletonItem} />
+        <Skeleton width="92%" height={40} style={styles.skeletonItem} />
+        <Skeleton width="88%" height={40} style={styles.skeletonItem} />
       </View>
     );
   }
@@ -55,6 +59,11 @@ function RootLayoutNav() {
         <Stack.Screen name="auth/register" />
         <Stack.Screen name="auth/verify" />
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="case/[id]" options={{ headerShown: true, title: 'Case Details' }} />
+        <Stack.Screen name="report" />
+        <Stack.Screen name="about" />
+        <Stack.Screen name="donate" />
+        <Stack.Screen name="legal" />
       </Stack>
     </>
   );
@@ -74,5 +83,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     flex: 1,
     justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
+  skeletonTop: {
+    marginBottom: 32,
+  },
+  skeletonItem: {
+    marginBottom: 16,
   },
 });

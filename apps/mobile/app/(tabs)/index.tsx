@@ -115,10 +115,8 @@ export default function MapScreen() {
   }, []);
 
   const handleViewDetails = useCallback((caseId: string) => {
-    // Navigate to case details screen (will be implemented in a later task)
-    console.log('View case details:', caseId);
-    // router.push(`/cases/${caseId}`);
-  }, []);
+    router.push(`/case/${caseId}`);
+  }, [router]);
 
   const handleNewReport = useCallback(() => {
     router.push('/report/new');

@@ -46,6 +46,44 @@ export default function SettingsScreen() {
       <View style={styles.content}>
         <NotificationPrefs />
 
+        <View style={styles.section}>
+          <TouchableOpacity
+            style={styles.navLink}
+            onPress={() => router.push('/about')}
+            accessibilityLabel={t('about.title')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.navLinkText}>{t('about.title')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navLink}
+            onPress={() => router.push('/donate')}
+            accessibilityLabel={t('donate.title')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.navLinkText}>{t('donate.title')}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.section}>
+          <TouchableOpacity
+            style={styles.navLink}
+            onPress={() => router.push('/legal/privacy')}
+            accessibilityLabel={t('legal.privacy')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.navLinkText}>{t('legal.privacy')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navLink}
+            onPress={() => router.push('/legal/terms')}
+            accessibilityLabel={t('legal.terms')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.navLinkText}>{t('legal.terms')}</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity
           style={styles.signOutButton}
           onPress={handleSignOut}
@@ -78,6 +116,30 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...typography.h1,
+    color: colors.neutral900,
+  },
+  section: {
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    marginTop: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  sectionTitle: {
+    ...typography.caption,
+    color: colors.neutral500,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    textTransform: 'uppercase',
+  },
+  navLink: {
+    backgroundColor: colors.white,
+    borderBottomColor: colors.neutral200,
+    borderBottomWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  navLinkText: {
+    ...typography.body,
     color: colors.neutral900,
   },
   signOutButton: {
