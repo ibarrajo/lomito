@@ -3,6 +3,7 @@
  * Horizontal bar chart showing cases by category.
  */
 
+import { memo, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@lomito/ui/src/components/card';
@@ -19,37 +20,39 @@ interface CategoryChartProps {
   data: CategoryData;
 }
 
-export function CategoryChart({ data }: CategoryChartProps) {
+export const CategoryChart = memo(function CategoryChart({ data }: CategoryChartProps) {
   const { t } = useTranslation();
 
-  const total = data.abuse + data.stray + data.missing;
-  const abusePercent = total > 0 ? (data.abuse / total) * 100 : 0;
-  const strayPercent = total > 0 ? (data.stray / total) * 100 : 0;
-  const missingPercent = total > 0 ? (data.missing / total) * 100 : 0;
+  const categories = useMemo(() => {
+    const total = data.abuse + data.stray + data.missing;
+    const abusePercent = total > 0 ? (data.abuse / total) * 100 : 0;
+    const strayPercent = total > 0 ? (data.stray / total) * 100 : 0;
+    const missingPercent = total > 0 ? (data.missing / total) * 100 : 0;
 
-  const categories = [
-    {
-      key: 'abuse',
-      label: t('category.abuse'),
-      count: data.abuse,
-      percent: abusePercent,
-      color: colors.category.abuse.pin,
-    },
-    {
-      key: 'stray',
-      label: t('category.stray'),
-      count: data.stray,
-      percent: strayPercent,
-      color: colors.category.stray.pin,
-    },
-    {
-      key: 'missing',
-      label: t('category.missing'),
-      count: data.missing,
-      percent: missingPercent,
-      color: colors.category.missing.pin,
-    },
-  ];
+    return [
+      {
+        key: 'abuse',
+        label: t('category.abuse'),
+        count: data.abuse,
+        percent: abusePercent,
+        color: colors.category.abuse.pin,
+      },
+      {
+        key: 'stray',
+        label: t('category.stray'),
+        count: data.stray,
+        percent: strayPercent,
+        color: colors.category.stray.pin,
+      },
+      {
+        key: 'missing',
+        label: t('category.missing'),
+        count: data.missing,
+        percent: missingPercent,
+        color: colors.category.missing.pin,
+      },
+    ];
+  }, [data, t]);
 
   return (
     <Card accessibilityLabel={t('dashboard.byCategory')}>
@@ -89,7 +92,7 @@ export function CategoryChart({ data }: CategoryChartProps) {
       </View>
     </Card>
   );
-}
+});
 
 const styles = StyleSheet.create({
   title: {

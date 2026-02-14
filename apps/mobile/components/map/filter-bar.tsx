@@ -3,6 +3,7 @@
  * Horizontal scrollable filter pills for category and status.
  */
 
+import { memo, useCallback } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { colors, spacing, borderRadius, typography } from '@lomito/ui/src/theme/tokens';
@@ -36,7 +37,7 @@ const STATUS_COLORS: Record<CaseStatus | 'all', string> = {
   archived: colors.neutral400,
 };
 
-export function FilterBar({
+export const FilterBar = memo(function FilterBar({
   selectedCategories,
   selectedStatuses,
   onToggleCategory,
@@ -44,19 +45,19 @@ export function FilterBar({
 }: FilterBarProps) {
   const { t } = useTranslation();
 
-  const isCategorySelected = (category: CaseCategory | 'all'): boolean => {
+  const isCategorySelected = useCallback((category: CaseCategory | 'all'): boolean => {
     if (category === 'all') {
       return selectedCategories === 'all';
     }
     return selectedCategories !== 'all' && selectedCategories.has(category);
-  };
+  }, [selectedCategories]);
 
-  const isStatusSelected = (status: CaseStatus | 'all'): boolean => {
+  const isStatusSelected = useCallback((status: CaseStatus | 'all'): boolean => {
     if (status === 'all') {
       return selectedStatuses === 'all';
     }
     return selectedStatuses !== 'all' && selectedStatuses.has(status);
-  };
+  }, [selectedStatuses]);
 
   return (
     <View style={styles.container}>
@@ -143,7 +144,7 @@ export function FilterBar({
       </ScrollView>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

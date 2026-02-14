@@ -3,6 +3,7 @@
  * Card showing case summary with government action buttons (folio, response, status)
  */
 
+import { memo } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
@@ -27,7 +28,7 @@ interface CaseActionCardProps {
   onUpdateStatus: (caseId: string) => void;
 }
 
-export function CaseActionCard({
+export const CaseActionCard = memo(function CaseActionCard({
   id,
   category,
   animalType,
@@ -163,7 +164,7 @@ export function CaseActionCard({
       </Card>
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   actionButton: {

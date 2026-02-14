@@ -7,6 +7,7 @@ import { ThemeProvider } from '@lomito/ui';
 import { colors } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../hooks/use-auth';
 import { useNotifications } from '../hooks/use-notifications';
+import { PerformanceMonitor } from '../lib/performance';
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
@@ -15,6 +16,14 @@ function RootLayoutNav() {
 
   // Initialize notifications only when user is authenticated
   useNotifications();
+
+  // Measure cold start on first render
+  useEffect(() => {
+    const coldStartTime = PerformanceMonitor.measureColdStart();
+    if (coldStartTime > 0) {
+      console.log(`App cold start completed in ${coldStartTime}ms`);
+    }
+  }, []);
 
   useEffect(() => {
     if (loading) return;

@@ -3,6 +3,7 @@
  * Card showing case summary with verify/reject/flag actions for moderators
  */
 
+import { memo } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
@@ -25,7 +26,7 @@ interface CaseReviewCardProps {
   onFlag: (caseId: string) => void;
 }
 
-export function CaseReviewCard({
+export const CaseReviewCard = memo(function CaseReviewCard({
   id,
   category,
   animalType,
@@ -135,7 +136,7 @@ export function CaseReviewCard({
       </Card>
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   actionButton: {

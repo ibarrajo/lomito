@@ -3,6 +3,7 @@
  * Dashboard metric card with icon, value, and label.
  */
 
+import { memo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import type { LucideIcon } from 'lucide-react-native';
 import { Card } from '@lomito/ui/src/components/card';
@@ -17,7 +18,7 @@ interface StatCardProps {
   accessibilityLabel?: string;
 }
 
-export function StatCard({
+export const StatCard = memo(function StatCard({
   icon: Icon,
   value,
   label,
@@ -44,7 +45,7 @@ export function StatCard({
       </View>
     </Card>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {

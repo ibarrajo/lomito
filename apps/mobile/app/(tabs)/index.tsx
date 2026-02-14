@@ -3,7 +3,7 @@
  * Full-screen map with case pins, clustering, filters, and summary cards.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
@@ -55,11 +55,7 @@ export default function MapScreen() {
     zoom: mapZoom,
   });
 
-  useEffect(() => {
-    fetchCases();
-  }, [selectedCategories, selectedStatuses]);
-
-  async function fetchCases() {
+  const fetchCases = useCallback(async () => {
     try {
       let query = supabase
         .from('cases')
@@ -83,10 +79,14 @@ export default function MapScreen() {
     } catch (error) {
       console.error('Unexpected error fetching cases:', error);
     }
-  }
+  }, [buildQuery]);
 
-  function convertToGeoJSON(): GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory }> {
-    return {
+  useEffect(() => {
+    fetchCases();
+  }, [fetchCases]);
+
+  const geoJSONData = useMemo<GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory }>>(
+    () => ({
       type: 'FeatureCollection',
       features: cases.map((caseData) => ({
         type: 'Feature',
@@ -99,35 +99,36 @@ export default function MapScreen() {
           category: caseData.category,
         },
       })),
-    };
-  }
+    }),
+    [cases]
+  );
 
-  function handlePinPress(caseId: string) {
+  const handlePinPress = useCallback((caseId: string) => {
     const caseData = cases.find((c) => c.id === caseId);
     if (caseData) {
       setSelectedCase(caseData);
     }
-  }
+  }, [cases]);
 
-  function handleCloseCard() {
+  const handleCloseCard = useCallback(() => {
     setSelectedCase(null);
-  }
+  }, []);
 
-  function handleViewDetails(caseId: string) {
+  const handleViewDetails = useCallback((caseId: string) => {
     // Navigate to case details screen (will be implemented in a later task)
     console.log('View case details:', caseId);
     // router.push(`/cases/${caseId}`);
-  }
+  }, []);
 
-  function handleNewReport() {
+  const handleNewReport = useCallback(() => {
     router.push('/report/new');
-  }
+  }, [router]);
 
-  function handleToggleBoundaries() {
+  const handleToggleBoundaries = useCallback(() => {
     setShowBoundaries((prev) => !prev);
-  }
+  }, []);
 
-  function handleRegionChange(region: { bounds: { ne: [number, number]; sw: [number, number] }; zoomLevel: number }) {
+  const handleRegionChange = useCallback((region: { bounds: { ne: [number, number]; sw: [number, number] }; zoomLevel: number }) => {
     const { bounds, zoomLevel } = region;
     setMapBounds({
       west: bounds.sw[0],
@@ -136,17 +137,15 @@ export default function MapScreen() {
       north: bounds.ne[1],
     });
     setMapZoom(zoomLevel);
-  }
+  }, []);
 
-  function handleJurisdictionPress(_jurisdictionId: string, jurisdictionName: string) {
+  const handleJurisdictionPress = useCallback((_jurisdictionId: string, jurisdictionName: string) => {
     Alert.alert(
       t('map.jurisdictionInfo', { name: jurisdictionName }),
       '',
       [{ text: t('common.ok') }]
     );
-  }
-
-  const geoJSONData = convertToGeoJSON();
+  }, [t]);
 
   return (
     <View style={styles.container}>

@@ -3,6 +3,7 @@
  * Circular progress indicator showing resolution percentage.
  */
 
+import { memo, useMemo } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Svg, { Circle } from 'react-native-svg';
@@ -15,17 +16,26 @@ interface ResolutionRateProps {
   totalCount: number;
 }
 
-export function ResolutionRate({ resolvedCount, totalCount }: ResolutionRateProps) {
+export const ResolutionRate = memo(function ResolutionRate({ resolvedCount, totalCount }: ResolutionRateProps) {
   const { t } = useTranslation();
 
-  const percentage = totalCount > 0 ? Math.round((resolvedCount / totalCount) * 100) : 0;
+  const percentage = useMemo(
+    () => (totalCount > 0 ? Math.round((resolvedCount / totalCount) * 100) : 0),
+    [resolvedCount, totalCount]
+  );
 
   // Circle dimensions
-  const size = 140;
-  const strokeWidth = 12;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+  const circleProps = useMemo(() => {
+    const size = 140;
+    const strokeWidth = 12;
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+    return { size, strokeWidth, radius, circumference, strokeDashoffset };
+  }, [percentage]);
+
+  const { size, strokeWidth, radius, circumference, strokeDashoffset } = circleProps;
 
   return (
     <Card accessibilityLabel={`${t('dashboard.resolvedRate')}: ${percentage}%`}>
@@ -68,7 +78,7 @@ export function ResolutionRate({ resolvedCount, totalCount }: ResolutionRateProp
       </View>
     </Card>
   );
-}
+});
 
 const styles = StyleSheet.create({
   title: {

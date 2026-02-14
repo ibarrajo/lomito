@@ -3,6 +3,7 @@
  * Mapbox clustering for case pins on the map.
  */
 
+import { memo, useCallback } from 'react';
 import MapboxGL from '../../lib/mapbox';
 import { colors } from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types/database';
@@ -24,8 +25,8 @@ interface ClusterLayerProps {
   onPinPress?: (caseId: string) => void;
 }
 
-export function ClusterLayer({ cases, onPinPress }: ClusterLayerProps) {
-  const handlePress = (event: unknown) => {
+export const ClusterLayer = memo(function ClusterLayer({ cases, onPinPress }: ClusterLayerProps) {
+  const handlePress = useCallback((event: unknown) => {
     if (!onPinPress) return;
 
     // Type assertion for event structure (actual implementation will have proper types)
@@ -33,7 +34,7 @@ export function ClusterLayer({ cases, onPinPress }: ClusterLayerProps) {
     if (feature?.properties?.id) {
       onPinPress(feature.properties.id);
     }
-  };
+  }, [onPinPress]);
 
   return (
     <MapboxGL.ShapeSource
@@ -96,4 +97,4 @@ export function ClusterLayer({ cases, onPinPress }: ClusterLayerProps) {
       />
     </MapboxGL.ShapeSource>
   );
-}
+});
