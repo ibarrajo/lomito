@@ -54,7 +54,10 @@
     "allCategories": "All",
     "allStatuses": "All",
     "casesInView": "{{count}} cases",
-    "clusterCount": "{{count}}"
+    "clusterCount": "{{count}}",
+    "showBoundaries": "Show boundaries",
+    "hideBoundaries": "Hide boundaries",
+    "jurisdictionInfo": "Jurisdiction: {{name}}"
   },
   "report": {
     "newReport": "New report",

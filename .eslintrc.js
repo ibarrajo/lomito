@@ -34,5 +34,5 @@ module.exports = {
     'react-native/no-color-literals': 'warn',
     'react-native/no-raw-text': 'off',
   },
-  ignorePatterns: ['node_modules/', 'dist/', 'build/', '.expo/'],
+  ignorePatterns: ['node_modules/', 'dist/', 'build/', '.expo/', 'supabase/functions/'],
 };

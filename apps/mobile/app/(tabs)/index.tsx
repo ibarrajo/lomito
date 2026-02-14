@@ -4,15 +4,17 @@
  */
 
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
 import { ClusterLayer } from '../../components/map/cluster-layer';
+import { JurisdictionLayer } from '../../components/map/jurisdiction-layer';
 import { CaseSummaryCard } from '../../components/map/case-summary-card';
 import { FilterBar } from '../../components/map/filter-bar';
 import { useMapFilters } from '../../hooks/use-map-filters';
+import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { supabase } from '../../lib/supabase';
-import { colors, spacing, shadowStyles } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, shadowStyles, iconSizes } from '@lomito/ui/src/theme/tokens';
 import { useTranslation } from 'react-i18next';
 import type { CaseCategory, CaseStatus, AnimalType } from '@lomito/shared/types/database';
 
@@ -31,6 +33,14 @@ export default function MapScreen() {
   const router = useRouter();
   const [cases, setCases] = useState<CaseSummary[]>([]);
   const [selectedCase, setSelectedCase] = useState<CaseSummary | null>(null);
+  const [showBoundaries, setShowBoundaries] = useState(false);
+  const [mapBounds, setMapBounds] = useState<{
+    west: number;
+    south: number;
+    east: number;
+    north: number;
+  } | null>(null);
+  const [mapZoom, setMapZoom] = useState(12);
 
   const {
     selectedCategories,
@@ -39,6 +49,11 @@ export default function MapScreen() {
     toggleStatus,
     buildQuery,
   } = useMapFilters();
+
+  const { data: jurisdictions } = useJurisdictions({
+    bounds: mapBounds,
+    zoom: mapZoom,
+  });
 
   useEffect(() => {
     fetchCases();
@@ -108,6 +123,29 @@ export default function MapScreen() {
     router.push('/report/new');
   }
 
+  function handleToggleBoundaries() {
+    setShowBoundaries((prev) => !prev);
+  }
+
+  function handleRegionChange(region: { bounds: { ne: [number, number]; sw: [number, number] }; zoomLevel: number }) {
+    const { bounds, zoomLevel } = region;
+    setMapBounds({
+      west: bounds.sw[0],
+      south: bounds.sw[1],
+      east: bounds.ne[0],
+      north: bounds.ne[1],
+    });
+    setMapZoom(zoomLevel);
+  }
+
+  function handleJurisdictionPress(_jurisdictionId: string, jurisdictionName: string) {
+    Alert.alert(
+      t('map.jurisdictionInfo', { name: jurisdictionName }),
+      '',
+      [{ text: t('common.ok') }]
+    );
+  }
+
   const geoJSONData = convertToGeoJSON();
 
   return (
@@ -119,8 +157,25 @@ export default function MapScreen() {
         onToggleStatus={toggleStatus}
       />
 
-      <MapView>
+      {/* Jurisdiction toggle button */}
+      <Pressable
+        style={styles.jurisdictionToggle}
+        onPress={handleToggleBoundaries}
+        accessibilityLabel={showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')}
+        accessibilityRole="button"
+      >
+        <Text style={styles.jurisdictionToggleText}>
+          {showBoundaries ? '🗺️' : '🗺️'}
+        </Text>
+      </Pressable>
+
+      <MapView onRegionDidChange={handleRegionChange}>
         <ClusterLayer cases={geoJSONData} onPinPress={handlePinPress} />
+        <JurisdictionLayer
+          data={jurisdictions}
+          visible={showBoundaries}
+          onPress={handleJurisdictionPress}
+        />
       </MapView>
 
       {selectedCase && (
@@ -147,6 +202,22 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  jurisdictionToggle: {
+    position: 'absolute',
+    top: 80,
+    right: spacing.md,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+    ...shadowStyles.card,
+  },
+  jurisdictionToggleText: {
+    fontSize: iconSizes.default,
   },
   fab: {
     position: 'absolute',

@@ -7,18 +7,57 @@ import { StyleSheet, View } from 'react-native';
 import MapboxGL, { TIJUANA_CENTER, DEFAULT_ZOOM } from '../../lib/mapbox';
 import type { ReactNode } from 'react';
 
+interface Region {
+  bounds: {
+    ne: [number, number];
+    sw: [number, number];
+  };
+  zoomLevel: number;
+}
+
 interface MapViewProps {
   children?: ReactNode;
   onMapReady?: () => void;
+  onRegionDidChange?: (region: Region) => void;
 }
 
-export function MapView({ children, onMapReady }: MapViewProps) {
+export function MapView({ children, onMapReady, onRegionDidChange }: MapViewProps) {
+  const handleRegionDidChange = async (event: unknown) => {
+    if (!onRegionDidChange) return;
+
+    try {
+      // Extract region data from event
+      const regionData = event as {
+        properties?: {
+          visibleBounds?: [[number, number], [number, number]];
+          zoomLevel?: number;
+        };
+      };
+
+      const visibleBounds = regionData.properties?.visibleBounds;
+      const zoomLevel = regionData.properties?.zoomLevel;
+
+      if (visibleBounds && zoomLevel !== undefined) {
+        onRegionDidChange({
+          bounds: {
+            ne: visibleBounds[0],
+            sw: visibleBounds[1],
+          },
+          zoomLevel,
+        });
+      }
+    } catch (err) {
+      console.error('Error handling region change:', err);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapboxGL.MapView
         style={styles.map}
         styleURL={MapboxGL.StyleURL.Street}
         onDidFinishLoadingMap={onMapReady}
+        onRegionDidChange={handleRegionDidChange}
         compassEnabled={false}
         scaleBarEnabled={false}
       >
