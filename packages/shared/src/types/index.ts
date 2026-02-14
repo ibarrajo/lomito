@@ -1,4 +1,19 @@
-// Shared TypeScript types
-// Database types, API types, domain models will be defined here
-
-export {};
+export type {
+  UserRole,
+  CaseStatus,
+  CaseCategory,
+  AnimalType,
+  UrgencyLevel,
+  MediaType,
+  JurisdictionLevel,
+  DonationMethod,
+  TimelineAction,
+  Profile,
+  Jurisdiction,
+  Case,
+  CaseMedia,
+  CaseTimeline,
+  CaseSubscription,
+  Donation,
+  Database,
+} from './database';
