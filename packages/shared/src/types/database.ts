@@ -23,6 +23,13 @@ export type TimelineAction =
   | 'resolved'
   | 'archived';
 
+export interface NotificationPreferences {
+  push_enabled: boolean;
+  email_enabled: boolean;
+  own_case_updates: boolean;
+  flagged_cases: boolean;
+}
+
 export interface Profile {
   id: string;
   full_name: string;
@@ -31,6 +38,7 @@ export interface Profile {
   role: UserRole;
   avatar_url: string | null;
   push_token: string | null;
+  notification_preferences: NotificationPreferences | null;
   created_at: string;
   updated_at: string;
 }
@@ -116,9 +124,10 @@ export interface Database {
     Tables: {
       profiles: {
         Row: Profile;
-        Insert: Omit<Profile, 'created_at' | 'updated_at'> & {
+        Insert: Omit<Profile, 'created_at' | 'updated_at' | 'notification_preferences'> & {
           created_at?: string;
           updated_at?: string;
+          notification_preferences?: NotificationPreferences | null;
         };
         Update: Partial<Omit<Profile, 'id' | 'created_at' | 'updated_at'>>;
       };

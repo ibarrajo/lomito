@@ -175,5 +175,15 @@
     "caseUpdated": "Caso actualizado",
     "caseVerified": "Tu reporte ha sido verificado",
     "caseResolved": "El caso ha sido resuelto"
+  },
+  "settings": {
+    "title": "Configuración",
+    "notifications": "Notificaciones",
+    "pushEnabled": "Notificaciones push",
+    "emailEnabled": "Notificaciones por correo",
+    "ownCaseUpdates": "Actualizaciones de mis reportes",
+    "flaggedCases": "Alertas de casos señalados",
+    "notificationPrefs": "Preferencias de notificación",
+    "signOut": "Cerrar sesión"
   }
 }

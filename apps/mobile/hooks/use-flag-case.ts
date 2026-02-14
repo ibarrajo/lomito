@@ -76,7 +76,7 @@ export function useFlagCase(caseId: string): FlagCaseResult {
             case_id: caseIdToFlag,
             reporter_id: user.id,
             reason,
-          });
+          } as never);
 
         if (insertError) {
           // Check if it's a unique constraint violation (user already flagged)

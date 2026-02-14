@@ -153,7 +153,7 @@ serve(async (req) => {
 
     const { data: profiles, error: profilesError } = await supabase
       .from('profiles')
-      .select('push_token')
+      .select('push_token, notification_preferences')
       .in('id', subscriberIds)
       .not('push_token', 'is', null);
 
@@ -175,17 +175,65 @@ serve(async (req) => {
       );
     }
 
+    // Get case data to check if subscriber is reporter
+    const { data: caseData } = await supabase
+      .from('cases')
+      .select('reporter_id')
+      .eq('id', caseId)
+      .single();
+
+    // Filter profiles based on notification preferences
+    const eligibleProfiles = profiles.filter((p) => {
+      if (!p.push_token) return false;
+
+      const prefs = p.notification_preferences as {
+        push_enabled?: boolean;
+        own_case_updates?: boolean;
+        flagged_cases?: boolean;
+      } | null;
+
+      // If no preferences set, use defaults (all enabled)
+      if (!prefs) return true;
+
+      // Check if push notifications are enabled
+      if (prefs.push_enabled === false) return false;
+
+      // Check if this is an update on their own case
+      if (caseData && subscriberIds.includes(caseData.reporter_id)) {
+        if (prefs.own_case_updates === false) return false;
+      }
+
+      // For flagged case notifications (moderators only)
+      if (action === 'flagged') {
+        if (prefs.flagged_cases === false) return false;
+      }
+
+      return true;
+    });
+
+    if (eligibleProfiles.length === 0) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          sent: 0,
+          message: 'No eligible subscribers after preference filtering',
+        }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
+
     // Build notification messages
     const { title, body } = getNotificationContent(action, actorName);
-    const messages: ExpoPushMessage[] = profiles
-      .filter((p) => p.push_token)
-      .map((p) => ({
-        to: p.push_token!,
-        sound: 'default',
-        title,
-        body,
-        data: { caseId },
-      }));
+    const messages: ExpoPushMessage[] = eligibleProfiles.map((p) => ({
+      to: p.push_token!,
+      sound: 'default',
+      title,
+      body,
+      data: { caseId },
+    }));
 
     // Send to Expo Push API
     const response = await fetch(EXPO_PUSH_URL, {
