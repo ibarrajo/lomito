@@ -1,0 +1,89 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "search": "Search",
+    "filter": "Filter",
+    "share": "Share",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK"
+  },
+  "nav": {
+    "map": "Map",
+    "profile": "Profile",
+    "settings": "Settings",
+    "notifications": "Notifications"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Sign up",
+    "logout": "Log out",
+    "email": "Email address",
+    "phone": "Phone number",
+    "name": "Full name",
+    "municipality": "Municipality",
+    "magicLink": "Send magic link",
+    "smsOtp": "Send SMS code",
+    "verifyCode": "Verify code",
+    "enterCode": "Enter the code sent to your phone",
+    "privacyAccept": "I accept the privacy notice",
+    "termsAccept": "I accept the terms of service",
+    "welcomeBack": "Welcome back!",
+    "createAccount": "Create account"
+  },
+  "map": {
+    "title": "Report map",
+    "myLocation": "My location",
+    "reportHere": "Report here",
+    "noReports": "No reports in this area",
+    "filterByCategory": "Filter by category",
+    "filterByStatus": "Filter by status"
+  },
+  "report": {
+    "newReport": "New report",
+    "category": "Category",
+    "animalType": "Animal type",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe the animal's situation...",
+    "urgency": "Urgency",
+    "photos": "Photos",
+    "addPhoto": "Add photo",
+    "location": "Location",
+    "submit": "Submit report"
+  },
+  "category": {
+    "abuse": "Abuse",
+    "stray": "Stray",
+    "missing": "Missing"
+  },
+  "animal": {
+    "dog": "Dog",
+    "cat": "Cat",
+    "bird": "Bird",
+    "other": "Other"
+  },
+  "urgency": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
+  },
+  "status": {
+    "pending": "Pending",
+    "verified": "Verified",
+    "in_progress": "In progress",
+    "resolved": "Resolved",
+    "rejected": "Rejected",
+    "archived": "Archived"
+  }
+}

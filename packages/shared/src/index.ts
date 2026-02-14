@@ -1,6 +1,3 @@
-// Barrel exports for shared package
-// Types will be exported from here once created
-// Constants will be exported from here once created
-// i18n configuration will be exported from here once created
-
-export {};
+export * from './types';
+export * from './constants';
+export { i18n, resources } from './i18n';

@@ -1,3 +1,4 @@
+import '../../../packages/shared/src/i18n/config';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 

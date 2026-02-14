@@ -1,0 +1,89 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Listo",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "share": "Compartir",
+    "close": "Cerrar",
+    "yes": "Sí",
+    "no": "No",
+    "ok": "OK"
+  },
+  "nav": {
+    "map": "Mapa",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "notifications": "Notificaciones"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "phone": "Número de teléfono",
+    "name": "Nombre completo",
+    "municipality": "Municipio",
+    "magicLink": "Enviar enlace mágico",
+    "smsOtp": "Enviar código por SMS",
+    "verifyCode": "Verificar código",
+    "enterCode": "Ingresa el código enviado a tu teléfono",
+    "privacyAccept": "Acepto el aviso de privacidad",
+    "termsAccept": "Acepto los términos de servicio",
+    "welcomeBack": "¡Bienvenido de vuelta!",
+    "createAccount": "Crear cuenta"
+  },
+  "map": {
+    "title": "Mapa de reportes",
+    "myLocation": "Mi ubicación",
+    "reportHere": "Reportar aquí",
+    "noReports": "No hay reportes en esta zona",
+    "filterByCategory": "Filtrar por categoría",
+    "filterByStatus": "Filtrar por estado"
+  },
+  "report": {
+    "newReport": "Nuevo reporte",
+    "category": "Categoría",
+    "animalType": "Tipo de animal",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe la situación del animal...",
+    "urgency": "Urgencia",
+    "photos": "Fotos",
+    "addPhoto": "Agregar foto",
+    "location": "Ubicación",
+    "submit": "Enviar reporte"
+  },
+  "category": {
+    "abuse": "Maltrato",
+    "stray": "Callejero",
+    "missing": "Extraviado"
+  },
+  "animal": {
+    "dog": "Perro",
+    "cat": "Gato",
+    "bird": "Ave",
+    "other": "Otro"
+  },
+  "urgency": {
+    "low": "Baja",
+    "medium": "Media",
+    "high": "Alta",
+    "critical": "Crítica"
+  },
+  "status": {
+    "pending": "Pendiente",
+    "verified": "Verificado",
+    "in_progress": "En progreso",
+    "resolved": "Resuelto",
+    "rejected": "Rechazado",
+    "archived": "Archivado"
+  }
+}
