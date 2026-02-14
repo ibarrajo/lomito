@@ -25,13 +25,13 @@ Rules:
 Respond with ONLY the commit message, nothing else."""
 
 
-def committer_node(state: AgentState, *, router: ModelRouter, config: Any) -> dict:
+def committer_node(state: AgentState, *, router: ModelRouter, app_config: Any) -> dict:
     """Stage changes and create a git commit."""
     task = state["current_task"]
     if task is None:
         return {"error": "No task to commit"}
 
-    working_dir = str(config.project_dir)
+    working_dir = str(app_config.project_dir)
 
     status_result = subprocess.run(
         ["git", "status", "--porcelain"],

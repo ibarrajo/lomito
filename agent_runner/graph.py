@@ -50,10 +50,10 @@ def build_graph(config: Config) -> tuple[Any, SqliteSaver]:
 
     graph = StateGraph(AgentState)
 
-    graph.add_node("planner", partial(planner_node, router=router, config=config))
+    graph.add_node("planner", partial(planner_node, router=router, app_config=config))
     graph.add_node("implementer", partial(implementer_node, router=router, tools=tools))
     graph.add_node("reviewer", partial(reviewer_node, router=router, tools=tools))
-    graph.add_node("committer", partial(committer_node, router=router, config=config))
+    graph.add_node("committer", partial(committer_node, router=router, app_config=config))
 
     graph.set_entry_point("planner")
 

@@ -31,7 +31,7 @@ Selection criteria:
 """
 
 
-def planner_node(state: AgentState, *, router: ModelRouter, config: Any) -> dict:
+def planner_node(state: AgentState, *, router: ModelRouter, app_config: Any) -> dict:
     """Select the next task to execute."""
     tasks = state["tasks"]
     task_status = state["task_status"]
@@ -77,7 +77,7 @@ def planner_node(state: AgentState, *, router: ModelRouter, config: Any) -> dict
 
     spec_content = ""
     if selected.spec:
-        spec_path = Path(config.project_dir) / selected.spec
+        spec_path = Path(app_config.project_dir) / selected.spec
         if spec_path.exists():
             try:
                 spec_content = spec_path.read_text(encoding="utf-8")[:10000]
