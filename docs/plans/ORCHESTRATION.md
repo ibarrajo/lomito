@@ -184,79 +184,25 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 5: Launch Readiness
 
 ### P5-T1: Mercado Pago donations
-- **Depends on:** P1-T4 (schema), P1-T6 (auth)
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5 — "Mercado Pago donation integration")
-- **Deliverables:**
-  - `supabase/functions/create-donation/index.ts` — Edge Function: creates Mercado Pago payment preference (checkout link). Supports OXXO, SPEI, credit/debit card. Returns checkout URL.
-  - `supabase/functions/donation-webhook/index.ts` — Edge Function: receives Mercado Pago IPN webhook, updates donation status in DB, inserts success/failure record
-  - `apps/mobile/app/donate.tsx` — Donation screen: amount picker (preset + custom), payment method selector, opens Mercado Pago checkout via WebBrowser
-  - `apps/mobile/hooks/use-donate.ts` — Hook: createDonation, tracks payment state
-  - `apps/mobile/components/donate/amount-picker.tsx` — Preset amounts ($50, $100, $200, $500 MXN) + custom input
-  - `apps/mobile/components/donate/payment-methods.tsx` — Payment method selector (card, OXXO, SPEI)
-  - i18n: add `donate.title`, `donate.amount`, `donate.customAmount`, `donate.paymentMethod`, `donate.processing`, `donate.thankYou`, `donate.error` keys to both JSON files
 - **Commit:** `feat(donations): add Mercado Pago donation flow with OXXO and SPEI support`
-- [ ] Done
+- [x] Done
 
 ### P5-T2: Public impact dashboard
-- **Depends on:** P1-T4 (schema)
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5 — "Public impact dashboard")
-- **Deliverables:**
-  - `apps/mobile/app/(tabs)/dashboard.tsx` — Dashboard tab screen: public-facing stats and charts
-  - `apps/mobile/hooks/use-dashboard-stats.ts` — Hook: fetches aggregated stats via Supabase RPC (total cases, resolved %, by category, by jurisdiction, avg resolution time, donation total)
-  - `supabase/migrations/20250214000012_dashboard_stats_function.sql` — SQL function returning aggregated stats (avoids exposing raw data)
-  - `apps/mobile/components/dashboard/stat-card.tsx` — Card displaying single stat with icon, value, label
-  - `apps/mobile/components/dashboard/category-chart.tsx` — Simple bar chart showing cases by category (abuse, stray, missing)
-  - `apps/mobile/components/dashboard/resolution-rate.tsx` — Circular progress indicator showing resolution percentage
-  - Update `apps/mobile/app/(tabs)/_layout.tsx` — Add Dashboard tab with `BarChart3` icon
-  - i18n: add `dashboard.title`, `dashboard.totalCases`, `dashboard.resolvedRate`, `dashboard.byCategory`, `dashboard.byJurisdiction`, `dashboard.avgResolution`, `dashboard.totalDonations` keys to both JSON files
 - **Commit:** `feat(dashboard): add public impact dashboard with stats and charts`
-- [ ] Done
+- [x] Done
 
 ### P5-T3: About Us page
-- **Depends on:** P1-T3 (UI components)
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5)
-- **Deliverables:**
-  - `apps/mobile/app/about.tsx` — About Us screen: mission statement, team info, open source links, contact, social media
-  - `apps/mobile/components/about/mission-section.tsx` — Mission statement with Lomito branding
-  - `apps/mobile/components/about/team-section.tsx` — Team/org info cards
-  - `apps/mobile/components/about/links-section.tsx` — External links: GitHub repo, website, contact email, social media
-  - i18n: add `about.title`, `about.mission`, `about.missionText`, `about.team`, `about.openSource`, `about.contact`, `about.website` keys to both JSON files
 - **Commit:** `feat(about): add About Us page with mission, team, and links`
-- [ ] Done
+- [x] Done
 
 ### P5-T4: Legal documents
-- **Depends on:** P1-T5 (i18n)
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5 — "Legal documents: privacy notice, TOS, security policy")
-- **Deliverables:**
-  - `apps/mobile/app/legal/privacy.tsx` — Privacy notice screen (renders markdown/text content)
-  - `apps/mobile/app/legal/terms.tsx` — Terms of service screen
-  - `apps/mobile/app/legal/_layout.tsx` — Stack layout for legal screens
-  - `packages/shared/src/legal/privacy-es.ts` — Privacy notice text (Spanish, LFPDP compliant)
-  - `packages/shared/src/legal/privacy-en.ts` — Privacy notice text (English)
-  - `packages/shared/src/legal/terms-es.ts` — Terms of service (Spanish)
-  - `packages/shared/src/legal/terms-en.ts` — Terms of service (English)
-  - i18n: add `legal.privacy`, `legal.terms`, `legal.lastUpdated` keys to both JSON files
 - **Commit:** `feat(legal): add privacy notice and terms of service screens`
-- [ ] Done
+- [x] Done
 
 ### P5-T5: Performance audit
-- **Depends on:** all previous phases
-- **Spec:** CLAUDE.md (Performance Budgets)
-- **Deliverables:**
-  - `apps/mobile/lib/performance.ts` — Performance monitoring utilities: measure cold start, screen transition times, API call durations
-  - Review and optimize: lazy loading for screens, memoization audit (useMemo/useCallback), image optimization check, bundle size analysis
-  - `docs/audit/performance-report.md` — Performance audit report with findings and optimizations applied
 - **Commit:** `perf: performance audit and optimizations`
-- [ ] Done
+- [x] Done
 
 ### P5-T6: App Store + Play Store submission
-- **Depends on:** P5-T5, P5-T4
-- **Spec:** `docs/specs/PROJECT_BRIEF.md` (Phase 5)
-- **Deliverables:**
-  - `apps/mobile/app.json` — Updated with store metadata: name, description, version, icon, splash, iOS/Android config
-  - `apps/mobile/eas.json` — EAS Build configuration for production builds
-  - `docs/store/app-store-listing.md` — App Store listing text (English + Spanish)
-  - `docs/store/play-store-listing.md` — Play Store listing text (English + Spanish)
-  - `docs/store/screenshots.md` — Screenshot requirements checklist
 - **Commit:** `chore: prepare App Store and Play Store submission assets`
-- [ ] Done
+- [x] Done
