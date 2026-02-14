@@ -62,7 +62,21 @@
     "photos": "Photos",
     "addPhoto": "Add photo",
     "location": "Location",
-    "submit": "Submit report"
+    "submit": "Submit report",
+    "step1Title": "What happened?",
+    "step2Title": "Where is it?",
+    "step3Title": "Tell us more",
+    "step4Title": "Review & submit",
+    "selectCategory": "Select a category",
+    "selectAnimalType": "What type of animal?",
+    "selectUrgency": "How urgent is this?",
+    "dropPin": "Drag the map to set the location",
+    "reviewSubmit": "Review and submit your report",
+    "edit": "Edit",
+    "coordinates": "Coordinates",
+    "categoryabuseDescription": "Animal is being harmed or neglected",
+    "categorystrayDescription": "Stray animal needing help",
+    "categorymissingDescription": "Lost pet looking for owner"
   },
   "category": {
     "abuse": "Abuse",

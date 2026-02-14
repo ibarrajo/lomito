@@ -62,7 +62,21 @@
     "photos": "Fotos",
     "addPhoto": "Agregar foto",
     "location": "Ubicación",
-    "submit": "Enviar reporte"
+    "submit": "Enviar reporte",
+    "step1Title": "¿Qué sucedió?",
+    "step2Title": "¿Dónde está?",
+    "step3Title": "Cuéntanos más",
+    "step4Title": "Revisar y enviar",
+    "selectCategory": "Selecciona una categoría",
+    "selectAnimalType": "¿Qué tipo de animal?",
+    "selectUrgency": "¿Qué tan urgente es?",
+    "dropPin": "Arrastra el mapa para fijar la ubicación",
+    "reviewSubmit": "Revisa y envía tu reporte",
+    "edit": "Editar",
+    "coordinates": "Coordenadas",
+    "categoryabuseDescription": "El animal está siendo maltratado o descuidado",
+    "categorystrayDescription": "Animal callejero que necesita ayuda",
+    "categorymissingDescription": "Mascota perdida buscando a su dueño"
   },
   "category": {
     "abuse": "Maltrato",

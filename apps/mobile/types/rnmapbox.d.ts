@@ -17,6 +17,7 @@ declare module '@rnmapbox/maps' {
     style?: ViewStyle;
     styleURL?: string;
     onDidFinishLoadingMap?: () => void;
+    onRegionDidChange?: (feature: unknown) => void;
     compassEnabled?: boolean;
     scaleBarEnabled?: boolean;
     children?: ReactNode;
