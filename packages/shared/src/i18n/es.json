@@ -47,7 +47,10 @@
     "reportHere": "Reportar aquí",
     "noReports": "No hay reportes en esta zona",
     "filterByCategory": "Filtrar por categoría",
-    "filterByStatus": "Filtrar por estado"
+    "filterByStatus": "Filtrar por estado",
+    "viewDetails": "Ver detalles",
+    "reportedOn": "Reportado el",
+    "loadingCases": "Cargando casos..."
   },
   "report": {
     "newReport": "Nuevo reporte",

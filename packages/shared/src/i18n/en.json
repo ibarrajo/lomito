@@ -47,7 +47,10 @@
     "reportHere": "Report here",
     "noReports": "No reports in this area",
     "filterByCategory": "Filter by category",
-    "filterByStatus": "Filter by status"
+    "filterByStatus": "Filter by status",
+    "viewDetails": "View details",
+    "reportedOn": "Reported on",
+    "loadingCases": "Loading cases..."
   },
   "report": {
     "newReport": "New report",
