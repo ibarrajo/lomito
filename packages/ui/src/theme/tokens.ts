@@ -52,6 +52,7 @@ export const colors = {
 
   // Status/semantic colors
   error: '#C53030',
+  errorDark: '#9B2C2C',
   errorBackground: '#FFF5F5',
   warning: '#DD6B20',
   warningBackground: '#FFFAF0',
