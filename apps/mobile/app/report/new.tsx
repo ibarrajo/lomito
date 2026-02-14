@@ -15,6 +15,7 @@ import { CategoryPicker } from '../../components/report/category-picker';
 import { AnimalTypePicker } from '../../components/report/animal-type-picker';
 import { UrgencyPicker } from '../../components/report/urgency-picker';
 import { LocationPicker } from '../../components/report/location-picker';
+import { PhotoPicker } from '../../components/report/photo-picker';
 import { ReviewStep } from '../../components/report/review-step';
 import { useCreateCase } from '../../hooks/use-create-case';
 
@@ -24,6 +25,7 @@ interface ReportFormData {
   location: { latitude: number; longitude: number } | null;
   description: string;
   urgency: UrgencyLevel;
+  photos: string[];
 }
 
 export default function NewReportScreen() {
@@ -38,12 +40,14 @@ export default function NewReportScreen() {
     location: null,
     description: '',
     urgency: 'medium',
+    photos: [],
   });
 
   const stepTitles = [
     t('report.step1Title'),
     t('report.step2Title'),
     t('report.step3Title'),
+    t('report.step5Title'),
     t('report.step4Title'),
   ];
 
@@ -61,7 +65,7 @@ export default function NewReportScreen() {
   };
 
   const handleNext = () => {
-    if (currentStep < 3 && canProceedFromStep(currentStep)) {
+    if (currentStep < 4 && canProceedFromStep(currentStep)) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -162,6 +166,15 @@ export default function NewReportScreen() {
 
       case 3:
         return (
+          <View style={styles.stepContent}>
+            <PhotoPicker
+              onImagesChange={(photos) => setFormData({ ...formData, photos })}
+            />
+          </View>
+        );
+
+      case 4:
+        return (
           <ReviewStep
             data={formData}
             onEdit={handleEdit}
@@ -188,14 +201,14 @@ export default function NewReportScreen() {
             <Body color={colors.primary}>{t('common.back')}</Body>
           </Pressable>
           <Body color={colors.neutral500}>
-            {currentStep + 1} / 4
+            {currentStep + 1} / 5
           </Body>
         </View>
         <H1 style={styles.title}>{stepTitles[currentStep]}</H1>
 
         {/* Step Indicator */}
         <View style={styles.stepIndicator}>
-          {[0, 1, 2, 3].map((step) => (
+          {[0, 1, 2, 3, 4].map((step) => (
             <View
               key={step}
               style={[
@@ -222,7 +235,7 @@ export default function NewReportScreen() {
       )}
 
       {/* Navigation Buttons (except on review step) */}
-      {currentStep < 3 && (
+      {currentStep < 4 && (
         <View style={styles.footer}>
           <Button
             variant="primary"
