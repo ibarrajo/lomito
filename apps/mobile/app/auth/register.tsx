@@ -3,15 +3,16 @@ import {
   View,
   StyleSheet,
   Pressable,
-  Alert,
   Modal,
   ScrollView,
+  Text,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Button, TextInput, H1, Body, BodySmall } from '@lomito/ui';
-import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
+import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
+import { colors, spacing, borderRadius, typography } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
+import { useBreakpoint } from '../../hooks/use-breakpoint';
 
 const MUNICIPALITIES = [
   'Tijuana',
@@ -21,10 +22,13 @@ const MUNICIPALITIES = [
   'Mexicali',
 ];
 
+const MODAL_OVERLAY_COLOR = 'rgba(0, 0, 0, 0.5)';
+
 export default function RegisterScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const { signUp } = useAuth();
+  const { isDesktop } = useBreakpoint();
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -35,34 +39,32 @@ export default function RegisterScreen() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showMunicipalityPicker, setShowMunicipalityPicker] = useState(false);
+  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
 
   const handleRegister = async () => {
     // Validation
     if (!fullName.trim()) {
-      Alert.alert(t('common.error'), 'Please enter your full name');
+      setModal({ title: t('common.error'), message: t('auth.nameRequired') });
       return;
     }
     if (!email.trim()) {
-      Alert.alert(t('common.error'), 'Please enter your email address');
+      setModal({ title: t('common.error'), message: t('auth.emailRequired') });
       return;
     }
     if (!phone.trim()) {
-      Alert.alert(t('common.error'), 'Please enter your phone number');
+      setModal({ title: t('common.error'), message: t('auth.phoneRequired') });
       return;
     }
     if (!municipality) {
-      Alert.alert(t('common.error'), 'Please select your municipality');
+      setModal({ title: t('common.error'), message: t('auth.municipalityRequired') });
       return;
     }
     if (!password.trim() || password.length < 6) {
-      Alert.alert(t('common.error'), 'Password must be at least 6 characters');
+      setModal({ title: t('common.error'), message: t('auth.passwordMinLength') });
       return;
     }
     if (!privacyAccepted || !termsAccepted) {
-      Alert.alert(
-        t('common.error'),
-        'Please accept the privacy notice and terms of service',
-      );
+      setModal({ title: t('common.error'), message: t('auth.acceptTerms') });
       return;
     }
 
@@ -73,30 +75,46 @@ export default function RegisterScreen() {
         phone,
         municipality,
       });
-      Alert.alert(
-        t('common.done'),
-        'Account created! Check your email to verify your account.',
-        [
-          {
-            text: t('common.ok'),
-            onPress: () => router.replace('/auth/login'),
-          },
-        ],
-      );
+      setModal({
+        title: t('common.done'),
+        message: t('auth.accountCreated'),
+        onDismiss: () => router.replace('/auth/login'),
+      });
     } catch (error) {
-      Alert.alert(t('common.error'), (error as Error).message);
+      setModal({ title: t('common.error'), message: (error as Error).message });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <H1 accessibilityLabel={t('auth.createAccount')}>
-          {t('auth.createAccount')}
-        </H1>
-      </View>
+    <View style={[styles.outerContainer, isDesktop && styles.outerContainerRow]}>
+      {isDesktop && (
+        <View style={styles.sidebar}>
+          <View style={styles.sidebarContent}>
+            <Text style={styles.sidebarEmoji}>🐾</Text>
+            <Text style={styles.sidebarHeading}>
+              {i18n.language === 'es' ? 'Únete a nuestra comunidad' : 'Join our community'}
+            </Text>
+            <Text style={styles.sidebarSubtext}>
+              {i18n.language === 'es' ? 'Juntos podemos proteger a los animales de Tijuana' : 'Together we can protect Tijuana\'s animals'}
+            </Text>
+          </View>
+        </View>
+      )}
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+        <View style={styles.formWrapper}>
+          {!isDesktop && <View style={styles.mobileAccent} />}
+          <View style={styles.branding}>
+            <Text style={styles.brandWordmark}>Lomito</Text>
+            <BodySmall color={colors.neutral500}>{t('landing.footerTagline')}</BodySmall>
+          </View>
+
+          <View style={styles.header}>
+            <H1 accessibilityLabel={t('auth.createAccount')}>
+              {t('auth.createAccount')}
+            </H1>
+          </View>
 
       <View style={styles.form}>
         <TextInput
@@ -145,19 +163,19 @@ export default function RegisterScreen() {
           >
             <Body
               color={municipality ? colors.neutral900 : colors.neutral400}
-              accessibilityLabel={municipality || 'Select municipality'}
+              accessibilityLabel={municipality || t('auth.selectMunicipality')}
             >
-              {municipality || 'Select municipality'}
+              {municipality || t('auth.selectMunicipality')}
             </Body>
           </Pressable>
         </View>
 
         <TextInput
-          label="Password"
+          label={t('auth.password')}
           value={password}
           onChangeText={setPassword}
-          placeholder="At least 6 characters"
-          accessibilityLabel="Password"
+          placeholder={t('auth.passwordPlaceholder')}
+          accessibilityLabel={t('auth.password')}
           secureTextEntry
           autoCapitalize="none"
         />
@@ -213,8 +231,8 @@ export default function RegisterScreen() {
 
       {/* Login link */}
       <View style={styles.footer}>
-        <Body accessibilityLabel="Already have an account?">
-          Already have an account?{' '}
+        <Body accessibilityLabel={t('auth.alreadyHaveAccount')}>
+          {t('auth.alreadyHaveAccount')}{' '}
         </Body>
         <Pressable
           onPress={() => router.back()}
@@ -226,9 +244,10 @@ export default function RegisterScreen() {
           </Body>
         </Pressable>
       </View>
+        </View>
 
-      {/* Municipality picker modal */}
-      <Modal
+        {/* Municipality picker modal */}
+        <Modal
         visible={showMunicipalityPicker}
         transparent
         animationType="slide"
@@ -237,7 +256,7 @@ export default function RegisterScreen() {
         <Pressable
           style={styles.modalOverlay}
           onPress={() => setShowMunicipalityPicker(false)}
-          accessibilityLabel="Close municipality picker"
+          accessibilityLabel={t('common.close')}
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -269,11 +288,43 @@ export default function RegisterScreen() {
           </View>
         </Pressable>
       </Modal>
-    </ScrollView>
+
+      <AppModal
+        visible={!!modal}
+        title={modal?.title ?? ''}
+        message={modal?.message}
+        actions={[{
+          label: t('common.ok'),
+          onPress: () => {
+            const onDismiss = modal?.onDismiss;
+            setModal(null);
+            onDismiss?.();
+          },
+        }]}
+        onClose={() => {
+          const onDismiss = modal?.onDismiss;
+          setModal(null);
+          onDismiss?.();
+        }}
+      />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  brandWordmark: {
+    color: colors.primary,
+    fontFamily: typography.h1.fontFamily,
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: spacing.xs,
+  },
+  branding: {
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+    paddingTop: spacing.lg,
+  },
   checkbox: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -300,7 +351,6 @@ const styles = StyleSheet.create({
     marginLeft: spacing.sm,
   },
   container: {
-    backgroundColor: colors.white,
     flex: 1,
   },
   content: {
@@ -318,11 +368,24 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     marginTop: spacing.lg,
   },
+  formWrapper: {
+    alignSelf: 'center',
+    maxWidth: 480,
+    width: '100%',
+  },
   header: {
     marginBottom: spacing.xl,
   },
   label: {
     marginBottom: spacing.xs,
+  },
+  mobileAccent: {
+    alignSelf: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 2,
+    height: 4,
+    marginBottom: spacing.lg,
+    width: 40,
   },
   modalContent: {
     backgroundColor: colors.white,
@@ -341,9 +404,16 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   modalOverlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: MODAL_OVERLAY_COLOR,
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  outerContainer: {
+    backgroundColor: colors.white,
+    flex: 1,
+  },
+  outerContainerRow: {
+    flexDirection: 'row',
   },
   picker: {
     backgroundColor: colors.white,
@@ -353,6 +423,36 @@ const styles = StyleSheet.create({
     height: 48,
     justifyContent: 'center',
     paddingHorizontal: spacing.md,
+  },
+  sidebar: {
+    alignItems: 'center',
+    backgroundColor: colors.primaryLight,
+    borderRightColor: colors.neutral200,
+    borderRightWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    maxWidth: 480,
+    padding: spacing.xxl,
+  },
+  sidebarContent: {
+    maxWidth: 320,
+  },
+  sidebarEmoji: {
+    fontSize: 48,
+    marginBottom: spacing.lg,
+  },
+  sidebarHeading: {
+    color: colors.primaryDark,
+    fontFamily: typography.h1.fontFamily,
+    fontSize: 28,
+    fontWeight: '700',
+    lineHeight: 36,
+    marginBottom: spacing.md,
+  },
+  sidebarSubtext: {
+    color: colors.neutral500,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.body.fontSize,
   },
   submitButton: {
     marginTop: spacing.md,

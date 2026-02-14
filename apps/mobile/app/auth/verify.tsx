@@ -18,12 +18,12 @@ export default function VerifyScreen() {
 
   const handleVerify = async () => {
     if (!phone) {
-      Alert.alert(t('common.error'), 'Phone number is required');
+      Alert.alert(t('common.error'), t('auth.phoneRequired'));
       return;
     }
 
     if (!code.trim() || code.length !== 6) {
-      Alert.alert(t('common.error'), 'Please enter a valid 6-digit code');
+      Alert.alert(t('common.error'), t('auth.codeInvalid'));
       return;
     }
 
@@ -40,14 +40,14 @@ export default function VerifyScreen() {
 
   const handleResend = async () => {
     if (!phone) {
-      Alert.alert(t('common.error'), 'Phone number is required');
+      Alert.alert(t('common.error'), t('auth.phoneRequired'));
       return;
     }
 
     setResending(true);
     try {
       await signInWithOtp(phone);
-      Alert.alert(t('common.done'), 'A new code has been sent to your phone');
+      Alert.alert(t('common.done'), t('auth.codeSent'));
     } catch (error) {
       Alert.alert(t('common.error'), (error as Error).message);
     } finally {
@@ -77,11 +77,11 @@ export default function VerifyScreen() {
 
       <View style={styles.form}>
         <TextInput
-          label="Verification code"
+          label={t('auth.verificationCode')}
           value={code}
           onChangeText={setCode}
           placeholder="000000"
-          accessibilityLabel="Verification code"
+          accessibilityLabel={t('auth.verificationCode')}
           keyboardType="number-pad"
           maxLength={6}
           autoFocus
@@ -99,20 +99,20 @@ export default function VerifyScreen() {
 
       {/* Resend code link */}
       <View style={styles.footer}>
-        <Body accessibilityLabel="Didn't receive the code?">
-          Didn&apos;t receive the code?{' '}
+        <Body accessibilityLabel={t('auth.noCode')}>
+          {t('auth.noCode')}{' '}
         </Body>
         <Pressable
           onPress={handleResend}
           disabled={resending}
-          accessibilityLabel="Resend code"
+          accessibilityLabel={t('auth.resend')}
           accessibilityRole="button"
         >
           <Body
             color={resending ? colors.neutral400 : colors.primary}
-            accessibilityLabel="Resend code"
+            accessibilityLabel={t('auth.resend')}
           >
-            {resending ? 'Sending...' : 'Resend'}
+            {resending ? t('auth.sending') : t('auth.resend')}
           </Body>
         </Pressable>
       </View>

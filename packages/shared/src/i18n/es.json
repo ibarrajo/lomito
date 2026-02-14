@@ -45,7 +45,28 @@
     "privacyAccept": "Acepto el aviso de privacidad",
     "termsAccept": "Acepto los términos de servicio",
     "welcomeBack": "¡Bienvenido de vuelta!",
-    "createAccount": "Crear cuenta"
+    "createAccount": "Crear cuenta",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Al menos 6 caracteres",
+    "selectMunicipality": "Selecciona municipio",
+    "noAccount": "¿No tienes cuenta?",
+    "alreadyHaveAccount": "¿Ya tienes cuenta?",
+    "magicLinkSent": "Revisa tu correo para el enlace mágico de inicio de sesión",
+    "accountCreated": "¡Cuenta creada! Revisa tu correo para verificar tu cuenta.",
+    "codeSent": "Se ha enviado un nuevo código a tu teléfono",
+    "noCode": "¿No recibiste el código?",
+    "resend": "Reenviar",
+    "sending": "Enviando...",
+    "verificationCode": "Código de verificación",
+    "emailRequired": "Por favor ingresa tu correo electrónico",
+    "phoneRequired": "Por favor ingresa tu número de teléfono",
+    "nameRequired": "Por favor ingresa tu nombre completo",
+    "municipalityRequired": "Por favor selecciona tu municipio",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "acceptTerms": "Por favor acepta el aviso de privacidad y los términos de servicio",
+    "codeInvalid": "Por favor ingresa un código válido de 6 dígitos",
+    "emailLoginTab": "Iniciar sesión con correo",
+    "smsLoginTab": "Iniciar sesión con SMS"
   },
   "map": {
     "title": "Mapa de reportes",
@@ -209,7 +230,10 @@
     "ownCaseUpdates": "Actualizaciones de mis reportes",
     "flaggedCases": "Alertas de casos señalados",
     "notificationPrefs": "Preferencias de notificación",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "language": "Idioma",
+    "account": "Cuenta",
+    "signOutError": "Error al cerrar sesión"
   },
   "escalation": {
     "escalate": "Escalar a autoridades",
@@ -278,7 +302,9 @@
     "minAmount": "Mínimo $10 MXN",
     "cardInfo": "Paga de forma segura con tarjeta de crédito o débito a través de Mercado Pago.",
     "oxxoInfo": "Genera un código de pago para pagar en efectivo en cualquier tienda OXXO.",
-    "speiInfo": "Realiza una transferencia bancaria directa usando SPEI desde tu banco."
+    "speiInfo": "Realiza una transferencia bancaria directa usando SPEI desde tu banco.",
+    "whyDonate": "A dónde va tu donación",
+    "whyDonateDescription": "El 100% de las donaciones se destina a costos de servidor, notificaciones SMS y mantener Lomito gratuito para todos. Somos voluntarios sin gastos generales."
   },
   "dashboard": {
     "title": "Tablero de impacto",
@@ -310,5 +336,22 @@
     "moderator": "Moderador",
     "government": "Gobierno",
     "admin": "Administrador"
+  },
+  "landing": {
+    "heroTitle": "Protegiendo a los animales de nuestra comunidad, juntos",
+    "heroSubtitle": "Reporta problemas de bienestar animal, da seguimiento y exige responsabilidad a las autoridades — todo en una sola plataforma.",
+    "ctaReport": "Reportar Ahora",
+    "ctaViewMap": "Ver Mapa",
+    "howItWorksTitle": "Cómo Funciona",
+    "step1Title": "Reporta",
+    "step1Description": "¿Ves un animal en peligro? Envía un reporte con fotos y ubicación en segundos.",
+    "step2Title": "Da Seguimiento",
+    "step2Description": "Sigue tu caso mientras avanza por verificación y respuesta gubernamental.",
+    "step3Title": "Resuelve",
+    "step3Description": "Ve resultados reales. Cada caso resuelto hace nuestra comunidad más segura para los animales.",
+    "impactTitle": "Nuestro Impacto",
+    "communityTitle": "Hecho por la Comunidad",
+    "communityDescription": "Lomito es de código abierto e impulsado por la comunidad. Creemos que la transparencia y la participación cívica crean un cambio duradero para los animales callejeros en México.",
+    "footerTagline": "Hecho con amor en Tijuana"
   }
 }

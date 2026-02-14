@@ -184,3 +184,28 @@ export const iconSizes = {
 } as const;
 
 export const iconStrokeWidth = 1.5;
+
+export const breakpoints = {
+  mobile: 0,
+  tablet: 768,
+  desktop: 1024,
+  wide: 1440,
+} as const;
+
+export const layout = {
+  maxContentWidth: 1280,
+  navbarHeight: 64,
+  sidebarWidth: 280,
+  mapPanelWidth: 400,
+  containerPadding: { mobile: 16, tablet: 24, desktop: 32 },
+} as const;
+
+export const motion = {
+  duration: { instant: 100, fast: 200, normal: 300, slow: 500 },
+  easing: {
+    default: [0.4, 0, 0.2, 1] as readonly number[],
+    decelerate: [0, 0, 0.2, 1] as readonly number[],
+    accelerate: [0.4, 0, 1, 1] as readonly number[],
+  },
+  spring: { damping: 15, stiffness: 150, mass: 1 },
+} as const;

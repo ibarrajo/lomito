@@ -1,9 +1,11 @@
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Body, Caption } from '@lomito/ui';
+import { Caption, Container } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { TERMS_OF_SERVICE_ES } from '@lomito/shared/src/legal/terms-es';
 import { TERMS_OF_SERVICE_EN } from '@lomito/shared/src/legal/terms-en';
+import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
+import { PageFooter } from '../../components/shared/page-footer';
 
 export default function TermsScreen() {
   const { t, i18n } = useTranslation();
@@ -18,17 +20,18 @@ export default function TermsScreen() {
         contentContainerStyle={styles.content}
         accessibilityLabel={t('legal.terms')}
       >
-        <Caption
-          style={styles.lastUpdated}
-          color={colors.neutral500}
-          accessibilityLabel={t('legal.lastUpdated', { date: 'February 2026' })}
-        >
-          {t('legal.lastUpdated', { date: 'February 2026' })}
-        </Caption>
+        <Container maxWidth={720}>
+          <Caption
+            style={styles.lastUpdated}
+            color={colors.neutral500}
+            accessibilityLabel={t('legal.lastUpdated', { date: 'February 2026' })}
+          >
+            {t('legal.lastUpdated', { date: 'February 2026' })}
+          </Caption>
 
-        <Body style={styles.text} accessibilityLabel="Terms of service content">
-          {termsText}
-        </Body>
+          <LegalTextRenderer text={termsText} />
+        </Container>
+        <PageFooter />
       </ScrollView>
     </View>
   );
@@ -49,8 +52,5 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  text: {
-    lineHeight: 22,
   },
 });

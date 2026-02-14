@@ -2,12 +2,16 @@ import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { colors, spacing, typography, borderRadius } from '@lomito/ui/src/theme/tokens';
+import { H1, Body, Caption } from '@lomito/ui';
 import { useAuth } from '../../hooks/use-auth';
+import { useUserProfile } from '../../hooks/use-user-profile';
 import { NotificationPrefs } from '../../components/settings/notification-prefs';
+import { LanguagePicker } from '../../components/settings/language-picker';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
-  const { signOut } = useAuth();
+  const { session, signOut } = useAuth();
+  const { profile } = useUserProfile();
   const router = useRouter();
 
   const handleSignOut = () => {
@@ -26,7 +30,7 @@ export default function SettingsScreen() {
               router.replace('/auth/login');
             } catch (error) {
               console.error('Error signing out:', error);
-              Alert.alert(t('common.error'), 'Failed to sign out');
+              Alert.alert(t('common.error'), t('settings.signOutError'));
             }
           },
           style: 'destructive',
@@ -40,11 +44,25 @@ export default function SettingsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>{t('settings.title')}</Text>
+        <H1>{t('settings.title')}</H1>
       </View>
 
       <View style={styles.content}>
+        <View style={styles.section}>
+          <Caption style={styles.sectionLabel}>{t('settings.account')}</Caption>
+          <View style={styles.accountInfo}>
+            <Body style={{ color: colors.neutral900 }}>{profile?.full_name || ''}</Body>
+            <Caption style={{ color: colors.neutral500 }}>{session?.user?.email || ''}</Caption>
+          </View>
+        </View>
+
+        <View style={styles.spacer} />
+
         <NotificationPrefs />
+
+        <View style={styles.spacer} />
+
+        <LanguagePicker />
 
         <View style={styles.section}>
           <Pressable
@@ -114,22 +132,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingTop: spacing.xl,
   },
-  headerTitle: {
-    ...typography.h1,
-    color: colors.neutral900,
-  },
-  section: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.card,
-    marginTop: spacing.md,
-    paddingVertical: spacing.xs,
-  },
-  sectionTitle: {
-    ...typography.caption,
+  sectionLabel: {
     color: colors.neutral500,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xs,
     textTransform: 'uppercase',
+  },
+  accountInfo: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
   },
   navLink: {
     backgroundColor: colors.white,
@@ -142,6 +154,12 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.neutral900,
   },
+  section: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.card,
+    marginTop: spacing.md,
+    paddingVertical: spacing.xs,
+  },
   signOutButton: {
     alignItems: 'center',
     backgroundColor: colors.error,
@@ -153,5 +171,8 @@ const styles = StyleSheet.create({
   signOutButtonText: {
     ...typography.button,
     color: colors.white,
+  },
+  spacer: {
+    height: spacing.md,
   },
 });

@@ -12,6 +12,9 @@ export {
   shadowStyles,
   iconSizes,
   iconStrokeWidth,
+  breakpoints,
+  layout,
+  motion,
 } from './tokens';
 
 export { ThemeProvider, useTheme } from './theme-provider';

@@ -10,11 +10,18 @@ import {
   Text,
   type ViewStyle,
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  useReducedMotion,
+} from 'react-native-reanimated';
 import {
   colors,
   typography,
   spacing,
   borderRadius,
+  motion,
 } from '../theme/tokens';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive';
@@ -41,51 +48,78 @@ export function Button({
   style,
 }: ButtonProps) {
   const isDisabled = disabled || loading;
+  const reducedMotion = useReducedMotion();
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    if (reducedMotion) {
+      return { transform: [{ scale: 1 }] };
+    }
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePressIn = () => {
+    if (!isDisabled && !reducedMotion) {
+      scale.value = withSpring(0.97, motion.spring);
+    }
+  };
+
+  const handlePressOut = () => {
+    if (!isDisabled && !reducedMotion) {
+      scale.value = withSpring(1, motion.spring);
+    }
+  };
 
   return (
-    <Pressable
-      onPress={onPress}
-      disabled={isDisabled}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="button"
-      accessibilityState={{ disabled: isDisabled }}
-      style={({ pressed }) => {
-        // eslint-disable-next-line react-native/no-unused-styles
-        const variantStyle = styles[variant];
-        const pressedStyle = pressed && !isDisabled
+    <Animated.View style={animatedStyle}>
+      <Pressable
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={isDisabled}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="button"
+        accessibilityState={{ disabled: isDisabled }}
+        style={({ pressed }) => {
           // eslint-disable-next-line react-native/no-unused-styles
-          ? styles[`${variant}Pressed` as 'primaryPressed' | 'secondaryPressed' | 'ghostPressed' | 'destructivePressed']
-          : undefined;
-
-        return [
-          styles.base,
-          variantStyle,
-          pressedStyle,
-          isDisabled && styles.disabled,
-          style,
-        ];
-      }}
-    >
-      {loading ? (
-        <ActivityIndicator
-          color={
-            variant === 'secondary' || variant === 'ghost'
-              ? colors.primary
-              : colors.white
-          }
-        />
-      ) : (
-        <Text
-          style={[
-            styles.text,
+          const variantStyle = styles[variant];
+          const pressedStyle = pressed && !isDisabled
             // eslint-disable-next-line react-native/no-unused-styles
-            styles[`${variant}Text` as 'primaryText' | 'secondaryText' | 'ghostText' | 'destructiveText'],
-          ]}
-        >
-          {children}
-        </Text>
-      )}
-    </Pressable>
+            ? styles[`${variant}Pressed` as 'primaryPressed' | 'secondaryPressed' | 'ghostPressed' | 'destructivePressed']
+            : undefined;
+
+          return [
+            styles.base,
+            variantStyle,
+            pressedStyle,
+            isDisabled && styles.disabled,
+            style,
+          ];
+        }}
+      >
+        {loading ? (
+          <ActivityIndicator
+            color={
+              variant === 'secondary' || variant === 'ghost'
+                ? colors.primary
+                : colors.white
+            }
+          />
+        ) : (
+          <Text
+            style={[
+              styles.text,
+              // eslint-disable-next-line react-native/no-unused-styles
+              styles[`${variant}Text` as 'primaryText' | 'secondaryText' | 'ghostText' | 'destructiveText'],
+            ]}
+          >
+            {children}
+          </Text>
+        )}
+      </Pressable>
+    </Animated.View>
   );
 }
 

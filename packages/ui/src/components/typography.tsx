@@ -42,6 +42,7 @@ export function H2({
       style={[styles.h2, { color }, style]}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="header"
+      aria-level={2}
     >
       {children}
     </Text>
@@ -59,6 +60,7 @@ export function H3({
       style={[styles.h3, { color }, style]}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="header"
+      aria-level={3}
     >
       {children}
     </Text>

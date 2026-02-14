@@ -132,3 +132,134 @@ All spacing uses an 8px base grid.
 - Color-coded by category (see Semantic Colors).
 - Resolved pins: smaller, desaturated.
 - Clusters: circle with count, gradient from dominant category color.
+
+## Responsive Breakpoints
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| breakpoint-mobile | 0px | Default, phone screens |
+| breakpoint-tablet | 768px | Tablet portrait, small laptops |
+| breakpoint-desktop | 1024px | Desktop, laptop screens |
+| breakpoint-wide | 1440px | Wide desktop monitors |
+
+## Layout Tokens
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| layout-max-content-width | 1280px | Maximum content area width on desktop |
+| layout-navbar-height | 64px | Top navigation bar height (desktop web) |
+| layout-sidebar-width | 280px | Reserved for future sidebar navigation |
+| layout-map-panel-width | 400px | Case detail panel on desktop map view |
+| layout-container-padding-mobile | 16px | Horizontal page padding on mobile |
+| layout-container-padding-tablet | 24px | Horizontal page padding on tablet |
+| layout-container-padding-desktop | 32px | Horizontal page padding on desktop |
+
+## Motion Tokens
+
+### Durations
+| Token | Value | Usage |
+|-------|-------|-------|
+| duration-instant | 100ms | Micro-interactions, toggles |
+| duration-fast | 200ms | Button presses, chip toggles |
+| duration-normal | 300ms | Page transitions, modals |
+| duration-slow | 500ms | Complex animations, hero transitions |
+
+### Easing Curves
+| Token | Value | Usage |
+|-------|-------|-------|
+| easing-default | cubic-bezier(0.4, 0, 0.2, 1) | Standard movement (Material Design standard) |
+| easing-decelerate | cubic-bezier(0, 0, 0.2, 1) | Elements entering screen |
+| easing-accelerate | cubic-bezier(0.4, 0, 1, 1) | Elements leaving screen |
+
+### Spring Configuration
+| Token | Value | Usage |
+|-------|-------|-------|
+| spring-damping | 15 | Reanimated spring damping |
+| spring-stiffness | 150 | Reanimated spring stiffness |
+| spring-mass | 1 | Reanimated spring mass |
+
+All animations must respect `useReducedMotion()` — skip or simplify when true.
+
+## Desktop Typography Scale
+
+On desktop (≥1024px), headings scale up for better readability at distance:
+
+| Element | Mobile | Desktop | Delta |
+|---------|--------|---------|-------|
+| Display | 32px | 40px | +8px |
+| Heading 1 | 24px | 32px | +8px |
+| Heading 2 | 20px | 24px | +4px |
+| Heading 3 | 17px | 20px | +3px |
+| Body | 15px | 16px | +1px |
+| Body Small | 13px | 14px | +1px |
+
+## Component Specs (Desktop)
+
+### Navbar
+- Height: 64px, sticky top, white background
+- Bottom border: 1px neutral-200
+- Shadow: card shadow (warm-toned)
+- Left: Logo wordmark
+- Center: Navigation links (active = primary color underline, 2px)
+- Right: Language toggle, user avatar dropdown, primary CTA button
+- All labels use `t()` translations
+
+### Modal (AppModal)
+- Overlay: neutral-900 at 50% opacity
+- Card: white, max-width 400px, border-radius 12px (card)
+- Title: H2, message: Body
+- Action buttons: right-aligned, primary + ghost variants
+- Entry animation: scale 0.95→1.0 + opacity 0→1, duration-normal
+
+### Language Picker
+- Two options: Español, English
+- Radio-style selection (circle indicator)
+- Persists to AsyncStorage, applies via `i18n.changeLanguage()`
+
+## Desktop Layout Patterns
+
+### Split-Pane Map
+On desktop, the map view uses a split layout:
+- Left panel (400px): case list / case detail
+- Right: full-height map
+- Panel slides in/out with duration-normal easing-default
+
+### Multi-Column Grid
+Dashboard stats and landing page feature cards use a responsive grid:
+- Mobile: 1 column
+- Tablet: 2 columns
+- Desktop: 3-4 columns
+- Min column width: 300px, gap: 16px
+
+### Max-Width Containers
+All page content wraps in a `Container` component:
+- Max width: 1280px (layout-max-content-width)
+- Centered with auto margins
+- Responsive padding by breakpoint
+- Prose content (about, legal): max-width 720px for readability
+- Auth forms (login, register): max-width 440px, centered
+- Single-action pages (donate): max-width 560px, centered
+
+## Design Anti-Patterns (Avoiding the AI-Generated Look)
+
+When building new pages or components, actively avoid these common AI-generated design tells:
+
+### Layout
+- **Never center everything** — left-align hero text, section headers, and body copy. Centered layouts feel generic and template-like.
+- **Break the 3-identical-cards pattern** — use asymmetric layouts: one large card + two stacked small cards (bento grid), or vary card sizes deliberately. Never place 3 identically-sized cards in a row.
+- **Vary section rhythms** — alternate between full-width sections, contained sections, and accent-bar callouts. Avoid identical spacing between every section.
+
+### Visual Hierarchy
+- **Use fewer, more purposeful icons** — don't put a Lucide icon on every card. Use icons where they add meaning (navigation, status indicators), not decoration.
+- **Avoid symmetric icon-title-description cards** — if every card has `[icon] → [H3] → [Body]`, the page feels generated. Mix formats: some cards with icons, some without, some with accent borders instead.
+- **Reduce excessive whitespace** — AI-generated pages tend to over-space. Tighten padding to what feels intentional, not empty.
+
+### Content & Tone
+- **Write specific, non-generic copy** — "Protecting our community's animals, together" is better than "Welcome to our platform". Reference Tijuana, Mexico, the specific problem being solved.
+- **Show real data where possible** — stats, case counts, response times. Concrete numbers build trust more than abstract statements.
+- **Avoid corporate-speak** — "empowering communities" reads like a template. "We report animal welfare issues to the authorities who are supposed to handle them" reads like humans wrote it.
+
+### Components
+- **Auth pages need identity** — a bare form on white looks like a template. Add the app wordmark, a tagline, or a colored sidebar. The user should know which app they're logging into.
+- **Footers should be compact** — a single horizontal row with links is better than a massive 4-column footer grid that looks like a WordPress theme.
+- **Prefer accent bars over icon decorations** — a 4px colored left border on a callout is more distinctive than a circle-with-icon above every section.

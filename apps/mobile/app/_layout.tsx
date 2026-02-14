@@ -2,12 +2,13 @@ import '../../../packages/shared/src/i18n/config';
 import { useEffect } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { ThemeProvider, Skeleton } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../hooks/use-auth';
 import { useNotifications } from '../hooks/use-notifications';
 import { PerformanceMonitor } from '../lib/performance';
+import { AppShell } from '../components/navigation/app-shell';
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
@@ -30,9 +31,17 @@ function RootLayoutNav() {
 
     const inAuthGroup = segments[0] === 'auth';
 
-    if (!session && !inAuthGroup) {
-      // Redirect to login if not authenticated
-      router.replace('/auth/login');
+    // Routes accessible without authentication
+    const publicRoutes = ['(public)', 'auth', 'about', 'donate', 'legal'];
+    const inPublicRoute = publicRoutes.includes(segments[0] as string);
+
+    if (!session && !inPublicRoute) {
+      // Redirect to public landing (web) or login (native)
+      if (Platform.OS === 'web') {
+        router.replace('/(public)');
+      } else {
+        router.replace('/auth/login');
+      }
     } else if (session && inAuthGroup) {
       // Redirect to main app if authenticated
       router.replace('/(tabs)');
@@ -52,9 +61,10 @@ function RootLayoutNav() {
   }
 
   return (
-    <>
+    <AppShell>
       <StatusBar style="auto" />
       <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(public)" />
         <Stack.Screen name="auth/login" />
         <Stack.Screen name="auth/register" />
         <Stack.Screen name="auth/verify" />
@@ -65,7 +75,7 @@ function RootLayoutNav() {
         <Stack.Screen name="donate" />
         <Stack.Screen name="legal" />
       </Stack>
-    </>
+    </AppShell>
   );
 }
 
@@ -85,10 +95,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.md,
   },
-  skeletonTop: {
-    marginBottom: spacing.xl,
-  },
   skeletonItem: {
     marginBottom: spacing.md,
+  },
+  skeletonTop: {
+    marginBottom: spacing.xl,
   },
 });

@@ -1,38 +1,38 @@
 import { useState } from 'react';
-import { View, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, Pressable, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Button, TextInput, H1, Body } from '@lomito/ui';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
+import { colors, spacing, typography } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
+import { useBreakpoint } from '../../hooks/use-breakpoint';
 
 type AuthMethod = 'email' | 'phone';
 
 export default function LoginScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const { signInWithMagicLink, signInWithOtp } = useAuth();
 
+  const { isDesktop } = useBreakpoint();
   const [authMethod, setAuthMethod] = useState<AuthMethod>('email');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
 
   const handleMagicLink = async () => {
     if (!email.trim()) {
-      Alert.alert(t('common.error'), 'Please enter your email address');
+      setModal({ title: t('common.error'), message: t('auth.emailRequired') });
       return;
     }
 
     setLoading(true);
     try {
       await signInWithMagicLink(email);
-      Alert.alert(
-        t('common.done'),
-        'Check your email for the magic link to log in',
-      );
+      setModal({ title: t('common.done'), message: t('auth.magicLinkSent') });
     } catch (error) {
-      Alert.alert(t('common.error'), (error as Error).message);
+      setModal({ title: t('common.error'), message: (error as Error).message });
     } finally {
       setLoading(false);
     }
@@ -40,7 +40,7 @@ export default function LoginScreen() {
 
   const handleSmsOtp = async () => {
     if (!phone.trim()) {
-      Alert.alert(t('common.error'), 'Please enter your phone number');
+      setModal({ title: t('common.error'), message: t('auth.phoneRequired') });
       return;
     }
 
@@ -52,26 +52,47 @@ export default function LoginScreen() {
         params: { phone },
       });
     } catch (error) {
-      Alert.alert(t('common.error'), (error as Error).message);
+      setModal({ title: t('common.error'), message: (error as Error).message });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <H1 accessibilityLabel={t('auth.welcomeBack')}>
-          {t('auth.welcomeBack')}
-        </H1>
-      </View>
+    <View style={[styles.container, isDesktop && styles.containerRow]}>
+      {isDesktop && (
+        <View style={styles.sidebar}>
+          <View style={styles.sidebarContent}>
+            <Text style={styles.sidebarEmoji}>🐾</Text>
+            <Text style={styles.sidebarHeading}>
+              {i18n.language === 'es' ? 'Protegiendo a los animales de nuestra comunidad' : 'Protecting our community\'s animals'}
+            </Text>
+            <Text style={styles.sidebarSubtext}>
+              {i18n.language === 'es' ? 'Plataforma cívica para Tijuana' : 'Civic platform for Tijuana'}
+            </Text>
+          </View>
+        </View>
+      )}
+      <View style={styles.formSide}>
+        <View style={styles.formWrapper}>
+          {!isDesktop && <View style={styles.mobileAccent} />}
+          <View style={styles.branding}>
+            <Text style={styles.brandWordmark}>Lomito</Text>
+            <BodySmall color={colors.neutral500}>{t('landing.footerTagline')}</BodySmall>
+          </View>
+
+          <View style={styles.header}>
+            <H1 accessibilityLabel={t('auth.welcomeBack')}>
+              {t('auth.welcomeBack')}
+            </H1>
+          </View>
 
       {/* Tab switcher */}
       <View style={styles.tabs}>
         <Pressable
           style={[styles.tab, authMethod === 'email' && styles.tabActive]}
           onPress={() => setAuthMethod('email')}
-          accessibilityLabel="Email login tab"
+          accessibilityLabel={t('auth.emailLoginTab')}
           accessibilityRole="tab"
           accessibilityState={{ selected: authMethod === 'email' }}
         >
@@ -86,7 +107,7 @@ export default function LoginScreen() {
         <Pressable
           style={[styles.tab, authMethod === 'phone' && styles.tabActive]}
           onPress={() => setAuthMethod('phone')}
-          accessibilityLabel="SMS login tab"
+          accessibilityLabel={t('auth.smsLoginTab')}
           accessibilityRole="tab"
           accessibilityState={{ selected: authMethod === 'phone' }}
         >
@@ -150,8 +171,8 @@ export default function LoginScreen() {
 
       {/* Register link */}
       <View style={styles.footer}>
-        <Body accessibilityLabel="Don't have an account?">
-          Don&apos;t have an account?{' '}
+        <Body accessibilityLabel={t('auth.noAccount')}>
+          {t('auth.noAccount')}{' '}
         </Body>
         <Pressable
           onPress={() => router.push('/auth/register')}
@@ -163,16 +184,50 @@ export default function LoginScreen() {
           </Body>
         </Pressable>
       </View>
+        </View>
+      </View>
+
+      <AppModal
+        visible={!!modal}
+        title={modal?.title ?? ''}
+        message={modal?.message}
+        actions={[{
+          label: t('common.ok'),
+          onPress: () => {
+            const onDismiss = modal?.onDismiss;
+            setModal(null);
+            onDismiss?.();
+          },
+        }]}
+        onClose={() => {
+          const onDismiss = modal?.onDismiss;
+          setModal(null);
+          onDismiss?.();
+        }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  brandWordmark: {
+    color: colors.primary,
+    fontFamily: typography.h1.fontFamily,
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: spacing.xs,
+  },
+  branding: {
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+    paddingTop: spacing.lg,
+  },
   container: {
     backgroundColor: colors.white,
     flex: 1,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xxl,
+  },
+  containerRow: {
+    flexDirection: 'row',
   },
   footer: {
     alignItems: 'center',
@@ -184,14 +239,63 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     marginTop: spacing.lg,
   },
+  formSide: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xxl,
+  },
+  formWrapper: {
+    alignSelf: 'center',
+    maxWidth: 440,
+    width: '100%',
+  },
   header: {
     marginBottom: spacing.xl,
+  },
+  mobileAccent: {
+    alignSelf: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 2,
+    height: 4,
+    marginBottom: spacing.lg,
+    width: 40,
+  },
+  sidebar: {
+    alignItems: 'center',
+    backgroundColor: colors.primaryLight,
+    borderRightColor: colors.neutral200,
+    borderRightWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    maxWidth: 480,
+    padding: spacing.xxl,
+  },
+  sidebarContent: {
+    maxWidth: 320,
+  },
+  sidebarEmoji: {
+    fontSize: 48,
+    marginBottom: spacing.lg,
+  },
+  sidebarHeading: {
+    color: colors.primaryDark,
+    fontFamily: typography.h1.fontFamily,
+    fontSize: 28,
+    fontWeight: '700',
+    lineHeight: 36,
+    marginBottom: spacing.md,
+  },
+  sidebarSubtext: {
+    color: colors.neutral500,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.body.fontSize,
   },
   submitButton: {
     marginTop: spacing.md,
   },
   tab: {
-    borderBottomColor: 'transparent',
+    borderBottomColor: colors.white,
     borderBottomWidth: 2,
     flex: 1,
     paddingBottom: spacing.sm,

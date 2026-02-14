@@ -45,7 +45,28 @@
     "privacyAccept": "I accept the privacy notice",
     "termsAccept": "I accept the terms of service",
     "welcomeBack": "Welcome back!",
-    "createAccount": "Create account"
+    "createAccount": "Create account",
+    "password": "Password",
+    "passwordPlaceholder": "At least 6 characters",
+    "selectMunicipality": "Select municipality",
+    "noAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "magicLinkSent": "Check your email for the magic link to log in",
+    "accountCreated": "Account created! Check your email to verify your account.",
+    "codeSent": "A new code has been sent to your phone",
+    "noCode": "Didn't receive the code?",
+    "resend": "Resend",
+    "sending": "Sending...",
+    "verificationCode": "Verification code",
+    "emailRequired": "Please enter your email address",
+    "phoneRequired": "Please enter your phone number",
+    "nameRequired": "Please enter your full name",
+    "municipalityRequired": "Please select your municipality",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "acceptTerms": "Please accept the privacy notice and terms of service",
+    "codeInvalid": "Please enter a valid 6-digit code",
+    "emailLoginTab": "Email login tab",
+    "smsLoginTab": "SMS login tab"
   },
   "map": {
     "title": "Report map",
@@ -209,7 +230,10 @@
     "ownCaseUpdates": "Updates on my reports",
     "flaggedCases": "Flagged case alerts",
     "notificationPrefs": "Notification preferences",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "language": "Language",
+    "account": "Account",
+    "signOutError": "Failed to sign out"
   },
   "escalation": {
     "escalate": "Escalate to authorities",
@@ -278,7 +302,9 @@
     "minAmount": "Minimum $10 MXN",
     "cardInfo": "Pay securely with credit or debit card through Mercado Pago.",
     "oxxoInfo": "Generate a payment code to pay in cash at any OXXO store.",
-    "speiInfo": "Make a direct bank transfer using SPEI from your bank."
+    "speiInfo": "Make a direct bank transfer using SPEI from your bank.",
+    "whyDonate": "Where your donation goes",
+    "whyDonateDescription": "100% of donations go to server costs, SMS notifications, and keeping Lomito free for everyone. We're volunteer-run with zero overhead."
   },
   "dashboard": {
     "title": "Impact Dashboard",
@@ -310,5 +336,22 @@
     "moderator": "Moderator",
     "government": "Government",
     "admin": "Administrator"
+  },
+  "landing": {
+    "heroTitle": "Protecting our community's animals, together",
+    "heroSubtitle": "Report animal welfare issues, track progress, and hold authorities accountable — all in one platform.",
+    "ctaReport": "Report Now",
+    "ctaViewMap": "View Map",
+    "howItWorksTitle": "How It Works",
+    "step1Title": "Report",
+    "step1Description": "Spot an animal in need? Submit a report with photos and location in seconds.",
+    "step2Title": "Track",
+    "step2Description": "Follow your case as it moves through verification and government response.",
+    "step3Title": "Resolve",
+    "step3Description": "See real outcomes. Every resolved case makes our community safer for animals.",
+    "impactTitle": "Our Impact",
+    "communityTitle": "Built by the Community",
+    "communityDescription": "Lomito is open source and community-driven. We believe transparency and civic participation create lasting change for street animals in Mexico.",
+    "footerTagline": "Made with love in Tijuana"
   }
 }

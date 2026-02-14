@@ -27,6 +27,11 @@ export async function requestPermissions(): Promise<boolean> {
 
 export async function registerForPushNotifications(): Promise<string | null> {
   try {
+    // Push notifications are not supported on web without VAPID configuration
+    if (Platform.OS === 'web') {
+      return null;
+    }
+
     // Request permissions first
     const hasPermission = await requestPermissions();
     if (!hasPermission) {
