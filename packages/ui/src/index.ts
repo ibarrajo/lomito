@@ -1,4 +1,7 @@
-// Barrel exports for UI package
-// Theme tokens and components will be exported from here
+/**
+ * Lomito UI Package
+ * Exports design system tokens and shared UI components.
+ */
 
-export {};
+export * from './theme';
+export * from './components';

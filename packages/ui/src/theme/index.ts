@@ -1,4 +1,18 @@
-// Design system tokens
-// Colors, typography, spacing, shadows, etc. will be defined here
+/**
+ * Design System Theme
+ * Exports all design tokens and theme utilities.
+ */
 
-export {};
+export {
+  colors,
+  typography,
+  spacing,
+  borderRadius,
+  shadows,
+  shadowStyles,
+  iconSizes,
+  iconStrokeWidth,
+} from './tokens';
+
+export { ThemeProvider, useTheme } from './theme-provider';
+export type { Theme } from './theme-provider';
