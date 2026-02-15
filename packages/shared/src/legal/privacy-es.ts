@@ -6,8 +6,6 @@
 
 export const PRIVACY_NOTICE_ES = `AVISO DE PRIVACIDAD
 
-Última actualización: Febrero 2026
-
 RESPONSABLE DEL TRATAMIENTO DE DATOS PERSONALES
 
 Lomito (en adelante "nosotros" o "la plataforma") con dominio web lomito.org, es responsable del tratamiento de sus datos personales de conformidad con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).

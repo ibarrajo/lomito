@@ -6,8 +6,6 @@
 
 export const PRIVACY_NOTICE_EN = `PRIVACY NOTICE
 
-Last updated: February 2026
-
 DATA CONTROLLER
 
 Lomito ("we" or "the platform") at lomito.org is responsible for the processing of your personal data in accordance with Mexico's Federal Law on Protection of Personal Data Held by Private Parties (LFPDPPP).

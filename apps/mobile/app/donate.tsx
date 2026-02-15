@@ -4,18 +4,30 @@
  */
 
 import { useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Platform } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Platform,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as WebBrowser from 'expo-web-browser';
 import { AmountPicker } from '../components/donate/amount-picker';
 import { PaymentMethods } from '../components/donate/payment-methods';
 import { useDonate } from '../hooks/use-donate';
-import { colors, spacing, borderRadius, shadowStyles } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  shadowStyles,
+} from '@lomito/ui/src/theme/tokens';
 import { H1, H2, Body, BodySmall, ButtonText, AppModal } from '@lomito/ui';
 import { ArrowLeft } from 'lucide-react-native';
 import { isFeatureEnabled } from '@lomito/shared';
 import { useAnalytics } from '../hooks/use-analytics';
+import { PageFooter } from '../components/shared/page-footer';
 
 type PaymentMethod = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -26,8 +38,13 @@ export default function DonateScreen() {
   const { trackEvent } = useAnalytics();
 
   const [selectedAmount, setSelectedAmount] = useState(100);
-  const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('mercado_pago');
-  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
+  const [selectedMethod, setSelectedMethod] =
+    useState<PaymentMethod>('mercado_pago');
+  const [modal, setModal] = useState<{
+    title: string;
+    message: string;
+    onDismiss?: () => void;
+  } | null>(null);
 
   async function handleSubmit() {
     // Validate amount
@@ -36,7 +53,10 @@ export default function DonateScreen() {
       return;
     }
 
-    trackEvent('donate_start', { amount: String(selectedAmount), method: selectedMethod });
+    trackEvent('donate_start', {
+      amount: String(selectedAmount),
+      method: selectedMethod,
+    });
 
     // Create donation and get checkout URL
     const result = await createDonation({
@@ -46,7 +66,9 @@ export default function DonateScreen() {
 
     if (result && result.checkoutUrl) {
       // Open Mercado Pago checkout in browser
-      const browserResult = await WebBrowser.openBrowserAsync(result.checkoutUrl);
+      const browserResult = await WebBrowser.openBrowserAsync(
+        result.checkoutUrl,
+      );
 
       // Handle result after user returns from browser
       if (browserResult.type === 'cancel' || browserResult.type === 'dismiss') {
@@ -83,8 +105,11 @@ export default function DonateScreen() {
         </View>
         <View style={styles.comingSoonWrapper}>
           <H2 style={styles.comingSoonTitle}>{t('donate.comingSoon')}</H2>
-          <Body color={colors.neutral500}>{t('donate.comingSoonDescription')}</Body>
+          <Body color={colors.neutral500}>
+            {t('donate.comingSoonDescription')}
+          </Body>
         </View>
+        <PageFooter />
       </View>
     );
   }
@@ -120,10 +145,16 @@ export default function DonateScreen() {
           </View>
 
           {/* Amount Picker */}
-          <AmountPicker selectedAmount={selectedAmount} onAmountChange={setSelectedAmount} />
+          <AmountPicker
+            selectedAmount={selectedAmount}
+            onAmountChange={setSelectedAmount}
+          />
 
           {/* Payment Methods */}
-          <PaymentMethods selectedMethod={selectedMethod} onMethodChange={setSelectedMethod} />
+          <PaymentMethods
+            selectedMethod={selectedMethod}
+            onMethodChange={setSelectedMethod}
+          />
 
           {/* Info text based on payment method */}
           <View style={styles.infoCard}>
@@ -138,14 +169,19 @@ export default function DonateScreen() {
         {/* Submit Button */}
         <View style={styles.footer}>
           <Pressable
-            style={[styles.submitButton, loading && styles.submitButtonDisabled]}
+            style={[
+              styles.submitButton,
+              loading && styles.submitButtonDisabled,
+            ]}
             onPress={handleSubmit}
             disabled={loading}
             accessibilityLabel={t('common.submit')}
             accessibilityRole="button"
           >
             <ButtonText style={styles.submitButtonText}>
-              {loading ? t('donate.processing') : `${t('common.submit')} $${selectedAmount} MXN`}
+              {loading
+                ? t('donate.processing')
+                : `${t('common.submit')} $${selectedAmount} MXN`}
             </ButtonText>
           </Pressable>
         </View>

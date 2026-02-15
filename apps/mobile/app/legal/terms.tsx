@@ -5,6 +5,7 @@ import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { TERMS_OF_SERVICE_ES } from '@lomito/shared/src/legal/terms-es';
 import { TERMS_OF_SERVICE_EN } from '@lomito/shared/src/legal/terms-en';
 import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
+import { PageFooter } from '../../components/shared/page-footer';
 
 export default function TermsScreen() {
   const { t, i18n } = useTranslation();
@@ -25,6 +26,7 @@ export default function TermsScreen() {
           </View>
           <LegalTextRenderer text={termsText} />
         </Container>
+        <PageFooter />
       </ScrollView>
     </View>
   );

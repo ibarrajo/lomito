@@ -5,8 +5,6 @@
 
 export const TERMS_OF_SERVICE_EN = `TERMS OF SERVICE
 
-Last updated: February 2026
-
 ACCEPTANCE OF TERMS
 
 By accessing and using the Lomito platform (lomito.org), you agree to be bound by these Terms of Service. If you do not agree with any of these terms, please do not use the platform.

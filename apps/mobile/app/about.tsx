@@ -9,6 +9,7 @@ import { MissionSection } from '../components/about/mission-section';
 import { TeamSection } from '../components/about/team-section';
 import { RoadmapSection } from '../components/about/roadmap-section';
 import { LinksSection } from '../components/about/links-section';
+import { PageFooter } from '../components/shared/page-footer';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
@@ -44,8 +45,8 @@ export default function AboutScreen() {
           <TeamSection />
           <RoadmapSection />
           <LinksSection />
-          <View style={styles.spacer} />
         </Container>
+        <PageFooter />
       </ScrollView>
     </>
   );
@@ -85,8 +86,5 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     marginBottom: spacing.sm,
-  },
-  spacer: {
-    height: spacing.xl,
   },
 });

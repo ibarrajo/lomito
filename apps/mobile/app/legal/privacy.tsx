@@ -5,6 +5,7 @@ import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { PRIVACY_NOTICE_ES } from '@lomito/shared/src/legal/privacy-es';
 import { PRIVACY_NOTICE_EN } from '@lomito/shared/src/legal/privacy-en';
 import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
+import { PageFooter } from '../../components/shared/page-footer';
 
 export default function PrivacyScreen() {
   const { t, i18n } = useTranslation();
@@ -25,6 +26,7 @@ export default function PrivacyScreen() {
           </View>
           <LegalTextRenderer text={privacyText} />
         </Container>
+        <PageFooter />
       </ScrollView>
     </View>
   );

@@ -5,8 +5,6 @@
 
 export const TERMS_OF_SERVICE_ES = `TÉRMINOS DE SERVICIO
 
-Última actualización: Febrero 2026
-
 ACEPTACIÓN DE LOS TÉRMINOS
 
 Al acceder y utilizar la plataforma Lomito (lomito.org), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con alguno de estos términos, por favor no utilice la plataforma.
