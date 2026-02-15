@@ -1,21 +1,24 @@
 /**
  * Case Detail Screen
- * Shows full case information including photos, timeline, and map.
+ * Shows full case information with hero image, stats, 2-column desktop layout.
  */
 
 import { useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Pressable, Text } from 'react-native';
-import { useLocalSearchParams, Stack } from 'expo-router';
+import { useLocalSearchParams, Stack, Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { H1, Body } from '@lomito/ui/components/typography';
-import { colors, spacing } from '@lomito/ui/theme/tokens';
+import { ChevronRight } from 'lucide-react-native';
+import { H2, Body, Caption } from '@lomito/ui/components/typography';
+import { colors, spacing, layout } from '@lomito/ui/theme/tokens';
 import { Skeleton } from '@lomito/ui/components/skeleton';
 import { useCase } from '../../hooks/use-case';
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { useCaseSubscription } from '../../hooks/use-case-subscription';
-import { CaseHeader } from '../../components/case/case-header';
+import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { CaseHero } from '../../components/case/case-hero';
+import { CaseStatsRow } from '../../components/case/case-stats-row';
+import { CaseSidebar } from '../../components/case/case-sidebar';
 import { PhotoGallery } from '../../components/case/photo-gallery';
-import { CaseMap } from '../../components/case/case-map';
 import { Timeline } from '../../components/case/timeline';
 import { FlagButton } from '../../components/case/flag-button';
 import { ShareButton } from '../../components/case/share-button';
@@ -36,6 +39,7 @@ export default function CaseDetailScreen() {
     toggle: toggleSubscription,
   } = useCaseSubscription(id ?? '');
   const { trackEvent } = useAnalytics();
+  const { isDesktop } = useBreakpoint();
 
   useEffect(() => {
     if (id) {
@@ -128,65 +132,130 @@ export default function CaseDetailScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Case Header */}
-        <CaseHeader caseData={caseData} />
-
-        {/* Escalate Button */}
-        {profile && (
-          <View style={styles.escalateSection}>
-            <EscalateButton
-              caseId={caseData.id}
-              status={caseData.status}
-              escalatedAt={caseData.escalated_at}
-              userRole={profile.role}
-              onEscalated={refetch}
+        {/* Breadcrumbs - Desktop only */}
+        {isDesktop && (
+          <View style={styles.breadcrumbs}>
+            <Link href="/" asChild>
+              <Pressable
+                style={styles.breadcrumbLink}
+                accessibilityLabel={t('case.breadcrumbHome')}
+                accessibilityRole="link"
+              >
+                <Caption color={colors.neutral500}>
+                  {t('case.breadcrumbHome')}
+                </Caption>
+              </Pressable>
+            </Link>
+            <ChevronRight
+              size={14}
+              color={colors.neutral400}
+              strokeWidth={1.5}
             />
-          </View>
-        )}
-
-        {/* Escalation Status */}
-        {caseData.escalated_at && (
-          <View style={styles.escalationStatusSection}>
-            <EscalationStatus
-              escalatedAt={caseData.escalated_at}
-              escalationReminderCount={caseData.escalation_reminder_count || 0}
-              markedUnresponsive={caseData.marked_unresponsive || false}
-              governmentResponseAt={caseData.government_response_at}
+            <Link href="/map" asChild>
+              <Pressable
+                style={styles.breadcrumbLink}
+                accessibilityLabel={t('case.breadcrumbCases')}
+                accessibilityRole="link"
+              >
+                <Caption color={colors.neutral500}>
+                  {t('case.breadcrumbCases')}
+                </Caption>
+              </Pressable>
+            </Link>
+            <ChevronRight
+              size={14}
+              color={colors.neutral400}
+              strokeWidth={1.5}
             />
+            <Caption color={colors.neutral700}>
+              {t('case.folio')} {caseData.folio || caseData.id.slice(0, 8)}
+            </Caption>
           </View>
         )}
 
-        {/* Description */}
-        {caseData.description && (
-          <View style={styles.section}>
-            <Body>{caseData.description}</Body>
-          </View>
-        )}
+        {/* Hero Section */}
+        <CaseHero caseData={caseData} media={media} />
 
-        {/* Photo Gallery */}
-        {media.length > 0 && (
-          <View style={styles.section}>
-            <H1 style={styles.sectionTitle}>{t('case.photos')}</H1>
-            <PhotoGallery media={media} />
-          </View>
-        )}
+        {/* Quick Stats Row */}
+        <CaseStatsRow caseData={caseData} />
 
-        {/* Map */}
-        <View style={styles.section}>
-          <H1 style={styles.sectionTitle}>{t('report.location')}</H1>
-          <View style={styles.mapContainer}>
-            <CaseMap
-              longitude={longitude}
+        {/* Main Content - 2-column on desktop */}
+        <View
+          style={[
+            styles.contentWrapper,
+            isDesktop && styles.contentWrapperDesktop,
+          ]}
+        >
+          {/* Left Column - Main Content */}
+          <View
+            style={[styles.mainColumn, isDesktop && styles.mainColumnDesktop]}
+          >
+            {/* Escalate Button */}
+            {profile && (
+              <View style={styles.escalateSection}>
+                <EscalateButton
+                  caseId={caseData.id}
+                  status={caseData.status}
+                  escalatedAt={caseData.escalated_at}
+                  userRole={profile.role}
+                  onEscalated={refetch}
+                />
+              </View>
+            )}
+
+            {/* Escalation Status */}
+            {caseData.escalated_at && (
+              <View style={styles.escalationStatusSection}>
+                <EscalationStatus
+                  escalatedAt={caseData.escalated_at}
+                  escalationReminderCount={
+                    caseData.escalation_reminder_count || 0
+                  }
+                  markedUnresponsive={caseData.marked_unresponsive || false}
+                  governmentResponseAt={caseData.government_response_at}
+                />
+              </View>
+            )}
+
+            {/* Description */}
+            {caseData.description && (
+              <View style={styles.section}>
+                <H2 style={styles.sectionTitle}>{t('case.description')}</H2>
+                <Body>{caseData.description}</Body>
+              </View>
+            )}
+
+            {/* Photo Gallery */}
+            {media.length > 0 && (
+              <View style={styles.section}>
+                <H2 style={styles.sectionTitle}>{t('case.photos')}</H2>
+                <PhotoGallery media={media} />
+              </View>
+            )}
+
+            {/* Timeline */}
+            <View style={styles.section}>
+              <H2 style={styles.sectionTitle}>{t('case.timeline')}</H2>
+              <Timeline events={timeline} />
+            </View>
+          </View>
+
+          {/* Right Column - Sidebar (Desktop only, below main on mobile) */}
+          <View
+            style={[
+              styles.sidebarColumn,
+              isDesktop && styles.sidebarColumnDesktop,
+            ]}
+          >
+            <CaseSidebar
               latitude={latitude}
-              category={caseData.category}
+              longitude={longitude}
+              isSubscribed={isSubscribed}
+              subscriptionLoading={subscriptionLoading}
+              onSubscribeToggle={toggleSubscription}
+              caseId={caseData.id}
             />
           </View>
-        </View>
-
-        {/* Timeline */}
-        <View style={styles.section}>
-          <H1 style={styles.sectionTitle}>{t('case.timeline')}</H1>
-          <Timeline events={timeline} />
         </View>
       </ScrollView>
     </View>
@@ -194,9 +263,31 @@ export default function CaseDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  breadcrumbLink: {
+    paddingHorizontal: spacing.xs,
+  },
+  breadcrumbs: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
   container: {
     backgroundColor: colors.white,
     flex: 1,
+  },
+  contentWrapper: {
+    flexDirection: 'column',
+    paddingHorizontal: spacing.md,
+  },
+  contentWrapperDesktop: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    gap: spacing.xl,
+    maxWidth: layout.maxContentWidth,
+    paddingHorizontal: layout.containerPadding.desktop,
+    width: '100%',
   },
   errorContainer: {
     alignItems: 'center',
@@ -205,12 +296,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
   },
   escalateSection: {
-    marginTop: spacing.md,
-    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
   escalationStatusSection: {
-    marginTop: spacing.md,
-    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
   followButton: {
     marginRight: spacing.sm,
@@ -227,8 +316,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.lg,
   },
-  mapContainer: {
-    paddingHorizontal: spacing.md,
+  mainColumn: {
+    flex: 1,
+    width: '100%',
+  },
+  mainColumnDesktop: {
+    flex: 1,
+    width: '65%',
   },
   scrollContent: {
     paddingBottom: spacing.xxl,
@@ -241,7 +335,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginBottom: spacing.md,
-    paddingHorizontal: spacing.md,
+  },
+  sidebarColumn: {
+    marginTop: spacing.lg,
+    width: '100%',
+  },
+  sidebarColumnDesktop: {
+    marginTop: 0,
+    width: '35%',
   },
   smallSpacer: {
     height: spacing.sm,
