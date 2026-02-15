@@ -25,6 +25,7 @@ import {
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { useMyCases } from '../../hooks/use-my-cases';
 import { MyCaseCard } from '../../components/profile/my-case-card';
+import { ProfileDesktopLayout } from '../../components/shared/profile-desktop-layout';
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
@@ -162,60 +163,62 @@ export default function ProfileScreen() {
           headerBackTitle: t('common.back'),
         }}
       />
-      <FlatList
-        data={cases}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <MyCaseCard
-            id={item.id}
-            category={item.category}
-            status={item.status}
-            description={item.description}
-            createdAt={item.created_at}
-          />
-        )}
-        ListHeaderComponent={renderHeader}
-        contentContainerStyle={styles.listContent}
-        ListEmptyComponent={
-          casesLoading ? (
-            <View style={styles.loadingContainer}>
-              <Skeleton
-                width="100%"
-                height={120}
-                borderRadius={borderRadius.card}
-              />
-              <View style={styles.spacer} />
-              <Skeleton
-                width="100%"
-                height={120}
-                borderRadius={borderRadius.card}
-              />
-              <View style={styles.spacer} />
-              <Skeleton
-                width="100%"
-                height={120}
-                borderRadius={borderRadius.card}
-              />
-            </View>
-          ) : (
-            <View style={styles.emptyContainer}>
-              <Body color={colors.neutral500}>{t('profile.noReports')}</Body>
-              <Caption color={colors.neutral400} style={styles.emptyMessage}>
-                {t('profile.noReportsMessage')}
-              </Caption>
-            </View>
-          )
-        }
-        refreshControl={
-          <RefreshControl
-            refreshing={casesLoading}
-            onRefresh={refetch}
-            tintColor={colors.primary}
-            colors={[colors.primary]}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-      />
+      <ProfileDesktopLayout>
+        <FlatList
+          data={cases}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <MyCaseCard
+              id={item.id}
+              category={item.category}
+              status={item.status}
+              description={item.description}
+              createdAt={item.created_at}
+            />
+          )}
+          ListHeaderComponent={renderHeader}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={
+            casesLoading ? (
+              <View style={styles.loadingContainer}>
+                <Skeleton
+                  width="100%"
+                  height={120}
+                  borderRadius={borderRadius.card}
+                />
+                <View style={styles.spacer} />
+                <Skeleton
+                  width="100%"
+                  height={120}
+                  borderRadius={borderRadius.card}
+                />
+                <View style={styles.spacer} />
+                <Skeleton
+                  width="100%"
+                  height={120}
+                  borderRadius={borderRadius.card}
+                />
+              </View>
+            ) : (
+              <View style={styles.emptyContainer}>
+                <Body color={colors.neutral500}>{t('profile.noReports')}</Body>
+                <Caption color={colors.neutral400} style={styles.emptyMessage}>
+                  {t('profile.noReportsMessage')}
+                </Caption>
+              </View>
+            )
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={casesLoading}
+              onRefresh={refetch}
+              tintColor={colors.primary}
+              colors={[colors.primary]}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+        />
+      </ProfileDesktopLayout>
     </View>
   );
 }

@@ -20,6 +20,8 @@ import { useDashboardStats } from '../../hooks/use-dashboard-stats';
 import { StatCard } from '../../components/dashboard/stat-card';
 import { CategoryChart } from '../../components/dashboard/category-chart';
 import { ResolutionRate } from '../../components/dashboard/resolution-rate';
+import { KpiRow } from '../../components/dashboard/kpi-row';
+import { ProfileDesktopLayout } from '../../components/shared/profile-desktop-layout';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function DashboardScreen() {
@@ -93,80 +95,84 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.content}
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={handleRefresh}
-            tintColor={colors.primary}
+      <ProfileDesktopLayout>
+        <ScrollView
+          style={styles.content}
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={handleRefresh}
+              tintColor={colors.primary}
+            />
+          }
+        >
+          <H1 style={styles.header}>{t('dashboard.title')}</H1>
+
+          <KpiRow />
+
+          <StatCard
+            icon={FileText}
+            value={stats.total_cases}
+            label={t('dashboard.totalCases')}
+            color={colors.primary}
           />
-        }
-      >
-        <H1 style={styles.header}>{t('dashboard.title')}</H1>
 
-        <StatCard
-          icon={FileText}
-          value={stats.total_cases}
-          label={t('dashboard.totalCases')}
-          color={colors.primary}
-        />
-
-        <View style={styles.row}>
-          <View style={styles.halfCard}>
-            <StatCard
-              icon={Clock}
-              value={stats.pending_cases}
-              label={t('dashboard.pending')}
-              color={colors.warning}
-            />
+          <View style={styles.row}>
+            <View style={styles.halfCard}>
+              <StatCard
+                icon={Clock}
+                value={stats.pending_cases}
+                label={t('dashboard.pending')}
+                color={colors.warning}
+              />
+            </View>
+            <View style={styles.halfCard}>
+              <StatCard
+                icon={TrendingUp}
+                value={stats.in_progress_cases}
+                label={t('dashboard.inProgress')}
+                color={colors.info}
+              />
+            </View>
           </View>
-          <View style={styles.halfCard}>
-            <StatCard
-              icon={TrendingUp}
-              value={stats.in_progress_cases}
-              label={t('dashboard.inProgress')}
-              color={colors.info}
-            />
-          </View>
-        </View>
 
-        <StatCard
-          icon={CheckCircle2}
-          value={`${stats.resolved_cases} (${resolutionPercentage}%)`}
-          label={t('dashboard.resolved')}
-          color={colors.success}
-        />
+          <StatCard
+            icon={CheckCircle2}
+            value={`${stats.resolved_cases} (${resolutionPercentage}%)`}
+            label={t('dashboard.resolved')}
+            color={colors.success}
+          />
 
-        <StatCard
-          icon={Calendar}
-          value={`${stats.avg_resolution_days} ${t('dashboard.days')}`}
-          label={t('dashboard.avgResolution')}
-          color={colors.secondary}
-        />
+          <StatCard
+            icon={Calendar}
+            value={`${stats.avg_resolution_days} ${t('dashboard.days')}`}
+            label={t('dashboard.avgResolution')}
+            color={colors.secondary}
+          />
 
-        <StatCard
-          icon={DollarSign}
-          value={`$${stats.total_donations.toLocaleString()}`}
-          label={t('dashboard.totalDonations')}
-          color={colors.accent}
-        />
+          <StatCard
+            icon={DollarSign}
+            value={`$${stats.total_donations.toLocaleString()}`}
+            label={t('dashboard.totalDonations')}
+            color={colors.accent}
+          />
 
-        <CategoryChart
-          data={{
-            abuse: stats.abuse_cases,
-            stray: stats.stray_cases,
-            missing: stats.missing_cases,
-          }}
-        />
+          <CategoryChart
+            data={{
+              abuse: stats.abuse_cases,
+              stray: stats.stray_cases,
+              missing: stats.missing_cases,
+            }}
+          />
 
-        <ResolutionRate
-          resolvedCount={stats.resolved_cases}
-          totalCount={stats.total_cases}
-        />
+          <ResolutionRate
+            resolvedCount={stats.resolved_cases}
+            totalCount={stats.total_cases}
+          />
 
-        <View style={styles.bottomPadding} />
-      </ScrollView>
+          <View style={styles.bottomPadding} />
+        </ScrollView>
+      </ProfileDesktopLayout>
     </SafeAreaView>
   );
 }

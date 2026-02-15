@@ -131,7 +131,14 @@
     "coordinates": "Coordenadas",
     "categoryAbuseDescription": "El animal está siendo maltratado o descuidado",
     "categoryStrayDescription": "Animal callejero que necesita ayuda",
-    "categoryMissingDescription": "Mascota perdida buscando a su dueño"
+    "categoryMissingDescription": "Mascota perdida buscando a su dueño",
+    "sidebar": {
+      "securityBadge": "Anónimo y seguro",
+      "title": "Tu reporte importa",
+      "reviewTime": "Los reportes se revisan en 48 horas",
+      "identityProtected": "Tu identidad permanece protegida",
+      "authoritiesNotified": "Las autoridades son notificadas cuando es necesario"
+    }
   },
   "category": {
     "abuse": "Maltrato",
@@ -384,7 +391,12 @@
     "days": "días",
     "pending": "Pendientes",
     "inProgress": "En progreso",
-    "resolved": "Resueltos"
+    "resolved": "Resueltos",
+    "kpi": {
+      "casesReported": "Casos Reportados",
+      "casesResolved": "Casos Resueltos",
+      "responseRate": "Tasa de Respuesta"
+    }
   },
   "legal": {
     "privacy": "Aviso de Privacidad",
@@ -405,7 +417,14 @@
     "citizen": "Ciudadano",
     "moderator": "Moderador",
     "government": "Gobierno",
-    "admin": "Administrador"
+    "admin": "Administrador",
+    "sidebar": {
+      "dashboard": "Tablero",
+      "myProfile": "Mi Perfil",
+      "settings": "Configuración",
+      "donatePromo": "Apoya a Lomito",
+      "donatePromoDescription": "Ayúdanos a proteger más animales"
+    }
   },
   "landing": {
     "heroTitle": "Protegiendo a los animales de nuestra comunidad, juntos",

@@ -131,7 +131,14 @@
     "coordinates": "Coordinates",
     "categoryAbuseDescription": "Animal is being harmed or neglected",
     "categoryStrayDescription": "Stray animal needing help",
-    "categoryMissingDescription": "Lost pet looking for owner"
+    "categoryMissingDescription": "Lost pet looking for owner",
+    "sidebar": {
+      "securityBadge": "Anonymous & Secure",
+      "title": "Your report matters",
+      "reviewTime": "Reports are reviewed within 48 hours",
+      "identityProtected": "Your identity remains protected",
+      "authoritiesNotified": "Authorities are notified when needed"
+    }
   },
   "category": {
     "abuse": "Abuse",
@@ -384,7 +391,12 @@
     "days": "days",
     "pending": "Pending",
     "inProgress": "In progress",
-    "resolved": "Resolved"
+    "resolved": "Resolved",
+    "kpi": {
+      "casesReported": "Cases Reported",
+      "casesResolved": "Cases Resolved",
+      "responseRate": "Response Rate"
+    }
   },
   "legal": {
     "privacy": "Privacy Notice",
@@ -405,7 +417,14 @@
     "citizen": "Citizen",
     "moderator": "Moderator",
     "government": "Government",
-    "admin": "Administrator"
+    "admin": "Administrator",
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "myProfile": "My Profile",
+      "settings": "Settings",
+      "donatePromo": "Support Lomito",
+      "donatePromoDescription": "Help us protect more animals"
+    }
   },
   "landing": {
     "heroTitle": "Protecting our community's animals, together",
