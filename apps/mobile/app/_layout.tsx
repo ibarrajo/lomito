@@ -83,7 +83,10 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
           name="case/[id]"
-          options={{ headerShown: true, title: '' }}
+          options={{
+            headerShown: Platform.OS !== 'web',
+            title: '',
+          }}
         />
         <Stack.Screen name="report" />
         <Stack.Screen name="about" />

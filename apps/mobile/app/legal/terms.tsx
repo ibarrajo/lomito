@@ -6,6 +6,7 @@ import { TERMS_OF_SERVICE_ES } from '@lomito/shared/src/legal/terms-es';
 import { TERMS_OF_SERVICE_EN } from '@lomito/shared/src/legal/terms-en';
 import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
 import { PageFooter } from '../../components/shared/page-footer';
+import { PublicWebHeader } from '../../components/navigation/public-web-header';
 
 export default function TermsScreen() {
   const { t, i18n } = useTranslation();
@@ -15,6 +16,7 @@ export default function TermsScreen() {
 
   return (
     <View style={styles.container}>
+      <PublicWebHeader />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}

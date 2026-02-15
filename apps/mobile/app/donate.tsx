@@ -28,6 +28,7 @@ import { ArrowLeft } from 'lucide-react-native';
 import { isFeatureEnabled } from '@lomito/shared';
 import { useAnalytics } from '../hooks/use-analytics';
 import { PageFooter } from '../components/shared/page-footer';
+import { PublicWebHeader } from '../components/navigation/public-web-header';
 
 type PaymentMethod = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -92,21 +93,26 @@ export default function DonateScreen() {
     }
   }
 
+  const isWeb = Platform.OS === 'web';
+
   if (!isFeatureEnabled('donations')) {
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Pressable
-            onPress={handleBack}
-            style={styles.backButton}
-            accessibilityLabel={t('common.back')}
-            accessibilityRole="button"
-          >
-            <ArrowLeft size={24} color={colors.neutral900} />
-          </Pressable>
-          <H1>{t('donate.title')}</H1>
-          <View style={styles.headerSpacer} />
-        </View>
+        <PublicWebHeader />
+        {!isWeb && (
+          <View style={styles.header}>
+            <Pressable
+              onPress={handleBack}
+              style={styles.backButton}
+              accessibilityLabel={t('common.back')}
+              accessibilityRole="button"
+            >
+              <ArrowLeft size={24} color={colors.neutral900} />
+            </Pressable>
+            <H1>{t('donate.title')}</H1>
+            <View style={styles.headerSpacer} />
+          </View>
+        )}
         <View style={styles.comingSoonWrapper}>
           <H2 style={styles.comingSoonTitle}>{t('donate.comingSoon')}</H2>
           <Body color={colors.neutral500}>
@@ -120,19 +126,22 @@ export default function DonateScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Pressable
-          onPress={handleBack}
-          style={styles.backButton}
-          accessibilityLabel={t('common.back')}
-          accessibilityRole="button"
-        >
-          <ArrowLeft size={24} color={colors.neutral900} />
-        </Pressable>
-        <H1>{t('donate.title')}</H1>
-        <View style={styles.headerSpacer} />
-      </View>
+      <PublicWebHeader />
+      {/* Header — native only; web uses WebNavbar or PublicWebHeader */}
+      {!isWeb && (
+        <View style={styles.header}>
+          <Pressable
+            onPress={handleBack}
+            style={styles.backButton}
+            accessibilityLabel={t('common.back')}
+            accessibilityRole="button"
+          >
+            <ArrowLeft size={24} color={colors.neutral900} />
+          </Pressable>
+          <H1>{t('donate.title')}</H1>
+          <View style={styles.headerSpacer} />
+        </View>
+      )}
 
       <View style={styles.formWrapper}>
         <ScrollView

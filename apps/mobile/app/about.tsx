@@ -10,6 +10,7 @@ import { TeamSection } from '../components/about/team-section';
 import { RoadmapSection } from '../components/about/roadmap-section';
 import { LinksSection } from '../components/about/links-section';
 import { PageFooter } from '../components/shared/page-footer';
+import { PublicWebHeader } from '../components/navigation/public-web-header';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ export default function AboutScreen() {
           headerBackTitle: t('common.back'),
         }}
       />
+      <PublicWebHeader />
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}

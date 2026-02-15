@@ -6,6 +6,7 @@ import { PRIVACY_NOTICE_ES } from '@lomito/shared/src/legal/privacy-es';
 import { PRIVACY_NOTICE_EN } from '@lomito/shared/src/legal/privacy-en';
 import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
 import { PageFooter } from '../../components/shared/page-footer';
+import { PublicWebHeader } from '../../components/navigation/public-web-header';
 
 export default function PrivacyScreen() {
   const { t, i18n } = useTranslation();
@@ -15,6 +16,7 @@ export default function PrivacyScreen() {
 
   return (
     <View style={styles.container}>
+      <PublicWebHeader />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
