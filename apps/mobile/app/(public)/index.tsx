@@ -7,10 +7,12 @@ import { H1, H2, H3, Body, BodySmall } from '@lomito/ui/src/components/typograph
 import { colors, spacing, borderRadius, shadowStyles } from '@lomito/ui/src/theme/tokens';
 import { isFeatureEnabled } from '@lomito/shared';
 import { RecentReportsTicker } from '../../components/landing/recent-reports-ticker';
+import { useAnalytics } from '../../hooks/use-analytics';
 
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
+  const { trackEvent } = useAnalytics();
 
   if (Platform.OS !== 'web') {
     return <Redirect href="/auth/login" />;
@@ -36,7 +38,10 @@ export default function LandingPage() {
               <View style={styles.ctaRow}>
                 <TouchableOpacity
                   style={styles.ctaPrimary}
-                  onPress={() => router.push('/auth/register')}
+                  onPress={() => {
+                    trackEvent('cta_click', { label: 'report_now' });
+                    router.push('/auth/register');
+                  }}
                   accessibilityLabel={t('landing.ctaReport')}
                   accessibilityRole="button"
                 >
@@ -45,7 +50,10 @@ export default function LandingPage() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.ctaSecondary}
-                  onPress={() => router.push('/auth/login')}
+                  onPress={() => {
+                    trackEvent('cta_click', { label: 'view_map' });
+                    router.push('/auth/login');
+                  }}
                   accessibilityLabel={t('landing.ctaViewMap')}
                   accessibilityRole="button"
                 >

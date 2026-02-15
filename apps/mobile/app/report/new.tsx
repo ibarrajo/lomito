@@ -18,6 +18,7 @@ import { LocationPicker } from '../../components/report/location-picker';
 import { PhotoPicker } from '../../components/report/photo-picker';
 import { ReviewStep } from '../../components/report/review-step';
 import { useCreateCase } from '../../hooks/use-create-case';
+import { useAnalytics } from '../../hooks/use-analytics';
 
 interface ReportFormData {
   category: CaseCategory | null;
@@ -32,6 +33,7 @@ export default function NewReportScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const { createCase, loading } = useCreateCase();
+  const { trackEvent } = useAnalytics();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<ReportFormData>({
@@ -91,6 +93,8 @@ export default function NewReportScreen() {
         location: formData.location,
         urgency: formData.urgency,
       });
+
+      trackEvent('report_submit');
 
       // Navigate back to the map
       router.back();

@@ -12,9 +12,10 @@ import { colors, spacing, borderRadius } from '@lomito/ui/theme/tokens';
 interface ShareButtonProps {
   caseId: string;
   folio?: string | null;
+  onShare?: () => void;
 }
 
-export function ShareButton({ caseId, folio }: ShareButtonProps) {
+export function ShareButton({ caseId, folio, onShare }: ShareButtonProps) {
   const { t } = useTranslation();
   const [showCopiedFeedback, setShowCopiedFeedback] = useState(false);
 
@@ -32,6 +33,7 @@ export function ShareButton({ caseId, folio }: ShareButtonProps) {
   }, [showCopiedFeedback]);
 
   const handleShare = async () => {
+    onShare?.();
     try {
       if (Platform.OS === 'web') {
         // Web: use navigator.share if available, otherwise clipboard

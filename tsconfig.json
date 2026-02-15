@@ -47,7 +47,12 @@
     "dist",
     "build",
     ".expo",
-    "supabase/functions"
+    "supabase/functions",
+    "**/__tests__",
+    "**/*.test.ts",
+    "__mocks__",
+    "vitest.config.ts",
+    "vitest.setup.ts"
   ],
   "extends": "expo/tsconfig.base"
 }

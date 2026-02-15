@@ -13,6 +13,7 @@ import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
 import { colors, spacing, borderRadius, typography } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { useAnalytics } from '../../hooks/use-analytics';
 
 const MUNICIPALITIES = [
   'Tijuana',
@@ -29,6 +30,7 @@ export default function RegisterScreen() {
   const router = useRouter();
   const { signUp } = useAuth();
   const { isDesktop } = useBreakpoint();
+  const { trackEvent } = useAnalytics();
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -69,6 +71,7 @@ export default function RegisterScreen() {
     }
 
     setLoading(true);
+    trackEvent('auth_start', { method: 'email' });
     try {
       await signUp(email, password, {
         full_name: fullName,

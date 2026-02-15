@@ -15,6 +15,7 @@ import { colors, spacing, borderRadius, shadowStyles } from '@lomito/ui/src/them
 import { H1, H2, Body, BodySmall, ButtonText, AppModal } from '@lomito/ui';
 import { ArrowLeft } from 'lucide-react-native';
 import { isFeatureEnabled } from '@lomito/shared';
+import { useAnalytics } from '../hooks/use-analytics';
 
 type PaymentMethod = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -22,6 +23,7 @@ export default function DonateScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const { createDonation, loading, error } = useDonate();
+  const { trackEvent } = useAnalytics();
 
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('mercado_pago');
@@ -33,6 +35,8 @@ export default function DonateScreen() {
       setModal({ title: t('donate.error'), message: t('donate.minAmount') });
       return;
     }
+
+    trackEvent('donate_start', { amount: String(selectedAmount), method: selectedMethod });
 
     // Create donation and get checkout URL
     const result = await createDonation({

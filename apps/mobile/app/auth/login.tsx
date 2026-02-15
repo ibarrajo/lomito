@@ -6,6 +6,7 @@ import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
 import { colors, spacing, typography } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { useAnalytics } from '../../hooks/use-analytics';
 import { isFeatureEnabled } from '@lomito/shared';
 
 type AuthMethod = 'email' | 'phone';
@@ -16,6 +17,7 @@ export default function LoginScreen() {
   const { signInWithMagicLink, signInWithOtp } = useAuth();
 
   const { isDesktop } = useBreakpoint();
+  const { trackEvent } = useAnalytics();
   const [authMethod, setAuthMethod] = useState<AuthMethod>('email');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -29,6 +31,7 @@ export default function LoginScreen() {
     }
 
     setLoading(true);
+    trackEvent('auth_start', { method: 'email' });
     try {
       await signInWithMagicLink(email);
       setModal({ title: t('common.done'), message: t('auth.magicLinkSent') });
@@ -46,6 +49,7 @@ export default function LoginScreen() {
     }
 
     setLoading(true);
+    trackEvent('auth_start', { method: 'sms' });
     try {
       await signInWithOtp(phone);
       router.push({

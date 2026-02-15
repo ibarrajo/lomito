@@ -2,6 +2,7 @@
 
 **Open-source civic platform for animal welfare in Mexico**
 
+[![Live](https://img.shields.io/badge/Live-lomito.org-D4662B)](https://lomito.org)
 [![License: Source Available](https://img.shields.io/badge/License-Source%20Available-blue.svg)](LICENSE)
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
@@ -39,7 +40,7 @@ Built with a mobile-first approach, Lomito works on iOS, Android, and web from a
 | **Maps** | Mapbox GL (react-native-mapbox-gl on native, mapbox-gl-js on web) |
 | **Notifications** | Firebase Cloud Messaging (push) + Resend (email) |
 | **Payments** | Mercado Pago (Mexico: OXXO, SPEI, card) + Stripe (international) |
-| **Analytics** | PostHog (public-facing dashboard) |
+| **Analytics** | GA4 via Supabase Edge Function proxy |
 | **i18n** | react-i18next |
 | **Language** | TypeScript (strict mode) |
 
@@ -78,7 +79,7 @@ lomito/
 ### Clone & Install
 
 ```bash
-git clone https://github.com/your-org/lomito.git
+git clone https://github.com/ibarrajo/lomito.git
 cd lomito
 npm install
 ```
@@ -167,5 +168,5 @@ Copyright (c) 2025-2026 Lomito Contributors
 
 - **Website:** [lomito.org](https://lomito.org)
 - **Documentation:** [docs/](docs/)
-- **Issue Tracker:** [GitHub Issues](https://github.com/your-org/lomito/issues)
+- **Issue Tracker:** [GitHub Issues](https://github.com/ibarrajo/lomito/issues)
 - **Code of Conduct:** [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)

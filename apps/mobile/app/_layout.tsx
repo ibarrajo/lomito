@@ -1,6 +1,6 @@
 import '../../../packages/shared/src/i18n/config';
 import { useEffect } from 'react';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { Stack, usePathname, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, Platform } from 'react-native';
 import { ThemeProvider, Skeleton } from '@lomito/ui';
@@ -8,12 +8,14 @@ import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../hooks/use-auth';
 import { useNotifications } from '../hooks/use-notifications';
 import { PerformanceMonitor } from '../lib/performance';
+import { trackPageView } from '../lib/analytics';
 import { AppShell } from '../components/navigation/app-shell';
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const pathname = usePathname();
 
   // Initialize notifications only when user is authenticated
   useNotifications();
@@ -25,6 +27,13 @@ function RootLayoutNav() {
       console.log(`App cold start completed in ${coldStartTime}ms`);
     }
   }, []);
+
+  // Auto page-view tracking on web
+  useEffect(() => {
+    if (Platform.OS === 'web' && pathname) {
+      trackPageView(pathname);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (loading) return;

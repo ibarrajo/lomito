@@ -3,6 +3,7 @@
  * Shows full case information including photos, timeline, and map.
  */
 
+import { useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Pressable, Text } from 'react-native';
 import { useLocalSearchParams, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +21,7 @@ import { FlagButton } from '../../components/case/flag-button';
 import { ShareButton } from '../../components/case/share-button';
 import { EscalateButton } from '../../components/case/escalate-button';
 import { EscalationStatus } from '../../components/case/escalation-status';
+import { useAnalytics } from '../../hooks/use-analytics';
 
 export default function CaseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -27,6 +29,13 @@ export default function CaseDetailScreen() {
   const { caseData, media, timeline, loading, error, refetch } = useCase(id ?? '');
   const { profile } = useUserProfile();
   const { isSubscribed, loading: subscriptionLoading, toggle: toggleSubscription } = useCaseSubscription(id ?? '');
+  const { trackEvent } = useAnalytics();
+
+  useEffect(() => {
+    if (id) {
+      trackEvent('case_view', { case_id: id });
+    }
+  }, [id, trackEvent]);
 
   if (loading) {
     return (
@@ -93,7 +102,7 @@ export default function CaseDetailScreen() {
                   {isSubscribed ? '❤️' : '🤍'}
                 </Text>
               </Pressable>
-              <ShareButton caseId={caseData.id} folio={caseData.folio} />
+              <ShareButton caseId={caseData.id} folio={caseData.folio} onShare={() => trackEvent('share_click', { case_id: caseData.id })} />
               <FlagButton caseId={caseData.id} reporterId={caseData.reporter_id} />
             </View>
           ),
