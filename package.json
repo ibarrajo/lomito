@@ -15,7 +15,15 @@
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "eas:build:dev": "cd apps/mobile && eas build --profile development --platform all",
+    "eas:build:preview": "cd apps/mobile && eas build --profile preview --platform all",
+    "eas:build:prod": "cd apps/mobile && eas build --profile production --platform all",
+    "eas:build:ios": "cd apps/mobile && eas build --profile production --platform ios",
+    "eas:build:android": "cd apps/mobile && eas build --profile production --platform android",
+    "eas:submit:ios": "cd apps/mobile && eas submit --platform ios",
+    "eas:submit:android": "cd apps/mobile && eas submit --platform android",
+    "eas:update": "cd apps/mobile && eas update"
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.16",
