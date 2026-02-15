@@ -84,7 +84,7 @@ export const ClusterLayer = memo(function ClusterLayer({
           textField: ['get', 'point_count_abbreviated'],
           textSize: 14,
           textColor: colors.white,
-          textFont: ['DM Sans Bold', 'Arial Unicode MS Bold'],
+          textFont: ['Public Sans Bold', 'Arial Unicode MS Bold'],
           textAllowOverlap: true,
         }}
       />

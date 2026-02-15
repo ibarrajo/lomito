@@ -6,24 +6,24 @@
 
 export const colors = {
   // Primary
-  primary: '#D4662B',
-  primaryDark: '#A34D1E',
-  primaryLight: '#FFF8F3',
+  primary: '#13ECC8',
+  primaryDark: '#0FBDA0',
+  primaryLight: '#E6FDF9',
 
   // Secondary
-  secondary: '#1A6B54',
-  secondaryLight: '#E8F3EF',
+  secondary: '#1E293B',
+  secondaryLight: '#F1F5F9',
 
   // Accent
-  accent: '#E8A838',
+  accent: '#F2994A',
 
   // Neutrals
-  neutral900: '#1F2328',
-  neutral700: '#4A5568',
-  neutral500: '#718096',
-  neutral400: '#A0AEC0',
+  neutral900: '#1E293B',
+  neutral700: '#334155',
+  neutral500: '#64748B',
+  neutral400: '#94A3B8',
   neutral200: '#E2E8F0',
-  neutral100: '#F7F8FA',
+  neutral100: '#F6F8F8',
   white: '#FFFFFF',
 
   // Category colors (for case pins and backgrounds)
@@ -51,73 +51,73 @@ export const colors = {
   },
 
   // Status/semantic colors
-  error: '#C53030',
-  errorDark: '#9B2C2C',
-  errorBackground: '#FFF5F5',
-  warning: '#DD6B20',
-  warningBackground: '#FFFAF0',
-  success: '#276749',
-  successBackground: '#F0FFF4',
-  info: '#2B6CB0',
-  infoBackground: '#EBF8FF',
+  error: '#DC2626',
+  errorDark: '#B91C1C',
+  errorBackground: '#FEF2F2',
+  warning: '#F59E0B',
+  warningBackground: '#FFFBEB',
+  success: '#059669',
+  successBackground: '#ECFDF5',
+  info: '#2563EB',
+  infoBackground: '#EFF6FF',
 } as const;
 
 export const typography = {
   // Font families
   fontFamily: {
-    display: 'DM Sans',
-    body: 'Source Sans 3',
+    display: 'Public Sans',
+    body: 'Public Sans',
     mono: 'JetBrains Mono',
   },
 
   // Type scale
   display: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: '700' as const,
     lineHeight: 1.2,
-    fontFamily: 'DM Sans',
+    fontFamily: 'Public Sans',
   },
   h1: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700' as const,
     lineHeight: 1.25,
-    fontFamily: 'DM Sans',
+    fontFamily: 'Public Sans',
   },
   h2: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '600' as const,
     lineHeight: 1.3,
-    fontFamily: 'Source Sans 3',
+    fontFamily: 'Public Sans',
   },
   h3: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600' as const,
     lineHeight: 1.35,
-    fontFamily: 'Source Sans 3',
+    fontFamily: 'Public Sans',
   },
   body: {
     fontSize: 15,
     fontWeight: '400' as const,
     lineHeight: 1.5,
-    fontFamily: 'Source Sans 3',
+    fontFamily: 'Public Sans',
   },
   small: {
     fontSize: 13,
     fontWeight: '400' as const,
     lineHeight: 1.45,
-    fontFamily: 'Source Sans 3',
+    fontFamily: 'Public Sans',
   },
   caption: {
     fontSize: 11,
-    fontWeight: '400' as const,
+    fontWeight: '500' as const,
     lineHeight: 1.4,
-    fontFamily: 'Source Sans 3',
+    fontFamily: 'Public Sans',
   },
   button: {
-    fontSize: 15,
-    fontWeight: '600' as const,
+    fontSize: 14,
+    fontWeight: '700' as const,
     lineHeight: 1.0,
-    fontFamily: 'Source Sans 3',
+    fontFamily: 'Public Sans',
   },
 } as const;
 
@@ -136,6 +136,7 @@ export const borderRadius = {
   input: 8,
   pill: 9999,
   avatar: 9999,
+  tag: 6,
 } as const;
 
 /**
@@ -143,9 +144,8 @@ export const borderRadius = {
  * For React Native, use shadowStyles instead.
  */
 export const shadows = {
-  card: '0 1px 3px rgba(164, 77, 30, 0.08), 0 1px 2px rgba(164, 77, 30, 0.06)',
-  elevated:
-    '0 4px 12px rgba(164, 77, 30, 0.12), 0 2px 4px rgba(164, 77, 30, 0.08)',
+  card: '0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)',
+  elevated: '0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04)',
   bottomSheet: '0 -4px 24px rgba(31, 35, 40, 0.15)',
 } as const;
 
@@ -156,21 +156,21 @@ export const shadows = {
  */
 export const shadowStyles = {
   card: {
-    shadowColor: '#A34D1E',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.06,
     shadowRadius: 3,
     elevation: 2,
   },
   elevated: {
-    shadowColor: '#A34D1E',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 8,
   },
   bottomSheet: {
-    shadowColor: '#1F2328',
+    shadowColor: '#1E293B',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.15,
     shadowRadius: 24,

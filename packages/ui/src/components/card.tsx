@@ -64,7 +64,9 @@ export function Card({
 const styles = StyleSheet.create({
   base: {
     backgroundColor: colors.white,
+    borderColor: colors.neutral200,
     borderRadius: borderRadius.card,
+    borderWidth: 1,
     padding: spacing.md,
     ...shadowStyles.card,
   },

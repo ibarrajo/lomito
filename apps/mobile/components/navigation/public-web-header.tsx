@@ -43,7 +43,7 @@ export function PublicWebHeader() {
         accessibilityLabel="Lomito home"
         accessibilityRole="link"
       >
-        <Text style={styles.wordmark}>Lomito</Text>
+        <Text style={styles.wordmark}>Lomito.org</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.loginButton}
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   loginButtonText: {
-    color: colors.white,
+    color: colors.secondary,
     fontFamily: typography.button.fontFamily,
     fontSize: typography.button.fontSize,
     fontWeight: typography.button.fontWeight,

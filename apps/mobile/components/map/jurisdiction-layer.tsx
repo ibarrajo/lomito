@@ -92,7 +92,7 @@ export function JurisdictionLayer({
           textField: ['get', 'name'],
           textSize: 14,
           textColor: colors.secondary,
-          textFont: ['Source Sans 3 Semibold', 'Arial Unicode MS Regular'],
+          textFont: ['Public Sans Semibold', 'Arial Unicode MS Regular'],
           textAllowOverlap: false,
         }}
       />

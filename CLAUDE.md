@@ -54,15 +54,15 @@ lomito/
 ## Design System Tokens (Quick Reference)
 
 ```
-Primary:      #D4662B (terra cotta)    Secondary:  #1A6B54 (deep sage)
-Primary Dark: #A34D1E (burnt sienna)   Accent:     #E8A838 (golden amber)
-Neutral 900:  #1F2328 (charcoal)       Neutral 100: #F7F8FA (snow)
-Error:        #C53030    Warning: #DD6B20    Success: #276749    Info: #2B6CB0
+Primary:      #13ECC8 (mint)           Secondary:  #1E293B (navy)
+Primary Dark: #0FBDA0 (darker mint)    Accent:     #F2994A (warm orange)
+Neutral 900:  #1E293B (navy/slate)     Neutral 100: #F6F8F8 (cool off-white)
+Error:        #DC2626    Warning: #F59E0B    Success: #059669    Info: #2563EB
 
-Fonts: DM Sans (headings), Source Sans 3 (body), JetBrains Mono (code/IDs)
+Fonts: Public Sans (all text), JetBrains Mono (code/IDs)
 Spacing: 4px base grid (4, 8, 16, 24, 32, 48)
-Border Radius: cards 12px, buttons 8px, inputs 8px, pills 9999px
-Shadows: Warm-toned (rgba(164,77,30,0.08)) not cold gray defaults
+Border Radius: cards 12px, buttons 8px, inputs 8px, tags 6px, pills 9999px
+Shadows: Neutral-toned (rgba(0,0,0,0.06)) not warm defaults
 ```
 
 Full token reference: `docs/style/DESIGN_TOKENS.md`

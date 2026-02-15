@@ -139,7 +139,7 @@ export function WebNavbar() {
           accessibilityLabel="Lomito home"
           accessibilityRole="link"
         >
-          <Text style={styles.wordmark}>Lomito</Text>
+          <Text style={styles.wordmark}>Lomito.org</Text>
         </TouchableOpacity>
 
         {/* Center: Nav Links */}
@@ -337,7 +337,7 @@ export function WebNavbar() {
           >
             <Plus
               size={iconSizes.inline}
-              color={colors.white}
+              color={colors.secondary}
               strokeWidth={2}
             />
             <Text style={styles.ctaButtonText}>{t('report.newReport')}</Text>
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     ...typography.button,
-    color: colors.white,
+    color: colors.secondary,
     fontSize: 15,
   },
   container: {
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
   },
   ctaButtonText: {
     ...typography.button,
-    color: colors.white,
+    color: colors.secondary,
   },
   languageText: {
     ...typography.button,

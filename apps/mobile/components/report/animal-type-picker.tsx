@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.fontSize * typography.body.lineHeight,
   },
   textSelected: {
-    color: colors.white,
+    color: colors.secondary,
   },
 });

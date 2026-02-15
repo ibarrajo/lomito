@@ -70,7 +70,7 @@ export async function registerForPushNotifications(): Promise<string | null> {
         name: 'Default',
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#D4662B',
+        lightColor: '#13ECC8',
       });
     }
 

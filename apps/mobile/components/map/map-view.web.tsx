@@ -75,7 +75,7 @@ export function MapView({
         source: 'cases-source',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#D4662B', // colors.primary
+          'circle-color': '#13ECC8', // colors.primary
           'circle-radius': ['step', ['get', 'point_count'], 20, 10, 25, 30, 35],
           'circle-opacity': 0.9,
           'circle-stroke-width': 2,
@@ -92,7 +92,7 @@ export function MapView({
         layout: {
           'text-field': ['get', 'point_count_abbreviated'],
           'text-size': 14,
-          'text-font': ['DM Sans Bold', 'Arial Unicode MS Bold'],
+          'text-font': ['Public Sans Bold', 'Arial Unicode MS Bold'],
           'text-allow-overlap': true,
         },
         paint: {

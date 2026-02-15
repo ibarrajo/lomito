@@ -12,3 +12,6 @@ export { Container } from './container';
 export { ResponsiveGrid } from './responsive-grid';
 export { AppModal } from './app-modal';
 export { EmptyState } from './empty-state';
+export { StatusBadge } from './status-badge';
+export { KPICard } from './kpi-card';
+export { ProgressBar } from './progress-bar';

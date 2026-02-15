@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   pillTextSelected: {
-    color: colors.white,
+    color: colors.secondary,
   },
   scrollContent: {
     alignItems: 'center',

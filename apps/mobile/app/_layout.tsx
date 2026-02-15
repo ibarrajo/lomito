@@ -5,6 +5,13 @@ import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, Platform } from 'react-native';
 import { ThemeProvider, Skeleton } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import {
+  useFonts,
+  PublicSans_400Regular,
+  PublicSans_500Medium,
+  PublicSans_600SemiBold,
+  PublicSans_700Bold,
+} from '@expo-google-fonts/public-sans';
 import { useAuth } from '../hooks/use-auth';
 import { useNotifications } from '../hooks/use-notifications';
 import { PerformanceMonitor } from '../lib/performance';
@@ -98,6 +105,24 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    'Public Sans': PublicSans_400Regular,
+    'PublicSans-Regular': PublicSans_400Regular,
+    'PublicSans-Medium': PublicSans_500Medium,
+    'PublicSans-SemiBold': PublicSans_600SemiBold,
+    'PublicSans-Bold': PublicSans_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Skeleton width="100%" height={60} style={styles.skeletonTop} />
+        <Skeleton width="90%" height={40} style={styles.skeletonItem} />
+        <Skeleton width="85%" height={40} style={styles.skeletonItem} />
+      </View>
+    );
+  }
+
   return (
     <ThemeProvider>
       <RootLayoutNav />

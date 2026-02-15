@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   saveButtonText: {
-    color: colors.white,
+    color: colors.secondary,
   },
   title: {
     marginBottom: spacing.sm,

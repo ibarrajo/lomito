@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     ...shadowStyles.elevated,
   },
   fabText: {
-    color: colors.white,
+    color: colors.secondary,
     fontSize: typography.display.fontSize,
     fontWeight: '300',
     lineHeight: typography.display.fontSize,

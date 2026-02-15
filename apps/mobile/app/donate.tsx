@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral400,
   },
   submitButtonText: {
-    color: colors.white,
+    color: colors.secondary,
   },
   trustBody: {
     lineHeight: 22,

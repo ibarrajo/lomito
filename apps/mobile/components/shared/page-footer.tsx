@@ -25,7 +25,7 @@ export function PageFooter() {
     <View style={styles.footer}>
       <View style={styles.footerInner}>
         <View style={styles.footerLeft}>
-          <Text style={styles.footerBrand}>Lomito</Text>
+          <Text style={styles.footerBrand}>Lomito.org</Text>
           <BodySmall color={colors.neutral500}>
             {t('landing.footerTagline')}
           </BodySmall>

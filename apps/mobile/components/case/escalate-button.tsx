@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryDark,
   },
   buttonText: {
-    color: colors.white,
+    color: colors.secondary,
     fontSize: typography.button.fontSize,
     fontWeight: typography.button.fontWeight,
   },

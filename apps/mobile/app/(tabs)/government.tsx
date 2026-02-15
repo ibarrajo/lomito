@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterPillTextActive: {
-    color: colors.white,
+    color: colors.secondary,
   },
   header: {
     borderBottomColor: colors.neutral200,

@@ -108,11 +108,7 @@ export function Button({
       >
         {loading ? (
           <ActivityIndicator
-            color={
-              variant === 'secondary' || variant === 'ghost'
-                ? colors.primary
-                : colors.white
-            }
+            color={variant === 'destructive' ? colors.white : colors.secondary}
           />
         ) : (
           <Text
@@ -179,19 +175,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryDark,
   },
   primaryText: {
-    color: colors.white,
+    color: colors.secondary,
   },
   // Secondary variant
   secondary: {
-    backgroundColor: TRANSPARENT,
-    borderColor: colors.primary,
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
     borderWidth: 1,
   },
   secondaryPressed: {
-    backgroundColor: colors.primaryLight,
+    backgroundColor: colors.neutral100,
   },
   secondaryText: {
-    color: colors.primary,
+    color: colors.secondary,
   },
   // Text base
   text: {

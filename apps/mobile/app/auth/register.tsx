@@ -133,7 +133,7 @@ export default function RegisterScreen() {
         <View style={styles.formWrapper}>
           {!isDesktop && <View style={styles.mobileAccent} />}
           <View style={styles.branding}>
-            <Text style={styles.brandWordmark}>Lomito</Text>
+            <Text style={styles.brandWordmark}>Lomito.org</Text>
             <BodySmall color={colors.neutral500}>
               {t('landing.footerTagline')}
             </BodySmall>

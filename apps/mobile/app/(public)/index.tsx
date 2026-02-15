@@ -70,7 +70,11 @@ export default function LandingPage() {
                   <Text style={styles.ctaPrimaryText}>
                     {t('landing.ctaReport')}
                   </Text>
-                  <ArrowRight size={18} color={colors.white} strokeWidth={2} />
+                  <ArrowRight
+                    size={18}
+                    color={colors.secondary}
+                    strokeWidth={2}
+                  />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.ctaSecondary}
@@ -180,7 +184,10 @@ export default function LandingPage() {
               </View>
               <View style={[styles.bentoCard, styles.bentoSmall]}>
                 <View
-                  style={[styles.featureIcon, { backgroundColor: '#F0FFF4' }]}
+                  style={[
+                    styles.featureIcon,
+                    { backgroundColor: colors.successBackground },
+                  ]}
                 >
                   <Bell size={20} color={colors.success} strokeWidth={1.5} />
                 </View>
@@ -234,7 +241,7 @@ export default function LandingPage() {
         <Container>
           <View style={styles.footerInner}>
             <View style={styles.footerLeft}>
-              <Text style={styles.footerBrand}>Lomito</Text>
+              <Text style={styles.footerBrand}>Lomito.org</Text>
               <BodySmall style={styles.footerTagline}>
                 {t('landing.footerTagline')}
               </BodySmall>
@@ -296,7 +303,9 @@ const styles = StyleSheet.create({
   },
   bentoCard: {
     backgroundColor: colors.white,
+    borderColor: colors.neutral200,
     borderRadius: borderRadius.card,
+    borderWidth: 1,
     padding: spacing.lg,
     ...shadowStyles.card,
   },
@@ -349,7 +358,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   ctaPrimaryText: {
-    color: colors.white,
+    color: colors.secondary,
     fontSize: 15,
     fontWeight: '600',
   },

@@ -39,7 +39,7 @@ export default function PublicLayout() {
             name="description"
             content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad. Plataforma cívica para Tijuana."
           />
-          <meta name="theme-color" content="#D4662B" />
+          <meta name="theme-color" content="#13ECC8" />
         </Head>
       )}
       <View style={styles.header}>
@@ -48,7 +48,7 @@ export default function PublicLayout() {
           accessibilityLabel="Lomito home"
           accessibilityRole="link"
         >
-          <Text style={styles.wordmark}>Lomito</Text>
+          <Text style={styles.wordmark}>Lomito.org</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.loginButton}
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   loginButtonText: {
-    color: colors.white,
+    color: colors.secondary,
     fontFamily: typography.button.fontFamily,
     fontSize: typography.button.fontSize,
     fontWeight: typography.button.fontWeight,
