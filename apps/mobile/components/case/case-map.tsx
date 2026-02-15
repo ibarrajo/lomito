@@ -19,6 +19,13 @@ const CATEGORY_PIN_COLORS: Record<CaseCategory, string> = {
   injured: colors.category.injured.pin,
   missing: colors.category.missing.pin,
   stray: colors.category.stray.pin,
+  zoonotic: colors.category.zoonotic.pin,
+  dead_animal: colors.category.dead_animal.pin,
+  dangerous_dog: colors.category.dangerous_dog.pin,
+  distress: colors.category.distress.pin,
+  illegal_sales: colors.category.illegal_sales.pin,
+  wildlife: colors.category.wildlife.pin,
+  noise_nuisance: colors.category.noise_nuisance.pin,
 };
 
 export function CaseMap({ longitude, latitude, category }: CaseMapProps) {

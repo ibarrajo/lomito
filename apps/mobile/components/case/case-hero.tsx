@@ -29,6 +29,13 @@ const CATEGORY_COLORS: Record<
   stray: { color: colors.warning, background: colors.warningBackground },
   missing: { color: colors.info, background: colors.infoBackground },
   injured: { color: colors.error, background: colors.errorBackground },
+  zoonotic: { color: '#7C3AED', background: '#F5F3FF' },
+  dead_animal: { color: '#6B7280', background: '#F9FAFB' },
+  dangerous_dog: { color: colors.error, background: colors.errorBackground },
+  distress: { color: colors.warning, background: colors.warningBackground },
+  illegal_sales: { color: '#B91C1C', background: colors.errorBackground },
+  wildlife: { color: colors.success, background: colors.successBackground },
+  noise_nuisance: { color: '#6366F1', background: '#EEF2FF' },
 };
 
 const STATUS_COLORS: Record<string, { color: string; background: string }> = {

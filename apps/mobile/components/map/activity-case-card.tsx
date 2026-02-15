@@ -47,6 +47,13 @@ const CATEGORY_BG_COLORS: Record<CaseCategory, string> = {
   injured: colors.category.injured.background,
   missing: colors.category.missing.background,
   stray: colors.category.stray.background,
+  zoonotic: colors.category.zoonotic.background,
+  dead_animal: colors.category.dead_animal.background,
+  dangerous_dog: colors.category.dangerous_dog.background,
+  distress: colors.category.distress.background,
+  illegal_sales: colors.category.illegal_sales.background,
+  wildlife: colors.category.wildlife.background,
+  noise_nuisance: colors.category.noise_nuisance.background,
 };
 
 function getTimeAgo(dateString: string): string {

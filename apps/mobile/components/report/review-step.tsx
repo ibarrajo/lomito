@@ -45,6 +45,13 @@ export function ReviewStep({
       injured: { pin: colors.error, background: colors.errorBackground },
       missing: { pin: colors.info, background: colors.infoBackground },
       stray: { pin: colors.warning, background: colors.warningBackground },
+      zoonotic: { pin: '#7C3AED', background: '#F5F3FF' },
+      dead_animal: { pin: '#6B7280', background: '#F9FAFB' },
+      dangerous_dog: { pin: colors.error, background: colors.errorBackground },
+      distress: { pin: colors.warning, background: colors.warningBackground },
+      illegal_sales: { pin: '#B91C1C', background: colors.errorBackground },
+      wildlife: { pin: colors.success, background: colors.successBackground },
+      noise_nuisance: { pin: '#6366F1', background: '#EEF2FF' },
     };
     return categoryColors[category];
   };

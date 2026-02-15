@@ -74,6 +74,16 @@
     "codeInvalid": "Por favor ingresa un código válido de 6 dígitos",
     "emailLoginTab": "Iniciar sesión con correo",
     "smsLoginTab": "Iniciar sesión con SMS",
+    "magicLinkTab": "Enlace mágico",
+    "passwordTab": "Contraseña",
+    "passwordLogin": "Contraseña",
+    "checkYourEmail": "Revisa tu correo",
+    "checkEmailHeading": "¡Ya casi!",
+    "checkEmailSubtext": "Enviamos un enlace mágico a tu bandeja de entrada",
+    "magicLinkSentTo": "Enviamos un enlace de inicio de sesión a {{email}}. Haz clic en el enlace del correo para ingresar.",
+    "openProvider": "Abrir {{provider}}",
+    "tryDifferentEmail": "Usar otro correo",
+    "resendLink": "Reenviar enlace",
     "sidebarHeading": "Protegiendo a los animales de nuestra comunidad",
     "sidebarSubtext": "Plataforma cívica para Tijuana",
     "registerSidebarHeading": "Únete a nuestra comunidad",
@@ -155,6 +165,13 @@
     "categoryInjuredDescription": "Animal que parece herido o necesita atención médica",
     "categoryMissingDescription": "Mascota perdida buscando a su dueño",
     "categoryStrayDescription": "Animal callejero que necesita ayuda",
+    "categoryZoonoticDescription": "Riesgo potencial de enfermedad para humanos por animal",
+    "categoryDeadAnimalDescription": "Animal muerto encontrado en área pública",
+    "categoryDangerousDogDescription": "Perro agresivo o peligroso que representa una amenaza",
+    "categoryDistressDescription": "Animal atrapado, atorado o en peligro inmediato",
+    "categoryIllegalSalesDescription": "Venta o tráfico ilegal de animales",
+    "categoryWildlifeDescription": "Animal silvestre en zona urbana que necesita ayuda",
+    "categoryNoiseNuisanceDescription": "Ruido persistente de animal que molesta a la comunidad",
     "sidebar": {
       "securityBadge": "Anónimo y seguro",
       "title": "Tu reporte importa",
@@ -167,7 +184,14 @@
     "abuse": "Maltrato",
     "injured": "Herido",
     "missing": "Extraviado",
-    "stray": "Callejero"
+    "stray": "Callejero",
+    "zoonotic": "Riesgo zoonótico",
+    "dead_animal": "Animal muerto",
+    "dangerous_dog": "Perro peligroso",
+    "distress": "Animal en peligro",
+    "illegal_sales": "Venta ilegal",
+    "wildlife": "Fauna silvestre",
+    "noise_nuisance": "Ruido molesto"
   },
   "animal": {
     "dog": "Perro",
@@ -536,6 +560,31 @@
     "footerFaq": "Preguntas frecuentes",
     "footerContact": "Contacto",
     "footerLegal": "Legal"
+  },
+  "authority": {
+    "type": {
+      "primary": "Autoridad primaria",
+      "escalation": "Autoridad de escalación",
+      "enforcement": "Aplicación de la ley",
+      "specialized": "Especializada"
+    },
+    "category": {
+      "control_animal": "Control animal",
+      "ecologia": "Ecología",
+      "salud": "Salud",
+      "seguridad_publica": "Seguridad pública",
+      "fiscalia": "Fiscalía",
+      "dif": "DIF",
+      "semarnat": "SEMARNAT",
+      "smads": "SMADS",
+      "unknown": "Desconocido"
+    },
+    "verification": {
+      "unverified": "Sin verificar",
+      "verified": "Verificado",
+      "contact_confirmed": "Contacto confirmado",
+      "unresponsive": "Sin respuesta"
+    }
   },
   "impact": {
     "title": "Impacto de la Plataforma",

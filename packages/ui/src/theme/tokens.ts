@@ -44,6 +44,34 @@ export const colors = {
       pin: '#DD6B20',
       background: '#FFFAF0',
     },
+    zoonotic: {
+      pin: '#7C3AED',
+      background: '#F5F3FF',
+    },
+    dead_animal: {
+      pin: '#6B7280',
+      background: '#F9FAFB',
+    },
+    dangerous_dog: {
+      pin: '#DC2626',
+      background: '#FEF2F2',
+    },
+    distress: {
+      pin: '#F59E0B',
+      background: '#FFFBEB',
+    },
+    illegal_sales: {
+      pin: '#B91C1C',
+      background: '#FEF2F2',
+    },
+    wildlife: {
+      pin: '#059669',
+      background: '#ECFDF5',
+    },
+    noise_nuisance: {
+      pin: '#6366F1',
+      background: '#EEF2FF',
+    },
     resolved: {
       pin: '#276749',
       background: '#F0FFF4',

@@ -74,6 +74,16 @@
     "codeInvalid": "Please enter a valid 6-digit code",
     "emailLoginTab": "Email login tab",
     "smsLoginTab": "SMS login tab",
+    "magicLinkTab": "Magic link tab",
+    "passwordTab": "Password tab",
+    "passwordLogin": "Password",
+    "checkYourEmail": "Check your email",
+    "checkEmailHeading": "Almost there!",
+    "checkEmailSubtext": "We sent a magic link to your inbox",
+    "magicLinkSentTo": "We sent a login link to {{email}}. Click the link in the email to sign in.",
+    "openProvider": "Open {{provider}}",
+    "tryDifferentEmail": "Try a different email",
+    "resendLink": "Resend link",
     "sidebarHeading": "Protecting our community's animals",
     "sidebarSubtext": "Civic platform for Tijuana",
     "registerSidebarHeading": "Join our community",
@@ -155,6 +165,13 @@
     "categoryInjuredDescription": "Animal that appears injured or in need of medical attention",
     "categoryMissingDescription": "Lost pet looking for owner",
     "categoryStrayDescription": "Stray animal needing help",
+    "categoryZoonoticDescription": "Potential disease risk to humans from animal",
+    "categoryDeadAnimalDescription": "Dead animal found in public area",
+    "categoryDangerousDogDescription": "Aggressive or dangerous dog posing a threat",
+    "categoryDistressDescription": "Animal trapped, stuck, or in immediate danger",
+    "categoryIllegalSalesDescription": "Illegal sale or trafficking of animals",
+    "categoryWildlifeDescription": "Wild animal in urban area needing help",
+    "categoryNoiseNuisanceDescription": "Persistent animal noise disturbing the community",
     "sidebar": {
       "securityBadge": "Anonymous & Secure",
       "title": "Your report matters",
@@ -167,7 +184,14 @@
     "abuse": "Abuse",
     "injured": "Injured",
     "missing": "Missing",
-    "stray": "Stray"
+    "stray": "Stray",
+    "zoonotic": "Zoonotic Risk",
+    "dead_animal": "Dead Animal",
+    "dangerous_dog": "Dangerous Dog",
+    "distress": "Animal in Distress",
+    "illegal_sales": "Illegal Sales",
+    "wildlife": "Wildlife",
+    "noise_nuisance": "Noise Nuisance"
   },
   "animal": {
     "dog": "Dog",
@@ -536,6 +560,31 @@
     "footerFaq": "FAQ",
     "footerContact": "Contact",
     "footerLegal": "Legal"
+  },
+  "authority": {
+    "type": {
+      "primary": "Primary Authority",
+      "escalation": "Escalation Authority",
+      "enforcement": "Enforcement",
+      "specialized": "Specialized"
+    },
+    "category": {
+      "control_animal": "Animal Control",
+      "ecologia": "Ecology",
+      "salud": "Health",
+      "seguridad_publica": "Public Safety",
+      "fiscalia": "Prosecutor",
+      "dif": "Family Services (DIF)",
+      "semarnat": "SEMARNAT",
+      "smads": "SMADS",
+      "unknown": "Unknown"
+    },
+    "verification": {
+      "unverified": "Unverified",
+      "verified": "Verified",
+      "contact_confirmed": "Contact Confirmed",
+      "unresponsive": "Unresponsive"
+    }
   },
   "impact": {
     "title": "Platform Impact",

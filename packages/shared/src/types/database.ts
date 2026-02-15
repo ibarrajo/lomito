@@ -9,11 +9,27 @@ export type CaseStatus =
   | 'resolved'
   | 'rejected'
   | 'archived';
-export type CaseCategory = 'abuse' | 'stray' | 'missing' | 'injured';
+export type CaseCategory =
+  | 'abuse'
+  | 'stray'
+  | 'missing'
+  | 'injured'
+  | 'zoonotic'
+  | 'dead_animal'
+  | 'dangerous_dog'
+  | 'distress'
+  | 'illegal_sales'
+  | 'wildlife'
+  | 'noise_nuisance';
 export type AnimalType = 'dog' | 'cat' | 'bird' | 'other';
 export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
 export type MediaType = 'image' | 'video';
-export type JurisdictionLevel = 'state' | 'municipality' | 'locality';
+export type JurisdictionLevel =
+  | 'country'
+  | 'state'
+  | 'municipality'
+  | 'delegacion'
+  | 'locality';
 export type DonationMethod = 'mercado_pago' | 'stripe' | 'oxxo' | 'spei';
 export type TimelineAction =
   | 'created'
@@ -29,6 +45,28 @@ export type TimelineAction =
   | 'resolved'
   | 'archived'
   | 'marked_unresponsive';
+
+export type AuthorityType =
+  | 'primary'
+  | 'escalation'
+  | 'enforcement'
+  | 'specialized';
+export type DependencyCategory =
+  | 'control_animal'
+  | 'ecologia'
+  | 'salud'
+  | 'seguridad_publica'
+  | 'fiscalia'
+  | 'dif'
+  | 'semarnat'
+  | 'smads'
+  | 'unknown';
+export type VerificationStatus =
+  | 'unverified'
+  | 'verified'
+  | 'contact_confirmed'
+  | 'unresponsive';
+export type SubmissionStatus = 'pending' | 'approved' | 'rejected';
 
 export interface NotificationPreferences {
   push_enabled: boolean;
@@ -53,16 +91,66 @@ export interface Profile {
 export interface Jurisdiction {
   id: string;
   name: string;
+  name_en: string | null;
   parent_id: string | null;
   level: JurisdictionLevel;
+  country_code: string;
+  inegi_clave: string | null;
+  fips_code: string | null;
+  population: number | null;
+  timezone: string | null;
+  /** @deprecated Use jurisdiction_authorities table instead */
   authority_name: string | null;
+  /** @deprecated Use jurisdiction_authorities table instead */
   authority_email: string | null;
+  /** @deprecated Use jurisdiction_authorities table instead */
   authority_phone: string | null;
+  /** @deprecated Use jurisdiction_authorities table instead */
   authority_url: string | null;
   escalation_enabled: boolean;
   verified: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface JurisdictionAuthority {
+  id: string;
+  jurisdiction_id: string;
+  authority_type: AuthorityType;
+  dependency_category: DependencyCategory;
+  dependency_name: string;
+  department_name: string | null;
+  contact_name: string | null;
+  contact_title: string | null;
+  email: string | null;
+  phone: string | null;
+  url: string | null;
+  address: string | null;
+  handles_report_types: string[];
+  verification: VerificationStatus;
+  verified_at: string | null;
+  verified_by: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuthoritySubmission {
+  id: string;
+  jurisdiction_id: string;
+  submitted_by: string;
+  status: SubmissionStatus;
+  dependency_name: string;
+  department_name: string | null;
+  contact_name: string | null;
+  email: string | null;
+  phone: string | null;
+  url: string | null;
+  handles_report_types: string[];
+  notes: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  created_at: string;
 }
 
 export interface Case {
@@ -165,6 +253,30 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Omit<Jurisdiction, 'id' | 'created_at' | 'updated_at'>>;
+      };
+      jurisdiction_authorities: {
+        Row: JurisdictionAuthority;
+        Insert: Omit<
+          JurisdictionAuthority,
+          'id' | 'created_at' | 'updated_at'
+        > & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<
+          Omit<JurisdictionAuthority, 'id' | 'created_at' | 'updated_at'>
+        >;
+      };
+      authority_submissions: {
+        Row: AuthoritySubmission;
+        Insert: Omit<AuthoritySubmission, 'id' | 'created_at'> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<
+          Omit<AuthoritySubmission, 'id' | 'submitted_by' | 'created_at'>
+        >;
       };
       cases: {
         Row: Case;
@@ -279,6 +391,10 @@ export interface Database {
       jurisdiction_level: JurisdictionLevel;
       donation_method: DonationMethod;
       timeline_action: TimelineAction;
+      authority_type: AuthorityType;
+      dependency_category: DependencyCategory;
+      verification_status: VerificationStatus;
+      submission_status: SubmissionStatus;
     };
     Functions: {
       get_dashboard_stats: {
