@@ -21,6 +21,8 @@ import { StatCard } from '../../components/dashboard/stat-card';
 import { CategoryChart } from '../../components/dashboard/category-chart';
 import { ResolutionRate } from '../../components/dashboard/resolution-rate';
 import { KpiRow } from '../../components/dashboard/kpi-row';
+import { MyReportsGrid } from '../../components/dashboard/my-reports-grid';
+import { NeighborhoodWatch } from '../../components/dashboard/neighborhood-watch';
 import { ProfileDesktopLayout } from '../../components/shared/profile-desktop-layout';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -109,6 +111,10 @@ export default function DashboardScreen() {
           <H1 style={styles.header}>{t('dashboard.title')}</H1>
 
           <KpiRow />
+
+          <MyReportsGrid />
+
+          <NeighborhoodWatch />
 
           <StatCard
             icon={FileText}
