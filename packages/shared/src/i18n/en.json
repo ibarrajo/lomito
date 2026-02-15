@@ -496,5 +496,24 @@
     "footerFaq": "FAQ",
     "footerContact": "Contact",
     "footerLegal": "Legal"
+  },
+  "impact": {
+    "title": "Platform Impact",
+    "subtitle": "Real-time data on animal welfare in our community",
+    "totalCases": "Total Cases",
+    "resolvedCases": "Resolved Cases",
+    "pendingCases": "Pending Cases",
+    "inProgressCases": "In Progress",
+    "abuseCases": "Abuse Reports",
+    "strayCases": "Stray Animals",
+    "missingCases": "Missing Pets",
+    "avgResolution": "Avg. Resolution Time",
+    "avgResolutionDays": "{{days}} days",
+    "totalDonations": "Total Donations",
+    "transparency": "Transparency",
+    "transparencyDescription": "We believe in full transparency. All data is real-time and publicly accessible.",
+    "categoryBreakdown": "By Category",
+    "joinCta": "Join the Community",
+    "joinDescription": "Help protect animals in your neighborhood"
   }
 }

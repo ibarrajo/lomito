@@ -496,5 +496,24 @@
     "footerFaq": "Preguntas frecuentes",
     "footerContact": "Contacto",
     "footerLegal": "Legal"
+  },
+  "impact": {
+    "title": "Impacto de la Plataforma",
+    "subtitle": "Datos en tiempo real sobre bienestar animal en nuestra comunidad",
+    "totalCases": "Casos totales",
+    "resolvedCases": "Casos resueltos",
+    "pendingCases": "Casos pendientes",
+    "inProgressCases": "En progreso",
+    "abuseCases": "Reportes de maltrato",
+    "strayCases": "Animales callejeros",
+    "missingCases": "Mascotas perdidas",
+    "avgResolution": "Tiempo promedio de resolución",
+    "avgResolutionDays": "{{days}} días",
+    "totalDonations": "Donaciones totales",
+    "transparency": "Transparencia",
+    "transparencyDescription": "Creemos en la transparencia total. Todos los datos son en tiempo real y de acceso público.",
+    "categoryBreakdown": "Por categoría",
+    "joinCta": "Únete a la comunidad",
+    "joinDescription": "Ayuda a proteger a los animales de tu vecindario"
   }
 }
