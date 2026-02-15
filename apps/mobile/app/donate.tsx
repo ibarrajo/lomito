@@ -85,7 +85,11 @@ export default function DonateScreen() {
   }
 
   function handleBack() {
-    router.back();
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/');
+    }
   }
 
   if (!isFeatureEnabled('donations')) {
