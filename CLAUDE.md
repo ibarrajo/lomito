@@ -80,7 +80,7 @@ Full token reference: `docs/style/DESIGN_TOKENS.md`
 ## Database Schema (Core Tables)
 
 - `profiles` — extends auth.users: name, phone, municipality, role, avatar_url
-- `jurisdictions` — id, name, parent_id, level, geometry (PostGIS), authority_name/email/phone/url, escalation_enabled, verified
+- `jurisdictions` — id, name, parent_id, level, geometry (PostGIS), escalation_enabled, verified. **Note:** `authority_name/email/phone/url` columns are deprecated in favor of `jurisdiction_authorities` table; scheduled for removal in a future migration.
 - `user_jurisdictions` — user_id, jurisdiction_id (junction for role scoping)
 - `cases` — id, reporter_id, category, animal_type, description, location (PostGIS point), jurisdiction_id (auto-assigned), urgency, status, timestamps
 - `case_media` — id, case_id, url, type, thumbnail_url, order
@@ -96,49 +96,43 @@ Full token reference: `docs/style/DESIGN_TOKENS.md`
 
 ## Agent Orchestration
 
-This project uses Claude Code's **native Task system** for work tracking and **subagent delegation** for execution.
+This session is the **orchestrator**. It runs on Opus and is the sole interface between the user and all subagent work. The user brings questions, new tasks, and feedback here — the orchestrator decomposes, delegates, and synthesizes.
 
-### How it works
+**Why this section exists:** Without it, context compaction causes the session to forget its orchestrator role and start implementing directly. This leads to context rot (bloated context from inline exploration), answer thrashing (revisiting the same questions), and lost delegation benefits. This section MUST survive compaction.
 
-1. Start with `CLAUDE_CODE_TASK_LIST_ID=lomito` so tasks persist across sessions.
-2. The orchestrator (main session on Opus) creates tasks with dependencies via `TaskCreate`.
-3. Each task is delegated to a subagent (Sonnet) with fresh context.
-4. Subagents read the relevant spec from `docs/` before coding.
-5. Each completed task = one atomic commit (run typecheck + lint first).
-6. Blockers logged to `docs/plans/ISSUES.md`, then move to next unblocked task.
+### Operating model
 
-### Subagent routing
+1. **User → Orchestrator:** All requests come through this session. The orchestrator clarifies requirements, breaks work into tasks, and delegates.
+2. **Orchestrator → Subagents:** Use the `Task` tool to launch subagents for planning (`Plan`), exploration (`Explore`), implementation (`implementer`), and review (`reviewer`). Choose the model that gives best ROI for each task — Haiku for quick searches, Sonnet for implementation, Opus for complex planning.
+3. **Subagents → Orchestrator:** Subagents return results. The orchestrator reviews, synthesizes, and communicates back to the user. Never let subagent output bypass review.
+4. **Task tracking:** Use `TaskCreate`/`TaskUpdate`/`TaskList` to track all work. Each task gets a clear description so subagents can work with fresh context (preventing context rot).
 
-- **Orchestrator (main):** Opus — planning, decomposition, verification
-- **Implementation subagents:** Sonnet — focused coding tasks
-- **Reviewer subagent:** `.claude/agents/reviewer.md` — read-only code review
+### Anti-patterns to avoid
 
-### Domain parallel patterns
+- **Inline implementation:** Do not write large features directly in the orchestrator. Delegate to subagents to keep this context clean.
+- **Removing this section:** This section defines the operating model. Never delete it during cleanup — update it instead.
+- **Skipping delegation for "quick" tasks:** Even medium tasks benefit from subagent isolation. The orchestrator's context is expensive — protect it.
 
-Dispatch parallel subagents when work spans independent domains:
+### Tools and integrations
 
-- **Frontend agent:** React Native components, UI, navigation
-- **Backend agent:** Supabase schema, migrations, RLS, Edge Functions
-- **Shared agent:** Types, i18n strings, constants, utilities
-
-### Task hydration on session start
-
-If resuming work, run: `Show me all tasks` to reload state. If no tasks exist, read `docs/plans/ORCHESTRATION.md` and hydrate from the phase spec.
+- **Task tool:** Subagent delegation (Explore, Plan, implementer, reviewer, etc.)
+- **Skills:** Invoke via `Skill` tool for recurring workflows
+- **MCP plugins:** Supabase (database), Playwright (browser testing), Stitch (design), Context7 (library docs)
 
 ## Reference Documents
 
 - `docs/specs/PRD.md` — Full product requirements
 - `docs/specs/ENGINEERING_GUIDE.md` — Architecture, performance, analytics, i18n, kickoff checklist
 - `docs/style/DESIGN_TOKENS.md` — Complete design token reference
-- `docs/plans/ORCHESTRATION.md` — Phased task definitions for hydration
 - `docs/plans/ISSUES.md` — Blockers needing human input
+- `docs/archive/` — Completed orchestration docs (ORCHESTRATION.md, LAUNCH_PROMPT.md, agent-runner specs)
 
 ## Compact Instructions
 
 When context is compacted, preserve:
 
-1. The monorepo structure and which packages exist
-2. Current task list state (done, in progress, blocked)
-3. Active subagent assignments
+1. **The orchestrator role** — this session delegates, it does not implement directly
+2. The monorepo structure and which packages exist
+3. Current task list state (done, in progress, blocked)
 4. Unresolved entries in ISSUES.md
 5. Design token values (colors, fonts, spacing)
