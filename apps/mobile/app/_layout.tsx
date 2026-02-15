@@ -45,6 +45,9 @@ function RootLayoutNav() {
     } else if (session && inAuthGroup) {
       // Redirect to main app if authenticated
       router.replace('/(tabs)');
+    } else if (session && segments[0] === '(public)' && Platform.OS === 'web') {
+      // Redirect authenticated users away from public landing on web
+      router.replace('/(tabs)');
     }
   }, [session, loading, segments, router]);
 
@@ -69,7 +72,7 @@ function RootLayoutNav() {
         <Stack.Screen name="auth/register" />
         <Stack.Screen name="auth/verify" />
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="case/[id]" options={{ headerShown: true, title: 'Case Details' }} />
+        <Stack.Screen name="case/[id]" options={{ headerShown: true, title: '' }} />
         <Stack.Screen name="report" />
         <Stack.Screen name="about" />
         <Stack.Screen name="donate" />

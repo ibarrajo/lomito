@@ -63,6 +63,7 @@ build/
 # Supabase local
 .supabase/
 supabase/.temp/
+supabase/.branches/
 
 # Logs
 logs/
@@ -75,6 +76,10 @@ logs/
 .cache/
 .turbo/
 .next/
+
+# Screenshots / QA artifacts
+*.png
+.playwright-mcp/
 
 # Python / Agent runner
 __pycache__/

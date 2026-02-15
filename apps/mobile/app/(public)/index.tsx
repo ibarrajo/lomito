@@ -5,6 +5,8 @@ import { MapPin, ArrowRight, Search, Bell } from 'lucide-react-native';
 import { Container } from '@lomito/ui/src/components/container';
 import { H1, H2, H3, Body, BodySmall } from '@lomito/ui/src/components/typography';
 import { colors, spacing, borderRadius, shadowStyles } from '@lomito/ui/src/theme/tokens';
+import { isFeatureEnabled } from '@lomito/shared';
+import { RecentReportsTicker } from '../../components/landing/recent-reports-ticker';
 
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
@@ -115,6 +117,24 @@ export default function LandingPage() {
         </Container>
       </View>
 
+      {/* Recent Activity — map preview + recent reports */}
+      <View style={styles.recentActivitySection}>
+        <Container>
+          <H2 style={styles.sectionTitle}>{t('landing.recentActivity')}</H2>
+          <BodySmall style={styles.sectionSubtitle}>{t('landing.recentActivityDescription')}</BodySmall>
+          <View style={styles.activityGrid}>
+            {/* Left side: decorative map placeholder */}
+            <View style={styles.mapPlaceholder}>
+              <Text style={styles.mapPlaceholderText}>Tijuana</Text>
+            </View>
+            {/* Right side: recent reports ticker */}
+            <View style={styles.tickerContainer}>
+              <RecentReportsTicker />
+            </View>
+          </View>
+        </Container>
+      </View>
+
       {/* Community — compact, left-aligned */}
       <View style={styles.communitySection}>
         <Container>
@@ -140,9 +160,11 @@ export default function LandingPage() {
               <TouchableOpacity onPress={() => router.push('/about')} accessibilityRole="link">
                 <Text style={styles.footerLink}>{t('about.title')}</Text>
               </TouchableOpacity>
+              {isFeatureEnabled('donations') && (
               <TouchableOpacity onPress={() => router.push('/donate')} accessibilityRole="link">
                 <Text style={styles.footerLink}>{t('donate.title')}</Text>
               </TouchableOpacity>
+              )}
               <TouchableOpacity onPress={() => router.push('/legal/privacy')} accessibilityRole="link">
                 <Text style={styles.footerLink}>{t('legal.privacy')}</Text>
               </TouchableOpacity>
@@ -159,6 +181,9 @@ export default function LandingPage() {
                 {i18n.language === 'en' ? 'Español' : 'English'}
               </Text>
             </TouchableOpacity>
+          </View>
+          <View style={styles.footerDisclaimer}>
+            <BodySmall style={styles.footerDisclaimerText}>{t('legal.disclaimerShort')}</BodySmall>
           </View>
         </Container>
       </View>
@@ -289,7 +314,7 @@ const styles = StyleSheet.create({
   },
   bentoLarge: {
     flex: 1.2,
-    minHeight: 240,
+    minHeight: 180,
     minWidth: 300,
   },
   bentoStack: {
@@ -319,6 +344,44 @@ const styles = StyleSheet.create({
   },
   featureDesc: {
     color: colors.neutral500,
+  },
+  // Recent Activity
+  recentActivitySection: {
+    backgroundColor: colors.neutral100,
+    paddingVertical: spacing.xxl,
+  },
+  sectionTitle: {
+    marginBottom: spacing.xs,
+  },
+  sectionSubtitle: {
+    color: colors.neutral500,
+    marginBottom: spacing.lg,
+  },
+  activityGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.lg,
+  },
+  mapPlaceholder: {
+    alignItems: 'center',
+    backgroundColor: colors.neutral100,
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.card,
+    borderStyle: 'dashed',
+    borderWidth: 2,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 280,
+    minWidth: 280,
+  },
+  mapPlaceholderText: {
+    color: colors.neutral400,
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  tickerContainer: {
+    flex: 1,
+    minWidth: 320,
   },
   // Community
   communitySection: {
@@ -379,5 +442,15 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 14,
     fontWeight: '600',
+  },
+  footerDisclaimer: {
+    borderTopColor: colors.neutral200,
+    borderTopWidth: 1,
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+  },
+  footerDisclaimerText: {
+    color: colors.neutral400,
+    textAlign: 'center',
   },
 });

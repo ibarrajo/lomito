@@ -115,9 +115,9 @@
     "reviewSubmit": "Revisa y envía tu reporte",
     "edit": "Editar",
     "coordinates": "Coordenadas",
-    "categoryabuseDescription": "El animal está siendo maltratado o descuidado",
-    "categorystrayDescription": "Animal callejero que necesita ayuda",
-    "categorymissingDescription": "Mascota perdida buscando a su dueño"
+    "categoryAbuseDescription": "El animal está siendo maltratado o descuidado",
+    "categoryStrayDescription": "Animal callejero que necesita ayuda",
+    "categoryMissingDescription": "Mascota perdida buscando a su dueño"
   },
   "category": {
     "abuse": "Maltrato",
@@ -155,7 +155,10 @@
     "noTimeline": "Sin eventos en el historial",
     "follow": "Seguir",
     "unfollow": "Dejar de seguir",
-    "following": "Siguiendo"
+    "following": "Siguiendo",
+    "share": "Compartir",
+    "shareText": "Mira este reporte de bienestar animal en Lomito: {{url}}",
+    "linkCopied": "Enlace copiado"
   },
   "timelineAction": {
     "created": "Reporte creado",
@@ -191,6 +194,8 @@
   "moderation": {
     "queue": "Cola de revisión",
     "pendingCases": "Casos pendientes",
+    "caseCount_one": "{{count}} caso",
+    "caseCount_other": "{{count}} casos",
     "verify": "Verificar",
     "reject": "Rechazar",
     "flag": "Señalar",
@@ -252,6 +257,8 @@
   },
   "government": {
     "portal": "Portal gubernamental",
+    "caseCount_one": "{{count}} caso",
+    "caseCount_other": "{{count}} casos",
     "assignFolio": "Asignar folio",
     "postResponse": "Publicar respuesta",
     "officialResponse": "Respuesta oficial",
@@ -276,12 +283,45 @@
   },
   "about": {
     "title": "Acerca de Lomito",
+    "whyTitle": "¿Por qué construimos Lomito?",
+    "whyContent": "En las ciudades de México, miles de animales callejeros sufren maltrato, abandono y falta de atención. Los reportes ciudadanos se pierden en burocracia, y no existe un mecanismo transparente para dar seguimiento. Lomito nació para empoderar a las comunidades, crear transparencia y cerrar la brecha entre ciudadanos y autoridades.",
+    "whatTitle": "¿Qué estamos construyendo?",
+    "whatContent": "Una plataforma centrada en mapas para reportar problemas de bienestar animal, con seguimiento por jurisdicción, escalación a gobierno, moderación comunitaria y un tablero público de transparencia e impacto.",
     "mission": "Nuestra Misión",
     "missionText": "Lomito es una plataforma cívica de código abierto que empodera a las comunidades para reportar y dar seguimiento a problemas de bienestar animal, responsabilizar a las autoridades y crear un cambio duradero para los animales callejeros en México.",
     "team": "Nuestro Equipo",
     "teamText": "Lomito está construido y mantenido por una comunidad de desarrolladores, diseñadores y defensores del bienestar animal.",
     "openSource": "Código Abierto",
     "openSourceText": "Lomito es completamente de código abierto. ¡Contribuciones bienvenidas!",
+    "roadmapTitle": "Próximas funciones",
+    "roadmap": {
+      "androidApp": {
+        "title": "Aplicación Android",
+        "description": "App nativa para dispositivos Android"
+      },
+      "iosApp": {
+        "title": "Aplicación iOS",
+        "description": "App nativa para iPhone y iPad"
+      },
+      "petRegistry": {
+        "title": "Registro de mascotas",
+        "description": "Registra a tu mascota con nombre, foto, estado de salud y datos del dueño"
+      },
+      "missingPetFinder": {
+        "title": "Buscador de mascotas con IA",
+        "description": "Busca mascotas perdidas usando reconocimiento de imágenes con inteligencia artificial"
+      },
+      "osintIngestion": {
+        "title": "Datos públicos (OSINT)",
+        "description": "Ingesta automática de datos públicos sobre mascotas y reportes de bienestar animal"
+      },
+      "status": {
+        "planned": "Planeado",
+        "exploring": "Explorando",
+        "inProgress": "En desarrollo",
+        "launched": "Lanzado"
+      }
+    },
     "contact": "Contáctanos",
     "website": "Sitio Web",
     "github": "GitHub",
@@ -304,7 +344,9 @@
     "oxxoInfo": "Genera un código de pago para pagar en efectivo en cualquier tienda OXXO.",
     "speiInfo": "Realiza una transferencia bancaria directa usando SPEI desde tu banco.",
     "whyDonate": "A dónde va tu donación",
-    "whyDonateDescription": "El 100% de las donaciones se destina a costos de servidor, notificaciones SMS y mantener Lomito gratuito para todos. Somos voluntarios sin gastos generales."
+    "whyDonateDescription": "El 100% de las donaciones se destina a costos de servidor, notificaciones SMS y mantener Lomito gratuito para todos. Somos voluntarios sin gastos generales.",
+    "comingSoon": "Próximamente",
+    "comingSoonDescription": "Las donaciones estarán disponibles pronto. Estamos trabajando en integrar métodos de pago seguros para México."
   },
   "dashboard": {
     "title": "Tablero de impacto",
@@ -321,7 +363,9 @@
   "legal": {
     "privacy": "Aviso de Privacidad",
     "terms": "Términos de Servicio",
-    "lastUpdated": "Última actualización: {{date}}"
+    "lastUpdated": "Última actualización: {{date}}",
+    "disclaimer": "Lomito es una plataforma cívica independiente creada por y para la comunidad. No es un sitio web gubernamental ni está patrocinado, avalado o afiliado a ninguna entidad de gobierno.",
+    "disclaimerShort": "Lomito no es un sitio gubernamental"
   },
   "profile": {
     "title": "Perfil",
@@ -352,6 +396,8 @@
     "impactTitle": "Nuestro Impacto",
     "communityTitle": "Hecho por la Comunidad",
     "communityDescription": "Lomito es de código abierto e impulsado por la comunidad. Creemos que la transparencia y la participación cívica crean un cambio duradero para los animales callejeros en México.",
-    "footerTagline": "Hecho con amor en Tijuana"
+    "footerTagline": "Hecho con amor en Tijuana",
+    "recentActivity": "Actividad reciente",
+    "recentActivityDescription": "Reportes recientes de la comunidad"
   }
 }

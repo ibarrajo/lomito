@@ -1,21 +1,33 @@
-MIT License
+Copyright (c) 2025-2026 Lomito Contributors. All rights reserved.
 
-Copyright (c) 2025-2026 Lomito Contributors
+SOURCE-AVAILABLE LICENSE
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This software and associated documentation files (the "Software") are made
+publicly available for viewing and reference purposes only. By accessing the
+Software, you agree to the following terms:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. NO LICENSE GRANTED. No license, express or implied, is granted to use, copy,
+   modify, merge, publish, distribute, sublicense, or sell copies of the
+   Software, in whole or in part, for any purpose.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. VIEWING ONLY. You may view and read the source code solely for personal,
+   non-commercial reference. You may not execute, deploy, host, or otherwise
+   run the Software without explicit written permission from the copyright
+   holders.
+
+3. NO WARRANTY. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+   EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+   OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE.
+
+4. CONTRIBUTIONS. By submitting a pull request or other contribution to this
+   repository, you agree to assign all intellectual property rights in your
+   contribution to the copyright holders.
+
+5. TRADEMARKS. The name "Lomito", the Lomito logo, and related branding are
+   trademarks of the copyright holders and may not be used without permission.
+
+For licensing inquiries, contact: hello@lomito.org

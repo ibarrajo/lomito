@@ -90,7 +90,7 @@ export default function ModerationScreen() {
       <View style={styles.header}>
         <H1>{t('moderation.pendingCases')}</H1>
         <Body color={colors.neutral500}>
-          {cases.length} {cases.length === 1 ? 'case' : 'cases'}
+          {t('moderation.caseCount', { count: cases.length })}
         </Body>
       </View>
       <FlatList

@@ -6,6 +6,7 @@ import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
 import { colors, spacing, typography } from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { isFeatureEnabled } from '@lomito/shared';
 
 type AuthMethod = 'email' | 'phone';
 
@@ -87,7 +88,8 @@ export default function LoginScreen() {
             </H1>
           </View>
 
-      {/* Tab switcher */}
+      {/* Tab switcher — only show if SMS login is enabled */}
+      {isFeatureEnabled('smsLogin') && (
       <View style={styles.tabs}>
         <Pressable
           style={[styles.tab, authMethod === 'email' && styles.tabActive]}
@@ -119,6 +121,7 @@ export default function LoginScreen() {
           </Body>
         </Pressable>
       </View>
+      )}
 
       {/* Email login */}
       {authMethod === 'email' && (
@@ -146,7 +149,7 @@ export default function LoginScreen() {
       )}
 
       {/* Phone login */}
-      {authMethod === 'phone' && (
+      {isFeatureEnabled('smsLogin') && authMethod === 'phone' && (
         <View style={styles.form}>
           <TextInput
             label={t('auth.phone')}

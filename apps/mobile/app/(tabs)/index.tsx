@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
 import { ClusterLayer } from '../../components/map/cluster-layer';
@@ -13,6 +13,7 @@ import { CaseSummaryCard } from '../../components/map/case-summary-card';
 import { FilterBar } from '../../components/map/filter-bar';
 import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
+import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { supabase } from '../../lib/supabase';
 import { colors, spacing, shadowStyles, iconSizes, typography } from '@lomito/ui/src/theme/tokens';
 import { AppModal } from '@lomito/ui';
@@ -32,6 +33,7 @@ interface CaseSummary {
 export default function MapScreen() {
   const { t } = useTranslation();
   const router = useRouter();
+  const { isDesktop } = useBreakpoint();
   const [cases, setCases] = useState<CaseSummary[]>([]);
   const [selectedCase, setSelectedCase] = useState<CaseSummary | null>(null);
   const [showBoundaries, setShowBoundaries] = useState(false);
@@ -182,15 +184,17 @@ export default function MapScreen() {
         />
       )}
 
-      {/* FAB for New Report */}
-      <Pressable
-        style={styles.fab}
-        onPress={handleNewReport}
-        accessibilityLabel={t('report.newReport')}
-        accessibilityRole="button"
-      >
-        <Text style={styles.fabText}>+</Text>
-      </Pressable>
+      {/* FAB for New Report - hidden on desktop web since navbar has CTA */}
+      {(Platform.OS !== 'web' || !isDesktop) && (
+        <Pressable
+          style={styles.fab}
+          onPress={handleNewReport}
+          accessibilityLabel={t('report.newReport')}
+          accessibilityRole="button"
+        >
+          <Text style={styles.fabText}>+</Text>
+        </Pressable>
+      )}
 
       <AppModal
         visible={!!jurisdictionModal}

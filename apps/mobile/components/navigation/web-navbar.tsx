@@ -15,11 +15,12 @@
  * - Responsive max-width container (1280px)
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
+  Pressable,
   StyleSheet,
   Platform,
 } from 'react-native';
@@ -33,6 +34,9 @@ import {
   Info,
   Heart,
   Plus,
+  User,
+  Settings,
+  LogOut,
 } from 'lucide-react-native';
 import {
   colors,
@@ -41,18 +45,28 @@ import {
   layout,
   shadowStyles,
   iconSizes,
+  borderRadius,
 } from '@lomito/ui/src/theme/tokens';
 import { useUserProfile } from '../../hooks/use-user-profile';
+import { useAuth } from '../../hooks/use-auth';
+import { isFeatureEnabled } from '@lomito/shared';
 
 export function WebNavbar() {
   const router = useRouter();
   const pathname = usePathname();
   const { t, i18n } = useTranslation();
   const { profile, loading } = useUserProfile();
+  const { signOut } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const isModerator = profile?.role === 'moderator' || profile?.role === 'admin';
   const isGovernment =
     profile?.role === 'government' || profile?.role === 'admin';
+
+  // Close dropdown when navigating
+  useEffect(() => {
+    setShowUserMenu(false);
+  }, [pathname]);
 
   const toggleLanguage = useCallback(() => {
     const newLang = i18n.language === 'en' ? 'es' : 'en';
@@ -71,7 +85,9 @@ export function WebNavbar() {
       if (path === '/(tabs)') {
         return pathname === '/' || pathname === '/(tabs)';
       }
-      return pathname.startsWith(path);
+      // Strip /(tabs) prefix for comparison since Expo Router strips it from pathname
+      const cleanPath = path.replace('/(tabs)', '');
+      return pathname === cleanPath || pathname.startsWith(cleanPath + '/');
     },
     [pathname],
   );
@@ -158,7 +174,7 @@ export function WebNavbar() {
               strokeWidth={1.5}
             />,
           )}
-          {renderNavLink(
+          {isFeatureEnabled('donations') && renderNavLink(
             t('donate.title'),
             '/donate',
             <Heart
@@ -210,18 +226,64 @@ export function WebNavbar() {
             </Text>
           </TouchableOpacity>
 
-          {profile && (
+          <View style={styles.avatarContainer}>
             <TouchableOpacity
               style={styles.avatar}
-              onPress={() => navigateTo('/(tabs)/profile')}
-              accessibilityLabel={`Profile: ${profile.full_name}`}
+              onPress={(e) => {
+                e.stopPropagation?.();
+                setShowUserMenu((prev) => !prev);
+              }}
+              accessibilityLabel={t('nav.profile')}
               accessibilityRole="button"
             >
               <Text style={styles.avatarText}>
-                {getInitials(profile.full_name)}
+                {getInitials(profile?.full_name)}
               </Text>
             </TouchableOpacity>
-          )}
+            {showUserMenu && (
+              <>
+              <Pressable
+                style={styles.userMenuBackdrop}
+                onPress={() => setShowUserMenu(false)}
+                accessibilityLabel="Close menu"
+              />
+              <View style={styles.userMenu}>
+                {profile && (
+                  <View style={styles.userMenuHeader}>
+                    <Text style={styles.userMenuName} numberOfLines={1}>
+                      {profile.full_name || '?'}
+                    </Text>
+                  </View>
+                )}
+                <Pressable
+                  style={({ pressed }) => [styles.userMenuItem, pressed && styles.userMenuItemPressed]}
+                  onPress={() => { setShowUserMenu(false); navigateTo('/(tabs)/profile'); }}
+                  accessibilityRole="link"
+                >
+                  <User size={16} color={colors.neutral700} strokeWidth={1.5} />
+                  <Text style={styles.userMenuItemText}>{t('nav.profile')}</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [styles.userMenuItem, pressed && styles.userMenuItemPressed]}
+                  onPress={() => { setShowUserMenu(false); navigateTo('/(tabs)/settings'); }}
+                  accessibilityRole="link"
+                >
+                  <Settings size={16} color={colors.neutral700} strokeWidth={1.5} />
+                  <Text style={styles.userMenuItemText}>{t('nav.settings')}</Text>
+                </Pressable>
+                <View style={styles.userMenuDivider} />
+                <Pressable
+                  style={({ pressed }) => [styles.userMenuItem, pressed && styles.userMenuItemPressed]}
+                  onPress={() => { setShowUserMenu(false); signOut(); }}
+                  accessibilityRole="button"
+                >
+                  <LogOut size={16} color={colors.error} strokeWidth={1.5} />
+                  <Text style={[styles.userMenuItemText, { color: colors.error }]}>{t('settings.signOut')}</Text>
+                </Pressable>
+              </View>
+              </>
+            )}
+          </View>
 
           <TouchableOpacity
             style={styles.ctaButton}
@@ -328,6 +390,22 @@ const styles = StyleSheet.create({
     color: colors.neutral700,
     fontSize: 15,
   },
+  avatarContainer: {
+    position: 'relative',
+  },
+  userMenuBackdrop: {
+    ...Platform.select({
+      web: {
+        position: 'fixed' as never,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1000,
+      },
+      default: {},
+    }),
+  },
   avatar: {
     width: 40,
     height: 40,
@@ -340,6 +418,58 @@ const styles = StyleSheet.create({
     ...typography.button,
     color: colors.white,
     fontSize: 15,
+  },
+  userMenu: {
+    position: 'absolute',
+    top: 48,
+    right: 0,
+    width: 220,
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.card,
+    borderWidth: 1,
+    borderColor: colors.neutral200,
+    ...shadowStyles.elevated,
+    ...Platform.select({
+      web: { zIndex: 1001 },
+      default: {},
+    }),
+  },
+  userMenuHeader: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.neutral100,
+  },
+  userMenuName: {
+    ...typography.button,
+    color: colors.neutral900,
+    fontSize: 14,
+  },
+  userMenuEmail: {
+    ...typography.body,
+    color: colors.neutral500,
+    fontSize: 12,
+    marginTop: 2,
+  },
+  userMenuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm + 2,
+  },
+  userMenuItemPressed: {
+    backgroundColor: colors.neutral100,
+  },
+  userMenuItemText: {
+    ...typography.body,
+    color: colors.neutral700,
+    fontSize: 14,
+  },
+  userMenuDivider: {
+    height: 1,
+    backgroundColor: colors.neutral100,
+    marginVertical: 2,
   },
   ctaButton: {
     flexDirection: 'row',

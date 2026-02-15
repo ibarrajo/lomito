@@ -14,7 +14,7 @@ import { useDonate } from '../hooks/use-donate';
 import { colors, spacing, borderRadius, shadowStyles } from '@lomito/ui/src/theme/tokens';
 import { H1, H2, Body, BodySmall, ButtonText, AppModal } from '@lomito/ui';
 import { ArrowLeft } from 'lucide-react-native';
-import { PageFooter } from '../components/shared/page-footer';
+import { isFeatureEnabled } from '@lomito/shared';
 
 type PaymentMethod = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -62,6 +62,29 @@ export default function DonateScreen() {
     router.back();
   }
 
+  if (!isFeatureEnabled('donations')) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Pressable
+            onPress={handleBack}
+            style={styles.backButton}
+            accessibilityLabel={t('common.back')}
+            accessibilityRole="button"
+          >
+            <ArrowLeft size={24} color={colors.neutral900} />
+          </Pressable>
+          <H1>{t('donate.title')}</H1>
+          <View style={styles.headerSpacer} />
+        </View>
+        <View style={styles.comingSoonWrapper}>
+          <H2 style={styles.comingSoonTitle}>{t('donate.comingSoon')}</H2>
+          <Body color={colors.neutral500}>{t('donate.comingSoonDescription')}</Body>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -106,7 +129,6 @@ export default function DonateScreen() {
               {selectedMethod === 'mercado_pago' && t('donate.cardInfo')}
             </BodySmall>
           </View>
-          <PageFooter />
         </ScrollView>
 
         {/* Submit Button */}
@@ -229,5 +251,14 @@ const styles = StyleSheet.create({
   },
   trustTitle: {
     marginBottom: spacing.sm,
+  },
+  comingSoonWrapper: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.xxl,
+  },
+  comingSoonTitle: {
+    marginBottom: spacing.md,
   },
 });

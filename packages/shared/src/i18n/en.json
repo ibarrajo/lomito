@@ -115,9 +115,9 @@
     "reviewSubmit": "Review and submit your report",
     "edit": "Edit",
     "coordinates": "Coordinates",
-    "categoryabuseDescription": "Animal is being harmed or neglected",
-    "categorystrayDescription": "Stray animal needing help",
-    "categorymissingDescription": "Lost pet looking for owner"
+    "categoryAbuseDescription": "Animal is being harmed or neglected",
+    "categoryStrayDescription": "Stray animal needing help",
+    "categoryMissingDescription": "Lost pet looking for owner"
   },
   "category": {
     "abuse": "Abuse",
@@ -155,7 +155,10 @@
     "noTimeline": "No timeline events yet",
     "follow": "Follow",
     "unfollow": "Unfollow",
-    "following": "Following"
+    "following": "Following",
+    "share": "Share",
+    "shareText": "Check out this animal welfare report on Lomito: {{url}}",
+    "linkCopied": "Link copied"
   },
   "timelineAction": {
     "created": "Report created",
@@ -191,6 +194,8 @@
   "moderation": {
     "queue": "Review Queue",
     "pendingCases": "Pending Cases",
+    "caseCount_one": "{{count}} case",
+    "caseCount_other": "{{count}} cases",
     "verify": "Verify",
     "reject": "Reject",
     "flag": "Flag",
@@ -252,6 +257,8 @@
   },
   "government": {
     "portal": "Government Portal",
+    "caseCount_one": "{{count}} case",
+    "caseCount_other": "{{count}} cases",
     "assignFolio": "Assign folio",
     "postResponse": "Post response",
     "officialResponse": "Official response",
@@ -276,12 +283,45 @@
   },
   "about": {
     "title": "About Lomito",
+    "whyTitle": "Why We Build Lomito",
+    "whyContent": "In Mexican cities, thousands of stray animals suffer from abuse, neglect, and lack of attention. Citizen reports get lost in bureaucracy, and there is no transparent mechanism to follow up. Lomito was born to empower communities, create transparency, and bridge the gap between citizens and authorities.",
+    "whatTitle": "What We're Building",
+    "whatContent": "A map-centric platform for reporting animal welfare issues, with jurisdiction-aware tracking, government escalation, community moderation, and a public transparency and impact dashboard.",
     "mission": "Our Mission",
     "missionText": "Lomito is an open-source civic platform empowering communities to report and track animal welfare issues, hold authorities accountable, and create lasting change for street animals in Mexico.",
     "team": "Our Team",
     "teamText": "Lomito is built and maintained by a community of developers, designers, and animal welfare advocates.",
     "openSource": "Open Source",
     "openSourceText": "Lomito is fully open source. Contributions welcome!",
+    "roadmapTitle": "Upcoming Features",
+    "roadmap": {
+      "androidApp": {
+        "title": "Android App",
+        "description": "Native app for Android devices"
+      },
+      "iosApp": {
+        "title": "iOS App",
+        "description": "Native app for iPhone and iPad"
+      },
+      "petRegistry": {
+        "title": "Pet Registry",
+        "description": "Register your pet with name, photo, health status, and owner information"
+      },
+      "missingPetFinder": {
+        "title": "AI Pet Finder",
+        "description": "Search for missing pets using AI-powered image recognition"
+      },
+      "osintIngestion": {
+        "title": "Public Data (OSINT)",
+        "description": "Automatic ingestion of public data about pets and animal welfare reports"
+      },
+      "status": {
+        "planned": "Planned",
+        "exploring": "Exploring",
+        "inProgress": "In Progress",
+        "launched": "Launched"
+      }
+    },
     "contact": "Contact Us",
     "website": "Website",
     "github": "GitHub",
@@ -304,7 +344,9 @@
     "oxxoInfo": "Generate a payment code to pay in cash at any OXXO store.",
     "speiInfo": "Make a direct bank transfer using SPEI from your bank.",
     "whyDonate": "Where your donation goes",
-    "whyDonateDescription": "100% of donations go to server costs, SMS notifications, and keeping Lomito free for everyone. We're volunteer-run with zero overhead."
+    "whyDonateDescription": "100% of donations go to server costs, SMS notifications, and keeping Lomito free for everyone. We're volunteer-run with zero overhead.",
+    "comingSoon": "Coming Soon",
+    "comingSoonDescription": "Donations will be available soon. We're working on integrating secure payment methods for Mexico."
   },
   "dashboard": {
     "title": "Impact Dashboard",
@@ -321,7 +363,9 @@
   "legal": {
     "privacy": "Privacy Notice",
     "terms": "Terms of Service",
-    "lastUpdated": "Last updated: {{date}}"
+    "lastUpdated": "Last updated: {{date}}",
+    "disclaimer": "Lomito is an independent civic platform created by and for the community. It is not a government website and is not sponsored, endorsed, or affiliated with any government entity.",
+    "disclaimerShort": "Lomito is not a government website"
   },
   "profile": {
     "title": "Profile",
@@ -352,6 +396,8 @@
     "impactTitle": "Our Impact",
     "communityTitle": "Built by the Community",
     "communityDescription": "Lomito is open source and community-driven. We believe transparency and civic participation create lasting change for street animals in Mexico.",
-    "footerTagline": "Made with love in Tijuana"
+    "footerTagline": "Made with love in Tijuana",
+    "recentActivity": "Recent Activity",
+    "recentActivityDescription": "Recent community reports"
   }
 }

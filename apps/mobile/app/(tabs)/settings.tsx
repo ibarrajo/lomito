@@ -8,6 +8,7 @@ import { useAuth } from '../../hooks/use-auth';
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { NotificationPrefs } from '../../components/settings/notification-prefs';
 import { LanguagePicker } from '../../components/settings/language-picker';
+import { isFeatureEnabled } from '@lomito/shared';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
@@ -64,6 +65,7 @@ export default function SettingsScreen() {
           >
             <Text style={styles.navLinkText}>{t('about.title')}</Text>
           </Pressable>
+          {isFeatureEnabled('donations') && (
           <Pressable
             style={styles.navLink}
             onPress={() => router.push('/donate')}
@@ -72,6 +74,7 @@ export default function SettingsScreen() {
           >
             <Text style={styles.navLinkText}>{t('donate.title')}</Text>
           </Pressable>
+          )}
         </View>
 
         <View style={styles.section}>

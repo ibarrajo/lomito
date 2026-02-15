@@ -8,7 +8,7 @@ import {
   shadowStyles,
   typography,
 } from '@lomito/ui/src/theme/tokens';
-import { ExternalLink, Github, Mail, Globe } from 'lucide-react-native';
+import { ExternalLink, Mail, Globe } from 'lucide-react-native';
 
 interface LinkItemProps {
   icon: React.ReactNode;
@@ -68,20 +68,6 @@ export function LinksSection() {
         label={t('about.website')}
         url="https://lomito.org"
         accessibilityLabel={`${t('about.website')} - lomito.org`}
-      />
-
-      <LinkItem
-        icon={
-          <Github
-            size={24}
-            color={colors.primary}
-            strokeWidth={1.5}
-            accessibilityLabel=""
-          />
-        }
-        label={t('about.github')}
-        url="https://github.com/lomito-org/lomito"
-        accessibilityLabel={`${t('about.github')} - github.com/lomito-org/lomito`}
       />
 
       <LinkItem

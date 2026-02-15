@@ -1,11 +1,10 @@
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Container } from '@lomito/ui';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { Container, Body } from '@lomito/ui';
+import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { PRIVACY_NOTICE_ES } from '@lomito/shared/src/legal/privacy-es';
 import { PRIVACY_NOTICE_EN } from '@lomito/shared/src/legal/privacy-en';
 import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
-import { PageFooter } from '../../components/shared/page-footer';
 
 export default function PrivacyScreen() {
   const { t, i18n } = useTranslation();
@@ -21,9 +20,11 @@ export default function PrivacyScreen() {
         accessibilityLabel={t('legal.privacy')}
       >
         <Container maxWidth={720}>
+          <View style={styles.disclaimer}>
+            <Body>{t('legal.disclaimer')}</Body>
+          </View>
           <LegalTextRenderer text={privacyText} />
         </Container>
-        <PageFooter />
       </ScrollView>
     </View>
   );
@@ -39,7 +40,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
   },
-scrollView: {
+  disclaimer: {
+    backgroundColor: colors.neutral100,
+    borderColor: colors.secondary,
+    borderLeftWidth: 4,
+    borderRadius: borderRadius.card,
+    marginBottom: spacing.lg,
+    padding: spacing.md,
+  },
+  scrollView: {
     flex: 1,
   },
 });

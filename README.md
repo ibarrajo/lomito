@@ -2,7 +2,7 @@
 
 **Open-source civic platform for animal welfare in Mexico**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Source Available](https://img.shields.io/badge/License-Source%20Available-blue.svg)](LICENSE)
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
@@ -159,7 +159,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+Source Available License - see [LICENSE](LICENSE) for details. This software is publicly viewable but all rights are reserved.
 
 Copyright (c) 2025-2026 Lomito Contributors
 

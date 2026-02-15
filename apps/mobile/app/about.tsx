@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Stack } from 'expo-router';
 import { Container, H1, Body } from '@lomito/ui';
 import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
+import { WhySection } from '../components/about/why-section';
+import { WhatSection } from '../components/about/what-section';
 import { MissionSection } from '../components/about/mission-section';
 import { TeamSection } from '../components/about/team-section';
+import { RoadmapSection } from '../components/about/roadmap-section';
 import { LinksSection } from '../components/about/links-section';
-import { PageFooter } from '../components/shared/page-footer';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
@@ -33,12 +35,17 @@ export default function AboutScreen() {
               {t('about.mission')}
             </Body>
           </View>
+          <View style={styles.disclaimer}>
+            <Body>{t('legal.disclaimer')}</Body>
+          </View>
+          <WhySection />
           <MissionSection />
+          <WhatSection />
           <TeamSection />
+          <RoadmapSection />
           <LinksSection />
           <View style={styles.spacer} />
         </Container>
-        <PageFooter />
       </ScrollView>
     </>
   );
@@ -50,6 +57,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
+    padding: spacing.md,
+  },
+  disclaimer: {
+    backgroundColor: colors.neutral100,
+    borderColor: colors.secondary,
+    borderLeftWidth: 4,
+    borderRadius: borderRadius.card,
+    marginBottom: spacing.lg,
     padding: spacing.md,
   },
   hero: {
@@ -65,11 +80,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
     width: 40,
   },
-  heroTitle: {
-    marginBottom: spacing.sm,
-  },
   heroSubtitle: {
     maxWidth: 560,
+  },
+  heroTitle: {
+    marginBottom: spacing.sm,
   },
   spacer: {
     height: spacing.xl,

@@ -137,7 +137,7 @@ export default function GovernmentScreen() {
       <View style={styles.header}>
         <H1>{t('government.portal')}</H1>
         <Body color={colors.neutral500}>
-          {cases.length} {cases.length === 1 ? 'case' : 'cases'}
+          {t('government.caseCount', { count: cases.length })}
         </Body>
       </View>
 

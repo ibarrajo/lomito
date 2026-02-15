@@ -17,6 +17,7 @@ import { PhotoGallery } from '../../components/case/photo-gallery';
 import { CaseMap } from '../../components/case/case-map';
 import { Timeline } from '../../components/case/timeline';
 import { FlagButton } from '../../components/case/flag-button';
+import { ShareButton } from '../../components/case/share-button';
 import { EscalateButton } from '../../components/case/escalate-button';
 import { EscalationStatus } from '../../components/case/escalation-status';
 
@@ -92,6 +93,7 @@ export default function CaseDetailScreen() {
                   {isSubscribed ? '❤️' : '🤍'}
                 </Text>
               </Pressable>
+              <ShareButton caseId={caseData.id} folio={caseData.folio} />
               <FlagButton caseId={caseData.id} reporterId={caseData.reporter_id} />
             </View>
           ),
