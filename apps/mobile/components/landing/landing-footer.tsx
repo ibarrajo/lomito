@@ -1,8 +1,9 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { Facebook, Twitter, Instagram } from 'lucide-react-native';
 import { H3, BodySmall } from '@lomito/ui/src/components/typography';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, iconSizes } from '@lomito/ui/src/theme/tokens';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
 
 export function LandingFooter() {
@@ -31,6 +32,13 @@ export function LandingFooter() {
     { label: t('legal.privacy'), route: '/legal/privacy' },
     { label: t('legal.terms'), route: '/legal/terms' },
     { label: t('landing.footerContact'), route: '#' },
+  ];
+
+  const communityLinks = [
+    { label: t('landing.volunteer'), route: '#' },
+    { label: t('landing.partnerNGOs'), route: '#' },
+    { label: t('landing.successStories'), route: '#' },
+    { label: t('landing.blog'), route: '#' },
   ];
 
   const getGridStyle = () => {
@@ -80,7 +88,23 @@ export function LandingFooter() {
           ))}
         </View>
 
-        {/* Column 4: Legal */}
+        {/* Column 4: Community */}
+        <View style={styles.column}>
+          <H3 style={styles.columnTitle}>{t('landing.footerCommunity')}</H3>
+          {communityLinks.map((link) => (
+            <TouchableOpacity
+              key={link.label}
+              onPress={() => {
+                if (link.route !== '#') router.push(link.route as never);
+              }}
+              accessibilityRole="link"
+            >
+              <Text style={styles.link}>{link.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Column 5: Legal */}
         <View style={styles.column}>
           <H3 style={styles.columnTitle}>{t('landing.footerLegal')}</H3>
           {legalLinks.map((link) => (
@@ -94,6 +118,43 @@ export function LandingFooter() {
               <Text style={styles.link}>{link.label}</Text>
             </TouchableOpacity>
           ))}
+        </View>
+      </View>
+
+      {/* Social Icons Row */}
+      <View style={styles.socialContainer}>
+        <Text style={styles.socialTitle}>{t('landing.followUs')}</Text>
+        <View style={styles.socialIcons}>
+          <TouchableOpacity
+            accessibilityLabel="Facebook"
+            accessibilityRole="link"
+          >
+            <Facebook
+              size={iconSizes.default}
+              color={colors.neutral400}
+              strokeWidth={1.5}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            accessibilityLabel="Twitter"
+            accessibilityRole="link"
+          >
+            <Twitter
+              size={iconSizes.default}
+              color={colors.neutral400}
+              strokeWidth={1.5}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            accessibilityLabel="Instagram"
+            accessibilityRole="link"
+          >
+            <Instagram
+              size={iconSizes.default}
+              color={colors.neutral400}
+              strokeWidth={1.5}
+            />
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -178,6 +239,24 @@ const styles = StyleSheet.create({
   link: {
     color: colors.neutral500,
     fontSize: 14,
+  },
+  socialContainer: {
+    alignItems: 'center',
+    borderTopColor: colors.neutral200,
+    borderTopWidth: 1,
+    marginTop: spacing.lg,
+    paddingTop: spacing.lg,
+  },
+  socialIcons: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.lg,
+    marginTop: spacing.sm,
+  },
+  socialTitle: {
+    color: colors.neutral700,
+    fontSize: 14,
+    fontWeight: '600',
   },
   tagline: {
     color: colors.neutral500,

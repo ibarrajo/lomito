@@ -152,8 +152,9 @@
     "edit": "Edit",
     "coordinates": "Coordinates",
     "categoryAbuseDescription": "Animal is being harmed or neglected",
-    "categoryStrayDescription": "Stray animal needing help",
+    "categoryInjuredDescription": "Animal that appears injured or in need of medical attention",
     "categoryMissingDescription": "Lost pet looking for owner",
+    "categoryStrayDescription": "Stray animal needing help",
     "sidebar": {
       "securityBadge": "Anonymous & Secure",
       "title": "Your report matters",
@@ -164,8 +165,9 @@
   },
   "category": {
     "abuse": "Abuse",
-    "stray": "Stray",
-    "missing": "Missing"
+    "injured": "Injured",
+    "missing": "Missing",
+    "stray": "Stray"
   },
   "animal": {
     "dog": "Dog",
@@ -203,7 +205,27 @@
     "shareText": "Check out this animal welfare report on Lomito: {{url}}",
     "linkCopied": "Link copied",
     "photoOf": "{{current}} of {{total}}",
-    "closeViewer": "Close photo viewer"
+    "closeViewer": "Close photo viewer",
+    "severity": "Severity",
+    "status": "Status",
+    "created": "Created",
+    "description": "Description",
+    "location": "Location",
+    "shareCase": "Share this Case",
+    "shareWhatsApp": "Share on WhatsApp",
+    "shareTwitter": "Share on X",
+    "copyLink": "Copy Link",
+    "subscribe": "Subscribe for Updates",
+    "subscribed": "Subscribed",
+    "breadcrumbHome": "Home",
+    "breadcrumbCases": "Cases",
+    "highUrgency": "High",
+    "mediumUrgency": "Medium",
+    "lowUrgency": "Low",
+    "daysAgo": "{{count}} days ago",
+    "hoursAgo": "{{count}} hours ago",
+    "reportedByName": "Reported by {{name}}",
+    "noPhotosAvailable": "No photos available"
   },
   "timelineAction": {
     "created": "Report created",
@@ -420,7 +442,15 @@
       "casesReported": "Cases Reported",
       "casesResolved": "Cases Resolved",
       "responseRate": "Response Rate"
-    }
+    },
+    "myReports": "My Reports",
+    "viewAll": "View All",
+    "noReports": "You haven't reported any cases yet",
+    "startReporting": "Report a Case",
+    "neighborhoodWatch": "Neighborhood Watch",
+    "noSubscriptions": "Follow cases to get updates on their progress",
+    "browseCases": "Browse Cases",
+    "daysAgo": "{{count}}d ago"
   },
   "legal": {
     "privacy": "Privacy Notice",
@@ -490,6 +520,16 @@
     "statsResolved": "Resolved",
     "statsLivesSaved": "Lives Saved",
     "statsAvgResponse": "Avg Response",
+    "navHome": "Home",
+    "navImpact": "Impact",
+    "navHowItWorks": "How it Works",
+    "navTransparency": "Transparency",
+    "footerCommunity": "Community",
+    "volunteer": "Volunteer",
+    "partnerNGOs": "Partner NGOs",
+    "successStories": "Success Stories",
+    "blog": "Blog",
+    "followUs": "Follow Us",
     "footerPlatform": "Platform",
     "footerResources": "Resources",
     "footerBlog": "Blog",

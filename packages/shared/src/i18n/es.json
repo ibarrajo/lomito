@@ -152,8 +152,9 @@
     "edit": "Editar",
     "coordinates": "Coordenadas",
     "categoryAbuseDescription": "El animal está siendo maltratado o descuidado",
-    "categoryStrayDescription": "Animal callejero que necesita ayuda",
+    "categoryInjuredDescription": "Animal que parece herido o necesita atención médica",
     "categoryMissingDescription": "Mascota perdida buscando a su dueño",
+    "categoryStrayDescription": "Animal callejero que necesita ayuda",
     "sidebar": {
       "securityBadge": "Anónimo y seguro",
       "title": "Tu reporte importa",
@@ -164,8 +165,9 @@
   },
   "category": {
     "abuse": "Maltrato",
-    "stray": "Callejero",
-    "missing": "Extraviado"
+    "injured": "Herido",
+    "missing": "Extraviado",
+    "stray": "Callejero"
   },
   "animal": {
     "dog": "Perro",
@@ -203,7 +205,27 @@
     "shareText": "Mira este reporte de bienestar animal en Lomito: {{url}}",
     "linkCopied": "Enlace copiado",
     "photoOf": "{{current}} de {{total}}",
-    "closeViewer": "Cerrar visor de fotos"
+    "closeViewer": "Cerrar visor de fotos",
+    "severity": "Gravedad",
+    "status": "Estado",
+    "created": "Creado",
+    "description": "Descripción",
+    "location": "Ubicación",
+    "shareCase": "Compartir este caso",
+    "shareWhatsApp": "Compartir en WhatsApp",
+    "shareTwitter": "Compartir en X",
+    "copyLink": "Copiar enlace",
+    "subscribe": "Suscribirse a actualizaciones",
+    "subscribed": "Suscrito",
+    "breadcrumbHome": "Inicio",
+    "breadcrumbCases": "Casos",
+    "highUrgency": "Alta",
+    "mediumUrgency": "Media",
+    "lowUrgency": "Baja",
+    "daysAgo": "hace {{count}} días",
+    "hoursAgo": "hace {{count}} horas",
+    "reportedByName": "Reportado por {{name}}",
+    "noPhotosAvailable": "No hay fotos disponibles"
   },
   "timelineAction": {
     "created": "Reporte creado",
@@ -420,7 +442,15 @@
       "casesReported": "Casos Reportados",
       "casesResolved": "Casos Resueltos",
       "responseRate": "Tasa de Respuesta"
-    }
+    },
+    "myReports": "Mis Reportes",
+    "viewAll": "Ver todos",
+    "noReports": "Aún no has reportado ningún caso",
+    "startReporting": "Reportar un caso",
+    "neighborhoodWatch": "Vigilancia vecinal",
+    "noSubscriptions": "Sigue casos para recibir actualizaciones sobre su progreso",
+    "browseCases": "Explorar casos",
+    "daysAgo": "hace {{count}}d"
   },
   "legal": {
     "privacy": "Aviso de Privacidad",
@@ -490,6 +520,16 @@
     "statsResolved": "Resueltos",
     "statsLivesSaved": "Vidas salvadas",
     "statsAvgResponse": "Respuesta promedio",
+    "navHome": "Inicio",
+    "navImpact": "Impacto",
+    "navHowItWorks": "Cómo funciona",
+    "navTransparency": "Transparencia",
+    "footerCommunity": "Comunidad",
+    "volunteer": "Voluntariado",
+    "partnerNGOs": "ONGs aliadas",
+    "successStories": "Casos de éxito",
+    "blog": "Blog",
+    "followUs": "Síguenos",
     "footerPlatform": "Plataforma",
     "footerResources": "Recursos",
     "footerBlog": "Blog",
