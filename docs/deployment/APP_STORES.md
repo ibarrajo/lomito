@@ -183,8 +183,8 @@ Before submitting for App Review, test via TestFlight:
 **Demo Account Credentials:**
 
 ```
-Username: <REDACTED>
-Password: <REDACTED>
+Username: <STORED IN 1PASSWORD — "Lomito App Review Demo">
+Password: <STORED IN 1PASSWORD — "Lomito App Review Demo">
 ```
 
 **Contact Information:**
@@ -310,8 +310,8 @@ Once approved:
    Lomito requires user account creation to submit reports and subscribe to case updates.
 
    Demo Account:
-   Email: <REDACTED>
-   Password: <REDACTED>
+   Email: <STORED IN 1PASSWORD>
+   Password: <STORED IN 1PASSWORD>
 
    To test:
    1. Sign in with demo account
