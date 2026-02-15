@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
 import * as WebBrowser from 'expo-web-browser';
 import { AmountPicker } from '../components/donate/amount-picker';
 import { PaymentMethods } from '../components/donate/payment-methods';
+import { FrequencyToggle } from '../components/donate/frequency-toggle';
+import { ImpactSidebar } from '../components/donate/impact-sidebar';
 import { useDonate } from '../hooks/use-donate';
 import {
   colors,
@@ -29,6 +31,7 @@ import { isFeatureEnabled } from '@lomito/shared';
 import { useAnalytics } from '../hooks/use-analytics';
 import { PageFooter } from '../components/shared/page-footer';
 import { PublicWebHeader } from '../components/navigation/public-web-header';
+import { useBreakpoint } from '../hooks/use-breakpoint';
 
 type PaymentMethod = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -41,11 +44,16 @@ export default function DonateScreen() {
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [selectedMethod, setSelectedMethod] =
     useState<PaymentMethod>('mercado_pago');
+  const [frequency, setFrequency] = useState<'one_time' | 'monthly'>(
+    'one_time',
+  );
   const [modal, setModal] = useState<{
     title: string;
     message: string;
     onDismiss?: () => void;
   } | null>(null);
+
+  const { isDesktop } = useBreakpoint();
 
   async function handleSubmit() {
     // Validate amount
@@ -143,61 +151,82 @@ export default function DonateScreen() {
         </View>
       )}
 
-      <View style={styles.formWrapper}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
+      <View style={[styles.contentWrapper, isDesktop && styles.desktopLayout]}>
+        {/* Left Column (Form) */}
+        <View
+          style={[styles.formWrapper, isDesktop && styles.formWrapperDesktop]}
         >
-          {/* Trust Building Callout */}
-          <View style={styles.trustCard}>
-            <H2 style={styles.trustTitle}>{t('donate.whyDonate')}</H2>
-            <Body color={colors.neutral700} style={styles.trustBody}>
-              {t('donate.whyDonateDescription')}
-            </Body>
-          </View>
-
-          {/* Amount Picker */}
-          <AmountPicker
-            selectedAmount={selectedAmount}
-            onAmountChange={setSelectedAmount}
-          />
-
-          {/* Payment Methods */}
-          <PaymentMethods
-            selectedMethod={selectedMethod}
-            onMethodChange={setSelectedMethod}
-          />
-
-          {/* Info text based on payment method */}
-          <View style={styles.infoCard}>
-            <BodySmall>
-              {selectedMethod === 'oxxo' && t('donate.oxxoInfo')}
-              {selectedMethod === 'spei' && t('donate.speiInfo')}
-              {selectedMethod === 'mercado_pago' && t('donate.cardInfo')}
-            </BodySmall>
-          </View>
-        </ScrollView>
-
-        {/* Submit Button */}
-        <View style={styles.footer}>
-          <Pressable
-            style={[
-              styles.submitButton,
-              loading && styles.submitButtonDisabled,
-            ]}
-            onPress={handleSubmit}
-            disabled={loading}
-            accessibilityLabel={t('common.submit')}
-            accessibilityRole="button"
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
           >
-            <ButtonText style={styles.submitButtonText}>
-              {loading
-                ? t('donate.processing')
-                : `${t('common.submit')} $${selectedAmount} MXN`}
-            </ButtonText>
-          </Pressable>
+            {/* Trust Building Callout */}
+            <View style={styles.trustCard}>
+              <H2 style={styles.trustTitle}>{t('donate.whyDonate')}</H2>
+              <Body color={colors.neutral700} style={styles.trustBody}>
+                {t('donate.whyDonateDescription')}
+              </Body>
+            </View>
+
+            {/* Frequency Toggle */}
+            <FrequencyToggle
+              frequency={frequency}
+              onFrequencyChange={setFrequency}
+            />
+
+            {/* Amount Picker */}
+            <AmountPicker
+              selectedAmount={selectedAmount}
+              onAmountChange={setSelectedAmount}
+            />
+
+            {/* Payment Methods */}
+            <PaymentMethods
+              selectedMethod={selectedMethod}
+              onMethodChange={setSelectedMethod}
+            />
+
+            {/* Info text based on payment method */}
+            <View style={styles.infoCard}>
+              <BodySmall>
+                {selectedMethod === 'oxxo' && t('donate.oxxoInfo')}
+                {selectedMethod === 'spei' && t('donate.speiInfo')}
+                {selectedMethod === 'mercado_pago' && t('donate.cardInfo')}
+              </BodySmall>
+            </View>
+
+            {/* Impact Sidebar (Mobile Only - Below Form) */}
+            {!isDesktop && <ImpactSidebar />}
+          </ScrollView>
+
+          {/* Submit Button */}
+          <View style={styles.footer}>
+            <Pressable
+              style={[
+                styles.submitButton,
+                loading && styles.submitButtonDisabled,
+              ]}
+              onPress={handleSubmit}
+              disabled={loading}
+              accessibilityLabel={t('common.submit')}
+              accessibilityRole="button"
+            >
+              <ButtonText style={styles.submitButtonText}>
+                {loading
+                  ? t('donate.processing')
+                  : `${t('common.submit')} $${selectedAmount} MXN`}
+              </ButtonText>
+            </Pressable>
+          </View>
         </View>
+
+        {/* Right Column (Impact Sidebar - Desktop Only) */}
+        {isDesktop && (
+          <View style={styles.sidebarWrapper}>
+            <ImpactSidebar />
+          </View>
+        )}
       </View>
 
       <AppModal
@@ -244,6 +273,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral100,
     flex: 1,
   },
+  contentWrapper: {
+    alignSelf: 'center',
+    flex: 1,
+    width: '100%',
+  },
+  desktopLayout: {
+    flexDirection: 'row',
+    gap: spacing.xl,
+    maxWidth: 960,
+    paddingHorizontal: spacing.lg,
+  },
   footer: {
     backgroundColor: colors.white,
     borderTopColor: colors.neutral200,
@@ -252,10 +292,10 @@ const styles = StyleSheet.create({
     ...shadowStyles.card,
   },
   formWrapper: {
-    alignSelf: 'center',
     flex: 1,
-    maxWidth: Platform.OS === 'web' ? 560 : undefined,
-    width: '100%',
+  },
+  formWrapperDesktop: {
+    flex: 7,
   },
   header: {
     alignItems: 'center',
@@ -285,6 +325,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  sidebarWrapper: {
+    flex: 5,
   },
   submitButton: {
     alignItems: 'center',
