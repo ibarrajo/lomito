@@ -3,42 +3,54 @@ import { useTranslation } from 'react-i18next';
 import { H2, BodySmall } from '@lomito/ui/src/components/typography';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { useDashboardStats } from '../../hooks/use-dashboard-stats';
 
-// TODO: Connect to useDashboardStats
-const HARDCODED_STATS = {
-  activeCases: 47,
-  resolvedCases: 312,
-  livesSaved: '280+',
-  avgResponse: '48h',
+const FALLBACK_STATS = {
+  activeCases: 0,
+  resolvedCases: 0,
+  livesSaved: '0',
+  avgResponse: '--',
 };
 
 export function HeroStatsBar() {
   const { t } = useTranslation();
   const { isMobile } = useBreakpoint();
+  const { stats } = useDashboardStats();
+
+  const displayStats = stats
+    ? {
+        activeCases: stats.pending_cases + stats.in_progress_cases,
+        resolvedCases: stats.resolved_cases,
+        livesSaved: `${stats.resolved_cases}+`,
+        avgResponse: stats.avg_resolution_days
+          ? `${Math.round(stats.avg_resolution_days * 24)}h`
+          : '--',
+      }
+    : FALLBACK_STATS;
 
   return (
     <View style={styles.container}>
       <View style={[styles.grid, isMobile && styles.gridMobile]}>
         <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{HARDCODED_STATS.activeCases}</H2>
+          <H2 style={styles.statNumber}>{displayStats.activeCases}</H2>
           <BodySmall style={styles.statLabel}>
             {t('landing.statsActiveCases')}
           </BodySmall>
         </View>
         <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{HARDCODED_STATS.resolvedCases}</H2>
+          <H2 style={styles.statNumber}>{displayStats.resolvedCases}</H2>
           <BodySmall style={styles.statLabel}>
             {t('landing.statsResolved')}
           </BodySmall>
         </View>
         <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{HARDCODED_STATS.livesSaved}</H2>
+          <H2 style={styles.statNumber}>{displayStats.livesSaved}</H2>
           <BodySmall style={styles.statLabel}>
             {t('landing.statsLivesSaved')}
           </BodySmall>
         </View>
         <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{HARDCODED_STATS.avgResponse}</H2>
+          <H2 style={styles.statNumber}>{displayStats.avgResponse}</H2>
           <BodySmall style={styles.statLabel}>
             {t('landing.statsAvgResponse')}
           </BodySmall>

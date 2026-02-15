@@ -108,7 +108,10 @@
     "noRecentCases": "No recent cases",
     "categoryLabel": "Category",
     "statusLabel": "Status",
-    "placeholderText": "Set EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN in .env to enable the map."
+    "placeholderText": "Set EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN in .env to enable the map.",
+    "displayPins": "Pins",
+    "displayHeatmap": "Heatmap",
+    "displayClusters": "Clusters"
   },
   "report": {
     "newReport": "New report",

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
@@ -6,6 +7,7 @@ import {
   borderRadius,
   typography,
 } from '@lomito/ui/src/theme/tokens';
+import { supabase } from '../../lib/supabase';
 
 interface ReportEntry {
   category: 'abuse' | 'stray' | 'missing';
@@ -14,56 +16,67 @@ interface ReportEntry {
   status: 'pending' | 'verified' | 'in_progress' | 'resolved';
 }
 
-const MOCK_REPORTS: ReportEntry[] = [
+const FALLBACK_REPORTS: ReportEntry[] = [
   {
     category: 'abuse',
     location: 'Col. Libertad',
-    timeAgo: 'hace 2h',
+    timeAgo: '2h',
     status: 'pending',
   },
   {
     category: 'stray',
     location: 'Zona Centro',
-    timeAgo: 'hace 4h',
+    timeAgo: '4h',
     status: 'verified',
   },
   {
     category: 'missing',
     location: 'Playas de Tijuana',
-    timeAgo: 'hace 6h',
+    timeAgo: '6h',
     status: 'in_progress',
   },
   {
     category: 'stray',
     location: 'Col. Sánchez Taboada',
-    timeAgo: 'hace 8h',
+    timeAgo: '8h',
     status: 'verified',
   },
   {
     category: 'abuse',
     location: 'Zona Río',
-    timeAgo: 'hace 10h',
+    timeAgo: '10h',
     status: 'in_progress',
   },
   {
     category: 'missing',
     location: 'La Mesa',
-    timeAgo: 'hace 12h',
+    timeAgo: '12h',
     status: 'resolved',
   },
-  {
-    category: 'stray',
-    location: 'Col. Cacho',
-    timeAgo: 'hace 14h',
-    status: 'verified',
-  },
-  {
-    category: 'abuse',
-    location: 'Otay',
-    timeAgo: 'hace 16h',
-    status: 'pending',
-  },
 ];
+
+function formatTimeAgo(dateString: string, locale: string): string {
+  const now = new Date();
+  const date = new Date(dateString);
+  const diffMs = now.getTime() - date.getTime();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffDays > 0) {
+    return locale === 'es' ? `${diffDays}d` : `${diffDays}d`;
+  }
+  if (diffHours > 0) {
+    return `${diffHours}h`;
+  }
+  return locale === 'es' ? '<1h' : '<1h';
+}
+
+function extractLocation(description: string): string {
+  // Use first ~25 chars of description as anonymized location hint
+  if (!description) return '---';
+  const trimmed = description.slice(0, 30);
+  return trimmed.length < description.length ? `${trimmed}...` : trimmed;
+}
 
 const getCategoryColor = (category: ReportEntry['category']): string => {
   switch (category) {
@@ -109,11 +122,46 @@ const getStatusBackground = (status: ReportEntry['status']): string => {
 };
 
 export function RecentReportsTicker() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [reports, setReports] = useState<ReportEntry[]>(FALLBACK_REPORTS);
+
+  useEffect(() => {
+    async function fetchRecentCases() {
+      try {
+        const { data, error } = await supabase
+          .from('cases')
+          .select('category, description, status, created_at')
+          .order('created_at', { ascending: false })
+          .limit(8);
+
+        if (error || !data || data.length === 0) return;
+
+        const rows = data as Array<{
+          category: string;
+          description: string | null;
+          status: string;
+          created_at: string;
+        }>;
+
+        const mapped: ReportEntry[] = rows.map((c) => ({
+          category: c.category as ReportEntry['category'],
+          location: extractLocation(c.description ?? ''),
+          timeAgo: formatTimeAgo(c.created_at, i18n.language),
+          status: c.status as ReportEntry['status'],
+        }));
+
+        setReports(mapped);
+      } catch {
+        // Keep fallback data on error
+      }
+    }
+
+    fetchRecentCases();
+  }, [i18n.language]);
 
   return (
     <View style={styles.container}>
-      {MOCK_REPORTS.map((report, index) => (
+      {reports.map((report, index) => (
         <View key={index} style={styles.reportRow}>
           <View
             style={[

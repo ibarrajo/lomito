@@ -59,6 +59,9 @@ export default function MapScreen() {
     north: number;
   } | null>(null);
   const [mapZoom, setMapZoom] = useState(12);
+  const [displayMode, setDisplayMode] = useState<
+    'pins' | 'heatmap' | 'clusters'
+  >('clusters');
   const [jurisdictionModal, setJurisdictionModal] = useState<string | null>(
     null,
   );
@@ -210,6 +213,36 @@ export default function MapScreen() {
         />
 
         <View style={styles.mapColumn}>
+          {/* Layer toggle tabs */}
+          <View style={styles.layerToggleBar}>
+            {(['pins', 'heatmap', 'clusters'] as const).map((mode) => (
+              <Pressable
+                key={mode}
+                style={[
+                  styles.layerToggleTab,
+                  displayMode === mode && styles.layerToggleTabActive,
+                ]}
+                onPress={() => setDisplayMode(mode)}
+                accessibilityLabel={t(
+                  `map.display${mode.charAt(0).toUpperCase() + mode.slice(1)}` as never,
+                )}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: displayMode === mode }}
+              >
+                <Text
+                  style={[
+                    styles.layerToggleText,
+                    displayMode === mode && styles.layerToggleTextActive,
+                  ]}
+                >
+                  {t(
+                    `map.display${mode.charAt(0).toUpperCase() + mode.slice(1)}` as never,
+                  )}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+
           {/* Jurisdiction toggle button */}
           <Pressable
             style={styles.jurisdictionToggle}
@@ -227,6 +260,7 @@ export default function MapScreen() {
           <MapView
             onRegionDidChange={handleRegionChange}
             cases={geoJSONData}
+            displayMode={displayMode}
             onPinPress={handlePinPress}
           >
             <JurisdictionLayer
@@ -377,6 +411,35 @@ const styles = StyleSheet.create({
   },
   jurisdictionToggleText: {
     fontSize: iconSizes.default,
+  },
+  layerToggleBar: {
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: 'row',
+    left: '50%',
+    position: 'absolute',
+    top: spacing.md,
+    transform: [{ translateX: '-50%' }],
+    zIndex: 10,
+    ...shadowStyles.card,
+  },
+  layerToggleTab: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  layerToggleTabActive: {
+    backgroundColor: colors.primary,
+    borderRadius: 6,
+  },
+  layerToggleText: {
+    color: colors.neutral500,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  layerToggleTextActive: {
+    color: colors.secondary,
   },
   mapColumn: {
     flex: 1,

@@ -15,9 +15,12 @@ interface Region {
   zoomLevel: number;
 }
 
+export type MapDisplayMode = 'pins' | 'heatmap' | 'clusters';
+
 interface MapViewProps {
   children?: ReactNode;
   cases?: GeoJSON.FeatureCollection;
+  displayMode?: MapDisplayMode;
   onMapReady?: () => void;
   onRegionDidChange?: (region: Region) => void;
   onPinPress?: (caseId: string) => void;

@@ -21,9 +21,12 @@ interface Region {
   zoomLevel: number;
 }
 
+export type MapDisplayMode = 'pins' | 'heatmap' | 'clusters';
+
 interface MapViewProps {
   children?: ReactNode;
   cases?: GeoJSON.FeatureCollection;
+  displayMode?: MapDisplayMode;
   onMapReady?: () => void;
   onRegionDidChange?: (region: Region) => void;
   onPinPress?: (caseId: string) => void;
@@ -33,6 +36,7 @@ export function MapView({
   onMapReady,
   onRegionDidChange,
   cases,
+  displayMode = 'clusters',
   onPinPress,
 }: MapViewProps) {
   const { t } = useTranslation();
@@ -156,6 +160,58 @@ export function MapView({
         },
       });
 
+      // Heatmap layer (hidden by default)
+      map.addLayer(
+        {
+          id: 'heatmap',
+          type: 'heatmap',
+          source: 'cases-source',
+          paint: {
+            'heatmap-weight': 1,
+            'heatmap-intensity': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              0,
+              1,
+              14,
+              3,
+            ],
+            'heatmap-color': [
+              'interpolate',
+              ['linear'],
+              ['heatmap-density'],
+              0,
+              'rgba(0,0,0,0)',
+              0.2,
+              '#13ECC8',
+              0.4,
+              '#0FBDA0',
+              0.6,
+              '#F2994A',
+              0.8,
+              '#DC2626',
+              1,
+              '#DC2626',
+            ],
+            'heatmap-radius': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              0,
+              2,
+              14,
+              20,
+            ],
+            'heatmap-opacity': 0.8,
+          },
+          layout: {
+            visibility: 'none',
+          },
+        },
+        'unclustered-points',
+      );
+
       // Click handler for unclustered points
       map.on('click', 'unclustered-points', (e) => {
         const feature = e.features?.[0];
@@ -256,6 +312,44 @@ export function MapView({
       source.setData(cases ?? { type: 'FeatureCollection', features: [] });
     }
   }, [cases]);
+
+  // Toggle layer visibility based on display mode
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded()) return;
+
+    const setVisibility = (layerId: string, visible: boolean) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(
+          layerId,
+          'visibility',
+          visible ? 'visible' : 'none',
+        );
+      }
+    };
+
+    switch (displayMode) {
+      case 'pins':
+        setVisibility('unclustered-points', true);
+        setVisibility('clusters', false);
+        setVisibility('cluster-count', false);
+        setVisibility('heatmap', false);
+        break;
+      case 'heatmap':
+        setVisibility('unclustered-points', false);
+        setVisibility('clusters', false);
+        setVisibility('cluster-count', false);
+        setVisibility('heatmap', true);
+        break;
+      case 'clusters':
+      default:
+        setVisibility('unclustered-points', true);
+        setVisibility('clusters', true);
+        setVisibility('cluster-count', true);
+        setVisibility('heatmap', false);
+        break;
+    }
+  }, [displayMode]);
 
   if (!hasToken) {
     return (

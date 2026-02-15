@@ -108,7 +108,10 @@
     "noRecentCases": "No hay casos recientes",
     "categoryLabel": "Categoría",
     "statusLabel": "Estado",
-    "placeholderText": "Configura EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN en .env para habilitar el mapa."
+    "placeholderText": "Configura EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN en .env para habilitar el mapa.",
+    "displayPins": "Puntos",
+    "displayHeatmap": "Calor",
+    "displayClusters": "Grupos"
   },
   "report": {
     "newReport": "Nuevo reporte",
