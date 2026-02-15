@@ -127,7 +127,12 @@
     "placeholderText": "Set EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN in .env to enable the map.",
     "displayPins": "Pins",
     "displayHeatmap": "Heatmap",
-    "displayClusters": "Clusters"
+    "displayClusters": "Clusters",
+    "noAuthorityInfo": "No authority contact information available",
+    "emailAuthority": "Email authority",
+    "callAuthority": "Call authority",
+    "visitWebsite": "Visit website",
+    "website": "Website"
   },
   "report": {
     "newReport": "New report",
@@ -604,5 +609,41 @@
     "categoryBreakdown": "By Category",
     "joinCta": "Join the Community",
     "joinDescription": "Help protect animals in your neighborhood"
+  },
+  "authoritySubmission": {
+    "title": "Suggest Authority Contact",
+    "description": "Help us improve our directory by suggesting government agencies or organizations that handle animal welfare issues in your jurisdiction.",
+    "dependencyName": "Agency or Department Name",
+    "dependencyNamePlaceholder": "e.g., Municipal Animal Control",
+    "dependencyNameRequired": "Please enter the agency or department name",
+    "departmentName": "Specific Department (Optional)",
+    "departmentNamePlaceholder": "e.g., Emergency Response Unit",
+    "contactName": "Contact Person (Optional)",
+    "contactNamePlaceholder": "e.g., Dr. María González",
+    "email": "Email (Optional)",
+    "emailPlaceholder": "contacto@ejemplo.gob.mx",
+    "phone": "Phone (Optional)",
+    "phonePlaceholder": "+52 664 123 4567",
+    "url": "Website (Optional)",
+    "urlPlaceholder": "https://ejemplo.gob.mx",
+    "handlesReportTypes": "Report Types Handled",
+    "selectReportTypes": "Select report types",
+    "selectedReportTypes": "{{count}} types selected",
+    "reportTypesHelper": "Select all types of animal welfare issues this authority handles",
+    "notes": "Additional Notes (Optional)",
+    "notesPlaceholder": "Any additional information about this authority's jurisdiction or hours of operation...",
+    "contactRequired": "Please provide at least one contact method (email, phone, or website)",
+    "mustBeLoggedIn": "You must be logged in to submit an authority",
+    "municipalityRequired": "Your profile must have a municipality set before you can submit an authority",
+    "successMessage": "Thank you! Your suggestion has been submitted for review. Our team will verify the information and update the directory.",
+    "status": {
+      "pending": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "mySubmissions": "My Submissions",
+    "noSubmissions": "You haven't submitted any authority contacts yet",
+    "submittedOn": "Submitted on {{date}}",
+    "reviewedOn": "Reviewed on {{date}}"
   }
 }

@@ -127,7 +127,12 @@
     "placeholderText": "Configura EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN en .env para habilitar el mapa.",
     "displayPins": "Puntos",
     "displayHeatmap": "Calor",
-    "displayClusters": "Grupos"
+    "displayClusters": "Grupos",
+    "noAuthorityInfo": "No hay información de contacto de la autoridad disponible",
+    "emailAuthority": "Enviar correo a autoridad",
+    "callAuthority": "Llamar a autoridad",
+    "visitWebsite": "Visitar sitio web",
+    "website": "Sitio web"
   },
   "report": {
     "newReport": "Nuevo reporte",
@@ -604,5 +609,41 @@
     "categoryBreakdown": "Por categoría",
     "joinCta": "Únete a la comunidad",
     "joinDescription": "Ayuda a proteger a los animales de tu vecindario"
+  },
+  "authoritySubmission": {
+    "title": "Sugerir Contacto de Autoridad",
+    "description": "Ayúdanos a mejorar nuestro directorio sugiriendo agencias gubernamentales u organizaciones que manejen temas de bienestar animal en tu jurisdicción.",
+    "dependencyName": "Nombre de Dependencia o Departamento",
+    "dependencyNamePlaceholder": "ej., Control Animal Municipal",
+    "dependencyNameRequired": "Por favor ingresa el nombre de la dependencia o departamento",
+    "departmentName": "Departamento Específico (Opcional)",
+    "departmentNamePlaceholder": "ej., Unidad de Respuesta a Emergencias",
+    "contactName": "Persona de Contacto (Opcional)",
+    "contactNamePlaceholder": "ej., Dra. María González",
+    "email": "Correo Electrónico (Opcional)",
+    "emailPlaceholder": "contacto@ejemplo.gob.mx",
+    "phone": "Teléfono (Opcional)",
+    "phonePlaceholder": "+52 664 123 4567",
+    "url": "Sitio Web (Opcional)",
+    "urlPlaceholder": "https://ejemplo.gob.mx",
+    "handlesReportTypes": "Tipos de Reporte que Atiende",
+    "selectReportTypes": "Selecciona tipos de reporte",
+    "selectedReportTypes": "{{count}} tipos seleccionados",
+    "reportTypesHelper": "Selecciona todos los tipos de problemas de bienestar animal que esta autoridad maneja",
+    "notes": "Notas Adicionales (Opcional)",
+    "notesPlaceholder": "Cualquier información adicional sobre la jurisdicción de esta autoridad o su horario de atención...",
+    "contactRequired": "Por favor proporciona al menos un método de contacto (correo, teléfono o sitio web)",
+    "mustBeLoggedIn": "Debes iniciar sesión para enviar una autoridad",
+    "municipalityRequired": "Tu perfil debe tener un municipio establecido antes de poder enviar una autoridad",
+    "successMessage": "¡Gracias! Tu sugerencia ha sido enviada para revisión. Nuestro equipo verificará la información y actualizará el directorio.",
+    "status": {
+      "pending": "En Revisión",
+      "approved": "Aprobado",
+      "rejected": "Rechazado"
+    },
+    "mySubmissions": "Mis Sugerencias",
+    "noSubmissions": "No has enviado sugerencias de contactos de autoridades aún",
+    "submittedOn": "Enviado el {{date}}",
+    "reviewedOn": "Revisado el {{date}}"
   }
 }

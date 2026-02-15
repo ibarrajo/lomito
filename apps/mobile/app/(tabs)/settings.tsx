@@ -84,6 +84,16 @@ export default function SettingsScreen() {
               <Text style={styles.navLinkText}>{t('donate.title')}</Text>
             </Pressable>
           )}
+          <Pressable
+            style={styles.navLink}
+            onPress={() => router.push('/authority/submit')}
+            accessibilityLabel={t('authoritySubmission.title')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.navLinkText}>
+              {t('authoritySubmission.title')}
+            </Text>
+          </Pressable>
         </View>
 
         <View style={styles.section}>
