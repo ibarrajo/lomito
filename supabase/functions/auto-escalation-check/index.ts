@@ -117,12 +117,12 @@ function buildReminderEmailHtml(
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recordatorio: Reporte ${folio}</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F7F8FA;">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F6F8F8;">
   <div style="max-width: 600px; margin: 0 auto; padding: 24px;">
-    <div style="background-color: #FFFFFF; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(164, 77, 30, 0.08);">
+    <div style="background-color: #FFFFFF; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(30, 41, 59, 0.08);">
       <!-- Header -->
-      <div style="border-bottom: 2px solid #D4662B; padding-bottom: 16px; margin-bottom: 24px;">
-        <h1 style="color: #D4662B; margin: 0 0 8px 0; font-size: 24px;">Lomito</h1>
+      <div style="border-bottom: 2px solid #13ECC8; padding-bottom: 16px; margin-bottom: 24px;">
+        <h1 style="color: #1E293B; margin: 0 0 8px 0; font-size: 24px;">Lomito</h1>
         <p style="color: #4A5568; margin: 0; font-size: 14px;">Recordatorio - Reporte de bienestar animal</p>
       </div>
 
@@ -191,7 +191,7 @@ function buildReminderEmailHtml(
         <a
           href="${googleMapsUrl}"
           target="_blank"
-          style="display: inline-block; background-color: #1A6B54; color: #FFFFFF; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 8px;"
+          style="display: inline-block; background-color: #1E293B; color: #FFFFFF; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 8px;"
         >
           Ver en Google Maps
         </a>
@@ -212,7 +212,7 @@ function buildReminderEmailHtml(
 
     <div style="text-align: center; margin-top: 16px;">
       <p style="color: #718096; font-size: 12px; margin: 0;">
-        <a href="https://lomito.org" style="color: #D4662B; text-decoration: none;">lomito.org</a>
+        <a href="https://lomito.org" style="color: #13ECC8; text-decoration: none;">lomito.org</a>
       </p>
     </div>
   </div>
