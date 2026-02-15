@@ -6,7 +6,12 @@
 import { memo, useCallback } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, spacing, borderRadius, typography } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory, CaseStatus } from '@lomito/shared/types/database';
 import type { FilterValue } from '../../hooks/use-map-filters';
 
@@ -17,8 +22,19 @@ interface FilterBarProps {
   onToggleStatus: (status: CaseStatus | 'all') => void;
 }
 
-const CATEGORIES: Array<CaseCategory | 'all'> = ['all', 'abuse', 'stray', 'missing'];
-const STATUSES: Array<CaseStatus | 'all'> = ['all', 'pending', 'verified', 'in_progress', 'resolved'];
+const CATEGORIES: Array<CaseCategory | 'all'> = [
+  'all',
+  'abuse',
+  'stray',
+  'missing',
+];
+const STATUSES: Array<CaseStatus | 'all'> = [
+  'all',
+  'pending',
+  'verified',
+  'in_progress',
+  'resolved',
+];
 
 const CATEGORY_COLORS: Record<CaseCategory | 'all', string> = {
   all: colors.neutral500,
@@ -45,19 +61,25 @@ export const FilterBar = memo(function FilterBar({
 }: FilterBarProps) {
   const { t } = useTranslation();
 
-  const isCategorySelected = useCallback((category: CaseCategory | 'all'): boolean => {
-    if (category === 'all') {
-      return selectedCategories === 'all';
-    }
-    return selectedCategories !== 'all' && selectedCategories.has(category);
-  }, [selectedCategories]);
+  const isCategorySelected = useCallback(
+    (category: CaseCategory | 'all'): boolean => {
+      if (category === 'all') {
+        return selectedCategories === 'all';
+      }
+      return selectedCategories !== 'all' && selectedCategories.has(category);
+    },
+    [selectedCategories],
+  );
 
-  const isStatusSelected = useCallback((status: CaseStatus | 'all'): boolean => {
-    if (status === 'all') {
-      return selectedStatuses === 'all';
-    }
-    return selectedStatuses !== 'all' && selectedStatuses.has(status);
-  }, [selectedStatuses]);
+  const isStatusSelected = useCallback(
+    (status: CaseStatus | 'all'): boolean => {
+      if (status === 'all') {
+        return selectedStatuses === 'all';
+      }
+      return selectedStatuses !== 'all' && selectedStatuses.has(status);
+    },
+    [selectedStatuses],
+  );
 
   return (
     <View style={styles.container}>
@@ -71,9 +93,10 @@ export const FilterBar = memo(function FilterBar({
         {CATEGORIES.map((category) => {
           const selected = isCategorySelected(category);
           const color = CATEGORY_COLORS[category];
-          const label = category === 'all'
-            ? t('map.allCategories')
-            : t(`category.${category}`);
+          const label =
+            category === 'all'
+              ? t('map.allCategories')
+              : t(`category.${category}`);
 
           return (
             <Pressable
@@ -112,9 +135,8 @@ export const FilterBar = memo(function FilterBar({
         {STATUSES.map((status) => {
           const selected = isStatusSelected(status);
           const color = STATUS_COLORS[status];
-          const label = status === 'all'
-            ? t('map.allStatuses')
-            : t(`status.${status}`);
+          const label =
+            status === 'all' ? t('map.allStatuses') : t(`status.${status}`);
 
           return (
             <Pressable

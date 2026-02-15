@@ -1,7 +1,14 @@
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Map, User, Shield, Settings, Building2, BarChart3 } from 'lucide-react-native';
+import {
+  Map,
+  User,
+  Shield,
+  Settings,
+  Building2,
+  BarChart3,
+} from 'lucide-react-native';
 import { colors, iconSizes } from '@lomito/ui/src/theme/tokens';
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
@@ -11,8 +18,10 @@ export default function TabLayout() {
   const { profile, loading } = useUserProfile();
   const { isDesktop } = useBreakpoint();
 
-  const isModerator = profile?.role === 'moderator' || profile?.role === 'admin';
-  const isGovernment = profile?.role === 'government' || profile?.role === 'admin';
+  const isModerator =
+    profile?.role === 'moderator' || profile?.role === 'admin';
+  const isGovernment =
+    profile?.role === 'government' || profile?.role === 'admin';
 
   const hideTabBar = Platform.OS === 'web' && isDesktop;
 

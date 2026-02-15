@@ -34,12 +34,25 @@ export default function DashboardScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
-          <H1 style={styles.header}>
-            {t('dashboard.title')}
-          </H1>
-          <Skeleton width="100%" height={100} borderRadius={12} style={styles.skeleton} />
-          <Skeleton width="100%" height={100} borderRadius={12} style={styles.skeleton} />
-          <Skeleton width="100%" height={200} borderRadius={12} style={styles.skeleton} />
+          <H1 style={styles.header}>{t('dashboard.title')}</H1>
+          <Skeleton
+            width="100%"
+            height={100}
+            borderRadius={12}
+            style={styles.skeleton}
+          />
+          <Skeleton
+            width="100%"
+            height={100}
+            borderRadius={12}
+            style={styles.skeleton}
+          />
+          <Skeleton
+            width="100%"
+            height={200}
+            borderRadius={12}
+            style={styles.skeleton}
+          />
         </View>
       </SafeAreaView>
     );
@@ -58,9 +71,7 @@ export default function DashboardScreen() {
             />
           }
         >
-          <H1 style={styles.header}>
-            {t('dashboard.title')}
-          </H1>
+          <H1 style={styles.header}>{t('dashboard.title')}</H1>
           <View style={styles.errorContainer}>
             <Body color={colors.error}>
               {t('common.error')}: {error}
@@ -75,9 +86,10 @@ export default function DashboardScreen() {
     return null;
   }
 
-  const resolutionPercentage = stats.total_cases > 0
-    ? Math.round((stats.resolved_cases / stats.total_cases) * 100)
-    : 0;
+  const resolutionPercentage =
+    stats.total_cases > 0
+      ? Math.round((stats.resolved_cases / stats.total_cases) * 100)
+      : 0;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,9 +103,7 @@ export default function DashboardScreen() {
           />
         }
       >
-        <H1 style={styles.header}>
-          {t('dashboard.title')}
-        </H1>
+        <H1 style={styles.header}>{t('dashboard.title')}</H1>
 
         <StatCard
           icon={FileText}

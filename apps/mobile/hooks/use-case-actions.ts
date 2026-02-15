@@ -14,7 +14,10 @@ export function useCaseActions(): UseCaseActionsResult {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function updateCaseStatus(caseId: string, newStatus: CaseStatus): Promise<void> {
+  async function updateCaseStatus(
+    caseId: string,
+    newStatus: CaseStatus,
+  ): Promise<void> {
     try {
       setLoading(true);
       setError(null);
@@ -30,7 +33,9 @@ export function useCaseActions(): UseCaseActionsResult {
       }
 
       // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
@@ -74,7 +79,9 @@ export function useCaseActions(): UseCaseActionsResult {
       }
 
       // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
@@ -119,7 +126,8 @@ export function useCaseActions(): UseCaseActionsResult {
       }
 
       // Increment flag count
-      const newFlagCount = ((caseData as { flag_count: number })?.flag_count ?? 0) + 1;
+      const newFlagCount =
+        ((caseData as { flag_count: number })?.flag_count ?? 0) + 1;
       const { error: updateError } = await supabase
         .from('cases')
         .update({ flag_count: newFlagCount } as never)
@@ -130,7 +138,9 @@ export function useCaseActions(): UseCaseActionsResult {
       }
 
       // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         throw new Error('User not authenticated');
       }

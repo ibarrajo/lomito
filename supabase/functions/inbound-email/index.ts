@@ -7,7 +7,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface ResendWebhookPayload {
@@ -40,7 +41,9 @@ async function validateWebhookSignature(
   secret: string | null,
 ): Promise<boolean> {
   if (!secret) {
-    console.warn('INBOUND_EMAIL_WEBHOOK_SECRET not configured, skipping signature validation');
+    console.warn(
+      'INBOUND_EMAIL_WEBHOOK_SECRET not configured, skipping signature validation',
+    );
     return true;
   }
 
@@ -49,10 +52,13 @@ async function validateWebhookSignature(
   }
 
   // Parse signature header (Svix format: "v1,sig1 v1,sig2")
-  const signatures = signature.split(' ').map((s) => {
-    const parts = s.split(',');
-    return parts.length === 2 && parts[0] === 'v1' ? parts[1] : null;
-  }).filter((s) => s !== null);
+  const signatures = signature
+    .split(' ')
+    .map((s) => {
+      const parts = s.split(',');
+      return parts.length === 2 && parts[0] === 'v1' ? parts[1] : null;
+    })
+    .filter((s) => s !== null);
 
   if (signatures.length === 0) {
     return false;
@@ -78,7 +84,9 @@ async function validateWebhookSignature(
   );
 
   // Convert to base64
-  const computedSignature = btoa(String.fromCharCode(...new Uint8Array(signatureBytes)));
+  const computedSignature = btoa(
+    String.fromCharCode(...new Uint8Array(signatureBytes)),
+  );
 
   // Check if computed signature matches any of the provided signatures
   return signatures.some((sig) => sig === computedSignature);
@@ -95,13 +103,10 @@ serve(async (req) => {
 
     // Only accept POST requests
     if (req.method !== 'POST') {
-      return new Response(
-        JSON.stringify({ error: 'Method not allowed' }),
-        {
-          status: 405,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+        status: 405,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Get raw body for signature validation
@@ -112,7 +117,12 @@ serve(async (req) => {
     const signature = req.headers.get('svix-signature');
     const timestamp = req.headers.get('svix-timestamp');
 
-    const isValidSignature = await validateWebhookSignature(rawBody, signature, timestamp, webhookSecret);
+    const isValidSignature = await validateWebhookSignature(
+      rawBody,
+      signature,
+      timestamp,
+      webhookSecret,
+    );
     if (!isValidSignature) {
       return new Response(
         JSON.stringify({ error: 'Invalid webhook signature' }),
@@ -128,13 +138,10 @@ serve(async (req) => {
 
     // We only care about email.received events
     if (payload.type !== 'email.received') {
-      return new Response(
-        JSON.stringify({ success: true, skipped: true }),
-        {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return new Response(JSON.stringify({ success: true, skipped: true }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const emailData = payload.data;
@@ -149,7 +156,9 @@ serve(async (req) => {
 
     if (!caseId) {
       return new Response(
-        JSON.stringify({ error: 'No valid case ID found in recipient address' }),
+        JSON.stringify({
+          error: 'No valid case ID found in recipient address',
+        }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -170,23 +179,17 @@ serve(async (req) => {
       .single();
 
     if (caseError || !caseData) {
-      return new Response(
-        JSON.stringify({ error: 'Case not found' }),
-        {
-          status: 404,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return new Response(JSON.stringify({ error: 'Case not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     if (!caseData.escalated_at) {
-      return new Response(
-        JSON.stringify({ error: 'Case was not escalated' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return new Response(JSON.stringify({ error: 'Case was not escalated' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Insert record into inbound_emails table
@@ -212,7 +215,8 @@ serve(async (req) => {
     }
 
     // Truncate response text to 2000 chars for timeline
-    const truncatedText = text.length > 2000 ? text.substring(0, 2000) + '...' : text;
+    const truncatedText =
+      text.length > 2000 ? text.substring(0, 2000) + '...' : text;
 
     // Create case_timeline event with action='government_response'
     const { error: timelineError } = await supabase

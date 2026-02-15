@@ -37,6 +37,7 @@ supabase start
 ```
 
 This starts:
+
 - PostgreSQL on `localhost:54322`
 - Supabase Studio on `http://localhost:54323`
 - Edge Functions runtime
@@ -44,6 +45,7 @@ This starts:
 - Realtime server
 
 **Credentials:**
+
 - Anon key: printed in terminal after `supabase start`
 - Service role key: printed in terminal
 - Database URL: `postgresql://postgres:postgres@localhost:54322/postgres`
@@ -184,6 +186,7 @@ supabase migration new description_of_change
 ```
 
 **Best Practices:**
+
 - Always include rollback SQL in a comment: `-- Rollback: DROP TABLE ...`
 - One logical change per migration
 - Test locally before pushing to production
@@ -300,13 +303,13 @@ supabase secrets unset RESEND_API_KEY
 
 **Required Secrets:**
 
-| Secret Name                      | Used By                                  | Source                          |
-|----------------------------------|------------------------------------------|---------------------------------|
-| `RESEND_API_KEY`                 | escalate-case                            | https://resend.com/api-keys     |
-| `MERCADO_PAGO_ACCESS_TOKEN`      | create-donation                          | Mercado Pago developer panel    |
-| `MERCADO_PAGO_WEBHOOK_SECRET`    | donation-webhook                         | Mercado Pago webhook settings   |
-| `INBOUND_EMAIL_WEBHOOK_SECRET`   | inbound-email                            | Resend webhook settings         |
-| `SUPABASE_SERVICE_ROLE_KEY`      | All functions (automatically injected)   | Supabase Project Settings → API |
+| Secret Name                    | Used By                                | Source                          |
+| ------------------------------ | -------------------------------------- | ------------------------------- |
+| `RESEND_API_KEY`               | escalate-case                          | https://resend.com/api-keys     |
+| `MERCADO_PAGO_ACCESS_TOKEN`    | create-donation                        | Mercado Pago developer panel    |
+| `MERCADO_PAGO_WEBHOOK_SECRET`  | donation-webhook                       | Mercado Pago webhook settings   |
+| `INBOUND_EMAIL_WEBHOOK_SECRET` | inbound-email                          | Resend webhook settings         |
+| `SUPABASE_SERVICE_ROLE_KEY`    | All functions (automatically injected) | Supabase Project Settings → API |
 
 **Note:** `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are automatically injected by Supabase into all Edge Functions. You do not need to set them manually.
 
@@ -326,12 +329,14 @@ curl -i --location --request POST 'http://localhost:54321/functions/v1/<function
 ### Viewing Function Logs
 
 **Production:**
+
 1. Go to Supabase Dashboard → Edge Functions
 2. Select function
 3. Click "Logs" tab
 4. View real-time logs (last 24 hours)
 
 **Local:**
+
 ```bash
 # Logs print to terminal when running `supabase functions serve`
 ```
@@ -355,6 +360,7 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 - **Simplification:** `ST_Simplify(geometry, 0.001)` for client-side rendering
 
 **Indexes:**
+
 - All geometry columns have GIST indexes for fast spatial queries
 - See migration `20250214000001_initial_schema.sql` for index definitions
 
@@ -367,6 +373,7 @@ All tables have RLS enabled. Policies are defined in `20250214000002_rls_policie
 ### Policy Overview
 
 **Citizen Role:**
+
 - Read all public case data (cases, case_media, case_timeline, jurisdictions)
 - Insert own reports (cases)
 - Update own reports before verification (status = 'pending')
@@ -374,6 +381,7 @@ All tables have RLS enabled. Policies are defined in `20250214000002_rls_policie
 - Update own profile
 
 **Moderator Role:**
+
 - All citizen permissions
 - Update cases in assigned jurisdictions (via `user_jurisdictions` join)
 - View reporter PII for cases in assigned jurisdictions (audit logged)
@@ -381,12 +389,14 @@ All tables have RLS enabled. Policies are defined in `20250214000002_rls_policie
 - Post comments on cases in assigned jurisdictions
 
 **Government Role:**
+
 - All citizen permissions
 - Update case status in assigned jurisdictions
 - Post official responses (timeline action = 'government_response')
 - View reporter PII for cases in assigned jurisdictions (audit logged)
 
 **Admin Role:**
+
 - Full access to all tables
 - No jurisdiction scoping
 
@@ -417,11 +427,13 @@ RESET ROLE;
 ### Database Logs
 
 **Via Dashboard:**
+
 1. Go to Supabase Dashboard → Logs → Database
 2. Filter by log level (error, warn, info)
 3. Search by query text or error message
 
 **Via SQL:**
+
 ```sql
 -- View recent slow queries
 SELECT * FROM pg_stat_statements
@@ -438,10 +450,12 @@ See "Viewing Function Logs" section above.
 Lomito uses Realtime only for `case_timeline` updates (case detail view).
 
 **Monitor active subscriptions:**
+
 1. Go to Supabase Dashboard → Database → Replication
 2. View active publications
 
 **Disable Realtime for a table:**
+
 ```sql
 ALTER PUBLICATION supabase_realtime DROP TABLE case_timeline;
 ```
@@ -481,6 +495,7 @@ WHERE ST_Intersects(
 Supabase uses PgBouncer for connection pooling. Default settings are optimal for most use cases.
 
 **If experiencing connection errors:**
+
 1. Go to Supabase Dashboard → Database → Connection Pooling
 2. Increase pool size (Pro plan only)
 
@@ -493,6 +508,7 @@ Supabase uses PgBouncer for connection pooling. Default settings are optimal for
 Supabase Pro plan includes daily automated backups (retained for 7 days).
 
 **Restore from backup:**
+
 1. Go to Supabase Dashboard → Database → Backups
 2. Select backup date
 3. Click "Restore"
@@ -523,6 +539,7 @@ psql -h db.<your-project-ref>.supabase.co \
 **Issue: Migrations fail with "extension postgis does not exist"**
 
 **Solution:**
+
 - Run `CREATE EXTENSION IF NOT EXISTS postgis;` manually in SQL Editor
 - Verify PostGIS is available in your Supabase project (it should be by default)
 
@@ -531,6 +548,7 @@ psql -h db.<your-project-ref>.supabase.co \
 **Issue: Edge Function returns "Invalid signature" when testing webhook**
 
 **Solution:**
+
 - For local testing, disable signature validation in the function code
 - For production, ensure `INBOUND_EMAIL_WEBHOOK_SECRET` or `MERCADO_PAGO_WEBHOOK_SECRET` is set correctly
 
@@ -539,6 +557,7 @@ psql -h db.<your-project-ref>.supabase.co \
 **Issue: RLS policy blocks legitimate query**
 
 **Solution:**
+
 - Check `auth.uid()` in policy definition matches the user's UUID
 - Verify `user_jurisdictions` table has correct entries
 - Test policy in isolation using `SET ROLE` (see "Testing RLS Policies" above)
@@ -548,6 +567,7 @@ psql -h db.<your-project-ref>.supabase.co \
 **Issue: Auto-escalation cron job not running**
 
 **Solution:**
+
 - Go to Supabase Dashboard → Edge Functions → auto-escalation-check → Settings
 - Verify cron schedule is set (e.g., `0 */6 * * *` for every 6 hours)
 - Check function logs for errors
@@ -557,10 +577,12 @@ psql -h db.<your-project-ref>.supabase.co \
 ## Support
 
 For Supabase-specific issues:
+
 - Supabase Docs: https://supabase.com/docs
 - Supabase Discord: https://discord.supabase.com
 - GitHub Issues: https://github.com/supabase/supabase/issues
 
 For Lomito-specific issues:
+
 - Contact development team
 - File issue in project repository

@@ -99,6 +99,7 @@ Full token reference: `docs/style/DESIGN_TOKENS.md`
 This project uses Claude Code's **native Task system** for work tracking and **subagent delegation** for execution.
 
 ### How it works
+
 1. Start with `CLAUDE_CODE_TASK_LIST_ID=lomito` so tasks persist across sessions.
 2. The orchestrator (main session on Opus) creates tasks with dependencies via `TaskCreate`.
 3. Each task is delegated to a subagent (Sonnet) with fresh context.
@@ -107,17 +108,21 @@ This project uses Claude Code's **native Task system** for work tracking and **s
 6. Blockers logged to `docs/plans/ISSUES.md`, then move to next unblocked task.
 
 ### Subagent routing
+
 - **Orchestrator (main):** Opus — planning, decomposition, verification
 - **Implementation subagents:** Sonnet — focused coding tasks
 - **Reviewer subagent:** `.claude/agents/reviewer.md` — read-only code review
 
 ### Domain parallel patterns
+
 Dispatch parallel subagents when work spans independent domains:
+
 - **Frontend agent:** React Native components, UI, navigation
 - **Backend agent:** Supabase schema, migrations, RLS, Edge Functions
 - **Shared agent:** Types, i18n strings, constants, utilities
 
 ### Task hydration on session start
+
 If resuming work, run: `Show me all tasks` to reload state. If no tasks exist, read `docs/plans/ORCHESTRATION.md` and hydrate from the phase spec.
 
 ## Reference Documents
@@ -131,6 +136,7 @@ If resuming work, run: `Show me all tasks` to reload state. If no tasks exist, r
 ## Compact Instructions
 
 When context is compacted, preserve:
+
 1. The monorepo structure and which packages exist
 2. Current task list state (done, in progress, blocked)
 3. Active subagent assignments

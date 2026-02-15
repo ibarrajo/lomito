@@ -5,7 +5,12 @@
 
 import { View, Pressable, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, typography, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  typography,
+  spacing,
+  borderRadius,
+} from '@lomito/ui/src/theme/tokens';
 import type { AnimalType } from '@lomito/shared/types';
 
 interface AnimalTypePickerProps {
@@ -15,7 +20,10 @@ interface AnimalTypePickerProps {
 
 const ANIMAL_TYPES: AnimalType[] = ['dog', 'cat', 'bird', 'other'];
 
-export function AnimalTypePicker({ selected, onSelect }: AnimalTypePickerProps) {
+export function AnimalTypePicker({
+  selected,
+  onSelect,
+}: AnimalTypePickerProps) {
   const { t } = useTranslation();
 
   return (
@@ -36,12 +44,7 @@ export function AnimalTypePicker({ selected, onSelect }: AnimalTypePickerProps) 
               pressed && styles.pillPressed,
             ]}
           >
-            <Text
-              style={[
-                styles.text,
-                isSelected && styles.textSelected,
-              ]}
-            >
+            <Text style={[styles.text, isSelected && styles.textSelected]}>
               {t(`animal.${type}`)}
             </Text>
           </Pressable>

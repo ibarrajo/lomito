@@ -49,7 +49,11 @@ export function PhotoGallery({ media }: PhotoGalleryProps) {
               source={{ uri: item.thumbnail_url || item.url }}
               style={styles.photo}
               contentFit="cover"
-              placeholder={item.thumbnail_url ? undefined : { blurhash: 'L6PZfSi_.AyE_3t7t7R**0o#DgR4' }}
+              placeholder={
+                item.thumbnail_url
+                  ? undefined
+                  : { blurhash: 'L6PZfSi_.AyE_3t7t7R**0o#DgR4' }
+              }
               transition={200}
             />
           </Card>

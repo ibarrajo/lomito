@@ -20,7 +20,7 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
 
   useEffect(() => {
     checkSubscription();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseId]);
 
   const checkSubscription = async () => {
@@ -28,7 +28,9 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
       setLoading(true);
       setError(null);
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       if (!user) {
         setIsSubscribed(false);
@@ -64,7 +66,9 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
       setLoading(true);
       setError(null);
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       if (!user) {
         setError('Must be logged in');
@@ -88,12 +92,15 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
         }
       } else {
         // Subscribe
-        const { error: insertError } = await (supabase
-          .from('case_subscriptions')
-          .insert as unknown as (data: { case_id: string; user_id: string }) => Promise<{ error: { message: string } | null }>)({
-            case_id: caseId,
-            user_id: user.id,
-          });
+        const { error: insertError } = await (
+          supabase.from('case_subscriptions').insert as unknown as (data: {
+            case_id: string;
+            user_id: string;
+          }) => Promise<{ error: { message: string } | null }>
+        )({
+          case_id: caseId,
+          user_id: user.id,
+        });
 
         if (insertError) {
           console.error('Error subscribing:', insertError);

@@ -14,7 +14,9 @@ interface UseReviewActionsResult {
   loading: boolean;
   error: string | null;
   modal: { title: string; message: string; onDismiss?: () => void } | null;
-  setModal: (modal: { title: string; message: string; onDismiss?: () => void } | null) => void;
+  setModal: (
+    modal: { title: string; message: string; onDismiss?: () => void } | null,
+  ) => void;
   confirmVerify: { caseId: string } | null;
   setConfirmVerify: (confirm: { caseId: string } | null) => void;
   confirmReject: { caseId: string } | null;
@@ -28,14 +30,27 @@ interface UseReviewActionsResult {
   confirmFlagAction: () => Promise<void>;
 }
 
-export function useReviewActions(onSuccess?: () => void): UseReviewActionsResult {
+export function useReviewActions(
+  onSuccess?: () => void,
+): UseReviewActionsResult {
   const { t } = useTranslation();
-  const { updateCaseStatus, rejectCase, flagCase, loading, error } = useCaseActions();
-  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
-  const [confirmVerify, setConfirmVerify] = useState<{ caseId: string } | null>(null);
-  const [confirmReject, setConfirmReject] = useState<{ caseId: string } | null>(null);
+  const { updateCaseStatus, rejectCase, flagCase, loading, error } =
+    useCaseActions();
+  const [modal, setModal] = useState<{
+    title: string;
+    message: string;
+    onDismiss?: () => void;
+  } | null>(null);
+  const [confirmVerify, setConfirmVerify] = useState<{ caseId: string } | null>(
+    null,
+  );
+  const [confirmReject, setConfirmReject] = useState<{ caseId: string } | null>(
+    null,
+  );
   const [rejectReason, setRejectReason] = useState('');
-  const [confirmFlag, setConfirmFlag] = useState<{ caseId: string } | null>(null);
+  const [confirmFlag, setConfirmFlag] = useState<{ caseId: string } | null>(
+    null,
+  );
 
   function handleVerify(caseId: string): void {
     setConfirmVerify({ caseId });
@@ -47,11 +62,17 @@ export function useReviewActions(onSuccess?: () => void): UseReviewActionsResult
     try {
       await updateCaseStatus(confirmVerify.caseId, 'verified');
       setConfirmVerify(null);
-      setModal({ title: t('common.done'), message: t('moderation.verifySuccess') });
+      setModal({
+        title: t('common.done'),
+        message: t('moderation.verifySuccess'),
+      });
       onSuccess?.();
     } catch (err) {
       setConfirmVerify(null);
-      setModal({ title: t('common.error'), message: t('moderation.actionError') });
+      setModal({
+        title: t('common.error'),
+        message: t('moderation.actionError'),
+      });
     }
   }
 
@@ -67,12 +88,18 @@ export function useReviewActions(onSuccess?: () => void): UseReviewActionsResult
       await rejectCase(confirmReject.caseId, rejectReason);
       setConfirmReject(null);
       setRejectReason('');
-      setModal({ title: t('common.done'), message: t('moderation.rejectSuccess') });
+      setModal({
+        title: t('common.done'),
+        message: t('moderation.rejectSuccess'),
+      });
       onSuccess?.();
     } catch (err) {
       setConfirmReject(null);
       setRejectReason('');
-      setModal({ title: t('common.error'), message: t('moderation.actionError') });
+      setModal({
+        title: t('common.error'),
+        message: t('moderation.actionError'),
+      });
     }
   }
 
@@ -86,11 +113,17 @@ export function useReviewActions(onSuccess?: () => void): UseReviewActionsResult
     try {
       await flagCase(confirmFlag.caseId);
       setConfirmFlag(null);
-      setModal({ title: t('common.done'), message: t('moderation.flagSuccess') });
+      setModal({
+        title: t('common.done'),
+        message: t('moderation.flagSuccess'),
+      });
       onSuccess?.();
     } catch (err) {
       setConfirmFlag(null);
-      setModal({ title: t('common.error'), message: t('moderation.actionError') });
+      setModal({
+        title: t('common.error'),
+        message: t('moderation.actionError'),
+      });
     }
   }
 

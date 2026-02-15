@@ -1,13 +1,17 @@
 ## Summary
+
 Brief description of changes.
 
 ## Related Issue
+
 Fixes #(issue number)
 
 ## Changes
+
 -
 
 ## Checklist
+
 - [ ] TypeScript strict — no `any`, no `@ts-ignore`
 - [ ] i18n — updated both `es.json` and `en.json`
 - [ ] Accessibility — `accessibilityLabel` on interactive elements

@@ -7,7 +7,13 @@ import { useState } from 'react';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Flag } from 'lucide-react-native';
-import { colors, spacing, iconSizes, borderRadius, typography } from '@lomito/ui/theme/tokens';
+import {
+  colors,
+  spacing,
+  iconSizes,
+  borderRadius,
+  typography,
+} from '@lomito/ui/theme/tokens';
 import { AppModal } from '@lomito/ui';
 import { useFlagCase } from '../../hooks/use-flag-case';
 import { useAuth } from '../../hooks/use-auth';
@@ -21,7 +27,11 @@ export function FlagButton({ caseId, reporterId }: FlagButtonProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { flagCase, hasUserFlagged, loading } = useFlagCase(caseId);
-  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
+  const [modal, setModal] = useState<{
+    title: string;
+    message: string;
+    onDismiss?: () => void;
+  } | null>(null);
   const [showReasonPicker, setShowReasonPicker] = useState(false);
 
   // Don't show flag button on user's own reports
@@ -111,14 +121,16 @@ export function FlagButton({ caseId, reporterId }: FlagButtonProps) {
         visible={!!modal}
         title={modal?.title ?? ''}
         message={modal?.message}
-        actions={[{
-          label: t('common.ok'),
-          onPress: () => {
-            const onDismiss = modal?.onDismiss;
-            setModal(null);
-            onDismiss?.();
+        actions={[
+          {
+            label: t('common.ok'),
+            onPress: () => {
+              const onDismiss = modal?.onDismiss;
+              setModal(null);
+              onDismiss?.();
+            },
           },
-        }]}
+        ]}
         onClose={() => {
           const onDismiss = modal?.onDismiss;
           setModal(null);

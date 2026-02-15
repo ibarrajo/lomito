@@ -3,7 +3,14 @@
  * List of pending cases for moderators to review and take action on
  */
 
-import { View, FlatList, StyleSheet, RefreshControl, Modal, Pressable } from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+  Modal,
+  Pressable,
+} from 'react-native';
 import { Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { H1, Body } from '@lomito/ui/components/typography';
@@ -172,7 +179,9 @@ export default function ModerationScreen() {
           onPress={() => setConfirmReject(null)}
         >
           <View style={styles.modalContent}>
-            <Body style={styles.modalTitle}>{t('moderation.confirmReject')}</Body>
+            <Body style={styles.modalTitle}>
+              {t('moderation.confirmReject')}
+            </Body>
             <TextInput
               label={t('moderation.rejectReason')}
               value={rejectReason}
@@ -203,14 +212,16 @@ export default function ModerationScreen() {
         visible={!!modal}
         title={modal?.title ?? ''}
         message={modal?.message}
-        actions={[{
-          label: t('common.ok'),
-          onPress: () => {
-            const onDismiss = modal?.onDismiss;
-            setModal(null);
-            onDismiss?.();
+        actions={[
+          {
+            label: t('common.ok'),
+            onPress: () => {
+              const onDismiss = modal?.onDismiss;
+              setModal(null);
+              onDismiss?.();
+            },
           },
-        }]}
+        ]}
         onClose={() => {
           const onDismiss = modal?.onDismiss;
           setModal(null);

@@ -67,7 +67,10 @@ function scheduleFlush(): void {
   flushTimer = setTimeout(flush, BATCH_INTERVAL_MS);
 }
 
-export function trackEvent(name: string, params?: Record<string, string>): void {
+export function trackEvent(
+  name: string,
+  params?: Record<string, string>,
+): void {
   if (Platform.OS !== 'web') return;
   if (!SUPABASE_URL) return;
 

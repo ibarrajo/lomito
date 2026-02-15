@@ -23,11 +23,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor },
-        style,
-      ]}
+      style={[styles.container, { backgroundColor }, style]}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="text"
     >

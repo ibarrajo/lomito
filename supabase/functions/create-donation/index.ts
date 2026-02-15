@@ -6,9 +6,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0';
 
-const MERCADO_PAGO_ACCESS_TOKEN = Deno.env.get('MERCADO_PAGO_ACCESS_TOKEN') ?? '';
+const MERCADO_PAGO_ACCESS_TOKEN =
+  Deno.env.get('MERCADO_PAGO_ACCESS_TOKEN') ?? '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+const SUPABASE_SERVICE_ROLE_KEY =
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 
 interface CreateDonationRequest {
   amount: number;
@@ -47,22 +49,33 @@ serve(async (req) => {
   }
 
   try {
-    const { amount, paymentMethod, donorId, recurring = false }: CreateDonationRequest = await req.json();
+    const {
+      amount,
+      paymentMethod,
+      donorId,
+      recurring = false,
+    }: CreateDonationRequest = await req.json();
 
     // Validate input
     if (!amount || amount < 10) {
-      return new Response(JSON.stringify({ error: 'Minimum donation amount is $10 MXN' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: 'Minimum donation amount is $10 MXN' }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     }
 
     if (!MERCADO_PAGO_ACCESS_TOKEN) {
       console.error('MERCADO_PAGO_ACCESS_TOKEN not configured');
-      return new Response(JSON.stringify({ error: 'Payment provider not configured' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: 'Payment provider not configured' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     }
 
     // Initialize Supabase client with service role
@@ -84,10 +97,13 @@ serve(async (req) => {
 
     if (insertError || !donation) {
       console.error('Error inserting donation:', insertError);
-      return new Response(JSON.stringify({ error: 'Failed to create donation record' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: 'Failed to create donation record' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     }
 
     // Build Mercado Pago preference based on payment method
@@ -113,11 +129,19 @@ serve(async (req) => {
     // Configure payment method constraints
     if (paymentMethod === 'oxxo') {
       preference.payment_methods = {
-        excluded_payment_types: [{ id: 'credit_card' }, { id: 'debit_card' }, { id: 'bank_transfer' }],
+        excluded_payment_types: [
+          { id: 'credit_card' },
+          { id: 'debit_card' },
+          { id: 'bank_transfer' },
+        ],
       };
     } else if (paymentMethod === 'spei') {
       preference.payment_methods = {
-        excluded_payment_types: [{ id: 'credit_card' }, { id: 'debit_card' }, { id: 'ticket' }],
+        excluded_payment_types: [
+          { id: 'credit_card' },
+          { id: 'debit_card' },
+          { id: 'ticket' },
+        ],
       };
     } else {
       // mercado_pago (card payments)
@@ -127,22 +151,28 @@ serve(async (req) => {
     }
 
     // Create Mercado Pago checkout preference
-    const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+    const mpResponse = await fetch(
+      'https://api.mercadopago.com/checkout/preferences',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(preference),
       },
-      body: JSON.stringify(preference),
-    });
+    );
 
     if (!mpResponse.ok) {
       const errorData = await mpResponse.text();
       console.error('Mercado Pago API error:', errorData);
-      return new Response(JSON.stringify({ error: 'Failed to create payment checkout' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: 'Failed to create payment checkout' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     }
 
     const mpData = await mpResponse.json();
@@ -169,7 +199,7 @@ serve(async (req) => {
       {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
-      }
+      },
     );
   } catch (error) {
     console.error('Unexpected error:', error);

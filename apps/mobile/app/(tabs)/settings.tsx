@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
-import { colors, spacing, typography, borderRadius } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  typography,
+  borderRadius,
+} from '@lomito/ui/src/theme/tokens';
 import { H1, Body, Caption, AppModal } from '@lomito/ui';
 import { useAuth } from '../../hooks/use-auth';
 import { useUserProfile } from '../../hooks/use-user-profile';
@@ -43,8 +48,12 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Caption style={styles.sectionLabel}>{t('settings.account')}</Caption>
           <View style={styles.accountInfo}>
-            <Body style={{ color: colors.neutral900 }}>{profile?.full_name || ''}</Body>
-            <Caption style={{ color: colors.neutral500 }}>{session?.user?.email || ''}</Caption>
+            <Body style={{ color: colors.neutral900 }}>
+              {profile?.full_name || ''}
+            </Body>
+            <Caption style={{ color: colors.neutral500 }}>
+              {session?.user?.email || ''}
+            </Caption>
           </View>
         </View>
 
@@ -66,14 +75,14 @@ export default function SettingsScreen() {
             <Text style={styles.navLinkText}>{t('about.title')}</Text>
           </Pressable>
           {isFeatureEnabled('donations') && (
-          <Pressable
-            style={styles.navLink}
-            onPress={() => router.push('/donate')}
-            accessibilityLabel={t('donate.title')}
-            accessibilityRole="button"
-          >
-            <Text style={styles.navLinkText}>{t('donate.title')}</Text>
-          </Pressable>
+            <Pressable
+              style={styles.navLink}
+              onPress={() => router.push('/donate')}
+              accessibilityLabel={t('donate.title')}
+              accessibilityRole="button"
+            >
+              <Text style={styles.navLinkText}>{t('donate.title')}</Text>
+            </Pressable>
           )}
         </View>
 
@@ -111,7 +120,10 @@ export default function SettingsScreen() {
         title={t('settings.signOut')}
         message={t('auth.logout')}
         actions={[
-          { label: t('common.cancel'), onPress: () => setShowSignOutConfirm(false) },
+          {
+            label: t('common.cancel'),
+            onPress: () => setShowSignOutConfirm(false),
+          },
           { label: t('settings.signOut'), onPress: confirmSignOut },
         ]}
         onClose={() => setShowSignOutConfirm(false)}
@@ -121,7 +133,9 @@ export default function SettingsScreen() {
         visible={!!errorModal}
         title={t('common.error')}
         message={errorModal ?? undefined}
-        actions={[{ label: t('common.ok'), onPress: () => setErrorModal(null) }]}
+        actions={[
+          { label: t('common.ok'), onPress: () => setErrorModal(null) },
+        ]}
         onClose={() => setErrorModal(null)}
       />
     </View>

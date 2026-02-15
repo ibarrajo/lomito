@@ -31,6 +31,7 @@ Before submitting to either store, ensure you have:
 ### Store Listings
 
 Pre-written listings are available in:
+
 - `/Users/elninja/Code/lomito/docs/store/app-store-listing.md` — Apple App Store
 - `/Users/elninja/Code/lomito/docs/store/play-store-listing.md` — Google Play Store
 
@@ -104,6 +105,7 @@ Apple requires detailed privacy labels. Configure in App Store Connect → App P
    - Device ID: **Not linked to user**, used for **Analytics** (PostHog)
 
 **Data Not Collected:**
+
 - Financial Info (donations handled by Mercado Pago/Stripe, not collected by app)
 - Browsing History
 - Search History
@@ -111,9 +113,11 @@ Apple requires detailed privacy labels. Configure in App Store Connect → App P
 - Sensitive Info (except location for case reporting)
 
 **Third-Party Tracking:**
+
 - **Do you or your third-party partners use data from this app for tracking purposes?** No
 
 **Privacy Policy URL:**
+
 ```
 https://lomito.org/privacy
 ```
@@ -125,6 +129,7 @@ For each new version submission:
 1. **Version Number:** 1.0.0 (use semantic versioning)
 2. **Copyright:** © 2026 Lomito Foundation. All rights reserved.
 3. **What's New in This Version:**
+
    ```
    Primer lanzamiento de Lomito en Tijuana.
 
@@ -153,6 +158,7 @@ eas submit --platform ios --profile production
 ```
 
 Or manually:
+
 1. Download IPA from EAS
 2. Open Xcode → Window → Organizer
 3. Click "Distribute App"
@@ -175,18 +181,21 @@ Before submitting for App Review, test via TestFlight:
 **Sign-in required?** Yes
 
 **Demo Account Credentials:**
+
 ```
 Username: <REDACTED>
 Password: <REDACTED>
 ```
 
 **Contact Information:**
+
 - First Name: Lomito
 - Last Name: Foundation
 - Email: hello@lomito.org
 - Phone: +52 664 XXX XXXX (TBD)
 
 **Notes:**
+
 ```
 Lomito is a civic platform for reporting animal welfare issues in Tijuana, Mexico.
 
@@ -235,6 +244,7 @@ Thank you for reviewing Lomito. We're excited to launch in Tijuana and expand ac
 **Rejection: "Location permission used without clear purpose"**
 
 **Solution:** Update `NSLocationWhenInUseUsageDescription` in `app.json` to clearly explain why location is needed. Already configured:
+
 ```
 Lomito needs your location to show animal welfare cases near you and to automatically detect your jurisdiction when submitting a report.
 ```
@@ -244,6 +254,7 @@ Lomito needs your location to show animal welfare cases near you and to automati
 **Rejection: "App crashes on launch"**
 
 **Solution:**
+
 - Test on physical device before submitting (simulators can mask issues)
 - Check Xcode crash logs
 - Ensure all API keys and environment variables are set correctly in EAS secrets
@@ -294,6 +305,7 @@ Once approved:
 1. Go to App access (left sidebar)
 2. **All functionality is available without restrictions:** No
 3. **Provide instructions for accessing restricted features:**
+
    ```
    Lomito requires user account creation to submit reports and subscribe to case updates.
 
@@ -319,6 +331,7 @@ Use content from `/Users/elninja/Code/lomito/docs/store/play-store-listing.md`.
 
 1. **App name:** Lomito
 2. **Short description (80 chars max):**
+
    ```
    Report and track animal welfare issues in your city
    ```
@@ -412,10 +425,12 @@ Google requires a Data Safety section (equivalent to iOS privacy labels).
    - **App interactions:** Collected, used for analytics (PostHog)
 
 **Data Shared:**
+
 - **Location:** Shared publicly (anonymized case locations on map)
 - **Personal info:** Shared with verified government/moderator accounts only (for case follow-up)
 
 **Security practices:**
+
 - **Data is encrypted in transit:** Yes
 - **Users can request data deletion:** Yes
 - **Data is not sold to third parties:** Yes
@@ -446,6 +461,7 @@ eas submit --platform android --profile production
 ```
 
 Or manually:
+
 1. Download AAB from EAS
 2. Go to Play Console → Release → Production
 3. Click "Create new release"
@@ -499,6 +515,7 @@ Before releasing to production, test via internal testing track:
 **Rejection: "App violates User Data policy"**
 
 **Solution:**
+
 - Ensure Data Safety section accurately describes all data collection
 - Privacy policy must be accessible and clearly explain data usage
 - Do not collect more data than necessary
@@ -508,6 +525,7 @@ Before releasing to production, test via internal testing track:
 **Rejection: "App crashes or has bugs"**
 
 **Solution:**
+
 - Test on multiple physical devices (different Android versions)
 - Use Play Console → Pre-launch report to catch crashes before submission
 - Fix all critical bugs before submitting
@@ -517,6 +535,7 @@ Before releasing to production, test via internal testing track:
 **Rejection: "Misleading app description"**
 
 **Solution:**
+
 - Screenshots and description must accurately represent app functionality
 - Do not mention features that don't exist in the submitted build
 - Do not use stock photos or generic images (use actual app screenshots)
@@ -526,6 +545,7 @@ Before releasing to production, test via internal testing track:
 **Rejection: "Permissions not justified"**
 
 **Solution:**
+
 - Ensure all declared permissions are used in the app
 - Remove unused permissions from `app.json`
 - Clearly explain why each permission is needed in the Data Safety section
@@ -563,11 +583,13 @@ Both stores allow you to respond to user reviews. Best practices:
 **Example responses:**
 
 **Positive review:**
+
 ```
 Gracias por tu apoyo. Juntos estamos haciendo de Tijuana un mejor lugar para todos los animales.
 ```
 
 **Negative review (bug report):**
+
 ```
 Lamentamos el inconveniente. Hemos identificado el problema y lo solucionaremos en la próxima actualización. Si necesitas ayuda, escríbenos a hello@lomito.org. ¡Gracias por reportar!
 ```
@@ -575,10 +597,12 @@ Lamentamos el inconveniente. Hemos identificado el problema y lo solucionaremos 
 ### Crash Monitoring
 
 **iOS:**
+
 - Xcode Organizer → Crashes
 - App Store Connect → Analytics → Crashes
 
 **Android:**
+
 - Play Console → Quality → Crashes & ANRs
 
 **Recommended:** Integrate Sentry or Bugsnag for real-time crash reporting.
@@ -586,11 +610,13 @@ Lamentamos el inconveniente. Hemos identificado el problema y lo solucionaremos 
 ### Update Cadence
 
 **Recommended schedule:**
+
 - **Patch releases (bug fixes):** Every 1-2 weeks as needed
 - **Minor releases (new features):** Every 4-6 weeks
 - **Major releases (major features/redesigns):** Every 3-6 months
 
 **Use semantic versioning:**
+
 - 1.0.0 → Initial release
 - 1.0.1 → Bug fix
 - 1.1.0 → New feature (backward compatible)
@@ -603,10 +629,12 @@ Lamentamos el inconveniente. Hemos identificado el problema y lo solucionaremos 
 ### "App pending review for 7+ days"
 
 **iOS:**
+
 - Contact Apple via App Store Connect → Contact Us
 - Escalate if urgent (emergency expedited review available in rare cases)
 
 **Android:**
+
 - Check Play Console for additional information requests
 - Contact Google via Help → Contact Us
 
@@ -615,10 +643,12 @@ Lamentamos el inconveniente. Hemos identificado el problema y lo solucionaremos 
 ### "Build rejected but no reason given"
 
 **iOS:**
+
 - Check Resolution Center in App Store Connect
 - Review Apple Developer Program License Agreement (you may have missed a required step)
 
 **Android:**
+
 - Check email associated with Play Console account
 - Review Play Console → Policy status for details
 
@@ -627,6 +657,7 @@ Lamentamos el inconveniente. Hemos identificado el problema y lo solucionaremos 
 ### "Users report crashes but I can't reproduce"
 
 **Solution:**
+
 1. Check crash logs in App Store Connect / Play Console
 2. Identify device/OS version causing crashes
 3. Test on that specific configuration
@@ -637,11 +668,14 @@ Lamentamos el inconveniente. Hemos identificado el problema y lo solucionaremos 
 ## Support
 
 **Apple Developer Support:**
+
 - https://developer.apple.com/support/
 
 **Google Play Console Help:**
+
 - https://support.google.com/googleplay/android-developer/
 
 **Lomito-specific submission issues:**
+
 - Contact development team
 - File issue in project repository

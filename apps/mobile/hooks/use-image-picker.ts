@@ -102,8 +102,8 @@ export function useImagePicker(): ImagePickerResult {
 
       if (!result.canceled && result.assets.length > 0) {
         // Compress all picked images
-        const compressPromises = result.assets.map((asset: ImagePicker.ImagePickerAsset) =>
-          compressImage(asset.uri)
+        const compressPromises = result.assets.map(
+          (asset: ImagePicker.ImagePickerAsset) => compressImage(asset.uri),
         );
         const compressed = await Promise.all(compressPromises);
 

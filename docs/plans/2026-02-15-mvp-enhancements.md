@@ -13,6 +13,7 @@
 ## Task 1: Legal Disclaimer — Not a Government Website
 
 **Files:**
+
 - Modify: `apps/mobile/app/about.tsx`
 - Modify: `apps/mobile/app/legal/privacy.tsx` (content update)
 - Modify: `apps/mobile/app/legal/terms.tsx` (content update)
@@ -40,6 +41,7 @@
 ## Task 2: Feature Flags Mechanism
 
 **Files:**
+
 - Create: `packages/shared/src/feature-flags.ts`
 - Modify: `apps/mobile/app/donate.tsx`
 - Modify: `apps/mobile/app/auth/login.tsx`
@@ -50,6 +52,7 @@
 **What to do:**
 
 1. Create `packages/shared/src/feature-flags.ts`:
+
 ```typescript
 /**
  * Feature flags for MVP.
@@ -87,6 +90,7 @@ export function isFeatureEnabled(flag: FeatureFlag): boolean {
 ## Task 3: Logo and OpenGraph Assets
 
 **Files:**
+
 - Create: `apps/mobile/assets/images/logo.svg` (source)
 - Create: `apps/mobile/assets/images/logo-full.png` (wordmark, 400x100)
 - Create: `apps/mobile/assets/images/og-default.png` (1200x630 OpenGraph)
@@ -118,6 +122,7 @@ This task requires graphic design input. For now, create placeholder assets:
 ## Task 4: Report Sharing Mechanism
 
 **Files:**
+
 - Modify: `apps/mobile/app/case/[id].tsx`
 - Create: `apps/mobile/components/case/share-button.tsx`
 - Modify: `packages/shared/src/i18n/es.json`
@@ -144,6 +149,7 @@ This task requires graphic design input. For now, create placeholder assets:
 ## Task 5: Footer on All Pertinent Web Pages
 
 **Files:**
+
 - Modify: `apps/mobile/components/navigation/app-shell.tsx`
 - Modify: `apps/mobile/app/about.tsx`
 - Modify: `apps/mobile/app/donate.tsx`
@@ -170,6 +176,7 @@ This task requires graphic design input. For now, create placeholder assets:
 ## Task 6: Map Preview + Recent Reports on Homepage
 
 **Files:**
+
 - Modify: `apps/mobile/app/(public)/index.tsx`
 - Create: `apps/mobile/components/landing/recent-reports-ticker.tsx`
 - Modify: `packages/shared/src/i18n/es.json`
@@ -197,6 +204,7 @@ This task requires graphic design input. For now, create placeholder assets:
 ## Task 7: Expand About Page
 
 **Files:**
+
 - Modify: `apps/mobile/app/about.tsx`
 - Modify: `packages/shared/src/i18n/es.json`
 - Modify: `packages/shared/src/i18n/en.json`
@@ -214,6 +222,7 @@ This task requires graphic design input. For now, create placeholder assets:
 3. Add "Roadmap" section (after Open Source):
    - Render a list of future features with status badges
    - Data structure:
+
    ```typescript
    const ROADMAP_ITEMS = [
      { key: 'androidApp', status: 'planned' },
@@ -223,6 +232,7 @@ This task requires graphic design input. For now, create placeholder assets:
      { key: 'osintIngestion', status: 'exploring' },
    ];
    ```
+
    - Status badges: "Planeado" (planned, secondary color), "Explorando" (exploring, accent color), "En desarrollo" (in_progress, primary color), "Lanzado" (launched, success color)
    - Each item: title + short description from i18n
 

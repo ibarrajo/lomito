@@ -6,7 +6,12 @@
 import { View, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { H3, BodySmall } from '@lomito/ui';
-import { colors, spacing, borderRadius, shadowStyles } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  shadowStyles,
+} from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types';
 
 interface CategoryPickerProps {
@@ -58,11 +63,18 @@ export function CategoryPicker({ selected, onSelect }: CategoryPickerProps) {
               pressed && styles.cardPressed,
             ]}
           >
-            <View style={[styles.iconArea, { backgroundColor: category.backgroundColor }]} />
+            <View
+              style={[
+                styles.iconArea,
+                { backgroundColor: category.backgroundColor },
+              ]}
+            />
             <View style={styles.content}>
               <H3>{t(`category.${category.key}`)}</H3>
               <BodySmall color={colors.neutral500}>
-                {t(`report.category${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Description`)}
+                {t(
+                  `report.category${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Description`,
+                )}
               </BodySmall>
             </View>
           </Pressable>

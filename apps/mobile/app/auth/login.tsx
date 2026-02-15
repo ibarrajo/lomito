@@ -22,7 +22,11 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
-  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
+  const [modal, setModal] = useState<{
+    title: string;
+    message: string;
+    onDismiss?: () => void;
+  } | null>(null);
 
   const handleMagicLink = async () => {
     if (!email.trim()) {
@@ -70,10 +74,14 @@ export default function LoginScreen() {
           <View style={styles.sidebarContent}>
             <Text style={styles.sidebarEmoji}>🐾</Text>
             <Text style={styles.sidebarHeading}>
-              {i18n.language === 'es' ? 'Protegiendo a los animales de nuestra comunidad' : 'Protecting our community\'s animals'}
+              {i18n.language === 'es'
+                ? 'Protegiendo a los animales de nuestra comunidad'
+                : "Protecting our community's animals"}
             </Text>
             <Text style={styles.sidebarSubtext}>
-              {i18n.language === 'es' ? 'Plataforma cívica para Tijuana' : 'Civic platform for Tijuana'}
+              {i18n.language === 'es'
+                ? 'Plataforma cívica para Tijuana'
+                : 'Civic platform for Tijuana'}
             </Text>
           </View>
         </View>
@@ -83,7 +91,9 @@ export default function LoginScreen() {
           {!isDesktop && <View style={styles.mobileAccent} />}
           <View style={styles.branding}>
             <Text style={styles.brandWordmark}>Lomito</Text>
-            <BodySmall color={colors.neutral500}>{t('landing.footerTagline')}</BodySmall>
+            <BodySmall color={colors.neutral500}>
+              {t('landing.footerTagline')}
+            </BodySmall>
           </View>
 
           <View style={styles.header}>
@@ -92,105 +102,112 @@ export default function LoginScreen() {
             </H1>
           </View>
 
-      {/* Tab switcher — only show if SMS login is enabled */}
-      {isFeatureEnabled('smsLogin') && (
-      <View style={styles.tabs}>
-        <Pressable
-          style={[styles.tab, authMethod === 'email' && styles.tabActive]}
-          onPress={() => setAuthMethod('email')}
-          accessibilityLabel={t('auth.emailLoginTab')}
-          accessibilityRole="tab"
-          accessibilityState={{ selected: authMethod === 'email' }}
-        >
-          <Body
-            color={authMethod === 'email' ? colors.primary : colors.neutral500}
-            accessibilityLabel={t('auth.magicLink')}
-          >
-            {t('auth.magicLink')}
-          </Body>
-        </Pressable>
+          {/* Tab switcher — only show if SMS login is enabled */}
+          {isFeatureEnabled('smsLogin') && (
+            <View style={styles.tabs}>
+              <Pressable
+                style={[styles.tab, authMethod === 'email' && styles.tabActive]}
+                onPress={() => setAuthMethod('email')}
+                accessibilityLabel={t('auth.emailLoginTab')}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: authMethod === 'email' }}
+              >
+                <Body
+                  color={
+                    authMethod === 'email' ? colors.primary : colors.neutral500
+                  }
+                  accessibilityLabel={t('auth.magicLink')}
+                >
+                  {t('auth.magicLink')}
+                </Body>
+              </Pressable>
 
-        <Pressable
-          style={[styles.tab, authMethod === 'phone' && styles.tabActive]}
-          onPress={() => setAuthMethod('phone')}
-          accessibilityLabel={t('auth.smsLoginTab')}
-          accessibilityRole="tab"
-          accessibilityState={{ selected: authMethod === 'phone' }}
-        >
-          <Body
-            color={authMethod === 'phone' ? colors.primary : colors.neutral500}
-            accessibilityLabel={t('auth.smsOtp')}
-          >
-            {t('auth.smsOtp')}
-          </Body>
-        </Pressable>
-      </View>
-      )}
+              <Pressable
+                style={[styles.tab, authMethod === 'phone' && styles.tabActive]}
+                onPress={() => setAuthMethod('phone')}
+                accessibilityLabel={t('auth.smsLoginTab')}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: authMethod === 'phone' }}
+              >
+                <Body
+                  color={
+                    authMethod === 'phone' ? colors.primary : colors.neutral500
+                  }
+                  accessibilityLabel={t('auth.smsOtp')}
+                >
+                  {t('auth.smsOtp')}
+                </Body>
+              </Pressable>
+            </View>
+          )}
 
-      {/* Email login */}
-      {authMethod === 'email' && (
-        <View style={styles.form}>
-          <TextInput
-            label={t('auth.email')}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="you@example.com"
-            accessibilityLabel={t('auth.email')}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+          {/* Email login */}
+          {authMethod === 'email' && (
+            <View style={styles.form}>
+              <TextInput
+                label={t('auth.email')}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="you@example.com"
+                accessibilityLabel={t('auth.email')}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
 
-          <Button
-            onPress={handleMagicLink}
-            loading={loading}
-            accessibilityLabel={t('auth.magicLink')}
-            style={styles.submitButton}
-          >
-            {t('auth.magicLink')}
-          </Button>
-        </View>
-      )}
+              <Button
+                onPress={handleMagicLink}
+                loading={loading}
+                accessibilityLabel={t('auth.magicLink')}
+                style={styles.submitButton}
+              >
+                {t('auth.magicLink')}
+              </Button>
+            </View>
+          )}
 
-      {/* Phone login */}
-      {isFeatureEnabled('smsLogin') && authMethod === 'phone' && (
-        <View style={styles.form}>
-          <TextInput
-            label={t('auth.phone')}
-            value={phone}
-            onChangeText={setPhone}
-            placeholder="+52 664 123 4567"
-            accessibilityLabel={t('auth.phone')}
-            keyboardType="phone-pad"
-            autoCapitalize="none"
-          />
+          {/* Phone login */}
+          {isFeatureEnabled('smsLogin') && authMethod === 'phone' && (
+            <View style={styles.form}>
+              <TextInput
+                label={t('auth.phone')}
+                value={phone}
+                onChangeText={setPhone}
+                placeholder="+52 664 123 4567"
+                accessibilityLabel={t('auth.phone')}
+                keyboardType="phone-pad"
+                autoCapitalize="none"
+              />
 
-          <Button
-            onPress={handleSmsOtp}
-            loading={loading}
-            accessibilityLabel={t('auth.smsOtp')}
-            style={styles.submitButton}
-          >
-            {t('auth.smsOtp')}
-          </Button>
-        </View>
-      )}
+              <Button
+                onPress={handleSmsOtp}
+                loading={loading}
+                accessibilityLabel={t('auth.smsOtp')}
+                style={styles.submitButton}
+              >
+                {t('auth.smsOtp')}
+              </Button>
+            </View>
+          )}
 
-      {/* Register link */}
-      <View style={styles.footer}>
-        <Body accessibilityLabel={t('auth.noAccount')}>
-          {t('auth.noAccount')}{' '}
-        </Body>
-        <Pressable
-          onPress={() => router.push('/auth/register')}
-          accessibilityLabel={t('auth.register')}
-          accessibilityRole="link"
-        >
-          <Body color={colors.primary} accessibilityLabel={t('auth.register')}>
-            {t('auth.register')}
-          </Body>
-        </Pressable>
-      </View>
+          {/* Register link */}
+          <View style={styles.footer}>
+            <Body accessibilityLabel={t('auth.noAccount')}>
+              {t('auth.noAccount')}{' '}
+            </Body>
+            <Pressable
+              onPress={() => router.push('/auth/register')}
+              accessibilityLabel={t('auth.register')}
+              accessibilityRole="link"
+            >
+              <Body
+                color={colors.primary}
+                accessibilityLabel={t('auth.register')}
+              >
+                {t('auth.register')}
+              </Body>
+            </Pressable>
+          </View>
         </View>
       </View>
 
@@ -198,14 +215,16 @@ export default function LoginScreen() {
         visible={!!modal}
         title={modal?.title ?? ''}
         message={modal?.message}
-        actions={[{
-          label: t('common.ok'),
-          onPress: () => {
-            const onDismiss = modal?.onDismiss;
-            setModal(null);
-            onDismiss?.();
+        actions={[
+          {
+            label: t('common.ok'),
+            onPress: () => {
+              const onDismiss = modal?.onDismiss;
+              setModal(null);
+              onDismiss?.();
+            },
           },
-        }]}
+        ]}
         onClose={() => {
           const onDismiss = modal?.onDismiss;
           setModal(null);

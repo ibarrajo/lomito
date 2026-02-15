@@ -26,6 +26,7 @@ An open-source, map-centric civic platform for reporting and tracking animal wel
 ## MVP Scope (What Gets Built)
 
 ### Phase 1: Foundation
+
 - Expo monorepo scaffolding with packages/shared, packages/ui, apps/mobile
 - Supabase project with PostGIS, schema migrations, RLS policies
 - Auth flow: magic link + SMS OTP, registration with privacy notice acceptance
@@ -35,6 +36,7 @@ An open-source, map-centric civic platform for reporting and tracking animal wel
 - Shared UI component library (Button, Card, Input, Badge, BottomSheet, Skeleton)
 
 ### Phase 2: Core Reporting
+
 - Report submission: category, map pin, description, photos (1-5), video (optional), animal type, urgency
 - Client-side image compression (1200px, JPEG 0.8, EXIF strip)
 - Auto jurisdiction assignment via PostGIS ST_Contains
@@ -43,6 +45,7 @@ An open-source, map-centric civic platform for reporting and tracking animal wel
 - Filter bar: category, status, date range
 
 ### Phase 3: Moderation + Notifications
+
 - Moderator review queue (verify/reject/flag)
 - RLS policies scoping moderator access to assigned jurisdictions
 - Community flagging (3 flags auto-hides)
@@ -50,6 +53,7 @@ An open-source, map-centric civic platform for reporting and tracking animal wel
 - Notification preferences screen
 
 ### Phase 4: Government Integration
+
 - Email escalation: structured emails to authorities with per-case reply-to
 - Inbound email parsing for government replies
 - Government account invitation flow
@@ -57,6 +61,7 @@ An open-source, map-centric civic platform for reporting and tracking animal wel
 - Auto-escalation flags (5/15/30 day no-response)
 
 ### Phase 5: Donations + Dashboard + Launch
+
 - Mercado Pago donation integration
 - Public impact dashboard
 - About Us page

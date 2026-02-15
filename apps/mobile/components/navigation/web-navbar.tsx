@@ -59,7 +59,8 @@ export function WebNavbar() {
   const { signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const isModerator = profile?.role === 'moderator' || profile?.role === 'admin';
+  const isModerator =
+    profile?.role === 'moderator' || profile?.role === 'admin';
   const isGovernment =
     profile?.role === 'government' || profile?.role === 'admin';
 
@@ -108,7 +109,9 @@ export function WebNavbar() {
       >
         <View style={styles.navLinkContent}>
           {icon}
-          <Text style={[styles.navLinkText, isActive && styles.navLinkTextActive]}>
+          <Text
+            style={[styles.navLinkText, isActive && styles.navLinkTextActive]}
+          >
             {label}
           </Text>
         </View>
@@ -170,20 +173,26 @@ export function WebNavbar() {
             '/about',
             <Info
               size={iconSizes.inline}
-              color={isActivePath('/about') ? colors.primary : colors.neutral700}
+              color={
+                isActivePath('/about') ? colors.primary : colors.neutral700
+              }
               strokeWidth={1.5}
             />,
           )}
-          {isFeatureEnabled('donations') && renderNavLink(
-            t('donate.title'),
-            '/donate',
-            <Heart
-              size={iconSizes.inline}
-              color={isActivePath('/donate') ? colors.primary : colors.neutral700}
-              strokeWidth={1.5}
-            />,
-          )}
-          {!loading && isModerator &&
+          {isFeatureEnabled('donations') &&
+            renderNavLink(
+              t('donate.title'),
+              '/donate',
+              <Heart
+                size={iconSizes.inline}
+                color={
+                  isActivePath('/donate') ? colors.primary : colors.neutral700
+                }
+                strokeWidth={1.5}
+              />,
+            )}
+          {!loading &&
+            isModerator &&
             renderNavLink(
               t('nav.moderation'),
               '/(tabs)/moderation',
@@ -197,7 +206,8 @@ export function WebNavbar() {
                 strokeWidth={1.5}
               />,
             )}
-          {!loading && isGovernment &&
+          {!loading &&
+            isGovernment &&
             renderNavLink(
               t('nav.government'),
               '/(tabs)/government',
@@ -242,45 +252,79 @@ export function WebNavbar() {
             </TouchableOpacity>
             {showUserMenu && (
               <>
-              <Pressable
-                style={styles.userMenuBackdrop}
-                onPress={() => setShowUserMenu(false)}
-                accessibilityLabel="Close menu"
-              />
-              <View style={styles.userMenu}>
-                {profile && (
-                  <View style={styles.userMenuHeader}>
-                    <Text style={styles.userMenuName} numberOfLines={1}>
-                      {profile.full_name || '?'}
+                <Pressable
+                  style={styles.userMenuBackdrop}
+                  onPress={() => setShowUserMenu(false)}
+                  accessibilityLabel="Close menu"
+                />
+                <View style={styles.userMenu}>
+                  {profile && (
+                    <View style={styles.userMenuHeader}>
+                      <Text style={styles.userMenuName} numberOfLines={1}>
+                        {profile.full_name || '?'}
+                      </Text>
+                    </View>
+                  )}
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.userMenuItem,
+                      pressed && styles.userMenuItemPressed,
+                    ]}
+                    onPress={() => {
+                      setShowUserMenu(false);
+                      navigateTo('/(tabs)/profile');
+                    }}
+                    accessibilityRole="link"
+                  >
+                    <User
+                      size={16}
+                      color={colors.neutral700}
+                      strokeWidth={1.5}
+                    />
+                    <Text style={styles.userMenuItemText}>
+                      {t('nav.profile')}
                     </Text>
-                  </View>
-                )}
-                <Pressable
-                  style={({ pressed }) => [styles.userMenuItem, pressed && styles.userMenuItemPressed]}
-                  onPress={() => { setShowUserMenu(false); navigateTo('/(tabs)/profile'); }}
-                  accessibilityRole="link"
-                >
-                  <User size={16} color={colors.neutral700} strokeWidth={1.5} />
-                  <Text style={styles.userMenuItemText}>{t('nav.profile')}</Text>
-                </Pressable>
-                <Pressable
-                  style={({ pressed }) => [styles.userMenuItem, pressed && styles.userMenuItemPressed]}
-                  onPress={() => { setShowUserMenu(false); navigateTo('/(tabs)/settings'); }}
-                  accessibilityRole="link"
-                >
-                  <Settings size={16} color={colors.neutral700} strokeWidth={1.5} />
-                  <Text style={styles.userMenuItemText}>{t('nav.settings')}</Text>
-                </Pressable>
-                <View style={styles.userMenuDivider} />
-                <Pressable
-                  style={({ pressed }) => [styles.userMenuItem, pressed && styles.userMenuItemPressed]}
-                  onPress={() => { setShowUserMenu(false); signOut(); }}
-                  accessibilityRole="button"
-                >
-                  <LogOut size={16} color={colors.error} strokeWidth={1.5} />
-                  <Text style={[styles.userMenuItemText, { color: colors.error }]}>{t('settings.signOut')}</Text>
-                </Pressable>
-              </View>
+                  </Pressable>
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.userMenuItem,
+                      pressed && styles.userMenuItemPressed,
+                    ]}
+                    onPress={() => {
+                      setShowUserMenu(false);
+                      navigateTo('/(tabs)/settings');
+                    }}
+                    accessibilityRole="link"
+                  >
+                    <Settings
+                      size={16}
+                      color={colors.neutral700}
+                      strokeWidth={1.5}
+                    />
+                    <Text style={styles.userMenuItemText}>
+                      {t('nav.settings')}
+                    </Text>
+                  </Pressable>
+                  <View style={styles.userMenuDivider} />
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.userMenuItem,
+                      pressed && styles.userMenuItemPressed,
+                    ]}
+                    onPress={() => {
+                      setShowUserMenu(false);
+                      signOut();
+                    }}
+                    accessibilityRole="button"
+                  >
+                    <LogOut size={16} color={colors.error} strokeWidth={1.5} />
+                    <Text
+                      style={[styles.userMenuItemText, { color: colors.error }]}
+                    >
+                      {t('settings.signOut')}
+                    </Text>
+                  </Pressable>
+                </View>
               </>
             )}
           </View>

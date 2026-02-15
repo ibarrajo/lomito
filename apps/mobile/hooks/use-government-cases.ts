@@ -23,7 +23,12 @@ interface GovernmentCase {
   government_response_at: string | null;
 }
 
-type FilterStatus = 'all' | 'escalated' | 'pending_response' | 'in_progress' | 'resolved';
+type FilterStatus =
+  | 'all'
+  | 'escalated'
+  | 'pending_response'
+  | 'in_progress'
+  | 'resolved';
 
 interface UseGovernmentCasesOptions {
   statusFilter?: FilterStatus;
@@ -37,7 +42,7 @@ interface UseGovernmentCasesResult {
 }
 
 export function useGovernmentCases(
-  options: UseGovernmentCasesOptions = {}
+  options: UseGovernmentCasesOptions = {},
 ): UseGovernmentCasesResult {
   const { statusFilter = 'all' } = options;
   const [cases, setCases] = useState<GovernmentCase[]>([]);
@@ -52,7 +57,7 @@ export function useGovernmentCases(
       let query = supabase
         .from('cases')
         .select(
-          'id, category, animal_type, description, urgency, status, location, created_at, jurisdiction_id, reporter_id, folio, escalated_at, government_response_at'
+          'id, category, animal_type, description, urgency, status, location, created_at, jurisdiction_id, reporter_id, folio, escalated_at, government_response_at',
         );
 
       // Apply status filter
@@ -82,8 +87,10 @@ export function useGovernmentCases(
         // Custom sort: prioritize escalated cases without response
         const sortedData = [...(data as GovernmentCase[])].sort((a, b) => {
           // First: escalated without response
-          const aEscalatedNoResponse = a.escalated_at && !a.government_response_at;
-          const bEscalatedNoResponse = b.escalated_at && !b.government_response_at;
+          const aEscalatedNoResponse =
+            a.escalated_at && !a.government_response_at;
+          const bEscalatedNoResponse =
+            b.escalated_at && !b.government_response_at;
 
           if (aEscalatedNoResponse && !bEscalatedNoResponse) return -1;
           if (!aEscalatedNoResponse && bEscalatedNoResponse) return 1;
@@ -94,7 +101,9 @@ export function useGovernmentCases(
           if (urgencyDiff !== 0) return urgencyDiff;
 
           // Finally: by date (newest first)
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          return (
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
         });
 
         setCases(sortedData);

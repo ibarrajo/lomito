@@ -6,7 +6,14 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { CreditCard, Store, Building } from 'lucide-react-native';
-import { colors, spacing, borderRadius, typography, shadowStyles, iconSizes } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+  shadowStyles,
+  iconSizes,
+} from '@lomito/ui/src/theme/tokens';
 
 type PaymentMethodType = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -43,7 +50,10 @@ const PAYMENT_METHODS: PaymentMethodOption[] = [
   },
 ];
 
-export function PaymentMethods({ selectedMethod, onMethodChange }: PaymentMethodsProps) {
+export function PaymentMethods({
+  selectedMethod,
+  onMethodChange,
+}: PaymentMethodsProps) {
   const { t } = useTranslation();
 
   return (
@@ -58,7 +68,10 @@ export function PaymentMethods({ selectedMethod, onMethodChange }: PaymentMethod
           return (
             <Pressable
               key={method.id}
-              style={[styles.methodCard, isSelected && styles.methodCardSelected]}
+              style={[
+                styles.methodCard,
+                isSelected && styles.methodCardSelected,
+              ]}
               onPress={() => onMethodChange(method.id)}
               accessibilityLabel={t(method.titleKey)}
               accessibilityRole="button"
@@ -73,7 +86,12 @@ export function PaymentMethods({ selectedMethod, onMethodChange }: PaymentMethod
               </View>
 
               <View style={styles.methodContent}>
-                <Text style={[styles.methodTitle, isSelected && styles.methodTitleSelected]}>
+                <Text
+                  style={[
+                    styles.methodTitle,
+                    isSelected && styles.methodTitleSelected,
+                  ]}
+                >
                   {t(method.titleKey)}
                 </Text>
               </View>

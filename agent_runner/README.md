@@ -37,11 +37,13 @@ cp agent_runner/.env.example .env
 ```
 
 Required keys (at least one):
+
 - `ANTHROPIC_API_KEY` - Claude Opus 4 (primary)
 - `GOOGLE_API_KEY` - Gemini 2.0 Flash (fallback 1)
 - `OPENAI_API_KEY` - GPT-4 (fallback 2)
 
 Optional:
+
 - `LOMITO_PROJECT_DIR` - Project root (defaults to current directory)
 
 ## Usage

@@ -87,7 +87,10 @@ export function AppModal({
               {actions.map((action, index) => (
                 <Button
                   key={index}
-                  variant={action.variant ?? (index === actions.length - 1 ? 'primary' : 'ghost')}
+                  variant={
+                    action.variant ??
+                    (index === actions.length - 1 ? 'primary' : 'ghost')
+                  }
                   onPress={action.onPress}
                   accessibilityLabel={action.label}
                   style={index > 0 ? styles.actionSpacing : undefined}

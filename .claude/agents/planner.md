@@ -20,6 +20,7 @@ You are a planning agent for the Lomito project. You decompose phases and featur
 ## Output format
 
 For each task, provide:
+
 ```
 ### [Phase]-T[N]: [Short name]
 - **Depends on:** [list of blocking task IDs, or "nothing"]
@@ -29,6 +30,7 @@ For each task, provide:
 ```
 
 ## Anti-patterns to avoid
+
 - Tasks that are too large (> 10 files created/modified)
 - Tasks with circular dependencies
 - Tasks that require external services not yet configured (check ISSUES.md)

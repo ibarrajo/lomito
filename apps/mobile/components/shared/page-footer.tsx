@@ -1,4 +1,10 @@
-import { View, StyleSheet, TouchableOpacity, Text, Platform } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Platform,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
@@ -20,19 +26,33 @@ export function PageFooter() {
       <View style={styles.footerInner}>
         <View style={styles.footerLeft}>
           <Text style={styles.footerBrand}>Lomito</Text>
-          <BodySmall color={colors.neutral500}>{t('landing.footerTagline')}</BodySmall>
+          <BodySmall color={colors.neutral500}>
+            {t('landing.footerTagline')}
+          </BodySmall>
         </View>
         <View style={styles.footerLinks}>
-          <TouchableOpacity onPress={() => router.push('/about')} accessibilityRole="link">
+          <TouchableOpacity
+            onPress={() => router.push('/about')}
+            accessibilityRole="link"
+          >
             <Text style={styles.footerLink}>{t('about.title')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/donate')} accessibilityRole="link">
+          <TouchableOpacity
+            onPress={() => router.push('/donate')}
+            accessibilityRole="link"
+          >
             <Text style={styles.footerLink}>{t('donate.title')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/legal/privacy')} accessibilityRole="link">
+          <TouchableOpacity
+            onPress={() => router.push('/legal/privacy')}
+            accessibilityRole="link"
+          >
             <Text style={styles.footerLink}>{t('legal.privacy')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/legal/terms')} accessibilityRole="link">
+          <TouchableOpacity
+            onPress={() => router.push('/legal/terms')}
+            accessibilityRole="link"
+          >
             <Text style={styles.footerLink}>{t('legal.terms')}</Text>
           </TouchableOpacity>
         </View>

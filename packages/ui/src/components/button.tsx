@@ -85,10 +85,17 @@ export function Button({
         style={({ pressed }) => {
           // eslint-disable-next-line react-native/no-unused-styles
           const variantStyle = styles[variant];
-          const pressedStyle = pressed && !isDisabled
-            // eslint-disable-next-line react-native/no-unused-styles
-            ? styles[`${variant}Pressed` as 'primaryPressed' | 'secondaryPressed' | 'ghostPressed' | 'destructivePressed']
-            : undefined;
+          const pressedStyle =
+            pressed && !isDisabled
+              ? // eslint-disable-next-line react-native/no-unused-styles
+                styles[
+                  `${variant}Pressed` as
+                    | 'primaryPressed'
+                    | 'secondaryPressed'
+                    | 'ghostPressed'
+                    | 'destructivePressed'
+                ]
+              : undefined;
 
           return [
             styles.base,
@@ -112,7 +119,13 @@ export function Button({
             style={[
               styles.text,
               // eslint-disable-next-line react-native/no-unused-styles
-              styles[`${variant}Text` as 'primaryText' | 'secondaryText' | 'ghostText' | 'destructiveText'],
+              styles[
+                `${variant}Text` as
+                  | 'primaryText'
+                  | 'secondaryText'
+                  | 'ghostText'
+                  | 'destructiveText'
+              ],
             ]}
           >
             {children}

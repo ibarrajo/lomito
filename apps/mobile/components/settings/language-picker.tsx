@@ -21,7 +21,7 @@ const languageNames: Record<Language, string> = {
 export function LanguagePicker() {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState<Language>(
-    i18n.language as Language
+    i18n.language as Language,
   );
 
   const handleLanguageChange = async (lang: Language) => {

@@ -8,8 +8,17 @@ import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react-native';
 import { Card, Badge, Button } from '@lomito/ui';
 import { H3, Caption } from '@lomito/ui/src/components/typography';
-import { colors, spacing, iconSizes, typography } from '@lomito/ui/src/theme/tokens';
-import type { CaseCategory, CaseStatus, AnimalType } from '@lomito/shared/types/database';
+import {
+  colors,
+  spacing,
+  iconSizes,
+  typography,
+} from '@lomito/ui/src/theme/tokens';
+import type {
+  CaseCategory,
+  CaseStatus,
+  AnimalType,
+} from '@lomito/shared/types/database';
 
 interface CaseSummaryData {
   id: string;
@@ -85,9 +94,7 @@ export function CaseSummaryCard({
           </Pressable>
         </View>
 
-        <H3 style={styles.animalType}>
-          {t(`animal.${caseData.animal_type}`)}
-        </H3>
+        <H3 style={styles.animalType}>{t(`animal.${caseData.animal_type}`)}</H3>
 
         <Text style={styles.description} numberOfLines={3}>
           {truncatedDescription}

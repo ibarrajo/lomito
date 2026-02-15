@@ -15,10 +15,20 @@ import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { supabase } from '../../lib/supabase';
-import { colors, spacing, shadowStyles, iconSizes, typography } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  shadowStyles,
+  iconSizes,
+  typography,
+} from '@lomito/ui/src/theme/tokens';
 import { AppModal } from '@lomito/ui';
 import { useTranslation } from 'react-i18next';
-import type { CaseCategory, CaseStatus, AnimalType } from '@lomito/shared/types/database';
+import type {
+  CaseCategory,
+  CaseStatus,
+  AnimalType,
+} from '@lomito/shared/types/database';
 
 interface CaseSummary {
   id: string;
@@ -44,7 +54,9 @@ export default function MapScreen() {
     north: number;
   } | null>(null);
   const [mapZoom, setMapZoom] = useState(12);
-  const [jurisdictionModal, setJurisdictionModal] = useState<string | null>(null);
+  const [jurisdictionModal, setJurisdictionModal] = useState<string | null>(
+    null,
+  );
 
   const {
     selectedCategories,
@@ -63,7 +75,9 @@ export default function MapScreen() {
     try {
       let query = supabase
         .from('cases')
-        .select('id, category, animal_type, description, status, location, created_at')
+        .select(
+          'id, category, animal_type, description, status, location, created_at',
+        )
         .order('created_at', { ascending: false })
         .limit(100);
 
@@ -89,7 +103,12 @@ export default function MapScreen() {
     fetchCases();
   }, [fetchCases]);
 
-  const geoJSONData = useMemo<GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory; status: CaseStatus }>>(
+  const geoJSONData = useMemo<
+    GeoJSON.FeatureCollection<
+      GeoJSON.Point,
+      { id: string; category: CaseCategory; status: CaseStatus }
+    >
+  >(
     () => ({
       type: 'FeatureCollection',
       features: cases.map((caseData) => ({
@@ -105,23 +124,29 @@ export default function MapScreen() {
         },
       })),
     }),
-    [cases]
+    [cases],
   );
 
-  const handlePinPress = useCallback((caseId: string) => {
-    const caseData = cases.find((c) => c.id === caseId);
-    if (caseData) {
-      setSelectedCase(caseData);
-    }
-  }, [cases]);
+  const handlePinPress = useCallback(
+    (caseId: string) => {
+      const caseData = cases.find((c) => c.id === caseId);
+      if (caseData) {
+        setSelectedCase(caseData);
+      }
+    },
+    [cases],
+  );
 
   const handleCloseCard = useCallback(() => {
     setSelectedCase(null);
   }, []);
 
-  const handleViewDetails = useCallback((caseId: string) => {
-    router.push(`/case/${caseId}`);
-  }, [router]);
+  const handleViewDetails = useCallback(
+    (caseId: string) => {
+      router.push(`/case/${caseId}`);
+    },
+    [router],
+  );
 
   const handleNewReport = useCallback(() => {
     router.push('/report/new');
@@ -131,20 +156,31 @@ export default function MapScreen() {
     setShowBoundaries((prev) => !prev);
   }, []);
 
-  const handleRegionChange = useCallback((region: { bounds: { ne: [number, number]; sw: [number, number] }; zoomLevel: number }) => {
-    const { bounds, zoomLevel } = region;
-    setMapBounds({
-      west: bounds.sw[0],
-      south: bounds.sw[1],
-      east: bounds.ne[0],
-      north: bounds.ne[1],
-    });
-    setMapZoom(zoomLevel);
-  }, []);
+  const handleRegionChange = useCallback(
+    (region: {
+      bounds: { ne: [number, number]; sw: [number, number] };
+      zoomLevel: number;
+    }) => {
+      const { bounds, zoomLevel } = region;
+      setMapBounds({
+        west: bounds.sw[0],
+        south: bounds.sw[1],
+        east: bounds.ne[0],
+        north: bounds.ne[1],
+      });
+      setMapZoom(zoomLevel);
+    },
+    [],
+  );
 
-  const handleJurisdictionPress = useCallback((_jurisdictionId: string, jurisdictionName: string) => {
-    setJurisdictionModal(t('map.jurisdictionInfo', { name: jurisdictionName }));
-  }, [t]);
+  const handleJurisdictionPress = useCallback(
+    (_jurisdictionId: string, jurisdictionName: string) => {
+      setJurisdictionModal(
+        t('map.jurisdictionInfo', { name: jurisdictionName }),
+      );
+    },
+    [t],
+  );
 
   return (
     <View style={styles.container}>
@@ -159,7 +195,9 @@ export default function MapScreen() {
       <Pressable
         style={styles.jurisdictionToggle}
         onPress={handleToggleBoundaries}
-        accessibilityLabel={showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')}
+        accessibilityLabel={
+          showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')
+        }
         accessibilityRole="button"
       >
         <Text style={styles.jurisdictionToggleText}>
@@ -199,7 +237,9 @@ export default function MapScreen() {
       <AppModal
         visible={!!jurisdictionModal}
         title={jurisdictionModal ?? ''}
-        actions={[{ label: t('common.ok'), onPress: () => setJurisdictionModal(null) }]}
+        actions={[
+          { label: t('common.ok'), onPress: () => setJurisdictionModal(null) },
+        ]}
         onClose={() => setJurisdictionModal(null)}
       />
     </View>

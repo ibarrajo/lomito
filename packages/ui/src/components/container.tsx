@@ -1,4 +1,9 @@
-import { View, StyleSheet, useWindowDimensions, type ViewStyle } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  useWindowDimensions,
+  type ViewStyle,
+} from 'react-native';
 import { layout, breakpoints } from '../theme/tokens';
 
 interface ContainerProps {
@@ -22,13 +27,7 @@ export function Container({
         : layout.containerPadding.mobile;
 
   return (
-    <View
-      style={[
-        styles.container,
-        { maxWidth, paddingHorizontal },
-        style,
-      ]}
-    >
+    <View style={[styles.container, { maxWidth, paddingHorizontal }, style]}>
       {children}
     </View>
   );

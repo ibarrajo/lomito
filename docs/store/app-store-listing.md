@@ -7,6 +7,7 @@
 **Subtitle (30 chars max):** Animal Welfare Made Civic
 
 **Category:**
+
 - Primary: Lifestyle
 - Secondary: Social Networking
 

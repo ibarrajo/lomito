@@ -32,19 +32,21 @@ export function Card({
 }: CardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const webHoverStyle = Platform.OS === 'web'
-    ? ({
-        transition: 'box-shadow 0.2s ease',
-        boxShadow: isHovered ? shadows.elevated : shadows.card,
-      } as ViewStyle)
-    : {};
+  const webHoverStyle =
+    Platform.OS === 'web'
+      ? ({
+          transition: 'box-shadow 0.2s ease',
+          boxShadow: isHovered ? shadows.elevated : shadows.card,
+        } as ViewStyle)
+      : {};
 
   return (
     <View
       style={[
         styles.base,
         variant === 'mapSummary' && styles.mapSummary,
-        variant === 'mapSummary' && categoryColor && { borderLeftColor: categoryColor },
+        variant === 'mapSummary' &&
+          categoryColor && { borderLeftColor: categoryColor },
         webHoverStyle,
         style,
       ]}

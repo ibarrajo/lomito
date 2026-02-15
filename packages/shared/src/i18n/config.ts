@@ -39,7 +39,10 @@ async function restoreLanguage() {
     }
 
     // Only change if we have a valid stored language
-    if (storedLanguage && (storedLanguage === 'es' || storedLanguage === 'en')) {
+    if (
+      storedLanguage &&
+      (storedLanguage === 'es' || storedLanguage === 'en')
+    ) {
       await i18n.changeLanguage(storedLanguage);
     }
   } catch (error) {

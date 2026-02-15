@@ -32,7 +32,8 @@ export function isValidPayload(body: unknown): body is AnalyticsPayload {
   if (typeof body !== 'object' || body === null) return false;
   const payload = body as Record<string, unknown>;
   if (typeof payload.client_id !== 'string' || !payload.client_id) return false;
-  if (!Array.isArray(payload.events) || payload.events.length === 0) return false;
+  if (!Array.isArray(payload.events) || payload.events.length === 0)
+    return false;
   if (payload.events.length > MAX_EVENTS_PER_REQUEST) return false;
   return payload.events.every(
     (event: unknown) =>

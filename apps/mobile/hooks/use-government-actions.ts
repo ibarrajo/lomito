@@ -38,12 +38,14 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
       }
 
       // Insert timeline event
-      const { error: timelineError } = await supabase.from('case_timeline').insert({
-        case_id: caseId,
-        actor_id: user.id,
-        action: 'assigned',
-        details: { folio },
-      } as never);
+      const { error: timelineError } = await supabase
+        .from('case_timeline')
+        .insert({
+          case_id: caseId,
+          actor_id: user.id,
+          action: 'assigned',
+          details: { folio },
+        } as never);
 
       if (timelineError) {
         throw timelineError;
@@ -58,7 +60,10 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
     }
   }
 
-  async function postResponse(caseId: string, responseText: string): Promise<void> {
+  async function postResponse(
+    caseId: string,
+    responseText: string,
+  ): Promise<void> {
     try {
       setLoading(true);
       setError(null);
@@ -82,12 +87,14 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
       }
 
       // Insert timeline event with response
-      const { error: timelineError } = await supabase.from('case_timeline').insert({
-        case_id: caseId,
-        actor_id: user.id,
-        action: 'government_response',
-        details: { response: responseText },
-      } as never);
+      const { error: timelineError } = await supabase
+        .from('case_timeline')
+        .insert({
+          case_id: caseId,
+          actor_id: user.id,
+          action: 'government_response',
+          details: { response: responseText },
+        } as never);
 
       if (timelineError) {
         throw timelineError;
@@ -102,7 +109,10 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
     }
   }
 
-  async function updateStatus(caseId: string, newStatus: CaseStatus): Promise<void> {
+  async function updateStatus(
+    caseId: string,
+    newStatus: CaseStatus,
+  ): Promise<void> {
     try {
       setLoading(true);
       setError(null);
@@ -126,12 +136,14 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
       }
 
       // Insert timeline event
-      const { error: timelineError } = await supabase.from('case_timeline').insert({
-        case_id: caseId,
-        actor_id: user.id,
-        action: 'status_changed',
-        details: { status: newStatus },
-      } as never);
+      const { error: timelineError } = await supabase
+        .from('case_timeline')
+        .insert({
+          case_id: caseId,
+          actor_id: user.id,
+          action: 'status_changed',
+          details: { status: newStatus },
+        } as never);
 
       if (timelineError) {
         throw timelineError;

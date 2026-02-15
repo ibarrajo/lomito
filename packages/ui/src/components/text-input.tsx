@@ -12,12 +12,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { useState } from 'react';
-import {
-  colors,
-  typography,
-  spacing,
-  borderRadius,
-} from '../theme/tokens';
+import { colors, typography, spacing, borderRadius } from '../theme/tokens';
 
 interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
   label?: string;

@@ -71,29 +71,29 @@
 
 ### Client-side (Expo — `apps/mobile/.env`)
 
-| Variable | Description |
-|----------|-------------|
-| `EXPO_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key (public) |
-| `EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN` | Mapbox public token |
-| `EXPO_PUBLIC_PROJECT_ID` | Expo project ID (push notifications) |
-| `EXPO_PUBLIC_MERCADO_PAGO_PUBLIC_KEY` | Mercado Pago public key |
+| Variable                              | Description                          |
+| ------------------------------------- | ------------------------------------ |
+| `EXPO_PUBLIC_SUPABASE_URL`            | Supabase project URL                 |
+| `EXPO_PUBLIC_SUPABASE_ANON_KEY`       | Supabase anonymous key (public)      |
+| `EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN`     | Mapbox public token                  |
+| `EXPO_PUBLIC_PROJECT_ID`              | Expo project ID (push notifications) |
+| `EXPO_PUBLIC_MERCADO_PAGO_PUBLIC_KEY` | Mercado Pago public key              |
 
 ### Supabase Edge Functions (Secrets)
 
-| Variable | Description |
-|----------|-------------|
-| `GA4_MEASUREMENT_ID` | Google Analytics 4 measurement ID |
-| `GA4_API_SECRET` | GA4 Measurement Protocol API secret |
-| `RESEND_API_KEY` | Resend email service API key |
-| `MERCADO_PAGO_ACCESS_TOKEN` | Mercado Pago server-side token |
+| Variable                    | Description                         |
+| --------------------------- | ----------------------------------- |
+| `GA4_MEASUREMENT_ID`        | Google Analytics 4 measurement ID   |
+| `GA4_API_SECRET`            | GA4 Measurement Protocol API secret |
+| `RESEND_API_KEY`            | Resend email service API key        |
+| `MERCADO_PAGO_ACCESS_TOKEN` | Mercado Pago server-side token      |
 
 ### Vercel (Build Environment)
 
-| Variable | Description |
-|----------|-------------|
-| `EXPO_PUBLIC_SUPABASE_URL` | Same as client .env — injected at build time |
-| `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Same as client .env — injected at build time |
+| Variable                          | Description                                  |
+| --------------------------------- | -------------------------------------------- |
+| `EXPO_PUBLIC_SUPABASE_URL`        | Same as client .env — injected at build time |
+| `EXPO_PUBLIC_SUPABASE_ANON_KEY`   | Same as client .env — injected at build time |
 | `EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN` | Same as client .env — injected at build time |
 
 ## Setup from Scratch

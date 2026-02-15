@@ -15,7 +15,9 @@ export default function VerifyScreen() {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
-  const [modal, setModal] = useState<{ title: string; message: string } | null>(null);
+  const [modal, setModal] = useState<{ title: string; message: string } | null>(
+    null,
+  );
 
   const handleVerify = async () => {
     if (!phone) {
@@ -100,9 +102,7 @@ export default function VerifyScreen() {
 
       {/* Resend code link */}
       <View style={styles.footer}>
-        <Body accessibilityLabel={t('auth.noCode')}>
-          {t('auth.noCode')}{' '}
-        </Body>
+        <Body accessibilityLabel={t('auth.noCode')}>{t('auth.noCode')} </Body>
         <Pressable
           onPress={handleResend}
           disabled={resending}
@@ -134,10 +134,12 @@ export default function VerifyScreen() {
         visible={!!modal}
         title={modal?.title ?? ''}
         message={modal?.message}
-        actions={[{
-          label: t('common.ok'),
-          onPress: () => setModal(null),
-        }]}
+        actions={[
+          {
+            label: t('common.ok'),
+            onPress: () => setModal(null),
+          },
+        ]}
         onClose={() => setModal(null)}
       />
     </View>

@@ -7,7 +7,10 @@ import { View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Body, Caption } from '@lomito/ui/components/typography';
 import { colors, spacing } from '@lomito/ui/theme/tokens';
-import type { CaseTimeline, TimelineAction } from '@lomito/shared/types/database';
+import type {
+  CaseTimeline,
+  TimelineAction,
+} from '@lomito/shared/types/database';
 
 interface TimelineProps {
   events: CaseTimeline[];
@@ -29,7 +32,11 @@ const ACTION_ICONS: Record<TimelineAction, string> = {
   marked_unresponsive: '⏰',
 };
 
-function getTimelineDescription(action: TimelineAction, details: Record<string, unknown>, t: (key: string, options?: Record<string, unknown>) => string): string {
+function getTimelineDescription(
+  action: TimelineAction,
+  details: Record<string, unknown>,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
   switch (action) {
     case 'created':
       return t('timeline.created');
@@ -37,7 +44,9 @@ function getTimelineDescription(action: TimelineAction, details: Record<string, 
       return t('timeline.verified');
     case 'rejected': {
       const reason = details.reason as string | undefined;
-      return reason ? t('timeline.rejectedWithReason', { reason }) : t('timeline.rejected');
+      return reason
+        ? t('timeline.rejectedWithReason', { reason })
+        : t('timeline.rejected');
     }
     case 'escalated': {
       const jurisdictionName = details.jurisdiction_name as string | undefined;
@@ -48,9 +57,10 @@ function getTimelineDescription(action: TimelineAction, details: Record<string, 
     case 'government_response': {
       const responseText = details.response_text as string | undefined;
       if (responseText) {
-        const truncated = responseText.length > 100
-          ? `${responseText.substring(0, 100)}...`
-          : responseText;
+        const truncated =
+          responseText.length > 100
+            ? `${responseText.substring(0, 100)}...`
+            : responseText;
         return t('timeline.governmentResponse', { response: truncated });
       }
       return t('timeline.governmentResponseGeneric');
@@ -59,9 +69,14 @@ function getTimelineDescription(action: TimelineAction, details: Record<string, 
       const newStatus = details.new_status as string | undefined;
       const oldStatus = details.old_status as string | undefined;
       if (newStatus && oldStatus) {
-        return t('timeline.statusChangedFromTo', { from: t(`status.${oldStatus}`), to: t(`status.${newStatus}`) });
+        return t('timeline.statusChangedFromTo', {
+          from: t(`status.${oldStatus}`),
+          to: t(`status.${newStatus}`),
+        });
       } else if (newStatus) {
-        return t('timeline.statusChangedTo', { status: t(`status.${newStatus}`) });
+        return t('timeline.statusChangedTo', {
+          status: t(`status.${newStatus}`),
+        });
       }
       return t('timeline.statusChanged');
     }
@@ -69,7 +84,9 @@ function getTimelineDescription(action: TimelineAction, details: Record<string, 
       return t('timeline.flagged');
     case 'marked_unresponsive': {
       const days = details.days as number | undefined;
-      return days ? t('timeline.markedUnresponsive', { days }) : t('timeline.markedUnresponsiveGeneric');
+      return days
+        ? t('timeline.markedUnresponsive', { days })
+        : t('timeline.markedUnresponsiveGeneric');
     }
     default:
       return t(`timelineAction.${action}`);
@@ -102,7 +119,11 @@ export function Timeline({ events }: TimelineProps) {
             minute: '2-digit',
           },
         );
-        const description = getTimelineDescription(event.action, event.details, t);
+        const description = getTimelineDescription(
+          event.action,
+          event.details,
+          t,
+        );
 
         return (
           <View
@@ -120,9 +141,7 @@ export function Timeline({ events }: TimelineProps) {
 
             {/* Event details */}
             <View style={styles.eventDetails}>
-              <Body style={styles.eventAction}>
-                {description}
-              </Body>
+              <Body style={styles.eventAction}>{description}</Body>
               <Caption color={colors.neutral500} style={styles.eventTime}>
                 {formattedDate}
               </Caption>

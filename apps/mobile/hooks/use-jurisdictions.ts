@@ -45,7 +45,10 @@ interface UseJurisdictionsResult {
 
 const DEBOUNCE_DELAY = 300;
 
-export function useJurisdictions({ bounds, zoom }: UseJurisdictionsParams): UseJurisdictionsResult {
+export function useJurisdictions({
+  bounds,
+  zoom,
+}: UseJurisdictionsParams): UseJurisdictionsResult {
   const [data, setData] = useState<JurisdictionGeoJSON | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,67 +56,75 @@ export function useJurisdictions({ bounds, zoom }: UseJurisdictionsParams): UseJ
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const cacheRef = useRef<Map<string, JurisdictionGeoJSON>>(new Map());
 
-  const fetchJurisdictions = useCallback(async (fetchBounds: Bounds, fetchZoom: number) => {
-    const cacheKey = `${fetchBounds.west},${fetchBounds.south},${fetchBounds.east},${fetchBounds.north},${Math.floor(fetchZoom)}`;
+  const fetchJurisdictions = useCallback(
+    async (fetchBounds: Bounds, fetchZoom: number) => {
+      const cacheKey = `${fetchBounds.west},${fetchBounds.south},${fetchBounds.east},${fetchBounds.north},${Math.floor(fetchZoom)}`;
 
-    // Check cache first
-    const cached = cacheRef.current.get(cacheKey);
-    if (cached) {
-      setData(cached);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
-      const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
-
-      if (!supabaseUrl || !supabaseAnonKey) {
-        throw new Error('Supabase configuration missing');
+      // Check cache first
+      const cached = cacheRef.current.get(cacheKey);
+      if (cached) {
+        setData(cached);
+        setLoading(false);
+        return;
       }
 
-      const url = new URL(`${supabaseUrl}/functions/v1/jurisdiction-boundaries`);
-      url.searchParams.append('west', fetchBounds.west.toString());
-      url.searchParams.append('south', fetchBounds.south.toString());
-      url.searchParams.append('east', fetchBounds.east.toString());
-      url.searchParams.append('north', fetchBounds.north.toString());
-      url.searchParams.append('zoom', fetchZoom.toString());
+      setLoading(true);
+      setError(null);
 
-      const response = await fetch(url.toString(), {
-        headers: {
-          'Authorization': `Bearer ${supabaseAnonKey}`,
-        },
-      });
+      try {
+        const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
+        const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch jurisdictions: ${response.statusText}`);
-      }
-
-      const result = await response.json() as JurisdictionGeoJSON;
-
-      // Cache the result
-      cacheRef.current.set(cacheKey, result);
-
-      // Limit cache size to prevent memory issues (keep last 10 entries)
-      if (cacheRef.current.size > 10) {
-        const firstKey = cacheRef.current.keys().next().value;
-        if (firstKey) {
-          cacheRef.current.delete(firstKey);
+        if (!supabaseUrl || !supabaseAnonKey) {
+          throw new Error('Supabase configuration missing');
         }
-      }
 
-      setData(result);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch jurisdictions';
-      setError(errorMessage);
-      console.error('Error fetching jurisdictions:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        const url = new URL(
+          `${supabaseUrl}/functions/v1/jurisdiction-boundaries`,
+        );
+        url.searchParams.append('west', fetchBounds.west.toString());
+        url.searchParams.append('south', fetchBounds.south.toString());
+        url.searchParams.append('east', fetchBounds.east.toString());
+        url.searchParams.append('north', fetchBounds.north.toString());
+        url.searchParams.append('zoom', fetchZoom.toString());
+
+        const response = await fetch(url.toString(), {
+          headers: {
+            Authorization: `Bearer ${supabaseAnonKey}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch jurisdictions: ${response.statusText}`,
+          );
+        }
+
+        const result = (await response.json()) as JurisdictionGeoJSON;
+
+        // Cache the result
+        cacheRef.current.set(cacheKey, result);
+
+        // Limit cache size to prevent memory issues (keep last 10 entries)
+        if (cacheRef.current.size > 10) {
+          const firstKey = cacheRef.current.keys().next().value;
+          if (firstKey) {
+            cacheRef.current.delete(firstKey);
+          }
+        }
+
+        setData(result);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to fetch jurisdictions';
+        setError(errorMessage);
+        console.error('Error fetching jurisdictions:', err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!bounds) {

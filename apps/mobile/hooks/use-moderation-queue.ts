@@ -1,6 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import type { CaseCategory, AnimalType, UrgencyLevel, CaseStatus } from '@lomito/shared/types/database';
+import type {
+  CaseCategory,
+  AnimalType,
+  UrgencyLevel,
+  CaseStatus,
+} from '@lomito/shared/types/database';
 
 interface ModerationCase {
   id: string;
@@ -34,7 +39,9 @@ export function useModerationQueue(): UseModerationQueueResult {
 
       const { data, error: queryError } = await supabase
         .from('cases')
-        .select('id, category, animal_type, description, urgency, status, location, created_at, jurisdiction_id, reporter_id')
+        .select(
+          'id, category, animal_type, description, urgency, status, location, created_at, jurisdiction_id, reporter_id',
+        )
         .eq('status', 'pending')
         .order('urgency', { ascending: false })
         .order('created_at', { ascending: false });

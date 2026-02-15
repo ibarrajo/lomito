@@ -4,11 +4,23 @@
  */
 
 import { useState } from 'react';
-import { View, TextInput, StyleSheet, Modal, Pressable, Text } from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Modal,
+  Pressable,
+  Text,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { H3, Body } from '@lomito/ui/components/typography';
 import { AppModal } from '@lomito/ui';
-import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from '@lomito/ui/theme/tokens';
 
 interface FolioInputProps {
   visible: boolean;
@@ -28,11 +40,18 @@ export function FolioInput({
   const { t } = useTranslation();
   const [folio, setFolio] = useState(currentFolio || '');
   const [saving, setSaving] = useState(false);
-  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
+  const [modal, setModal] = useState<{
+    title: string;
+    message: string;
+    onDismiss?: () => void;
+  } | null>(null);
 
   async function handleSave() {
     if (!folio.trim()) {
-      setModal({ title: t('common.error'), message: t('government.folioRequired') });
+      setModal({
+        title: t('common.error'),
+        message: t('government.folioRequired'),
+      });
       return;
     }
 
@@ -42,7 +61,10 @@ export function FolioInput({
       onDismiss();
       setFolio('');
     } catch (error) {
-      setModal({ title: t('common.error'), message: t('government.folioError') });
+      setModal({
+        title: t('common.error'),
+        message: t('government.folioError'),
+      });
     } finally {
       setSaving(false);
     }
@@ -64,7 +86,9 @@ export function FolioInput({
         <Pressable style={styles.overlay} onPress={handleDismiss}>
           <Pressable style={styles.modal} onPress={(e) => e.stopPropagation()}>
             <H3 style={styles.title}>{t('government.assignFolio')}</H3>
-            <Body style={styles.description}>{t('government.folioDescription')}</Body>
+            <Body style={styles.description}>
+              {t('government.folioDescription')}
+            </Body>
 
             <TextInput
               style={styles.input}
@@ -111,14 +135,16 @@ export function FolioInput({
         visible={!!modal}
         title={modal?.title ?? ''}
         message={modal?.message}
-        actions={[{
-          label: t('common.ok'),
-          onPress: () => {
-            const onDismiss = modal?.onDismiss;
-            setModal(null);
-            onDismiss?.();
+        actions={[
+          {
+            label: t('common.ok'),
+            onPress: () => {
+              const onDismiss = modal?.onDismiss;
+              setModal(null);
+              onDismiss?.();
+            },
           },
-        }]}
+        ]}
         onClose={() => {
           const onDismiss = modal?.onDismiss;
           setModal(null);

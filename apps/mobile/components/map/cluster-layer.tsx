@@ -22,20 +22,29 @@ interface CaseFeature {
 }
 
 interface ClusterLayerProps {
-  cases: GeoJSON.FeatureCollection<GeoJSON.Point, { id: string; category: CaseCategory; status: CaseStatus }>;
+  cases: GeoJSON.FeatureCollection<
+    GeoJSON.Point,
+    { id: string; category: CaseCategory; status: CaseStatus }
+  >;
   onPinPress?: (caseId: string) => void;
 }
 
-export const ClusterLayer = memo(function ClusterLayer({ cases, onPinPress }: ClusterLayerProps) {
-  const handlePress = useCallback((event: unknown) => {
-    if (!onPinPress) return;
+export const ClusterLayer = memo(function ClusterLayer({
+  cases,
+  onPinPress,
+}: ClusterLayerProps) {
+  const handlePress = useCallback(
+    (event: unknown) => {
+      if (!onPinPress) return;
 
-    // Type assertion for event structure (actual implementation will have proper types)
-    const feature = (event as { features?: CaseFeature[] })?.features?.[0];
-    if (feature?.properties?.id) {
-      onPinPress(feature.properties.id);
-    }
-  }, [onPinPress]);
+      // Type assertion for event structure (actual implementation will have proper types)
+      const feature = (event as { features?: CaseFeature[] })?.features?.[0];
+      if (feature?.properties?.id) {
+        onPinPress(feature.properties.id);
+      }
+    },
+    [onPinPress],
+  );
 
   return (
     <MapboxGL.ShapeSource
@@ -56,8 +65,10 @@ export const ClusterLayer = memo(function ClusterLayer({ cases, onPinPress }: Cl
             'step',
             ['get', 'point_count'],
             20, // radius for count < 10
-            10, 25, // radius for count >= 10
-            30, 35, // radius for count >= 30
+            10,
+            25, // radius for count >= 10
+            30,
+            35, // radius for count >= 30
           ],
           circleOpacity: 0.9,
           circleStrokeWidth: 2,
@@ -86,32 +97,45 @@ export const ClusterLayer = memo(function ClusterLayer({ cases, onPinPress }: Cl
           circleColor: [
             'match',
             ['get', 'category'],
-            'abuse', colors.category.abuse.pin,
-            'stray', colors.category.stray.pin,
-            'missing', colors.category.missing.pin,
+            'abuse',
+            colors.category.abuse.pin,
+            'stray',
+            colors.category.stray.pin,
+            'missing',
+            colors.category.missing.pin,
             colors.neutral500, // default
           ] as unknown as string,
           circleRadius: 12,
           circleStrokeWidth: [
             'case',
-            ['==', ['get', 'status'], 'resolved'], 3,
-            ['==', ['get', 'status'], 'verified'], 2,
-            ['==', ['get', 'status'], 'in_progress'], 2,
+            ['==', ['get', 'status'], 'resolved'],
+            3,
+            ['==', ['get', 'status'], 'verified'],
+            2,
+            ['==', ['get', 'status'], 'in_progress'],
+            2,
             2, // default for pending
           ] as unknown as number,
           circleStrokeColor: [
             'case',
-            ['==', ['get', 'status'], 'resolved'], colors.success,
-            ['==', ['get', 'status'], 'verified'], colors.success,
-            ['==', ['get', 'status'], 'in_progress'], colors.info,
-            ['==', ['get', 'status'], 'rejected'], colors.neutral400,
-            ['==', ['get', 'status'], 'archived'], colors.neutral400,
+            ['==', ['get', 'status'], 'resolved'],
+            colors.success,
+            ['==', ['get', 'status'], 'verified'],
+            colors.success,
+            ['==', ['get', 'status'], 'in_progress'],
+            colors.info,
+            ['==', ['get', 'status'], 'rejected'],
+            colors.neutral400,
+            ['==', ['get', 'status'], 'archived'],
+            colors.neutral400,
             'rgba(255, 255, 255, 0.9)', // default for pending
           ] as unknown as string,
           circleOpacity: [
             'case',
-            ['==', ['get', 'status'], 'rejected'], 0.5,
-            ['==', ['get', 'status'], 'archived'], 0.5,
+            ['==', ['get', 'status'], 'rejected'],
+            0.5,
+            ['==', ['get', 'status'], 'archived'],
+            0.5,
             1.0, // default
           ] as unknown as number,
         }}

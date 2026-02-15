@@ -26,9 +26,15 @@ import { useAnalytics } from '../../hooks/use-analytics';
 export default function CaseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
-  const { caseData, media, timeline, loading, error, refetch } = useCase(id ?? '');
+  const { caseData, media, timeline, loading, error, refetch } = useCase(
+    id ?? '',
+  );
   const { profile } = useUserProfile();
-  const { isSubscribed, loading: subscriptionLoading, toggle: toggleSubscription } = useCaseSubscription(id ?? '');
+  const {
+    isSubscribed,
+    loading: subscriptionLoading,
+    toggle: toggleSubscription,
+  } = useCaseSubscription(id ?? '');
   const { trackEvent } = useAnalytics();
 
   useEffect(() => {
@@ -69,9 +75,7 @@ export default function CaseDetailScreen() {
           }}
         />
         <View style={styles.errorContainer}>
-          <Body color={colors.error}>
-            {error || t('common.error')}
-          </Body>
+          <Body color={colors.error}>{error || t('common.error')}</Body>
         </View>
       </View>
     );
@@ -95,15 +99,26 @@ export default function CaseDetailScreen() {
                 onPress={handleFollowPress}
                 disabled={subscriptionLoading}
                 style={styles.followButton}
-                accessibilityLabel={isSubscribed ? t('case.unfollow') : t('case.follow')}
+                accessibilityLabel={
+                  isSubscribed ? t('case.unfollow') : t('case.follow')
+                }
                 accessibilityRole="button"
               >
                 <Text style={styles.followIcon}>
                   {isSubscribed ? '❤️' : '🤍'}
                 </Text>
               </Pressable>
-              <ShareButton caseId={caseData.id} folio={caseData.folio} onShare={() => trackEvent('share_click', { case_id: caseData.id })} />
-              <FlagButton caseId={caseData.id} reporterId={caseData.reporter_id} />
+              <ShareButton
+                caseId={caseData.id}
+                folio={caseData.folio}
+                onShare={() =>
+                  trackEvent('share_click', { case_id: caseData.id })
+                }
+              />
+              <FlagButton
+                caseId={caseData.id}
+                reporterId={caseData.reporter_id}
+              />
             </View>
           ),
         }}

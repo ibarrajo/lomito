@@ -10,8 +10,17 @@ import { useRouter } from 'expo-router';
 import { Badge } from '@lomito/ui/components/badge';
 import { Card } from '@lomito/ui/components/card';
 import { Body, Caption } from '@lomito/ui/components/typography';
-import { colors, spacing, typography, borderRadius } from '@lomito/ui/theme/tokens';
-import type { CaseCategory, AnimalType, UrgencyLevel } from '@lomito/shared/types/database';
+import {
+  colors,
+  spacing,
+  typography,
+  borderRadius,
+} from '@lomito/ui/theme/tokens';
+import type {
+  CaseCategory,
+  AnimalType,
+  UrgencyLevel,
+} from '@lomito/shared/types/database';
 import { differenceInDays } from 'date-fns';
 
 interface CaseActionCardProps {

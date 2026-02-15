@@ -92,7 +92,9 @@ export function RoadmapSection() {
       {ROADMAP_ITEMS.map((item, index) => (
         <View key={item.key}>
           <RoadmapItem itemKey={item.key} status={item.status} />
-          {index < ROADMAP_ITEMS.length - 1 && <View style={styles.separator} />}
+          {index < ROADMAP_ITEMS.length - 1 && (
+            <View style={styles.separator} />
+          )}
         </View>
       ))}
     </View>

@@ -1,6 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, spacing, borderRadius, typography } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from '@lomito/ui/src/theme/tokens';
 
 interface ReportEntry {
   category: 'abuse' | 'stray' | 'missing';
@@ -10,14 +15,54 @@ interface ReportEntry {
 }
 
 const MOCK_REPORTS: ReportEntry[] = [
-  { category: 'abuse', location: 'Col. Libertad', timeAgo: 'hace 2h', status: 'pending' },
-  { category: 'stray', location: 'Zona Centro', timeAgo: 'hace 4h', status: 'verified' },
-  { category: 'missing', location: 'Playas de Tijuana', timeAgo: 'hace 6h', status: 'in_progress' },
-  { category: 'stray', location: 'Col. Sánchez Taboada', timeAgo: 'hace 8h', status: 'verified' },
-  { category: 'abuse', location: 'Zona Río', timeAgo: 'hace 10h', status: 'in_progress' },
-  { category: 'missing', location: 'La Mesa', timeAgo: 'hace 12h', status: 'resolved' },
-  { category: 'stray', location: 'Col. Cacho', timeAgo: 'hace 14h', status: 'verified' },
-  { category: 'abuse', location: 'Otay', timeAgo: 'hace 16h', status: 'pending' },
+  {
+    category: 'abuse',
+    location: 'Col. Libertad',
+    timeAgo: 'hace 2h',
+    status: 'pending',
+  },
+  {
+    category: 'stray',
+    location: 'Zona Centro',
+    timeAgo: 'hace 4h',
+    status: 'verified',
+  },
+  {
+    category: 'missing',
+    location: 'Playas de Tijuana',
+    timeAgo: 'hace 6h',
+    status: 'in_progress',
+  },
+  {
+    category: 'stray',
+    location: 'Col. Sánchez Taboada',
+    timeAgo: 'hace 8h',
+    status: 'verified',
+  },
+  {
+    category: 'abuse',
+    location: 'Zona Río',
+    timeAgo: 'hace 10h',
+    status: 'in_progress',
+  },
+  {
+    category: 'missing',
+    location: 'La Mesa',
+    timeAgo: 'hace 12h',
+    status: 'resolved',
+  },
+  {
+    category: 'stray',
+    location: 'Col. Cacho',
+    timeAgo: 'hace 14h',
+    status: 'verified',
+  },
+  {
+    category: 'abuse',
+    location: 'Otay',
+    timeAgo: 'hace 16h',
+    status: 'pending',
+  },
 ];
 
 const getCategoryColor = (category: ReportEntry['category']): string => {
@@ -70,13 +115,28 @@ export function RecentReportsTicker() {
     <View style={styles.container}>
       {MOCK_REPORTS.map((report, index) => (
         <View key={index} style={styles.reportRow}>
-          <View style={[styles.categoryDot, { backgroundColor: getCategoryColor(report.category) }]} />
+          <View
+            style={[
+              styles.categoryDot,
+              { backgroundColor: getCategoryColor(report.category) },
+            ]}
+          />
           <View style={styles.reportContent}>
             <Text style={styles.locationText}>{report.location}</Text>
             <Text style={styles.timeText}>{report.timeAgo}</Text>
           </View>
-          <View style={[styles.statusBadge, { backgroundColor: getStatusBackground(report.status) }]}>
-            <Text style={[styles.statusText, { color: getStatusColor(report.status) }]}>
+          <View
+            style={[
+              styles.statusBadge,
+              { backgroundColor: getStatusBackground(report.status) },
+            ]}
+          >
+            <Text
+              style={[
+                styles.statusText,
+                { color: getStatusColor(report.status) },
+              ]}
+            >
               {t(`status.${report.status}`)}
             </Text>
           </View>

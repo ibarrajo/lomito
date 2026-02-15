@@ -10,7 +10,12 @@ import {
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
-import { colors, spacing, borderRadius, typography } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from '@lomito/ui/src/theme/tokens';
 import { useAuth } from '../../hooks/use-auth';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { useAnalytics } from '../../hooks/use-analytics';
@@ -41,7 +46,11 @@ export default function RegisterScreen() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showMunicipalityPicker, setShowMunicipalityPicker] = useState(false);
-  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
+  const [modal, setModal] = useState<{
+    title: string;
+    message: string;
+    onDismiss?: () => void;
+  } | null>(null);
 
   const handleRegister = async () => {
     // Validation
@@ -58,11 +67,17 @@ export default function RegisterScreen() {
       return;
     }
     if (!municipality) {
-      setModal({ title: t('common.error'), message: t('auth.municipalityRequired') });
+      setModal({
+        title: t('common.error'),
+        message: t('auth.municipalityRequired'),
+      });
       return;
     }
     if (!password.trim() || password.length < 6) {
-      setModal({ title: t('common.error'), message: t('auth.passwordMinLength') });
+      setModal({
+        title: t('common.error'),
+        message: t('auth.passwordMinLength'),
+      });
       return;
     }
     if (!privacyAccepted || !termsAccepted) {
@@ -91,26 +106,37 @@ export default function RegisterScreen() {
   };
 
   return (
-    <View style={[styles.outerContainer, isDesktop && styles.outerContainerRow]}>
+    <View
+      style={[styles.outerContainer, isDesktop && styles.outerContainerRow]}
+    >
       {isDesktop && (
         <View style={styles.sidebar}>
           <View style={styles.sidebarContent}>
             <Text style={styles.sidebarEmoji}>🐾</Text>
             <Text style={styles.sidebarHeading}>
-              {i18n.language === 'es' ? 'Únete a nuestra comunidad' : 'Join our community'}
+              {i18n.language === 'es'
+                ? 'Únete a nuestra comunidad'
+                : 'Join our community'}
             </Text>
             <Text style={styles.sidebarSubtext}>
-              {i18n.language === 'es' ? 'Juntos podemos proteger a los animales de Tijuana' : 'Together we can protect Tijuana\'s animals'}
+              {i18n.language === 'es'
+                ? 'Juntos podemos proteger a los animales de Tijuana'
+                : "Together we can protect Tijuana's animals"}
             </Text>
           </View>
         </View>
       )}
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+      >
         <View style={styles.formWrapper}>
           {!isDesktop && <View style={styles.mobileAccent} />}
           <View style={styles.branding}>
             <Text style={styles.brandWordmark}>Lomito</Text>
-            <BodySmall color={colors.neutral500}>{t('landing.footerTagline')}</BodySmall>
+            <BodySmall color={colors.neutral500}>
+              {t('landing.footerTagline')}
+            </BodySmall>
           </View>
 
           <View style={styles.header}>
@@ -119,197 +145,201 @@ export default function RegisterScreen() {
             </H1>
           </View>
 
-      <View style={styles.form}>
-        <TextInput
-          label={t('auth.name')}
-          value={fullName}
-          onChangeText={setFullName}
-          placeholder="Juan Pérez"
-          accessibilityLabel={t('auth.name')}
-          autoCapitalize="words"
-        />
+          <View style={styles.form}>
+            <TextInput
+              label={t('auth.name')}
+              value={fullName}
+              onChangeText={setFullName}
+              placeholder="Juan Pérez"
+              accessibilityLabel={t('auth.name')}
+              autoCapitalize="words"
+            />
 
-        <TextInput
-          label={t('auth.email')}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="you@example.com"
-          accessibilityLabel={t('auth.email')}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+            <TextInput
+              label={t('auth.email')}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="you@example.com"
+              accessibilityLabel={t('auth.email')}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
 
-        <TextInput
-          label={t('auth.phone')}
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="+52 664 123 4567"
-          accessibilityLabel={t('auth.phone')}
-          keyboardType="phone-pad"
-        />
+            <TextInput
+              label={t('auth.phone')}
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="+52 664 123 4567"
+              accessibilityLabel={t('auth.phone')}
+              keyboardType="phone-pad"
+            />
 
-        {/* Municipality picker */}
-        <View>
-          <BodySmall
-            color={colors.neutral700}
-            style={styles.label}
-            accessibilityLabel={t('auth.municipality')}
-          >
-            {t('auth.municipality')}
-          </BodySmall>
-          <Pressable
-            onPress={() => setShowMunicipalityPicker(true)}
-            style={styles.picker}
-            accessibilityLabel={t('auth.municipality')}
-            accessibilityRole="button"
-          >
-            <Body
-              color={municipality ? colors.neutral900 : colors.neutral400}
-              accessibilityLabel={municipality || t('auth.selectMunicipality')}
+            {/* Municipality picker */}
+            <View>
+              <BodySmall
+                color={colors.neutral700}
+                style={styles.label}
+                accessibilityLabel={t('auth.municipality')}
+              >
+                {t('auth.municipality')}
+              </BodySmall>
+              <Pressable
+                onPress={() => setShowMunicipalityPicker(true)}
+                style={styles.picker}
+                accessibilityLabel={t('auth.municipality')}
+                accessibilityRole="button"
+              >
+                <Body
+                  color={municipality ? colors.neutral900 : colors.neutral400}
+                  accessibilityLabel={
+                    municipality || t('auth.selectMunicipality')
+                  }
+                >
+                  {municipality || t('auth.selectMunicipality')}
+                </Body>
+              </Pressable>
+            </View>
+
+            <TextInput
+              label={t('auth.password')}
+              value={password}
+              onChangeText={setPassword}
+              placeholder={t('auth.passwordPlaceholder')}
+              accessibilityLabel={t('auth.password')}
+              secureTextEntry
+              autoCapitalize="none"
+            />
+
+            {/* Privacy and terms checkboxes */}
+            <Pressable
+              onPress={() => setPrivacyAccepted(!privacyAccepted)}
+              style={styles.checkbox}
+              accessibilityLabel={t('auth.privacyAccept')}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: privacyAccepted }}
             >
-              {municipality || t('auth.selectMunicipality')}
+              <View style={styles.checkboxBox}>
+                {privacyAccepted && <View style={styles.checkboxChecked} />}
+              </View>
+              <BodySmall
+                color={colors.neutral700}
+                style={styles.checkboxLabel}
+                accessibilityLabel={t('auth.privacyAccept')}
+              >
+                {t('auth.privacyAccept')}
+              </BodySmall>
+            </Pressable>
+
+            <Pressable
+              onPress={() => setTermsAccepted(!termsAccepted)}
+              style={styles.checkbox}
+              accessibilityLabel={t('auth.termsAccept')}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: termsAccepted }}
+            >
+              <View style={styles.checkboxBox}>
+                {termsAccepted && <View style={styles.checkboxChecked} />}
+              </View>
+              <BodySmall
+                color={colors.neutral700}
+                style={styles.checkboxLabel}
+                accessibilityLabel={t('auth.termsAccept')}
+              >
+                {t('auth.termsAccept')}
+              </BodySmall>
+            </Pressable>
+
+            <Button
+              onPress={handleRegister}
+              loading={loading}
+              accessibilityLabel={t('auth.createAccount')}
+              style={styles.submitButton}
+            >
+              {t('auth.createAccount')}
+            </Button>
+          </View>
+
+          {/* Login link */}
+          <View style={styles.footer}>
+            <Body accessibilityLabel={t('auth.alreadyHaveAccount')}>
+              {t('auth.alreadyHaveAccount')}{' '}
             </Body>
-          </Pressable>
-        </View>
-
-        <TextInput
-          label={t('auth.password')}
-          value={password}
-          onChangeText={setPassword}
-          placeholder={t('auth.passwordPlaceholder')}
-          accessibilityLabel={t('auth.password')}
-          secureTextEntry
-          autoCapitalize="none"
-        />
-
-        {/* Privacy and terms checkboxes */}
-        <Pressable
-          onPress={() => setPrivacyAccepted(!privacyAccepted)}
-          style={styles.checkbox}
-          accessibilityLabel={t('auth.privacyAccept')}
-          accessibilityRole="checkbox"
-          accessibilityState={{ checked: privacyAccepted }}
-        >
-          <View style={styles.checkboxBox}>
-            {privacyAccepted && <View style={styles.checkboxChecked} />}
+            <Pressable
+              onPress={() => router.back()}
+              accessibilityLabel={t('auth.login')}
+              accessibilityRole="link"
+            >
+              <Body color={colors.primary} accessibilityLabel={t('auth.login')}>
+                {t('auth.login')}
+              </Body>
+            </Pressable>
           </View>
-          <BodySmall
-            color={colors.neutral700}
-            style={styles.checkboxLabel}
-            accessibilityLabel={t('auth.privacyAccept')}
-          >
-            {t('auth.privacyAccept')}
-          </BodySmall>
-        </Pressable>
-
-        <Pressable
-          onPress={() => setTermsAccepted(!termsAccepted)}
-          style={styles.checkbox}
-          accessibilityLabel={t('auth.termsAccept')}
-          accessibilityRole="checkbox"
-          accessibilityState={{ checked: termsAccepted }}
-        >
-          <View style={styles.checkboxBox}>
-            {termsAccepted && <View style={styles.checkboxChecked} />}
-          </View>
-          <BodySmall
-            color={colors.neutral700}
-            style={styles.checkboxLabel}
-            accessibilityLabel={t('auth.termsAccept')}
-          >
-            {t('auth.termsAccept')}
-          </BodySmall>
-        </Pressable>
-
-        <Button
-          onPress={handleRegister}
-          loading={loading}
-          accessibilityLabel={t('auth.createAccount')}
-          style={styles.submitButton}
-        >
-          {t('auth.createAccount')}
-        </Button>
-      </View>
-
-      {/* Login link */}
-      <View style={styles.footer}>
-        <Body accessibilityLabel={t('auth.alreadyHaveAccount')}>
-          {t('auth.alreadyHaveAccount')}{' '}
-        </Body>
-        <Pressable
-          onPress={() => router.back()}
-          accessibilityLabel={t('auth.login')}
-          accessibilityRole="link"
-        >
-          <Body color={colors.primary} accessibilityLabel={t('auth.login')}>
-            {t('auth.login')}
-          </Body>
-        </Pressable>
-      </View>
         </View>
 
         {/* Municipality picker modal */}
         <Modal
-        visible={showMunicipalityPicker}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowMunicipalityPicker(false)}
-      >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setShowMunicipalityPicker(false)}
-          accessibilityLabel={t('common.close')}
+          visible={showMunicipalityPicker}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setShowMunicipalityPicker(false)}
         >
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <H1 accessibilityLabel={t('auth.municipality')}>
-                {t('auth.municipality')}
-              </H1>
-            </View>
-            {MUNICIPALITIES.map((mun) => (
-              <Pressable
-                key={mun}
-                onPress={() => {
-                  setMunicipality(mun);
-                  setShowMunicipalityPicker(false);
-                }}
-                style={styles.modalItem}
-                accessibilityLabel={mun}
-                accessibilityRole="button"
-              >
-                <Body
-                  color={
-                    municipality === mun ? colors.primary : colors.neutral900
-                  }
+          <Pressable
+            style={styles.modalOverlay}
+            onPress={() => setShowMunicipalityPicker(false)}
+            accessibilityLabel={t('common.close')}
+          >
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <H1 accessibilityLabel={t('auth.municipality')}>
+                  {t('auth.municipality')}
+                </H1>
+              </View>
+              {MUNICIPALITIES.map((mun) => (
+                <Pressable
+                  key={mun}
+                  onPress={() => {
+                    setMunicipality(mun);
+                    setShowMunicipalityPicker(false);
+                  }}
+                  style={styles.modalItem}
                   accessibilityLabel={mun}
+                  accessibilityRole="button"
                 >
-                  {mun}
-                </Body>
-              </Pressable>
-            ))}
-          </View>
-        </Pressable>
-      </Modal>
+                  <Body
+                    color={
+                      municipality === mun ? colors.primary : colors.neutral900
+                    }
+                    accessibilityLabel={mun}
+                  >
+                    {mun}
+                  </Body>
+                </Pressable>
+              ))}
+            </View>
+          </Pressable>
+        </Modal>
 
-      <AppModal
-        visible={!!modal}
-        title={modal?.title ?? ''}
-        message={modal?.message}
-        actions={[{
-          label: t('common.ok'),
-          onPress: () => {
+        <AppModal
+          visible={!!modal}
+          title={modal?.title ?? ''}
+          message={modal?.message}
+          actions={[
+            {
+              label: t('common.ok'),
+              onPress: () => {
+                const onDismiss = modal?.onDismiss;
+                setModal(null);
+                onDismiss?.();
+              },
+            },
+          ]}
+          onClose={() => {
             const onDismiss = modal?.onDismiss;
             setModal(null);
             onDismiss?.();
-          },
-        }]}
-        onClose={() => {
-          const onDismiss = modal?.onDismiss;
-          setModal(null);
-          onDismiss?.();
-        }}
-      />
+          }}
+        />
       </ScrollView>
     </View>
   );

@@ -37,7 +37,11 @@ interface JurisdictionLayerProps {
   onPress?: (jurisdictionId: string, jurisdictionName: string) => void;
 }
 
-export function JurisdictionLayer({ data, visible, onPress }: JurisdictionLayerProps) {
+export function JurisdictionLayer({
+  data,
+  visible,
+  onPress,
+}: JurisdictionLayerProps) {
   if (!data || !visible) {
     return null;
   }
@@ -45,7 +49,8 @@ export function JurisdictionLayer({ data, visible, onPress }: JurisdictionLayerP
   const handlePress = (event: unknown) => {
     if (!onPress) return;
 
-    const feature = (event as { features?: JurisdictionFeature[] })?.features?.[0];
+    const feature = (event as { features?: JurisdictionFeature[] })
+      ?.features?.[0];
     if (feature?.properties?.id && feature?.properties?.name) {
       onPress(feature.properties.id, feature.properties.name);
     }

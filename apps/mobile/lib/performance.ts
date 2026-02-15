@@ -38,7 +38,7 @@ const transitionStartTimes: Record<string, number> = {};
 
 export function measureScreenTransition(
   screenName: string,
-  phase: 'start' | 'end' = 'end'
+  phase: 'start' | 'end' = 'end',
 ): number | null {
   const now = Date.now();
 
@@ -49,9 +49,7 @@ export function measureScreenTransition(
 
   const startTime = transitionStartTimes[screenName];
   if (!startTime) {
-    console.warn(
-      `[Performance] No start time found for screen: ${screenName}`
-    );
+    console.warn(`[Performance] No start time found for screen: ${screenName}`);
     return null;
   }
 
@@ -80,7 +78,7 @@ export function logPerformanceMetric(name: string, durationMs: number): void {
     const emoji = status === 'good' ? '✅' : status === 'warn' ? '⚠️' : '❌';
     console.log(
       `[Performance] ${emoji} ${name}: ${durationMs.toFixed(0)}ms`,
-      metric
+      metric,
     );
   }
 
@@ -97,7 +95,7 @@ export function logPerformanceMetric(name: string, durationMs: number): void {
  */
 function getPerformanceStatus(
   name: string,
-  durationMs: number
+  durationMs: number,
 ): 'good' | 'warn' | 'poor' {
   const budgets: Record<string, { good: number; warn: number }> = {
     cold_start: { good: 2000, warn: 3000 },

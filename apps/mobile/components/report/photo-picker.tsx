@@ -28,8 +28,7 @@ interface PhotoPickerProps {
  */
 export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
   const { t } = useTranslation();
-  const { images, pickFromGallery, removeImage, loading } =
-    useImagePicker();
+  const { images, pickFromGallery, removeImage, loading } = useImagePicker();
 
   // Notify parent of image changes
   React.useEffect(() => {

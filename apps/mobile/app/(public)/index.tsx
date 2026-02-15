@@ -1,10 +1,28 @@
-import { View, StyleSheet, ScrollView, Platform, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Platform,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import { Redirect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MapPin, ArrowRight, Search, Bell } from 'lucide-react-native';
 import { Container } from '@lomito/ui/src/components/container';
-import { H1, H2, H3, Body, BodySmall } from '@lomito/ui/src/components/typography';
-import { colors, spacing, borderRadius, shadowStyles } from '@lomito/ui/src/theme/tokens';
+import {
+  H1,
+  H2,
+  H3,
+  Body,
+  BodySmall,
+} from '@lomito/ui/src/components/typography';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  shadowStyles,
+} from '@lomito/ui/src/theme/tokens';
 import { isFeatureEnabled } from '@lomito/shared';
 import { RecentReportsTicker } from '../../components/landing/recent-reports-ticker';
 import { useAnalytics } from '../../hooks/use-analytics';
@@ -31,10 +49,14 @@ export default function LandingPage() {
           <View style={styles.heroInner}>
             <View style={styles.heroText}>
               <BodySmall style={styles.heroTag}>
-                {i18n.language === 'es' ? 'Plataforma cívica para Tijuana' : 'Civic platform for Tijuana'}
+                {i18n.language === 'es'
+                  ? 'Plataforma cívica para Tijuana'
+                  : 'Civic platform for Tijuana'}
               </BodySmall>
               <H1 style={styles.heroTitle}>{t('landing.heroTitle')}</H1>
-              <Body style={styles.heroSubtitle}>{t('landing.heroSubtitle')}</Body>
+              <Body style={styles.heroSubtitle}>
+                {t('landing.heroSubtitle')}
+              </Body>
               <View style={styles.ctaRow}>
                 <TouchableOpacity
                   style={styles.ctaPrimary}
@@ -45,7 +67,9 @@ export default function LandingPage() {
                   accessibilityLabel={t('landing.ctaReport')}
                   accessibilityRole="button"
                 >
-                  <Text style={styles.ctaPrimaryText}>{t('landing.ctaReport')}</Text>
+                  <Text style={styles.ctaPrimaryText}>
+                    {t('landing.ctaReport')}
+                  </Text>
                   <ArrowRight size={18} color={colors.white} strokeWidth={2} />
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -57,33 +81,56 @@ export default function LandingPage() {
                   accessibilityLabel={t('landing.ctaViewMap')}
                   accessibilityRole="button"
                 >
-                  <Text style={styles.ctaSecondaryText}>{t('landing.ctaViewMap')}</Text>
+                  <Text style={styles.ctaSecondaryText}>
+                    {t('landing.ctaViewMap')}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
             {/* Right side — step indicators as a visual instead of generic icons */}
             <View style={styles.heroVisual}>
               <View style={styles.stepCard}>
-                <View style={[styles.stepDot, { backgroundColor: colors.primary }]} />
+                <View
+                  style={[styles.stepDot, { backgroundColor: colors.primary }]}
+                />
                 <View style={styles.stepContent}>
-                  <Text style={styles.stepLabel}>{t('landing.step1Title')}</Text>
-                  <Text style={styles.stepDesc}>{t('landing.step1Description')}</Text>
+                  <Text style={styles.stepLabel}>
+                    {t('landing.step1Title')}
+                  </Text>
+                  <Text style={styles.stepDesc}>
+                    {t('landing.step1Description')}
+                  </Text>
                 </View>
               </View>
               <View style={styles.stepConnector} />
               <View style={styles.stepCard}>
-                <View style={[styles.stepDot, { backgroundColor: colors.accent }]} />
+                <View
+                  style={[styles.stepDot, { backgroundColor: colors.accent }]}
+                />
                 <View style={styles.stepContent}>
-                  <Text style={styles.stepLabel}>{t('landing.step2Title')}</Text>
-                  <Text style={styles.stepDesc}>{t('landing.step2Description')}</Text>
+                  <Text style={styles.stepLabel}>
+                    {t('landing.step2Title')}
+                  </Text>
+                  <Text style={styles.stepDesc}>
+                    {t('landing.step2Description')}
+                  </Text>
                 </View>
               </View>
               <View style={styles.stepConnector} />
               <View style={styles.stepCard}>
-                <View style={[styles.stepDot, { backgroundColor: colors.secondary }]} />
+                <View
+                  style={[
+                    styles.stepDot,
+                    { backgroundColor: colors.secondary },
+                  ]}
+                />
                 <View style={styles.stepContent}>
-                  <Text style={styles.stepLabel}>{t('landing.step3Title')}</Text>
-                  <Text style={styles.stepDesc}>{t('landing.step3Description')}</Text>
+                  <Text style={styles.stepLabel}>
+                    {t('landing.step3Title')}
+                  </Text>
+                  <Text style={styles.stepDesc}>
+                    {t('landing.step3Description')}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -98,27 +145,49 @@ export default function LandingPage() {
           <View style={styles.bentoGrid}>
             {/* Large card */}
             <View style={[styles.bentoCard, styles.bentoLarge]}>
-              <View style={[styles.featureIcon, { backgroundColor: colors.primaryLight }]}>
+              <View
+                style={[
+                  styles.featureIcon,
+                  { backgroundColor: colors.primaryLight },
+                ]}
+              >
                 <MapPin size={24} color={colors.primary} strokeWidth={1.5} />
               </View>
               <H3 style={styles.featureTitle}>{t('landing.step1Title')}</H3>
-              <Body style={styles.featureDesc}>{t('landing.step1Description')}</Body>
+              <Body style={styles.featureDesc}>
+                {t('landing.step1Description')}
+              </Body>
             </View>
             {/* Two smaller cards stacked */}
             <View style={styles.bentoStack}>
               <View style={[styles.bentoCard, styles.bentoSmall]}>
-                <View style={[styles.featureIcon, { backgroundColor: colors.secondaryLight }]}>
-                  <Search size={20} color={colors.secondary} strokeWidth={1.5} />
+                <View
+                  style={[
+                    styles.featureIcon,
+                    { backgroundColor: colors.secondaryLight },
+                  ]}
+                >
+                  <Search
+                    size={20}
+                    color={colors.secondary}
+                    strokeWidth={1.5}
+                  />
                 </View>
                 <H3 style={styles.featureTitle}>{t('landing.step2Title')}</H3>
-                <Body style={styles.featureDesc}>{t('landing.step2Description')}</Body>
+                <Body style={styles.featureDesc}>
+                  {t('landing.step2Description')}
+                </Body>
               </View>
               <View style={[styles.bentoCard, styles.bentoSmall]}>
-                <View style={[styles.featureIcon, { backgroundColor: '#F0FFF4' }]}>
+                <View
+                  style={[styles.featureIcon, { backgroundColor: '#F0FFF4' }]}
+                >
                   <Bell size={20} color={colors.success} strokeWidth={1.5} />
                 </View>
                 <H3 style={styles.featureTitle}>{t('landing.step3Title')}</H3>
-                <Body style={styles.featureDesc}>{t('landing.step3Description')}</Body>
+                <Body style={styles.featureDesc}>
+                  {t('landing.step3Description')}
+                </Body>
               </View>
             </View>
           </View>
@@ -129,7 +198,9 @@ export default function LandingPage() {
       <View style={styles.recentActivitySection}>
         <Container>
           <H2 style={styles.sectionTitle}>{t('landing.recentActivity')}</H2>
-          <BodySmall style={styles.sectionSubtitle}>{t('landing.recentActivityDescription')}</BodySmall>
+          <BodySmall style={styles.sectionSubtitle}>
+            {t('landing.recentActivityDescription')}
+          </BodySmall>
           <View style={styles.activityGrid}>
             {/* Left side: decorative map placeholder */}
             <View style={styles.mapPlaceholder}>
@@ -150,7 +221,9 @@ export default function LandingPage() {
             <View style={styles.communityAccent} />
             <View style={styles.communityText}>
               <H2>{t('landing.communityTitle')}</H2>
-              <Body style={styles.communityDesc}>{t('landing.communityDescription')}</Body>
+              <Body style={styles.communityDesc}>
+                {t('landing.communityDescription')}
+              </Body>
             </View>
           </View>
         </Container>
@@ -162,21 +235,35 @@ export default function LandingPage() {
           <View style={styles.footerInner}>
             <View style={styles.footerLeft}>
               <Text style={styles.footerBrand}>Lomito</Text>
-              <BodySmall style={styles.footerTagline}>{t('landing.footerTagline')}</BodySmall>
+              <BodySmall style={styles.footerTagline}>
+                {t('landing.footerTagline')}
+              </BodySmall>
             </View>
             <View style={styles.footerLinks}>
-              <TouchableOpacity onPress={() => router.push('/about')} accessibilityRole="link">
+              <TouchableOpacity
+                onPress={() => router.push('/about')}
+                accessibilityRole="link"
+              >
                 <Text style={styles.footerLink}>{t('about.title')}</Text>
               </TouchableOpacity>
               {isFeatureEnabled('donations') && (
-              <TouchableOpacity onPress={() => router.push('/donate')} accessibilityRole="link">
-                <Text style={styles.footerLink}>{t('donate.title')}</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => router.push('/donate')}
+                  accessibilityRole="link"
+                >
+                  <Text style={styles.footerLink}>{t('donate.title')}</Text>
+                </TouchableOpacity>
               )}
-              <TouchableOpacity onPress={() => router.push('/legal/privacy')} accessibilityRole="link">
+              <TouchableOpacity
+                onPress={() => router.push('/legal/privacy')}
+                accessibilityRole="link"
+              >
                 <Text style={styles.footerLink}>{t('legal.privacy')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.push('/legal/terms')} accessibilityRole="link">
+              <TouchableOpacity
+                onPress={() => router.push('/legal/terms')}
+                accessibilityRole="link"
+              >
                 <Text style={styles.footerLink}>{t('legal.terms')}</Text>
               </TouchableOpacity>
             </View>
@@ -191,7 +278,9 @@ export default function LandingPage() {
             </TouchableOpacity>
           </View>
           <View style={styles.footerDisclaimer}>
-            <BodySmall style={styles.footerDisclaimerText}>{t('legal.disclaimerShort')}</BodySmall>
+            <BodySmall style={styles.footerDisclaimerText}>
+              {t('legal.disclaimerShort')}
+            </BodySmall>
           </View>
         </Container>
       </View>

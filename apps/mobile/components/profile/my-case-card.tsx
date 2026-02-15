@@ -11,10 +11,7 @@ import { Badge } from '@lomito/ui/components/badge';
 import { Card } from '@lomito/ui/components/card';
 import { Body, Caption } from '@lomito/ui/components/typography';
 import { colors, spacing } from '@lomito/ui/theme/tokens';
-import type {
-  CaseCategory,
-  CaseStatus,
-} from '@lomito/shared/types/database';
+import type { CaseCategory, CaseStatus } from '@lomito/shared/types/database';
 import { format } from 'date-fns';
 
 interface MyCaseCardProps {
@@ -42,10 +39,19 @@ export const MyCaseCard = memo(function MyCaseCard({
     CaseStatus,
     { color: string; backgroundColor: string }
   > = {
-    pending: { color: colors.warning, backgroundColor: colors.warningBackground },
+    pending: {
+      color: colors.warning,
+      backgroundColor: colors.warningBackground,
+    },
     verified: { color: colors.info, backgroundColor: colors.infoBackground },
-    in_progress: { color: colors.secondary, backgroundColor: colors.secondaryLight },
-    resolved: { color: colors.success, backgroundColor: colors.successBackground },
+    in_progress: {
+      color: colors.secondary,
+      backgroundColor: colors.secondaryLight,
+    },
+    resolved: {
+      color: colors.success,
+      backgroundColor: colors.successBackground,
+    },
     rejected: { color: colors.error, backgroundColor: colors.errorBackground },
     archived: { color: colors.neutral500, backgroundColor: colors.neutral100 },
   };
@@ -62,7 +68,11 @@ export const MyCaseCard = memo(function MyCaseCard({
       accessibilityRole="button"
       accessibilityLabel={t('map.viewDetails')}
     >
-      <Card categoryColor={categoryColor} variant="mapSummary" style={styles.card}>
+      <Card
+        categoryColor={categoryColor}
+        variant="mapSummary"
+        style={styles.card}
+      >
         {/* Header with category and status badges */}
         <View style={styles.header}>
           <Badge

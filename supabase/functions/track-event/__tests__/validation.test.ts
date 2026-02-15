@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { corsHeaders, isValidPayload, ALLOWED_ORIGINS, MAX_EVENTS_PER_REQUEST } from '../validation';
+import {
+  corsHeaders,
+  isValidPayload,
+  ALLOWED_ORIGINS,
+  MAX_EVENTS_PER_REQUEST,
+} from '../validation';
 
 describe('corsHeaders', () => {
   it('returns CORS headers for allowed origin lomito.org', () => {
@@ -11,17 +16,23 @@ describe('corsHeaders', () => {
 
   it('returns CORS headers for www.lomito.org', () => {
     const headers = corsHeaders('https://www.lomito.org');
-    expect(headers['Access-Control-Allow-Origin']).toBe('https://www.lomito.org');
+    expect(headers['Access-Control-Allow-Origin']).toBe(
+      'https://www.lomito.org',
+    );
   });
 
   it('returns CORS headers for localhost:8081', () => {
     const headers = corsHeaders('http://localhost:8081');
-    expect(headers['Access-Control-Allow-Origin']).toBe('http://localhost:8081');
+    expect(headers['Access-Control-Allow-Origin']).toBe(
+      'http://localhost:8081',
+    );
   });
 
   it('returns CORS headers for localhost:19006', () => {
     const headers = corsHeaders('http://localhost:19006');
-    expect(headers['Access-Control-Allow-Origin']).toBe('http://localhost:19006');
+    expect(headers['Access-Control-Allow-Origin']).toBe(
+      'http://localhost:19006',
+    );
   });
 
   it('returns empty headers for disallowed origin', () => {
@@ -102,11 +113,15 @@ describe('isValidPayload', () => {
   });
 
   it('rejects empty client_id', () => {
-    expect(isValidPayload({ client_id: '', events: [{ name: 'test' }] })).toBe(false);
+    expect(isValidPayload({ client_id: '', events: [{ name: 'test' }] })).toBe(
+      false,
+    );
   });
 
   it('rejects numeric client_id', () => {
-    expect(isValidPayload({ client_id: 123, events: [{ name: 'test' }] })).toBe(false);
+    expect(isValidPayload({ client_id: 123, events: [{ name: 'test' }] })).toBe(
+      false,
+    );
   });
 
   it('rejects missing events', () => {
@@ -118,13 +133,18 @@ describe('isValidPayload', () => {
   });
 
   it('rejects events that is not an array', () => {
-    expect(isValidPayload({ client_id: 'abc', events: 'not-array' })).toBe(false);
+    expect(isValidPayload({ client_id: 'abc', events: 'not-array' })).toBe(
+      false,
+    );
   });
 
   it('rejects events exceeding max limit', () => {
-    const events = Array.from({ length: MAX_EVENTS_PER_REQUEST + 1 }, (_, i) => ({
-      name: `event_${i}`,
-    }));
+    const events = Array.from(
+      { length: MAX_EVENTS_PER_REQUEST + 1 },
+      (_, i) => ({
+        name: `event_${i}`,
+      }),
+    );
     expect(isValidPayload({ client_id: 'test', events })).toBe(false);
   });
 
@@ -133,11 +153,15 @@ describe('isValidPayload', () => {
   });
 
   it('rejects event with empty name', () => {
-    expect(isValidPayload({ client_id: 'abc', events: [{ name: '' }] })).toBe(false);
+    expect(isValidPayload({ client_id: 'abc', events: [{ name: '' }] })).toBe(
+      false,
+    );
   });
 
   it('rejects event with numeric name', () => {
-    expect(isValidPayload({ client_id: 'abc', events: [{ name: 123 }] })).toBe(false);
+    expect(isValidPayload({ client_id: 'abc', events: [{ name: 123 }] })).toBe(
+      false,
+    );
   });
 
   it('rejects if any event in array is invalid', () => {
@@ -156,6 +180,8 @@ describe('isValidPayload', () => {
   });
 
   it('rejects string event in array', () => {
-    expect(isValidPayload({ client_id: 'abc', events: ['not-an-object'] })).toBe(false);
+    expect(
+      isValidPayload({ client_id: 'abc', events: ['not-an-object'] }),
+    ).toBe(false);
   });
 });

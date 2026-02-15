@@ -15,10 +15,16 @@ interface LocationPickerProps {
   onLocationChange: (location: { latitude: number; longitude: number }) => void;
 }
 
-export function LocationPicker({ location, onLocationChange }: LocationPickerProps) {
+export function LocationPicker({
+  location,
+  onLocationChange,
+}: LocationPickerProps) {
   const { t } = useTranslation();
   const [currentLocation, setCurrentLocation] = useState(
-    location || { latitude: TIJUANA_CENTER.latitude, longitude: TIJUANA_CENTER.longitude }
+    location || {
+      latitude: TIJUANA_CENTER.latitude,
+      longitude: TIJUANA_CENTER.longitude,
+    },
   );
 
   const handleRegionDidChange = async () => {
@@ -39,7 +45,10 @@ export function LocationPicker({ location, onLocationChange }: LocationPickerPro
         >
           <MapboxGL.Camera
             zoomLevel={DEFAULT_ZOOM}
-            centerCoordinate={[currentLocation.longitude, currentLocation.latitude]}
+            centerCoordinate={[
+              currentLocation.longitude,
+              currentLocation.latitude,
+            ]}
           />
         </MapboxGL.MapView>
 
@@ -54,7 +63,8 @@ export function LocationPicker({ location, onLocationChange }: LocationPickerPro
 
       <View style={styles.coordinates}>
         <Caption color={colors.neutral500}>
-          {t('report.coordinates')}: {currentLocation.latitude.toFixed(5)}, {currentLocation.longitude.toFixed(5)}
+          {t('report.coordinates')}: {currentLocation.latitude.toFixed(5)},{' '}
+          {currentLocation.longitude.toFixed(5)}
         </Caption>
       </View>
     </View>

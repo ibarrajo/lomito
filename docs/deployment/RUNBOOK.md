@@ -327,6 +327,7 @@ npx expo start
 ```
 
 Options:
+
 - Press `i` → open iOS Simulator
 - Press `a` → open Android Emulator
 - Press `w` → open in web browser
@@ -335,10 +336,12 @@ Options:
 ### 5.3 Test on Device
 
 **iOS:**
+
 - Install Expo Go from App Store
 - Scan QR code from terminal
 
 **Android:**
+
 - Install Expo Go from Play Store
 - Scan QR code from terminal
 
@@ -401,6 +404,7 @@ eas submit --platform ios --profile production
 ```
 
 Or manually:
+
 1. Download IPA from EAS
 2. Upload via Xcode → Organizer → Distribute App
 3. Fill out App Store Connect listing (see [APP_STORES.md](./APP_STORES.md))
@@ -418,6 +422,7 @@ eas submit --platform android --profile production
 ```
 
 Or manually:
+
 1. Download AAB from EAS
 2. Go to https://play.google.com/console
 3. Create new app → Upload AAB to internal testing track
@@ -534,6 +539,7 @@ Before launching to production:
 ## Support and Troubleshooting
 
 For common deployment issues and solutions, see:
+
 - [SUPABASE.md](./SUPABASE.md) — Database and Edge Function issues
 - [EAS.md](./EAS.md) — Build and certificate issues
 - [APP_STORES.md](./APP_STORES.md) — Store submission rejections

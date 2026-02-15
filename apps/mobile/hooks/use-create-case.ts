@@ -5,7 +5,11 @@
 
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import type { CaseCategory, AnimalType, UrgencyLevel } from '@lomito/shared/types';
+import type {
+  CaseCategory,
+  AnimalType,
+  UrgencyLevel,
+} from '@lomito/shared/types';
 
 interface CreateCaseInput {
   category: CaseCategory;

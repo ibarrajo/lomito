@@ -1,6 +1,11 @@
 import { View, Text, Switch, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, spacing, typography, borderRadius } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  typography,
+  borderRadius,
+} from '@lomito/ui/src/theme/tokens';
 import { useNotificationPrefs } from '../../hooks/use-notification-prefs';
 import { useUserProfile } from '../../hooks/use-user-profile';
 
@@ -9,7 +14,8 @@ export function NotificationPrefs() {
   const { prefs, updatePref, loading } = useNotificationPrefs();
   const { profile } = useUserProfile();
 
-  const isModerator = profile?.role === 'moderator' || profile?.role === 'admin';
+  const isModerator =
+    profile?.role === 'moderator' || profile?.role === 'admin';
 
   if (loading || !prefs) {
     return null;
@@ -37,10 +43,7 @@ export function NotificationPrefs() {
       <View style={styles.prefRow}>
         <View style={styles.prefLabelContainer}>
           <Text
-            style={[
-              styles.prefLabel,
-              !pushEnabled && styles.disabledLabel,
-            ]}
+            style={[styles.prefLabel, !pushEnabled && styles.disabledLabel]}
           >
             {t('settings.emailEnabled')}
           </Text>
@@ -58,10 +61,7 @@ export function NotificationPrefs() {
       <View style={styles.prefRow}>
         <View style={styles.prefLabelContainer}>
           <Text
-            style={[
-              styles.prefLabel,
-              !pushEnabled && styles.disabledLabel,
-            ]}
+            style={[styles.prefLabel, !pushEnabled && styles.disabledLabel]}
           >
             {t('settings.ownCaseUpdates')}
           </Text>
@@ -80,10 +80,7 @@ export function NotificationPrefs() {
         <View style={styles.prefRow}>
           <View style={styles.prefLabelContainer}>
             <Text
-              style={[
-                styles.prefLabel,
-                !pushEnabled && styles.disabledLabel,
-              ]}
+              style={[styles.prefLabel, !pushEnabled && styles.disabledLabel]}
             >
               {t('settings.flaggedCases')}
             </Text>

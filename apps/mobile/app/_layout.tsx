@@ -81,7 +81,10 @@ function RootLayoutNav() {
         <Stack.Screen name="auth/register" />
         <Stack.Screen name="auth/verify" />
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="case/[id]" options={{ headerShown: true, title: '' }} />
+        <Stack.Screen
+          name="case/[id]"
+          options={{ headerShown: true, title: '' }}
+        />
         <Stack.Screen name="report" />
         <Stack.Screen name="about" />
         <Stack.Screen name="donate" />

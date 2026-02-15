@@ -9,7 +9,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 serve(async (req: Request) => {
@@ -29,8 +30,13 @@ serve(async (req: Request) => {
     // Validate bounds
     if (!west || !south || !east || !north) {
       return new Response(
-        JSON.stringify({ error: 'Missing required parameters: west, south, east, north' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({
+          error: 'Missing required parameters: west, south, east, north',
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
       );
     }
 
@@ -68,46 +74,59 @@ serve(async (req: Request) => {
     if (error) {
       console.error('Database error:', error);
       return new Response(
-        JSON.stringify({ error: 'Database query failed', details: error.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({
+          error: 'Database query failed',
+          details: error.message,
+        }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
       );
     }
 
     // Transform results into GeoJSON FeatureCollection
-    const features = (data || []).map((row: {
-      id: string;
-      name: string;
-      level: string;
-      authority_name: string | null;
-      geojson: string;
-    }) => {
-      const geometry = JSON.parse(row.geojson);
-      return {
-        type: 'Feature',
-        geometry,
-        properties: {
-          id: row.id,
-          name: row.name,
-          level: row.level,
-          authority_name: row.authority_name,
-        },
-      };
-    });
+    const features = (data || []).map(
+      (row: {
+        id: string;
+        name: string;
+        level: string;
+        authority_name: string | null;
+        geojson: string;
+      }) => {
+        const geometry = JSON.parse(row.geojson);
+        return {
+          type: 'Feature',
+          geometry,
+          properties: {
+            id: row.id,
+            name: row.name,
+            level: row.level,
+            authority_name: row.authority_name,
+          },
+        };
+      },
+    );
 
     const featureCollection = {
       type: 'FeatureCollection',
       features,
     };
 
-    return new Response(
-      JSON.stringify(featureCollection),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify(featureCollection), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   } catch (err) {
     console.error('Error in jurisdiction-boundaries function:', err);
     return new Response(
-      JSON.stringify({ error: 'Internal server error', details: err instanceof Error ? err.message : 'Unknown error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({
+        error: 'Internal server error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
     );
   }
 });

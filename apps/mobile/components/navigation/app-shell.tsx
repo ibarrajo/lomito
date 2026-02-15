@@ -31,7 +31,9 @@ export function AppShell({ children }: AppShellProps) {
 
   // Routes that should NOT have a footer (fullscreen routes)
   const fullscreenRoutes = ['/', '/(tabs)', '/report'];
-  const shouldShowFooter = !fullscreenRoutes.some((route) => pathname.startsWith(route));
+  const shouldShowFooter = !fullscreenRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
 
   // On native platforms or mobile web, pass children through unchanged
   if (Platform.OS !== 'web' || isMobile) {

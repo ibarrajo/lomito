@@ -13,6 +13,7 @@
 ### Task 1: Project scaffold and dependencies
 
 **Files:**
+
 - Create: `agent_runner/__init__.py`
 - Create: `agent_runner/requirements.txt`
 - Create: `agent_runner/.env.example`
@@ -52,7 +53,7 @@ LOMITO_PROJECT_DIR=/Users/you/Code/lomito
 **Step 4: Write config.yaml**
 
 ```yaml
-project_dir: null  # Override via LOMITO_PROJECT_DIR env var
+project_dir: null # Override via LOMITO_PROJECT_DIR env var
 orchestration_file: docs/plans/ORCHESTRATION.md
 issues_file: docs/plans/ISSUES.md
 checkpoint_dir: ~/.claude/tasks/lomito
@@ -87,10 +88,10 @@ tools:
     - prettier
     - node
     - python
-  working_dir: null  # Defaults to project_dir
+  working_dir: null # Defaults to project_dir
 ```
 
-**Step 5: Write __init__.py files**
+**Step 5: Write **init**.py files**
 
 `agent_runner/__init__.py`: empty
 `agent_runner/agents/__init__.py`: empty
@@ -107,6 +108,7 @@ git commit -m "chore(agent): scaffold agent_runner package with dependencies and
 ### Task 2: State model and task parser
 
 **Files:**
+
 - Create: `agent_runner/state.py`
 - Create: `agent_runner/parser.py`
 - Create: `agent_runner/tests/__init__.py`
@@ -388,6 +390,7 @@ git commit -m "feat(agent): add state model and ORCHESTRATION.md parser with tes
 ### Task 3: Configuration loader
 
 **Files:**
+
 - Create: `agent_runner/config.py`
 
 **Step 1: Write config.py**
@@ -486,6 +489,7 @@ git commit -m "feat(agent): add YAML + env config loader"
 ### Task 4: Structured logger
 
 **Files:**
+
 - Create: `agent_runner/logger.py`
 
 **Step 1: Write logger.py**
@@ -593,6 +597,7 @@ git commit -m "feat(agent): add structured JSON logging"
 ### Task 5: Model router with multi-LLM fallback
 
 **Files:**
+
 - Create: `agent_runner/models.py`
 - Create: `agent_runner/tests/test_models.py`
 
@@ -800,6 +805,7 @@ git commit -m "feat(agent): add multi-LLM router with fallback chain"
 ### Task 6: Agent tools (file ops, bash, grep)
 
 **Files:**
+
 - Create: `agent_runner/tools.py`
 
 **Step 1: Write tools.py with LangChain tool definitions**
@@ -970,6 +976,7 @@ git commit -m "feat(agent): add LangChain tools for file ops, search, and shell 
 ### Task 7: Agent node implementations
 
 **Files:**
+
 - Create: `agent_runner/agents/planner.py`
 - Create: `agent_runner/agents/implementer.py`
 - Create: `agent_runner/agents/reviewer.py`
@@ -1425,6 +1432,7 @@ git commit -m "feat(agent): add planner, implementer, reviewer, and committer ag
 ### Task 8: LangGraph graph wiring
 
 **Files:**
+
 - Create: `agent_runner/graph.py`
 
 **Step 1: Write the StateGraph with conditional edges**
@@ -1540,6 +1548,7 @@ git commit -m "feat(agent): wire LangGraph StateGraph with conditional edges and
 ### Task 9: CLI entry point
 
 **Files:**
+
 - Create: `agent_runner/agent.py`
 
 **Step 1: Write CLI with Click**
@@ -1759,6 +1768,7 @@ git commit -m "feat(agent): add Click CLI with run, resume, status, and reset co
 ### Task 10: README and .gitignore updates
 
 **Files:**
+
 - Create: `agent_runner/README.md`
 - Modify: `.gitignore`
 

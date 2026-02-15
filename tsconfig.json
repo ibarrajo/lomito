@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": [
-      "ES2020"
-    ],
+    "lib": ["ES2020"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -28,18 +26,10 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@lomito/shared": [
-        "./packages/shared/src"
-      ],
-      "@lomito/shared/*": [
-        "./packages/shared/src/*"
-      ],
-      "@lomito/ui": [
-        "./packages/ui/src"
-      ],
-      "@lomito/ui/*": [
-        "./packages/ui/src/*"
-      ]
+      "@lomito/shared": ["./packages/shared/src"],
+      "@lomito/shared/*": ["./packages/shared/src/*"],
+      "@lomito/ui": ["./packages/ui/src"],
+      "@lomito/ui/*": ["./packages/ui/src/*"]
     }
   },
   "exclude": [

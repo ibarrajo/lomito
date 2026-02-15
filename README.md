@@ -32,17 +32,17 @@ Built with a mobile-first approach, Lomito works on iOS, Android, and web from a
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|-----------|
-| **Framework** | React Native (Expo SDK 52+) |
-| **Routing** | Expo Router v4 (file-based) |
-| **Backend** | Supabase (PostgreSQL + PostGIS + Auth + Realtime + Storage + Edge Functions) |
-| **Maps** | Mapbox GL (react-native-mapbox-gl on native, mapbox-gl-js on web) |
-| **Notifications** | Firebase Cloud Messaging (push) + Resend (email) |
-| **Payments** | Mercado Pago (Mexico: OXXO, SPEI, card) + Stripe (international) |
-| **Analytics** | GA4 via Supabase Edge Function proxy |
-| **i18n** | react-i18next |
-| **Language** | TypeScript (strict mode) |
+| Category          | Technology                                                                   |
+| ----------------- | ---------------------------------------------------------------------------- |
+| **Framework**     | React Native (Expo SDK 52+)                                                  |
+| **Routing**       | Expo Router v4 (file-based)                                                  |
+| **Backend**       | Supabase (PostgreSQL + PostGIS + Auth + Realtime + Storage + Edge Functions) |
+| **Maps**          | Mapbox GL (react-native-mapbox-gl on native, mapbox-gl-js on web)            |
+| **Notifications** | Firebase Cloud Messaging (push) + Resend (email)                             |
+| **Payments**      | Mercado Pago (Mexico: OXXO, SPEI, card) + Stripe (international)             |
+| **Analytics**     | GA4 via Supabase Edge Function proxy                                         |
+| **i18n**          | react-i18next                                                                |
+| **Language**      | TypeScript (strict mode)                                                     |
 
 ## Architecture
 
@@ -93,6 +93,7 @@ cp apps/mobile/.env.example apps/mobile/.env
 ```
 
 Required environment variables:
+
 - `EXPO_PUBLIC_SUPABASE_URL` — Your Supabase project URL
 - `EXPO_PUBLIC_SUPABASE_ANON_KEY` — Your Supabase anon key
 - `EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN` — Mapbox public token
@@ -153,6 +154,7 @@ lomito/
 ## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on:
+
 - Development workflow
 - Code conventions
 - Pull request process

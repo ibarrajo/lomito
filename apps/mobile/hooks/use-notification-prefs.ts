@@ -48,7 +48,9 @@ export function useNotificationPrefs(): UseNotificationPrefsResult {
         }
 
         // If preferences don't exist, use defaults
-        const profileData = data as { notification_preferences: NotificationPreferences | null };
+        const profileData = data as {
+          notification_preferences: NotificationPreferences | null;
+        };
         if (!profileData?.notification_preferences) {
           setPrefs(DEFAULT_PREFS);
         } else {

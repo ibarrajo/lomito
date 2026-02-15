@@ -44,10 +44,13 @@ function buildReminderEmailHtml(
   const [longitude, latitude] = caseData.location.coordinates;
   const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
   const folio = caseData.folio || 'Sin folio';
-  const escalatedDate = new Date(caseData.escalated_at).toLocaleString('es-MX', {
-    dateStyle: 'long',
-    timeStyle: 'short',
-  });
+  const escalatedDate = new Date(caseData.escalated_at).toLocaleString(
+    'es-MX',
+    {
+      dateStyle: 'long',
+      timeStyle: 'short',
+    },
+  );
 
   const categoryLabels: Record<string, string> = {
     abuse: 'Maltrato',
@@ -77,7 +80,8 @@ function buildReminderEmailHtml(
   };
 
   const category = categoryLabels[caseData.category] || caseData.category;
-  const animalType = animalTypeLabels[caseData.animal_type] || caseData.animal_type;
+  const animalType =
+    animalTypeLabels[caseData.animal_type] || caseData.animal_type;
   const urgency = urgencyLabels[caseData.urgency] || caseData.urgency;
   const urgencyColor = urgencyColors[caseData.urgency] || '#718096';
 

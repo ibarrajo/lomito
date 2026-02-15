@@ -9,6 +9,7 @@ Complete guide for building and deploying Lomito iOS and Android apps using Expo
 Lomito uses **EAS Build** for creating native iOS and Android binaries, and **EAS Submit** for uploading to app stores.
 
 **Key Benefits:**
+
 - Serverless build infrastructure (no Mac required for iOS builds)
 - Automatic code signing and credential management
 - Over-the-air (OTA) updates via EAS Update
@@ -27,6 +28,7 @@ Lomito uses **EAS Build** for creating native iOS and Android binaries, and **EA
 ### Tools
 
 - **EAS CLI** installed globally:
+
   ```bash
   npm install -g eas-cli
   ```
@@ -39,11 +41,13 @@ Lomito uses **EAS Build** for creating native iOS and Android binaries, and **EA
 ### Credentials
 
 **For iOS:**
+
 - Apple ID and password
 - App-specific password (if 2FA enabled)
 - App Store Connect API key (recommended for CI/CD)
 
 **For Android:**
+
 - Google Play Console service account JSON (for automatic submission)
 
 ---
@@ -66,6 +70,7 @@ eas init
 ```
 
 This:
+
 - Creates or updates `eas.json` (already exists in the project)
 - Generates a unique EAS project ID
 - Updates `app.json` with the project ID under `extra.eas.projectId`
@@ -114,6 +119,7 @@ This:
 ### 3. Update Submit Configuration
 
 **For iOS:**
+
 1. Go to App Store Connect → Apps → Your App
 2. Copy the **App ID** (numeric, e.g., `1234567890`)
 3. Go to https://developer.apple.com/account → Membership
@@ -129,6 +135,7 @@ This:
 ```
 
 **For Android:**
+
 1. Go to Google Play Console → Setup → API access
 2. Create a service account and download JSON key
 3. Save as `apps/mobile/google-play-service-account.json` (add to `.gitignore`)
@@ -190,6 +197,7 @@ eas build --platform android --profile development
 ```
 
 **Install:**
+
 - Download APK/IPA from EAS dashboard or CLI
 - Drag APK to Android emulator or use `adb install`
 - Drag IPA to iOS simulator or install via Xcode Devices
@@ -209,6 +217,7 @@ eas build --platform android --profile preview
 ```
 
 **Distribute:**
+
 - iOS: Upload to TestFlight via `eas submit` or manually
 - Android: Upload to internal testing track in Play Console
 
@@ -227,6 +236,7 @@ eas build --platform android --profile production
 ```
 
 **Features:**
+
 - `autoIncrement: true` — Auto-increments build number on each build
 - iOS: Builds IPA (archive for App Store)
 - Android: Builds AAB (Android App Bundle for Play Store)
@@ -284,6 +294,7 @@ Already configured in `apps/mobile/app.json`:
 4. Save
 
 **Set up App Information:**
+
 - Category: Lifestyle
 - Subcategory: Social Networking
 - Content Rights: Yes (you own or have rights to use all content)
@@ -344,6 +355,7 @@ Already configured in `apps/mobile/app.json`:
 4. Agree to policies and create app
 
 **Set up store listing:**
+
 - Category: Social
 - Target audience: Teen (13+)
 - Content rating: Complete questionnaire (see [APP_STORES.md](./APP_STORES.md))
@@ -361,6 +373,7 @@ eas build --platform ios --profile production
 ```
 
 **Build process:**
+
 1. Uploads source code to EAS
 2. Installs dependencies
 3. Runs prebuild (generates native iOS project)
@@ -389,6 +402,7 @@ eas build --platform android --profile production
 ```
 
 **Build process:**
+
 1. Uploads source code to EAS
 2. Installs dependencies
 3. Runs prebuild (generates native Android project)
@@ -433,11 +447,13 @@ eas submit --platform ios --id <build-id>
 ```
 
 **EAS will:**
+
 1. Download IPA from build
 2. Upload to App Store Connect via Transporter API
 3. Mark build for TestFlight review (automatic)
 
 **After submission:**
+
 1. Go to App Store Connect → TestFlight
 2. Wait for TestFlight review (1-24 hours)
 3. Once approved, add build to App Store submission
@@ -445,6 +461,7 @@ eas submit --platform ios --id <build-id>
 5. Submit for App Review
 
 **Submission timeline:**
+
 - TestFlight review: 1-24 hours
 - App Review: 1-3 days (first submission), 24-48 hours (updates)
 
@@ -461,16 +478,19 @@ eas submit --platform android --id <build-id>
 ```
 
 **EAS will:**
+
 1. Download AAB from build
 2. Upload to Google Play Console via service account credentials
 3. Publish to "production" track (or "internal" if specified in `eas.json`)
 
 **After submission:**
+
 1. Go to Play Console → Release → Production
 2. Complete store listing if not done (see [APP_STORES.md](./APP_STORES.md))
 3. Submit for review
 
 **Submission timeline:**
+
 - Initial review: 1-3 days
 - Updates: 1-2 days
 
@@ -492,10 +512,12 @@ eas update --branch production --message "Fix: corrected case status filter"
 ```
 
 **Users receive the update:**
+
 - Next time they open the app (if app is closed)
 - Immediately (if app is already open and configured for instant updates)
 
 **Important:**
+
 - OTA updates only work for JS code and assets
 - **Cannot update:**
   - Native dependencies (anything in `package.json` that requires native code)
@@ -551,6 +573,7 @@ jobs:
 ```
 
 **Required GitHub Secrets:**
+
 - `EXPO_TOKEN` — Create at https://expo.dev/accounts/[account]/settings/access-tokens
 
 ---
@@ -562,6 +585,7 @@ jobs:
 **Error: "No bundle ID found"**
 
 **Solution:**
+
 - Verify `ios.bundleIdentifier` in `app.json` matches Apple Developer account
 - Run `eas build:configure` to regenerate config
 
@@ -570,6 +594,7 @@ jobs:
 **Error: "Code signing failed"**
 
 **Solution:**
+
 - Run `eas credentials --platform ios`
 - Select "Remove all credentials"
 - Re-run build (EAS will regenerate credentials)
@@ -579,6 +604,7 @@ jobs:
 **Error: "Android build failed: AAPT2 error"**
 
 **Solution:**
+
 - Usually caused by invalid Android resource
 - Check `android` block in `app.json` for errors
 - Verify all required permissions are valid
@@ -588,6 +614,7 @@ jobs:
 **Error: "Build failed: Out of memory"**
 
 **Solution:**
+
 - Reduce bundle size (remove unused dependencies)
 - Contact EAS support to request more build memory (paid plans only)
 
@@ -596,6 +623,7 @@ jobs:
 **Error: "Submission failed: Invalid provisioning profile"**
 
 **Solution:**
+
 - Regenerate provisioning profile: `eas credentials --platform ios`
 - Re-run build and submit
 
@@ -624,6 +652,7 @@ eas build:logs <build-id>
 ### Bundle Size
 
 Lomito has performance budgets:
+
 - **iOS IPA:** < 50MB (after App Store thinning)
 - **Android APK:** < 30MB (AAB expands to ~40MB installed)
 - **JS bundle:** < 2MB (mobile)
@@ -638,6 +667,7 @@ npx expo export --platform android
 ```
 
 **Reduce size:**
+
 - Use Hermes engine (enabled by default in Expo SDK 52+)
 - Enable `expo-asset` for on-demand asset loading
 - Use WebP for images (supported in Expo Image)
@@ -647,12 +677,15 @@ npx expo export --platform android
 ## Support
 
 **EAS Documentation:**
+
 - https://docs.expo.dev/eas/
 
 **Expo Forums:**
+
 - https://forums.expo.dev/
 
 **Discord:**
+
 - https://chat.expo.dev/
 
 For Lomito-specific build issues, contact the development team.

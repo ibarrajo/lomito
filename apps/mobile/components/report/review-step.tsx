@@ -7,7 +7,11 @@ import { View, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { H3, Body, BodySmall, Button, Card, Badge } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
-import type { CaseCategory, AnimalType, UrgencyLevel } from '@lomito/shared/types';
+import type {
+  CaseCategory,
+  AnimalType,
+  UrgencyLevel,
+} from '@lomito/shared/types';
 
 interface ReportFormData {
   category: CaseCategory | null;
@@ -24,11 +28,19 @@ interface ReviewStepProps {
   loading: boolean;
 }
 
-export function ReviewStep({ data, onEdit, onSubmit, loading }: ReviewStepProps) {
+export function ReviewStep({
+  data,
+  onEdit,
+  onSubmit,
+  loading,
+}: ReviewStepProps) {
   const { t } = useTranslation();
 
   const getCategoryColor = (category: CaseCategory) => {
-    const categoryColors: Record<CaseCategory, { pin: string; background: string }> = {
+    const categoryColors: Record<
+      CaseCategory,
+      { pin: string; background: string }
+    > = {
       abuse: { pin: colors.error, background: colors.errorBackground },
       stray: { pin: colors.warning, background: colors.warningBackground },
       missing: { pin: colors.info, background: colors.infoBackground },
@@ -37,10 +49,16 @@ export function ReviewStep({ data, onEdit, onSubmit, loading }: ReviewStepProps)
   };
 
   const getUrgencyColor = (urgency: UrgencyLevel) => {
-    const urgencyColors: Record<UrgencyLevel, { color: string; background: string }> = {
+    const urgencyColors: Record<
+      UrgencyLevel,
+      { color: string; background: string }
+    > = {
       low: { color: colors.success, background: colors.successBackground },
       medium: { color: colors.warning, background: colors.warningBackground },
-      high: { color: colors.category.stray.pin, background: colors.category.stray.background },
+      high: {
+        color: colors.category.stray.pin,
+        background: colors.category.stray.background,
+      },
       critical: { color: colors.error, background: colors.errorBackground },
     };
     return urgencyColors[urgency];
@@ -52,7 +70,9 @@ export function ReviewStep({ data, onEdit, onSubmit, loading }: ReviewStepProps)
       {data.category && data.animalType && (
         <Card style={styles.section}>
           <View style={styles.sectionHeader}>
-            <H3>{t('report.category')} & {t('report.animalType')}</H3>
+            <H3>
+              {t('report.category')} & {t('report.animalType')}
+            </H3>
             <Pressable
               onPress={() => onEdit(0)}
               accessibilityLabel={t('report.edit')}
@@ -92,7 +112,8 @@ export function ReviewStep({ data, onEdit, onSubmit, loading }: ReviewStepProps)
             </Pressable>
           </View>
           <BodySmall color={colors.neutral500}>
-            {data.location.latitude.toFixed(5)}, {data.location.longitude.toFixed(5)}
+            {data.location.latitude.toFixed(5)},{' '}
+            {data.location.longitude.toFixed(5)}
           </BodySmall>
         </Card>
       )}
@@ -109,9 +130,13 @@ export function ReviewStep({ data, onEdit, onSubmit, loading }: ReviewStepProps)
             <BodySmall color={colors.primary}>{t('report.edit')}</BodySmall>
           </Pressable>
         </View>
-        <Body style={styles.description}>{data.description || t('report.descriptionPlaceholder')}</Body>
+        <Body style={styles.description}>
+          {data.description || t('report.descriptionPlaceholder')}
+        </Body>
         <View style={styles.urgencyRow}>
-          <BodySmall color={colors.neutral500}>{t('report.urgency')}:</BodySmall>
+          <BodySmall color={colors.neutral500}>
+            {t('report.urgency')}:
+          </BodySmall>
           <Badge
             label={t(`urgency.${data.urgency}`)}
             color={getUrgencyColor(data.urgency).color}

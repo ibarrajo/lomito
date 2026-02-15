@@ -107,18 +107,18 @@ while true; do
     --model opus \
     --dangerously-skip-permissions \
     2>&1 | tee -a .claude-agent.log
-  
+
   EXIT_CODE=$?
   echo "$(date): Session ended (exit $EXIT_CODE). Checking for remaining work..."
-  
+
   # Check if there are uncompleted tasks
   TASKS_REMAINING=$(find ~/.claude/tasks/ -name "*.json" -exec grep -l '"status":"pending"' {} \; 2>/dev/null | wc -l)
-  
+
   if [ "$TASKS_REMAINING" -eq 0 ]; then
     echo "$(date): All tasks complete or no tasks found. Stopping."
     break
   fi
-  
+
   echo "$(date): Tasks remaining. Restarting in 10 seconds..."
   sleep 10
 done

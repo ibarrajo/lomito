@@ -20,7 +20,9 @@ interface CategoryChartProps {
   data: CategoryData;
 }
 
-export const CategoryChart = memo(function CategoryChart({ data }: CategoryChartProps) {
+export const CategoryChart = memo(function CategoryChart({
+  data,
+}: CategoryChartProps) {
   const { t } = useTranslation();
 
   const categories = useMemo(() => {
@@ -56,9 +58,7 @@ export const CategoryChart = memo(function CategoryChart({ data }: CategoryChart
 
   return (
     <Card accessibilityLabel={t('dashboard.byCategory')}>
-      <H3 style={styles.title}>
-        {t('dashboard.byCategory')}
-      </H3>
+      <H3 style={styles.title}>{t('dashboard.byCategory')}</H3>
       <View style={styles.chartContainer}>
         {categories.map((category) => (
           <View key={category.key} style={styles.row}>
@@ -66,9 +66,7 @@ export const CategoryChart = memo(function CategoryChart({ data }: CategoryChart
               <View
                 style={[styles.colorDot, { backgroundColor: category.color }]}
               />
-              <Body style={styles.label}>
-                {category.label}
-              </Body>
+              <Body style={styles.label}>{category.label}</Body>
             </View>
             <View style={styles.barContainer}>
               <View

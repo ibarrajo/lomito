@@ -144,7 +144,8 @@ export const borderRadius = {
  */
 export const shadows = {
   card: '0 1px 3px rgba(164, 77, 30, 0.08), 0 1px 2px rgba(164, 77, 30, 0.06)',
-  elevated: '0 4px 12px rgba(164, 77, 30, 0.12), 0 2px 4px rgba(164, 77, 30, 0.08)',
+  elevated:
+    '0 4px 12px rgba(164, 77, 30, 0.12), 0 2px 4px rgba(164, 77, 30, 0.08)',
   bottomSheet: '0 -4px 24px rgba(31, 35, 40, 0.15)',
 } as const;
 

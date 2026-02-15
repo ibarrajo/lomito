@@ -3,14 +3,25 @@
  * Display user info and list of their own reports
  */
 
-import { View, FlatList, StyleSheet, RefreshControl, Pressable } from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+  Pressable,
+} from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
 import { H1, H2, Body, Caption } from '@lomito/ui/components/typography';
 import { Badge } from '@lomito/ui/components/badge';
 import { Skeleton } from '@lomito/ui/components/skeleton';
-import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from '@lomito/ui/theme/tokens';
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { useMyCases } from '../../hooks/use-my-cases';
 import { MyCaseCard } from '../../components/profile/my-case-card';
@@ -30,7 +41,11 @@ export default function ProfileScreen() {
       return (
         <View style={styles.headerContainer}>
           <View style={styles.avatarSection}>
-            <Skeleton width={80} height={80} borderRadius={borderRadius.avatar} />
+            <Skeleton
+              width={80}
+              height={80}
+              borderRadius={borderRadius.avatar}
+            />
             <View style={styles.userInfo}>
               <Skeleton width={120} height={24} borderRadius={4} />
               <View style={styles.spacerSmall} />
@@ -48,10 +63,19 @@ export default function ProfileScreen() {
       .join('')
       .toUpperCase();
 
-    const roleColors: Record<string, { color: string; backgroundColor: string }> = {
+    const roleColors: Record<
+      string,
+      { color: string; backgroundColor: string }
+    > = {
       citizen: { color: colors.neutral700, backgroundColor: colors.neutral100 },
-      moderator: { color: colors.secondary, backgroundColor: colors.secondaryLight },
-      government: { color: colors.info, backgroundColor: colors.infoBackground },
+      moderator: {
+        color: colors.secondary,
+        backgroundColor: colors.secondaryLight,
+      },
+      government: {
+        color: colors.info,
+        backgroundColor: colors.infoBackground,
+      },
       admin: { color: colors.primary, backgroundColor: colors.primaryLight },
     };
 
@@ -80,7 +104,9 @@ export default function ProfileScreen() {
         <View style={styles.detailsSection}>
           {profile.municipality && (
             <View style={styles.detailRow}>
-              <Caption style={styles.detailLabel}>{t('auth.municipality')}</Caption>
+              <Caption style={styles.detailLabel}>
+                {t('auth.municipality')}
+              </Caption>
               <Body>{profile.municipality}</Body>
             </View>
           )}
@@ -153,11 +179,23 @@ export default function ProfileScreen() {
         ListEmptyComponent={
           casesLoading ? (
             <View style={styles.loadingContainer}>
-              <Skeleton width="100%" height={120} borderRadius={borderRadius.card} />
+              <Skeleton
+                width="100%"
+                height={120}
+                borderRadius={borderRadius.card}
+              />
               <View style={styles.spacer} />
-              <Skeleton width="100%" height={120} borderRadius={borderRadius.card} />
+              <Skeleton
+                width="100%"
+                height={120}
+                borderRadius={borderRadius.card}
+              />
               <View style={styles.spacer} />
-              <Skeleton width="100%" height={120} borderRadius={borderRadius.card} />
+              <Skeleton
+                width="100%"
+                height={120}
+                borderRadius={borderRadius.card}
+              />
             </View>
           ) : (
             <View style={styles.emptyContainer}>

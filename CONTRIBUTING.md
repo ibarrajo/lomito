@@ -11,6 +11,7 @@ This project adheres to the Contributor Covenant [Code of Conduct](CODE_OF_CONDU
 ### Prerequisites
 
 Before you begin, ensure you have:
+
 - Node.js 18+ (Node 20+ recommended)
 - npm 9+
 - Expo CLI installed globally (`npm install -g expo-cli`)
@@ -31,12 +32,15 @@ Before you begin, ensure you have:
    npm install
    ```
 4. Set up environment variables:
+
    ```bash
    cp apps/mobile/.env.example apps/mobile/.env
    ```
+
    Fill in the required API keys (Supabase URL, Supabase anon key, Mapbox token, etc.)
 
 5. Start local Supabase and apply migrations:
+
    ```bash
    npx supabase start
    npx supabase db reset
@@ -71,6 +75,7 @@ All commit messages must follow the [Conventional Commits](https://www.conventio
 ```
 
 **Types:**
+
 - `feat:` — New feature
 - `fix:` — Bug fix
 - `chore:` — Maintenance tasks, dependency updates
@@ -81,6 +86,7 @@ All commit messages must follow the [Conventional Commits](https://www.conventio
 - `perf:` — Performance improvements
 
 **Examples:**
+
 ```
 feat: add community flagging to case detail screen
 fix: prevent duplicate jurisdiction assignment on case update
@@ -93,11 +99,13 @@ chore: upgrade expo to SDK 52
 Run the following checks locally:
 
 1. **Type checking:**
+
    ```bash
    npx tsc --noEmit
    ```
 
 2. **Linting:**
+
    ```bash
    npx eslint . --max-warnings 0
    ```
@@ -161,12 +169,14 @@ All UI must use design tokens defined in `docs/style/DESIGN_TOKENS.md`:
 ## Pull Request Process
 
 1. **Update your branch** with the latest changes from `main`:
+
    ```bash
    git fetch origin
    git rebase origin/main
    ```
 
 2. **Create a descriptive PR title** following Conventional Commits format:
+
    ```
    feat: add auto-escalation reminders for government cases
    fix: prevent crash when loading case with no media
@@ -190,6 +200,7 @@ All UI must use design tokens defined in `docs/style/DESIGN_TOKENS.md`:
 ### Reporting Bugs
 
 When reporting a bug, include:
+
 - **Steps to reproduce** the issue
 - **Expected behavior** vs. **actual behavior**
 - **Device and OS version** (e.g., iPhone 12, iOS 17.2)
@@ -200,6 +211,7 @@ When reporting a bug, include:
 ### Proposing Features
 
 When proposing a feature:
+
 - **Describe the problem** the feature solves
 - **Explain the proposed solution** with mockups or wireframes if applicable
 - **Consider alternatives** and explain why your approach is preferred
@@ -208,6 +220,7 @@ When proposing a feature:
 ## Questions?
 
 If you have questions about contributing, feel free to:
+
 - Open a [GitHub Discussion](https://github.com/your-org/lomito/discussions)
 - Ask in the issue you're working on
 - Reach out to the maintainers

@@ -35,6 +35,7 @@ You are an implementation agent for the Lomito project — a civic animal welfar
 ## If blocked
 
 If you cannot complete the task (missing dependency, unclear spec, API key needed):
+
 1. Document what's blocking you.
 2. Report back with the blocker details.
 3. Do NOT leave half-finished work. Either complete it or revert.

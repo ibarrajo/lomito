@@ -6,7 +6,13 @@
 import { useState } from 'react';
 import { View, Text, Pressable, TextInput, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, spacing, borderRadius, typography, shadowStyles } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+  shadowStyles,
+} from '@lomito/ui/src/theme/tokens';
 
 interface AmountPickerProps {
   selectedAmount: number;
@@ -15,7 +21,10 @@ interface AmountPickerProps {
 
 const PRESET_AMOUNTS = [50, 100, 200, 500];
 
-export function AmountPicker({ selectedAmount, onAmountChange }: AmountPickerProps) {
+export function AmountPicker({
+  selectedAmount,
+  onAmountChange,
+}: AmountPickerProps) {
   const { t } = useTranslation();
   const [customAmount, setCustomAmount] = useState('');
   const [isCustom, setIsCustom] = useState(false);
@@ -48,7 +57,9 @@ export function AmountPicker({ selectedAmount, onAmountChange }: AmountPickerPro
             key={amount}
             style={[
               styles.presetButton,
-              !isCustom && selectedAmount === amount && styles.presetButtonSelected,
+              !isCustom &&
+                selectedAmount === amount &&
+                styles.presetButtonSelected,
             ]}
             onPress={() => handlePresetPress(amount)}
             accessibilityLabel={`${amount} MXN`}
@@ -57,7 +68,9 @@ export function AmountPicker({ selectedAmount, onAmountChange }: AmountPickerPro
             <Text
               style={[
                 styles.presetButtonText,
-                !isCustom && selectedAmount === amount && styles.presetButtonTextSelected,
+                !isCustom &&
+                  selectedAmount === amount &&
+                  styles.presetButtonTextSelected,
               ]}
             >
               ${amount}

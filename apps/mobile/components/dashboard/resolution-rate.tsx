@@ -16,12 +16,15 @@ interface ResolutionRateProps {
   totalCount: number;
 }
 
-export const ResolutionRate = memo(function ResolutionRate({ resolvedCount, totalCount }: ResolutionRateProps) {
+export const ResolutionRate = memo(function ResolutionRate({
+  resolvedCount,
+  totalCount,
+}: ResolutionRateProps) {
   const { t } = useTranslation();
 
   const percentage = useMemo(
     () => (totalCount > 0 ? Math.round((resolvedCount / totalCount) * 100) : 0),
-    [resolvedCount, totalCount]
+    [resolvedCount, totalCount],
   );
 
   // Circle dimensions
@@ -35,13 +38,12 @@ export const ResolutionRate = memo(function ResolutionRate({ resolvedCount, tota
     return { size, strokeWidth, radius, circumference, strokeDashoffset };
   }, [percentage]);
 
-  const { size, strokeWidth, radius, circumference, strokeDashoffset } = circleProps;
+  const { size, strokeWidth, radius, circumference, strokeDashoffset } =
+    circleProps;
 
   return (
     <Card accessibilityLabel={`${t('dashboard.resolvedRate')}: ${percentage}%`}>
-      <H3 style={styles.title}>
-        {t('dashboard.resolvedRate')}
-      </H3>
+      <H3 style={styles.title}>{t('dashboard.resolvedRate')}</H3>
       <View style={styles.circleContainer}>
         <Svg width={size} height={size} style={styles.svg}>
           {/* Background circle */}
@@ -68,9 +70,7 @@ export const ResolutionRate = memo(function ResolutionRate({ resolvedCount, tota
           />
         </Svg>
         <View style={styles.percentageContainer}>
-          <Text style={styles.percentage}>
-            {percentage}%
-          </Text>
+          <Text style={styles.percentage}>{percentage}%</Text>
           <BodySmall color={colors.neutral700}>
             {resolvedCount} / {totalCount}
           </BodySmall>

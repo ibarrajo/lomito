@@ -27,7 +27,7 @@ const STORAGE_BUCKET = 'case-media';
 export async function uploadCaseImage(
   caseId: string,
   imageUri: string,
-  index: number
+  index: number,
 ): Promise<UploadedImage> {
   try {
     // Convert local URI to blob for upload
@@ -108,10 +108,10 @@ export async function uploadCaseImage(
  */
 export async function uploadCaseImages(
   caseId: string,
-  imageUris: string[]
+  imageUris: string[],
 ): Promise<UploadedImage[]> {
   const uploadPromises = imageUris.map((uri, index) =>
-    uploadCaseImage(caseId, uri, index)
+    uploadCaseImage(caseId, uri, index),
   );
 
   return Promise.all(uploadPromises);

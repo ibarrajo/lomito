@@ -6,15 +6,26 @@ const localStorageMock = (() => {
   let store: Record<string, string> = {};
   return {
     getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
-    removeItem: vi.fn((key: string) => { delete store[key]; }),
-    clear: vi.fn(() => { store = {}; }),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
   };
 })();
-Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock, writable: true });
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+});
 
 // Mock fetch
-const fetchMock = vi.fn(() => Promise.resolve(new Response(null, { status: 204 })));
+const fetchMock = vi.fn(() =>
+  Promise.resolve(new Response(null, { status: 204 })),
+);
 vi.stubGlobal('fetch', fetchMock);
 
 import {
@@ -50,7 +61,10 @@ describe('analytics client', () => {
       trackEvent('test_event', { key: 'value' });
 
       expect(_getEventQueue()).toHaveLength(1);
-      expect(_getEventQueue()[0]).toEqual({ name: 'test_event', params: { key: 'value' } });
+      expect(_getEventQueue()[0]).toEqual({
+        name: 'test_event',
+        params: { key: 'value' },
+      });
       expect(fetchMock).not.toHaveBeenCalled();
     });
 
@@ -139,7 +153,10 @@ describe('analytics client', () => {
       vi.advanceTimersByTime(2000);
 
       const body = getFetchBody();
-      const events = body.events as Array<{ name: string; params?: Record<string, string> }>;
+      const events = body.events as Array<{
+        name: string;
+        params?: Record<string, string>;
+      }>;
       expect(events[0]).toEqual({ name: 'no_params', params: undefined });
     });
 
@@ -168,7 +185,10 @@ describe('analytics client', () => {
       vi.advanceTimersByTime(2000);
 
       const body = getFetchBody();
-      const events = body.events as Array<{ name: string; params?: Record<string, string> }>;
+      const events = body.events as Array<{
+        name: string;
+        params?: Record<string, string>;
+      }>;
       expect(events[0]).toEqual({
         name: 'page_view',
         params: { page_path: '/home' },

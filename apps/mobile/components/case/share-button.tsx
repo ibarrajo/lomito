@@ -39,7 +39,11 @@ export function ShareButton({ caseId, folio, onShare }: ShareButtonProps) {
         // Web: use navigator.share if available, otherwise clipboard
         // Type check for web APIs that may not be in all browsers
         const nav = navigator as typeof navigator & {
-          share?: (data: { title?: string; text?: string; url?: string }) => Promise<void>;
+          share?: (data: {
+            title?: string;
+            text?: string;
+            url?: string;
+          }) => Promise<void>;
           clipboard?: { writeText: (text: string) => Promise<void> };
         };
 

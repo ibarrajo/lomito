@@ -6,8 +6,19 @@
 
 import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, Clock, CheckCircle, XCircle } from 'lucide-react-native';
-import { colors, spacing, borderRadius, typography, iconSizes } from '@lomito/ui/theme/tokens';
+import {
+  AlertTriangle,
+  Clock,
+  CheckCircle,
+  XCircle,
+} from 'lucide-react-native';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+  iconSizes,
+} from '@lomito/ui/theme/tokens';
 
 interface EscalationStatusProps {
   escalatedAt: string;
@@ -49,7 +60,13 @@ export function EscalationStatus({
       month: 'long',
       day: 'numeric',
     });
-    statusIcon = <CheckCircle size={iconSizes.inline} color={colors.success} strokeWidth={2} />;
+    statusIcon = (
+      <CheckCircle
+        size={iconSizes.inline}
+        color={colors.success}
+        strokeWidth={2}
+      />
+    );
     statusText = t('escalation.responded');
     statusColor = colors.success;
     statusBackgroundColor = colors.successBackground;
@@ -57,17 +74,30 @@ export function EscalationStatus({
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <AlertTriangle size={iconSizes.inline} color={colors.warning} strokeWidth={2} />
+          <AlertTriangle
+            size={iconSizes.inline}
+            color={colors.warning}
+            strokeWidth={2}
+          />
           <Text style={styles.headerText}>
-            {t('escalation.daysSinceEscalation', { count: daysSinceEscalation })}
+            {t('escalation.daysSinceEscalation', {
+              count: daysSinceEscalation,
+            })}
           </Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.label}>{t('escalation.escalatedAt', { date: formattedEscalatedDate })}</Text>
+          <Text style={styles.label}>
+            {t('escalation.escalatedAt', { date: formattedEscalatedDate })}
+          </Text>
         </View>
 
-        <View style={[styles.statusBadge, { backgroundColor: statusBackgroundColor }]}>
+        <View
+          style={[
+            styles.statusBadge,
+            { backgroundColor: statusBackgroundColor },
+          ]}
+        >
           {statusIcon}
           <Text style={[styles.statusText, { color: statusColor }]}>
             {statusText} - {formattedResponseDate}
@@ -78,12 +108,16 @@ export function EscalationStatus({
   }
 
   if (markedUnresponsive) {
-    statusIcon = <XCircle size={iconSizes.inline} color={colors.error} strokeWidth={2} />;
+    statusIcon = (
+      <XCircle size={iconSizes.inline} color={colors.error} strokeWidth={2} />
+    );
     statusText = t('escalation.unresponsive');
     statusColor = colors.error;
     statusBackgroundColor = colors.errorBackground;
   } else {
-    statusIcon = <Clock size={iconSizes.inline} color={colors.warning} strokeWidth={2} />;
+    statusIcon = (
+      <Clock size={iconSizes.inline} color={colors.warning} strokeWidth={2} />
+    );
     statusText = t('escalation.pendingResponse');
     statusColor = colors.warning;
     statusBackgroundColor = colors.warningBackground;
@@ -92,14 +126,20 @@ export function EscalationStatus({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <AlertTriangle size={iconSizes.inline} color={colors.warning} strokeWidth={2} />
+        <AlertTriangle
+          size={iconSizes.inline}
+          color={colors.warning}
+          strokeWidth={2}
+        />
         <Text style={styles.headerText}>
           {t('escalation.daysSinceEscalation', { count: daysSinceEscalation })}
         </Text>
       </View>
 
       <View style={styles.infoRow}>
-        <Text style={styles.label}>{t('escalation.escalatedAt', { date: formattedEscalatedDate })}</Text>
+        <Text style={styles.label}>
+          {t('escalation.escalatedAt', { date: formattedEscalatedDate })}
+        </Text>
       </View>
 
       {escalationReminderCount > 0 && (
@@ -111,10 +151,17 @@ export function EscalationStatus({
       )}
 
       <View style={styles.statusBadgeContainer}>
-        <View style={[styles.statusBadge, { backgroundColor: statusBackgroundColor }]}>
+        <View
+          style={[
+            styles.statusBadge,
+            { backgroundColor: statusBackgroundColor },
+          ]}
+        >
           {statusIcon}
           <View style={styles.statusTextContainer}>
-            <Text style={[styles.statusText, { color: statusColor }]}>{statusText}</Text>
+            <Text style={[styles.statusText, { color: statusColor }]}>
+              {statusText}
+            </Text>
             {markedUnresponsive && (
               <Text style={[styles.statusSubtext, { color: statusColor }]}>
                 {t('escalation.daysNoResponse', { count: daysSinceEscalation })}

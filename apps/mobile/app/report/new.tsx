@@ -10,7 +10,11 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { H1, Body, Button, TextInput } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
-import type { CaseCategory, AnimalType, UrgencyLevel } from '@lomito/shared/types';
+import type {
+  CaseCategory,
+  AnimalType,
+  UrgencyLevel,
+} from '@lomito/shared/types';
 import { CategoryPicker } from '../../components/report/category-picker';
 import { AnimalTypePicker } from '../../components/report/animal-type-picker';
 import { UrgencyPicker } from '../../components/report/urgency-picker';
@@ -114,7 +118,9 @@ export default function NewReportScreen() {
         return (
           <View style={styles.stepContent}>
             <View style={styles.section}>
-              <Body style={styles.sectionLabel}>{t('report.selectCategory')}</Body>
+              <Body style={styles.sectionLabel}>
+                {t('report.selectCategory')}
+              </Body>
               <CategoryPicker
                 selected={formData.category}
                 onSelect={(category) => setFormData({ ...formData, category })}
@@ -122,10 +128,14 @@ export default function NewReportScreen() {
             </View>
 
             <View style={styles.section}>
-              <Body style={styles.sectionLabel}>{t('report.selectAnimalType')}</Body>
+              <Body style={styles.sectionLabel}>
+                {t('report.selectAnimalType')}
+              </Body>
               <AnimalTypePicker
                 selected={formData.animalType}
-                onSelect={(animalType) => setFormData({ ...formData, animalType })}
+                onSelect={(animalType) =>
+                  setFormData({ ...formData, animalType })
+                }
               />
             </View>
           </View>
@@ -137,7 +147,9 @@ export default function NewReportScreen() {
             <Body style={styles.mapInstruction}>{t('report.dropPin')}</Body>
             <LocationPicker
               location={formData.location}
-              onLocationChange={(location) => setFormData({ ...formData, location })}
+              onLocationChange={(location) =>
+                setFormData({ ...formData, location })
+              }
             />
           </View>
         );
@@ -149,7 +161,9 @@ export default function NewReportScreen() {
               <TextInput
                 label={t('report.description')}
                 value={formData.description}
-                onChangeText={(description) => setFormData({ ...formData, description })}
+                onChangeText={(description) =>
+                  setFormData({ ...formData, description })
+                }
                 placeholder={t('report.descriptionPlaceholder')}
                 accessibilityLabel={t('report.description')}
                 multiline
@@ -159,7 +173,9 @@ export default function NewReportScreen() {
             </View>
 
             <View style={styles.section}>
-              <Body style={styles.sectionLabel}>{t('report.selectUrgency')}</Body>
+              <Body style={styles.sectionLabel}>
+                {t('report.selectUrgency')}
+              </Body>
               <UrgencyPicker
                 selected={formData.urgency}
                 onSelect={(urgency) => setFormData({ ...formData, urgency })}
@@ -204,9 +220,7 @@ export default function NewReportScreen() {
           >
             <Body color={colors.primary}>{t('common.back')}</Body>
           </Pressable>
-          <Body color={colors.neutral500}>
-            {currentStep + 1} / 5
-          </Body>
+          <Body color={colors.neutral500}>{currentStep + 1} / 5</Body>
         </View>
         <H1 style={styles.title}>{stepTitles[currentStep]}</H1>
 
@@ -228,12 +242,13 @@ export default function NewReportScreen() {
       {/* Step Content */}
       {currentStep === 1 ? (
         // Map step needs full height
-        <View style={styles.contentMap}>
-          {renderStep()}
-        </View>
+        <View style={styles.contentMap}>{renderStep()}</View>
       ) : (
         // Other steps use scrollview
-        <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.contentContainer}
+        >
           {renderStep()}
         </ScrollView>
       )}

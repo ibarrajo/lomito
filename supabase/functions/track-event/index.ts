@@ -40,9 +40,13 @@ serve(async (req: Request) => {
   if (!isValidPayload(body)) {
     return new Response(
       JSON.stringify({
-        error: 'Invalid payload. Expected { client_id: string, events: Array<{ name: string, params?: Record<string, string> }> } (max 25 events)',
+        error:
+          'Invalid payload. Expected { client_id: string, events: Array<{ name: string, params?: Record<string, string> }> } (max 25 events)',
       }),
-      { status: 400, headers: { ...headers, 'Content-Type': 'application/json' } },
+      {
+        status: 400,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      },
     );
   }
 

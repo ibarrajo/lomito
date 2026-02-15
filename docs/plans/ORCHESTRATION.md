@@ -30,6 +30,7 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 1: Foundation (Scaffold + Design System + Schema)
 
 ### P1-T1: Expo monorepo scaffolding
+
 - **Depends on:** nothing
 - **Spec:** `docs/specs/ENGINEERING_GUIDE.md` Part 2
 - **Deliverables:**
@@ -45,6 +46,7 @@ This file defines all tasks organized by phase. When starting a new session or r
 - [x] Done
 
 ### P1-T2: Design token implementation
+
 - **Depends on:** P1-T1
 - **Spec:** `docs/style/DESIGN_TOKENS.md`
 - **Deliverables:**
@@ -56,6 +58,7 @@ This file defines all tasks organized by phase. When starting a new session or r
 - [x] Done
 
 ### P1-T3: Core UI components
+
 - **Depends on:** P1-T2
 - **Spec:** `docs/style/DESIGN_TOKENS.md` (Component Specs section)
 - **Deliverables:**
@@ -70,6 +73,7 @@ This file defines all tasks organized by phase. When starting a new session or r
 - [x] Done
 
 ### P1-T4: Supabase schema and RLS
+
 - **Depends on:** P1-T1
 - **Spec:** CLAUDE.md (Database Schema section) + `.claude/rules/database.md`
 - **Deliverables:**
@@ -81,6 +85,7 @@ This file defines all tasks organized by phase. When starting a new session or r
 - [x] Done
 
 ### P1-T5: i18n setup
+
 - **Depends on:** P1-T1
 - **Spec:** `docs/specs/ENGINEERING_GUIDE.md` Part 6
 - **Deliverables:**
@@ -92,6 +97,7 @@ This file defines all tasks organized by phase. When starting a new session or r
 - [x] Done
 
 ### P1-T6: Auth flow
+
 - **Depends on:** P1-T3, P1-T4, P1-T5
 - **Spec:** `docs/specs/PRD.md` (User Registration section)
 - **Deliverables:**
@@ -104,6 +110,7 @@ This file defines all tasks organized by phase. When starting a new session or r
 - [x] Done
 
 ### P1-T7: Map screen (basic)
+
 - **Depends on:** P1-T3, P1-T4
 - **Spec:** `docs/specs/ENGINEERING_GUIDE.md` Part 3 (Sitemap, route `/`)
 - **Deliverables:**
@@ -120,22 +127,27 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 2: Core Reporting
 
 ### P2-T1: Report submission flow
+
 - **Commit:** `feat(report): implement multi-step case report submission flow`
 - [x] Done
 
 ### P2-T2: Image compression pipeline
+
 - **Commit:** `feat(report): add client-side image compression and upload pipeline`
 - [x] Done
 
 ### P2-T3: Case detail screen
+
 - **Commit:** `feat(case): add case detail screen with photo gallery and timeline`
 - [x] Done
 
 ### P2-T4: Map filters and clustering
+
 - **Commit:** `feat(map): add filter bar and pin clustering`
 - [x] Done
 
 ### P2-T5: Jurisdiction boundary overlays
+
 - **Commit:** `feat(map): add jurisdiction boundary overlays with zoom-adaptive simplification`
 - [x] Done
 
@@ -144,18 +156,22 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 3: Moderation + Notifications
 
 ### P3-T1: Moderator review queue
+
 - **Commit:** `feat(moderation): add moderator review queue with verify/reject/flag actions`
 - [x] Done
 
 ### P3-T2: Community flagging
+
 - **Commit:** `feat(moderation): add community flagging with auto-hide at 3 flags`
 - [x] Done
 
 ### P3-T3: Push notifications (FCM)
+
 - **Commit:** `feat(notifications): add push notifications for case updates`
 - [x] Done
 
 ### P3-T4: Notification preferences
+
 - **Commit:** `feat(settings): add notification preference toggles`
 - [x] Done
 
@@ -164,18 +180,22 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 4: Government Integration
 
 ### P4-T1: Email escalation system
+
 - **Commit:** `feat(escalation): add email escalation to jurisdiction authorities`
 - [x] Done
 
 ### P4-T2: Inbound email parsing
+
 - **Commit:** `feat(escalation): add inbound email parsing for government replies`
 - [x] Done
 
 ### P4-T3: Government account portal
+
 - **Commit:** `feat(government): add government portal with case management and folio assignment`
 - [x] Done
 
 ### P4-T4: Auto-escalation timers
+
 - **Commit:** `feat(escalation): add auto-escalation timers with 5/15/30 day reminders`
 - [x] Done
 
@@ -184,25 +204,31 @@ This file defines all tasks organized by phase. When starting a new session or r
 ## Phase 5: Launch Readiness
 
 ### P5-T1: Mercado Pago donations
+
 - **Commit:** `feat(donations): add Mercado Pago donation flow with OXXO and SPEI support`
 - [x] Done
 
 ### P5-T2: Public impact dashboard
+
 - **Commit:** `feat(dashboard): add public impact dashboard with stats and charts`
 - [x] Done
 
 ### P5-T3: About Us page
+
 - **Commit:** `feat(about): add About Us page with mission, team, and links`
 - [x] Done
 
 ### P5-T4: Legal documents
+
 - **Commit:** `feat(legal): add privacy notice and terms of service screens`
 - [x] Done
 
 ### P5-T5: Performance audit
+
 - **Commit:** `perf: performance audit and optimizations`
 - [x] Done
 
 ### P5-T6: App Store + Play Store submission
+
 - **Commit:** `chore: prepare App Store and Play Store submission assets`
 - [x] Done

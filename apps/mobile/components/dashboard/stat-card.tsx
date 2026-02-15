@@ -35,12 +35,8 @@ export const StatCard = memo(function StatCard({
           <Icon size={24} color={color} strokeWidth={1.5} />
         </View>
         <View style={styles.textContainer}>
-          <H1 style={styles.value}>
-            {value}
-          </H1>
-          <BodySmall color={colors.neutral700}>
-            {label}
-          </BodySmall>
+          <H1 style={styles.value}>{value}</H1>
+          <BodySmall color={colors.neutral700}>{label}</BodySmall>
         </View>
       </View>
     </Card>

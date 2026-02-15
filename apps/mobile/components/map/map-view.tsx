@@ -21,7 +21,11 @@ interface MapViewProps {
   onRegionDidChange?: (region: Region) => void;
 }
 
-export function MapView({ children, onMapReady, onRegionDidChange }: MapViewProps) {
+export function MapView({
+  children,
+  onMapReady,
+  onRegionDidChange,
+}: MapViewProps) {
   const handleRegionDidChange = async (event: unknown) => {
     if (!onRegionDidChange) return;
 

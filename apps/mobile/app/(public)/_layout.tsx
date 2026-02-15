@@ -1,7 +1,18 @@
-import { View, StyleSheet, Text, TouchableOpacity, Platform } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import Head from 'expo-router/head';
-import { colors, spacing, typography, borderRadius } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  spacing,
+  typography,
+  borderRadius,
+} from '@lomito/ui/src/theme/tokens';
 import { useTranslation } from 'react-i18next';
 
 export default function PublicLayout() {
@@ -13,12 +24,21 @@ export default function PublicLayout() {
       {Platform.OS === 'web' && (
         <Head>
           <title>Lomito — Plataforma cívica para bienestar animal</title>
-          <meta property="og:title" content="Lomito — Plataforma cívica para bienestar animal" />
-          <meta property="og:description" content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad" />
+          <meta
+            property="og:title"
+            content="Lomito — Plataforma cívica para bienestar animal"
+          />
+          <meta
+            property="og:description"
+            content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad"
+          />
           <meta property="og:type" content="website" />
           <meta property="og:url" content="https://lomito.org" />
           <meta property="og:site_name" content="Lomito" />
-          <meta name="description" content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad. Plataforma cívica para Tijuana." />
+          <meta
+            name="description"
+            content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad. Plataforma cívica para Tijuana."
+          />
           <meta name="theme-color" content="#D4662B" />
         </Head>
       )}

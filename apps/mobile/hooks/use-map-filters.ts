@@ -26,8 +26,10 @@ export interface MapFiltersReturn extends MapFilters {
 }
 
 export function useMapFilters(): MapFiltersReturn {
-  const [selectedCategories, setSelectedCategories] = useState<FilterValue<CaseCategory>>('all');
-  const [selectedStatuses, setSelectedStatuses] = useState<FilterValue<CaseStatus>>('all');
+  const [selectedCategories, setSelectedCategories] =
+    useState<FilterValue<CaseCategory>>('all');
+  const [selectedStatuses, setSelectedStatuses] =
+    useState<FilterValue<CaseStatus>>('all');
 
   const toggleCategory = useCallback((category: CaseCategory | 'all') => {
     if (category === 'all') {
@@ -78,23 +80,26 @@ export function useMapFilters(): MapFiltersReturn {
     setSelectedStatuses('all');
   }, []);
 
-  const buildQuery = useCallback(<T extends QueryBuilder>(query: T): T => {
-    let filteredQuery = query;
+  const buildQuery = useCallback(
+    <T extends QueryBuilder>(query: T): T => {
+      let filteredQuery = query;
 
-    // Apply category filter
-    if (selectedCategories !== 'all' && selectedCategories.size > 0) {
-      const categories = Array.from(selectedCategories);
-      filteredQuery = filteredQuery.in('category', categories) as T;
-    }
+      // Apply category filter
+      if (selectedCategories !== 'all' && selectedCategories.size > 0) {
+        const categories = Array.from(selectedCategories);
+        filteredQuery = filteredQuery.in('category', categories) as T;
+      }
 
-    // Apply status filter
-    if (selectedStatuses !== 'all' && selectedStatuses.size > 0) {
-      const statuses = Array.from(selectedStatuses);
-      filteredQuery = filteredQuery.in('status', statuses) as T;
-    }
+      // Apply status filter
+      if (selectedStatuses !== 'all' && selectedStatuses.size > 0) {
+        const statuses = Array.from(selectedStatuses);
+        filteredQuery = filteredQuery.in('status', statuses) as T;
+      }
 
-    return filteredQuery;
-  }, [selectedCategories, selectedStatuses]);
+      return filteredQuery;
+    },
+    [selectedCategories, selectedStatuses],
+  );
 
   return {
     selectedCategories,

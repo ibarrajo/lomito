@@ -8,7 +8,12 @@ import { useState } from 'react';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle } from 'lucide-react-native';
-import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from '@lomito/ui/theme/tokens';
 import { AppModal } from '@lomito/ui';
 import { useEscalateCase } from '../../hooks/use-escalate-case';
 import type { CaseStatus, UserRole } from '@lomito/shared/types/database';
@@ -30,7 +35,11 @@ export function EscalateButton({
 }: EscalateButtonProps) {
   const { t } = useTranslation();
   const { escalateCase, loading } = useEscalateCase();
-  const [modal, setModal] = useState<{ title: string; message: string; onDismiss?: () => void } | null>(null);
+  const [modal, setModal] = useState<{
+    title: string;
+    message: string;
+    onDismiss?: () => void;
+  } | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
 
   // Only show to moderators and admins
@@ -53,11 +62,7 @@ export function EscalateButton({
 
     return (
       <View style={styles.escalatedContainer}>
-        <AlertTriangle
-          size={16}
-          color={colors.accent}
-          strokeWidth={2}
-        />
+        <AlertTriangle size={16} color={colors.accent} strokeWidth={2} />
         <Text style={styles.escalatedText}>
           {t('escalation.escalatedAt', { date: escalatedDate })}
         </Text>
@@ -101,11 +106,7 @@ export function EscalateButton({
         ]}
       >
         <View style={styles.content}>
-          <AlertTriangle
-            size={20}
-            color={colors.white}
-            strokeWidth={2}
-          />
+          <AlertTriangle size={20} color={colors.white} strokeWidth={2} />
           <Text style={styles.buttonText}>
             {loading ? t('common.loading') : t('escalation.escalate')}
           </Text>
@@ -134,14 +135,16 @@ export function EscalateButton({
         visible={!!modal}
         title={modal?.title ?? ''}
         message={modal?.message}
-        actions={[{
-          label: t('common.ok'),
-          onPress: () => {
-            const onDismiss = modal?.onDismiss;
-            setModal(null);
-            onDismiss?.();
+        actions={[
+          {
+            label: t('common.ok'),
+            onPress: () => {
+              const onDismiss = modal?.onDismiss;
+              setModal(null);
+              onDismiss?.();
+            },
           },
-        }]}
+        ]}
         onClose={() => {
           const onDismiss = modal?.onDismiss;
           setModal(null);

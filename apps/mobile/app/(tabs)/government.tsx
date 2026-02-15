@@ -18,7 +18,12 @@ import { useTranslation } from 'react-i18next';
 import { H1, Body } from '@lomito/ui/components/typography';
 import { Skeleton } from '@lomito/ui/components/skeleton';
 import { AppModal } from '@lomito/ui';
-import { colors, spacing, borderRadius, typography } from '@lomito/ui/theme/tokens';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from '@lomito/ui/theme/tokens';
 import { useGovernmentCases } from '../../hooks/use-government-cases';
 import { useGovernmentActions } from '../../hooks/use-government-actions';
 import { CaseActionCard } from '../../components/government/case-action-card';
@@ -26,7 +31,12 @@ import { FolioInput } from '../../components/government/folio-input';
 import { OfficialResponse } from '../../components/government/official-response';
 import type { CaseStatus } from '@lomito/shared/types/database';
 
-type FilterStatus = 'all' | 'escalated' | 'pending_response' | 'in_progress' | 'resolved';
+type FilterStatus =
+  | 'all'
+  | 'escalated'
+  | 'pending_response'
+  | 'in_progress'
+  | 'resolved';
 
 export default function GovernmentScreen() {
   const { t } = useTranslation();
@@ -35,9 +45,13 @@ export default function GovernmentScreen() {
   const [responseModalVisible, setResponseModalVisible] = useState(false);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
-  const { cases, loading, error, refetch } = useGovernmentCases({ statusFilter });
+  const { cases, loading, error, refetch } = useGovernmentCases({
+    statusFilter,
+  });
   const { assignFolio, postResponse, updateStatus } = useGovernmentActions();
-  const [statusModalCaseId, setStatusModalCaseId] = useState<string | null>(null);
+  const [statusModalCaseId, setStatusModalCaseId] = useState<string | null>(
+    null,
+  );
 
   const selectedCase = selectedCaseId
     ? cases.find((c) => c.id === selectedCaseId)
@@ -238,14 +252,16 @@ export default function GovernmentScreen() {
           {
             label: t('status.in_progress'),
             onPress: () => {
-              if (statusModalCaseId) updateStatusAndRefresh(statusModalCaseId, 'in_progress');
+              if (statusModalCaseId)
+                updateStatusAndRefresh(statusModalCaseId, 'in_progress');
               setStatusModalCaseId(null);
             },
           },
           {
             label: t('status.resolved'),
             onPress: () => {
-              if (statusModalCaseId) updateStatusAndRefresh(statusModalCaseId, 'resolved');
+              if (statusModalCaseId)
+                updateStatusAndRefresh(statusModalCaseId, 'resolved');
               setStatusModalCaseId(null);
             },
           },

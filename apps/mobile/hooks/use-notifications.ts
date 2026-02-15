@@ -13,8 +13,9 @@ export function useNotifications() {
     useState<Notifications.Notification | null>(null);
   const router = useRouter();
 
-  const notificationListener =
-    useRef<Notifications.Subscription | undefined>(undefined);
+  const notificationListener = useRef<Notifications.Subscription | undefined>(
+    undefined,
+  );
   const responseListener = useRef<Notifications.Subscription | undefined>(
     undefined,
   );

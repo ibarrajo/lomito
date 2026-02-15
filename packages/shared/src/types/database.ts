@@ -2,7 +2,13 @@
 // Run: supabase gen types typescript --local > packages/shared/src/types/database.ts
 
 export type UserRole = 'citizen' | 'moderator' | 'government' | 'admin';
-export type CaseStatus = 'pending' | 'verified' | 'in_progress' | 'resolved' | 'rejected' | 'archived';
+export type CaseStatus =
+  | 'pending'
+  | 'verified'
+  | 'in_progress'
+  | 'resolved'
+  | 'rejected'
+  | 'archived';
 export type CaseCategory = 'abuse' | 'stray' | 'missing';
 export type AnimalType = 'dog' | 'cat' | 'bird' | 'other';
 export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
@@ -141,7 +147,10 @@ export interface Database {
     Tables: {
       profiles: {
         Row: Profile;
-        Insert: Omit<Profile, 'created_at' | 'updated_at' | 'notification_preferences'> & {
+        Insert: Omit<
+          Profile,
+          'created_at' | 'updated_at' | 'notification_preferences'
+        > & {
           created_at?: string;
           updated_at?: string;
           notification_preferences?: NotificationPreferences | null;
@@ -159,7 +168,21 @@ export interface Database {
       };
       cases: {
         Row: Case;
-        Insert: Omit<Case, 'id' | 'jurisdiction_id' | 'status' | 'flag_count' | 'folio' | 'escalated_at' | 'escalation_email_id' | 'escalation_reminder_count' | 'marked_unresponsive' | 'government_response_at' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Case,
+          | 'id'
+          | 'jurisdiction_id'
+          | 'status'
+          | 'flag_count'
+          | 'folio'
+          | 'escalated_at'
+          | 'escalation_email_id'
+          | 'escalation_reminder_count'
+          | 'marked_unresponsive'
+          | 'government_response_at'
+          | 'created_at'
+          | 'updated_at'
+        > & {
           id?: string;
           jurisdiction_id?: string | null;
           status?: CaseStatus;
@@ -218,7 +241,10 @@ export interface Database {
       };
       donations: {
         Row: Donation;
-        Insert: Omit<Donation, 'id' | 'created_at' | 'status' | 'payment_url'> & {
+        Insert: Omit<
+          Donation,
+          'id' | 'created_at' | 'status' | 'payment_url'
+        > & {
           id?: string;
           created_at?: string;
           status?: string;

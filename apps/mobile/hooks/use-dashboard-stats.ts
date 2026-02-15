@@ -30,7 +30,9 @@ export function useDashboardStats(): UseDashboardStatsResult {
       setLoading(true);
       setError(null);
 
-      const { data, error: queryError } = await supabase.rpc('get_dashboard_stats');
+      const { data, error: queryError } = await supabase.rpc(
+        'get_dashboard_stats',
+      );
 
       if (queryError) {
         console.error('Error fetching dashboard stats:', queryError);

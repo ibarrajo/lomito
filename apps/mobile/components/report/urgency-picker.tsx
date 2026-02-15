@@ -5,7 +5,12 @@
 
 import { View, Pressable, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors, typography, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
+import {
+  colors,
+  typography,
+  spacing,
+  borderRadius,
+} from '@lomito/ui/src/theme/tokens';
 import type { UrgencyLevel } from '@lomito/shared/types';
 
 interface UrgencyPickerProps {
@@ -57,7 +62,11 @@ export function UrgencyPicker({ selected, onSelect }: UrgencyPickerProps) {
             accessibilityState={{ selected: isSelected }}
             style={({ pressed }) => [
               styles.option,
-              { backgroundColor: isSelected ? level.color : level.backgroundColor },
+              {
+                backgroundColor: isSelected
+                  ? level.color
+                  : level.backgroundColor,
+              },
               isSelected && styles.optionSelected,
               pressed && styles.optionPressed,
             ]}

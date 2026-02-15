@@ -57,17 +57,14 @@ export function useAuth() {
     if (error) throw error;
   }, []);
 
-  const verifyOtp = useCallback(
-    async (phone: string, token: string) => {
-      const { error } = await supabase.auth.verifyOtp({
-        phone,
-        token,
-        type: 'sms',
-      });
-      if (error) throw error;
-    },
-    [],
-  );
+  const verifyOtp = useCallback(async (phone: string, token: string) => {
+    const { error } = await supabase.auth.verifyOtp({
+      phone,
+      token,
+      type: 'sms',
+    });
+    if (error) throw error;
+  }, []);
 
   const signUp = useCallback(
     async (email: string, password: string, metadata: SignUpMetadata) => {

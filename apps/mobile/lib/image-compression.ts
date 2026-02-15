@@ -28,11 +28,10 @@ const THUMBNAIL_MAX_DIMENSION = 400;
 export async function compressImage(uri: string): Promise<CompressedImage> {
   try {
     // Get image dimensions to calculate resize
-    const imageInfo = await ImageManipulator.manipulateAsync(
-      uri,
-      [],
-      { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
-    );
+    const imageInfo = await ImageManipulator.manipulateAsync(uri, [], {
+      compress: 1,
+      format: ImageManipulator.SaveFormat.JPEG,
+    });
 
     const { width, height } = imageInfo;
     const longestEdge = Math.max(width, height);
@@ -57,7 +56,7 @@ export async function compressImage(uri: string): Promise<CompressedImage> {
       {
         compress: JPEG_QUALITY,
         format: ImageManipulator.SaveFormat.JPEG,
-      }
+      },
     );
 
     return {
@@ -82,11 +81,10 @@ export async function compressImage(uri: string): Promise<CompressedImage> {
 export async function generateThumbnail(uri: string): Promise<CompressedImage> {
   try {
     // Get image dimensions
-    const imageInfo = await ImageManipulator.manipulateAsync(
-      uri,
-      [],
-      { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
-    );
+    const imageInfo = await ImageManipulator.manipulateAsync(uri, [], {
+      compress: 1,
+      format: ImageManipulator.SaveFormat.JPEG,
+    });
 
     const { width, height } = imageInfo;
     const longestEdge = Math.max(width, height);
@@ -111,7 +109,7 @@ export async function generateThumbnail(uri: string): Promise<CompressedImage> {
       {
         compress: JPEG_QUALITY,
         format: ImageManipulator.SaveFormat.JPEG,
-      }
+      },
     );
 
     return {

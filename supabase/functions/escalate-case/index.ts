@@ -204,7 +204,8 @@ function buildEmailHtml(
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 serve(async (req) => {
@@ -254,24 +255,18 @@ serve(async (req) => {
       .single();
 
     if (caseError || !caseData) {
-      return new Response(
-        JSON.stringify({ error: 'Case not found' }),
-        {
-          status: 404,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return new Response(JSON.stringify({ error: 'Case not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Check if already escalated
     if (caseData.escalated_at) {
-      return new Response(
-        JSON.stringify({ error: 'Case already escalated' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return new Response(JSON.stringify({ error: 'Case already escalated' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const jurisdiction = caseData.jurisdiction as unknown as Jurisdiction;
@@ -387,13 +382,10 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('Error updating case:', updateError);
-      return new Response(
-        JSON.stringify({ error: 'Failed to update case' }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return new Response(JSON.stringify({ error: 'Failed to update case' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Get current user from request authorization header

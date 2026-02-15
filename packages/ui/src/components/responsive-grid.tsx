@@ -1,4 +1,9 @@
-import { View, StyleSheet, useWindowDimensions, type ViewStyle } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  useWindowDimensions,
+  type ViewStyle,
+} from 'react-native';
 import { spacing } from '../theme/tokens';
 
 interface ResponsiveGridProps {
@@ -24,7 +29,10 @@ export function ResponsiveGrid({
     <View style={[styles.grid, { gap }, style]}>
       {Array.isArray(children)
         ? children.map((child, index) => (
-            <View key={index} style={{ width: childWidth, paddingHorizontal: gap / 2 }}>
+            <View
+              key={index}
+              style={{ width: childWidth, paddingHorizontal: gap / 2 }}
+            >
               {child}
             </View>
           ))

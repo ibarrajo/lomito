@@ -16,7 +16,10 @@ export function WhySection() {
       <View style={styles.header}>
         <H2 accessibilityLabel={t('about.whyTitle')}>{t('about.whyTitle')}</H2>
       </View>
-      <Body style={styles.contentText} accessibilityLabel={t('about.whyContent')}>
+      <Body
+        style={styles.contentText}
+        accessibilityLabel={t('about.whyContent')}
+      >
         {t('about.whyContent')}
       </Body>
     </View>
