@@ -3,10 +3,8 @@
 -- or: supabase db seed
 
 -- =============================================================================
--- 1. ALTER TYPE: Add 'injured' category
+-- 1. (Removed — 'injured' and other categories added via migration 20250215000002)
 -- =============================================================================
-
-ALTER TYPE case_category ADD VALUE IF NOT EXISTS 'injured';
 
 -- =============================================================================
 -- 2. Test Users (6 users: admin, 2 citizens, 1 moderator, 1 government, 1 citizen in Rosarito)
@@ -307,84 +305,220 @@ VALUES (
 );
 
 -- =============================================================================
--- 3. Jurisdictions (Baja California state, Tijuana and Playas de Rosarito municipalities)
+-- 3. Jurisdictions (Mexico → BC → 7 municipalities → delegaciones)
+--    Approximate polygons based on INEGI Marco Geoestadístico boundaries
+--    Full INEGI import requires ogr2ogr (GDAL) + shapefile download
 -- =============================================================================
 
--- Baja California (state) - parent jurisdiction
+-- Mexico (country-level, no geometry)
 INSERT INTO jurisdictions (
-  id,
-  name,
-  parent_id,
-  level,
-  geometry,
-  escalation_enabled,
-  verified
+  id, name, name_en, parent_id, level,
+  country_code, inegi_clave, timezone,
+  escalation_enabled, verified
+)
+VALUES (
+  '00000000-0000-0000-0000-000000000100',
+  'México', 'Mexico', NULL, 'country',
+  'MX', '00', 'America/Mexico_City',
+  false, true
+);
+
+-- Baja California (state)
+INSERT INTO jurisdictions (
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  escalation_enabled, verified
 )
 VALUES (
   '00000000-0000-0000-0000-000000000020',
-  'Baja California',
-  NULL,
+  'Baja California', 'Baja California',
+  '00000000-0000-0000-0000-000000000100',
   'state',
-  ST_GeomFromText('MULTIPOLYGON(((-117.3 32.2, -117.3 32.7, -114.7 32.7, -114.7 32.2, -117.3 32.2)))', 4326),
-  false,
-  true
+  ST_GeomFromText('MULTIPOLYGON(((-117.13 32.54, -117.10 32.52, -117.09 32.46, -117.06 32.40, -117.05 32.33, -117.05 32.24, -117.04 32.16, -117.02 32.08, -116.97 32.00, -116.90 31.90, -116.82 31.78, -116.75 31.70, -116.67 31.58, -116.60 31.50, -116.52 31.40, -116.47 31.28, -116.42 31.15, -116.38 31.00, -116.35 30.85, -116.30 30.70, -116.25 30.55, -116.18 30.38, -116.10 30.20, -116.02 30.05, -115.93 29.90, -115.85 29.72, -115.75 29.55, -115.68 29.40, -115.60 29.20, -115.52 29.05, -115.42 28.85, -115.30 28.70, -115.18 28.60, -115.05 28.50, -114.95 28.42, -114.85 28.38, -114.75 28.40, -114.60 28.50, -114.50 28.70, -114.40 28.95, -114.35 29.20, -114.32 29.50, -114.50 29.80, -114.65 30.05, -114.72 30.30, -114.72 30.55, -114.72 30.80, -114.72 31.05, -114.72 31.30, -114.72 31.55, -114.72 31.80, -114.72 32.00, -114.72 32.20, -114.72 32.52, -114.75 32.58, -114.82 32.62, -115.00 32.66, -115.20 32.69, -115.40 32.70, -115.60 32.71, -115.80 32.71, -116.00 32.71, -116.20 32.71, -116.40 32.71, -116.60 32.67, -116.75 32.62, -116.85 32.58, -116.95 32.55, -117.05 32.54, -117.13 32.54)))', 4326),
+  'MX', '02', 3769020, 'America/Tijuana',
+  true, true
 );
 
--- Tijuana municipality
+-- Tijuana municipality (02004) — keeps existing ID
 INSERT INTO jurisdictions (
-  id,
-  name,
-  parent_id,
-  level,
-  geometry,
-  authority_name,
-  authority_email,
-  authority_phone,
-  authority_url,
-  escalation_enabled,
-  verified
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  authority_name, authority_email, authority_phone, authority_url,
+  escalation_enabled, verified
 )
 VALUES (
   '00000000-0000-0000-0000-000000000010',
-  'Tijuana',
+  'Tijuana', 'Tijuana',
   '00000000-0000-0000-0000-000000000020',
   'municipality',
-  ST_GeomFromText('MULTIPOLYGON(((-117.12 32.43, -117.12 32.55, -116.90 32.55, -116.90 32.43, -117.12 32.43)))', 4326),
-  'Dirección de Bienestar Animal',
-  'bienestar.animal@tijuana.gob.mx',
-  '+526646888800',
-  'https://www.tijuana.gob.mx/bienestar-animal',
-  true,
-  true
+  ST_GeomFromText('MULTIPOLYGON(((-117.13 32.54, -117.10 32.52, -117.09 32.49, -117.08 32.46, -117.06 32.44, -117.05 32.42, -116.98 32.42, -116.92 32.42, -116.88 32.44, -116.85 32.47, -116.85 32.50, -116.85 32.53, -116.85 32.55, -116.85 32.58, -116.90 32.60, -116.95 32.55, -117.00 32.54, -117.05 32.54, -117.13 32.54)))', 4326),
+  'MX', '02004', 1922523, 'America/Tijuana',
+  'Departamento de Control Animal', 'control.animal@tijuana.gob.mx',
+  '+526646888800', 'https://www.tijuana.gob.mx',
+  true, true
 );
 
--- Playas de Rosarito municipality
+-- Playas de Rosarito municipality (02005) — keeps existing ID
 INSERT INTO jurisdictions (
-  id,
-  name,
-  parent_id,
-  level,
-  geometry,
-  authority_name,
-  authority_email,
-  authority_phone,
-  authority_url,
-  escalation_enabled,
-  verified
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  authority_name, authority_email, authority_phone, authority_url,
+  escalation_enabled, verified
 )
 VALUES (
   '00000000-0000-0000-0000-000000000011',
-  'Playas de Rosarito',
+  'Playas de Rosarito', 'Playas de Rosarito',
   '00000000-0000-0000-0000-000000000020',
   'municipality',
-  ST_GeomFromText('MULTIPOLYGON(((-117.08 32.30, -117.08 32.40, -116.92 32.40, -116.92 32.30, -117.08 32.30)))', 4326),
-  'Dirección de Protección Animal',
-  'proteccion.animal@rosarito.gob.mx',
-  '+526613612000',
-  'https://www.rosarito.gob.mx/proteccion-animal',
-  true,
-  true
+  ST_GeomFromText('MULTIPOLYGON(((-117.06 32.42, -117.05 32.38, -117.04 32.35, -117.04 32.32, -117.04 32.29, -116.92 32.29, -116.88 32.30, -116.85 32.33, -116.85 32.36, -116.85 32.39, -116.85 32.42, -116.88 32.44, -116.92 32.42, -116.98 32.42, -117.06 32.42)))', 4326),
+  'MX', '02005', 117000, 'America/Tijuana',
+  'Departamento de Control Animal', 'control.animal@rosarito.gob.mx',
+  '+526613612000', 'https://www.rosarito.gob.mx',
+  true, true
 );
+
+-- Mexicali municipality (02002)
+INSERT INTO jurisdictions (
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  escalation_enabled, verified
+)
+VALUES (
+  '00000000-0000-0000-0000-000000000012',
+  'Mexicali', 'Mexicali',
+  '00000000-0000-0000-0000-000000000020',
+  'municipality',
+  ST_GeomFromText('MULTIPOLYGON(((-116.05 32.71, -115.80 32.71, -115.60 32.71, -115.40 32.70, -115.20 32.69, -115.00 32.66, -114.82 32.62, -114.75 32.58, -114.72 32.52, -114.72 32.20, -114.72 32.00, -114.75 31.85, -115.00 31.85, -115.20 31.85, -115.40 31.88, -115.60 31.95, -115.75 32.05, -115.85 32.15, -115.95 32.30, -116.00 32.42, -116.05 32.55, -116.05 32.71)))', 4326),
+  'MX', '02002', 1049792, 'America/Tijuana',
+  true, true
+);
+
+-- Ensenada municipality (02001) — largest in BC
+INSERT INTO jurisdictions (
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  escalation_enabled, verified
+)
+VALUES (
+  '00000000-0000-0000-0000-000000000013',
+  'Ensenada', 'Ensenada',
+  '00000000-0000-0000-0000-000000000020',
+  'municipality',
+  ST_GeomFromText('MULTIPOLYGON(((-117.04 32.29, -117.02 32.22, -116.97 32.13, -116.92 32.05, -116.85 31.93, -116.78 31.82, -116.70 31.68, -116.62 31.55, -116.55 31.42, -116.48 31.30, -116.42 31.18, -116.37 31.05, -116.33 30.90, -116.30 30.78, -115.78 30.78, -115.40 30.82, -115.20 30.90, -115.00 31.05, -114.95 31.20, -114.95 31.45, -115.00 31.65, -115.15 31.78, -115.40 31.88, -115.60 31.95, -115.75 32.05, -115.85 32.15, -115.95 32.30, -116.00 32.42, -116.05 32.42, -116.20 32.42, -116.40 32.42, -116.60 32.35, -116.70 32.33, -116.78 32.30, -116.85 32.29, -116.92 32.29, -117.04 32.29)))', 4326),
+  'MX', '02001', 443807, 'America/Tijuana',
+  true, true
+);
+
+-- Tecate municipality (02003)
+INSERT INTO jurisdictions (
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  escalation_enabled, verified
+)
+VALUES (
+  '00000000-0000-0000-0000-000000000014',
+  'Tecate', 'Tecate',
+  '00000000-0000-0000-0000-000000000020',
+  'municipality',
+  ST_GeomFromText('MULTIPOLYGON(((-116.85 32.58, -116.85 32.55, -116.85 32.50, -116.85 32.47, -116.85 32.44, -116.85 32.42, -116.85 32.39, -116.85 32.36, -116.85 32.33, -116.85 32.29, -116.78 32.30, -116.70 32.33, -116.60 32.35, -116.40 32.42, -116.20 32.42, -116.05 32.42, -116.05 32.55, -116.05 32.71, -116.20 32.71, -116.40 32.71, -116.60 32.67, -116.75 32.62, -116.85 32.58)))', 4326),
+  'MX', '02003', 108440, 'America/Tijuana',
+  true, true
+);
+
+-- San Quintín municipality (02006)
+INSERT INTO jurisdictions (
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  escalation_enabled, verified
+)
+VALUES (
+  '00000000-0000-0000-0000-000000000015',
+  'San Quintín', 'San Quintin',
+  '00000000-0000-0000-0000-000000000020',
+  'municipality',
+  ST_GeomFromText('MULTIPOLYGON(((-116.30 30.78, -116.25 30.60, -116.18 30.42, -116.10 30.25, -116.02 30.08, -115.93 29.92, -115.85 29.75, -115.78 29.58, -115.40 29.58, -115.18 29.65, -115.05 29.80, -114.95 30.00, -114.95 30.20, -114.95 30.40, -114.95 30.60, -115.00 30.72, -115.00 31.05, -115.20 30.90, -115.40 30.82, -115.78 30.78, -116.30 30.78)))', 4326),
+  'MX', '02006', 115562, 'America/Tijuana',
+  false, true
+);
+
+-- San Felipe municipality (02007)
+INSERT INTO jurisdictions (
+  id, name, name_en, parent_id, level,
+  geometry, country_code, inegi_clave, population, timezone,
+  escalation_enabled, verified
+)
+VALUES (
+  '00000000-0000-0000-0000-000000000016',
+  'San Felipe', 'San Felipe',
+  '00000000-0000-0000-0000-000000000020',
+  'municipality',
+  ST_GeomFromText('MULTIPOLYGON(((-115.78 29.58, -115.68 29.40, -115.55 29.22, -115.42 29.05, -115.30 28.85, -115.18 28.70, -115.05 28.58, -114.95 28.48, -114.85 28.42, -114.75 28.40, -114.60 28.50, -114.50 28.70, -114.40 28.95, -114.35 29.20, -114.32 29.50, -114.50 29.80, -114.65 30.05, -114.72 30.30, -114.72 30.55, -114.72 30.80, -114.72 31.05, -114.72 31.30, -114.72 31.55, -114.72 31.80, -114.72 32.00, -114.75 31.85, -115.00 31.85, -115.15 31.78, -115.00 31.65, -114.95 31.45, -114.95 31.20, -114.95 30.60, -114.95 30.40, -114.95 30.20, -114.95 30.00, -115.05 29.80, -115.18 29.65, -115.40 29.58, -115.78 29.58)))', 4326),
+  'MX', '02007', 75000, 'America/Tijuana',
+  false, true
+);
+
+-- =============================================================================
+-- 3b. Delegaciones (Tijuana, Mexicali, Ensenada, San Quintín — no geometry)
+-- =============================================================================
+
+-- Tijuana delegaciones (9)
+INSERT INTO jurisdictions (id, name, name_en, parent_id, level, country_code, inegi_clave, timezone, escalation_enabled, verified) VALUES
+('00000000-0000-0000-00d1-000000000001', 'Centro', 'Downtown', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-01', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000002', 'La Mesa', 'La Mesa', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-02', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000003', 'Playas de Tijuana', 'Playas de Tijuana', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-03', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000004', 'San Antonio de los Buenos', 'San Antonio de los Buenos', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-04', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000005', 'La Presa', 'La Presa', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-05', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000006', 'Otay Centenario', 'Otay Centenario', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-06', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000007', 'Cerro Colorado', 'Cerro Colorado', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-07', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000008', 'La Presa Este', 'La Presa Este', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-08', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d1-000000000009', 'San Antonio del Mar', 'San Antonio del Mar', '00000000-0000-0000-0000-000000000010', 'delegacion', 'MX', '02004-09', 'America/Tijuana', false, true);
+
+-- Mexicali delegaciones (14)
+INSERT INTO jurisdictions (id, name, name_en, parent_id, level, country_code, inegi_clave, timezone, escalation_enabled, verified) VALUES
+('00000000-0000-0000-00d2-000000000001', 'González Ortega', 'Gonzalez Ortega', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-01', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000002', 'Progreso', 'Progreso', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-02', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000003', 'Pueblo Nuevo', 'Pueblo Nuevo', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-03', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000004', 'Delta', 'Delta', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-04', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000005', 'Los Algodones', 'Los Algodones', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-05', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000006', 'Estación Coahuila', 'Estacion Coahuila', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-06', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000007', 'Benito Juárez', 'Benito Juarez', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-07', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000008', 'Compuertas', 'Compuertas', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-08', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000009', 'Hechicera', 'Hechicera', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-09', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000010', 'Venustiano Carranza', 'Venustiano Carranza', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-10', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000011', 'Estación Delta', 'Estacion Delta', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-11', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000012', 'Nuevo León', 'Nuevo Leon', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-12', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000013', 'Ciudad Morelos', 'Ciudad Morelos', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-13', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d2-000000000014', 'Guadalupe Victoria', 'Guadalupe Victoria', '00000000-0000-0000-0000-000000000012', 'delegacion', 'MX', '02002-14', 'America/Tijuana', false, true);
+
+-- Ensenada delegaciones (16)
+INSERT INTO jurisdictions (id, name, name_en, parent_id, level, country_code, inegi_clave, timezone, escalation_enabled, verified) VALUES
+('00000000-0000-0000-00d3-000000000001', 'Ensenada Centro', 'Ensenada Downtown', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-01', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000002', 'El Sauzal', 'El Sauzal', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-02', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000003', 'Maneadero', 'Maneadero', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-03', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000004', 'Santo Tomás', 'Santo Tomas', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-04', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000005', 'San Vicente', 'San Vicente', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-05', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000006', 'Valle de la Trinidad', 'Valle de la Trinidad', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-06', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000007', 'Real del Castillo', 'Real del Castillo', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-07', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000008', 'Punta Colonet', 'Punta Colonet', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-08', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000009', 'Camalú', 'Camalu', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-09', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000010', 'Villa de Juárez', 'Villa de Juarez', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-10', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000011', 'El Rosario', 'El Rosario', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-11', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000012', 'San Antonio de las Minas', 'San Antonio de las Minas', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-12', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000013', 'Valle de Guadalupe', 'Valle de Guadalupe', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-13', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000014', 'La Misión', 'La Mision', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-14', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000015', 'Isla de Cedros', 'Isla de Cedros', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-15', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d3-000000000016', 'Punta Banda', 'Punta Banda', '00000000-0000-0000-0000-000000000013', 'delegacion', 'MX', '02001-16', 'America/Tijuana', false, true);
+
+-- San Quintín delegaciones (8)
+INSERT INTO jurisdictions (id, name, name_en, parent_id, level, country_code, inegi_clave, timezone, escalation_enabled, verified) VALUES
+('00000000-0000-0000-00d4-000000000001', 'San Quintín Centro', 'San Quintin Downtown', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-01', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d4-000000000002', 'Vicente Guerrero', 'Vicente Guerrero', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-02', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d4-000000000003', 'Lázaro Cárdenas', 'Lazaro Cardenas', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-03', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d4-000000000004', 'Punta Prieta', 'Punta Prieta', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-04', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d4-000000000005', 'Bahía de los Ángeles', 'Bahia de los Angeles', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-05', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d4-000000000006', 'El Mármol', 'El Marmol', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-06', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d4-000000000007', 'Santa María', 'Santa Maria', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-07', 'America/Tijuana', false, true),
+('00000000-0000-0000-00d4-000000000008', 'Cataviña', 'Catavina', '00000000-0000-0000-0000-000000000015', 'delegacion', 'MX', '02006-08', 'America/Tijuana', false, true);
 
 -- =============================================================================
 -- 4. User Jurisdiction Assignments
@@ -393,6 +527,232 @@ VALUES (
 INSERT INTO user_jurisdictions (user_id, jurisdiction_id) VALUES
 ('00000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000010'), -- Ana moderator → Tijuana
 ('00000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000010'); -- Roberto government → Tijuana
+
+-- =============================================================================
+-- 4b. Jurisdiction Authorities (seeded into new table)
+-- =============================================================================
+
+-- Delete any migrated data from the migration script to avoid duplicates
+DELETE FROM jurisdiction_authorities;
+
+-- === State-level (Baja California) ===
+
+-- SMADS - Dirección de Derecho y Bienestar Animal (escalation for all municipalities)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000020',
+  'escalation', 'smads',
+  'Secretaría de Medio Ambiente y Desarrollo Sustentable',
+  'Dirección de Derecho y Bienestar Animal',
+  'bienestar.animal@bajacalifornia.gob.mx',
+  '+526861211000',
+  'https://www.bajacalifornia.gob.mx/smads',
+  ARRAY['abuse', 'stray', 'missing', 'injured', 'zoonotic', 'dead_animal', 'dangerous_dog', 'distress'],
+  'verified'
+);
+
+-- Fiscalía Especializada (criminal cases — state level)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000020',
+  'enforcement', 'fiscalia',
+  'Fiscalía General del Estado de Baja California',
+  'Fiscalía Especializada en Delitos contra el Medio Ambiente y Animales',
+  'fiscalia.ambiental@bajacalifornia.gob.mx',
+  '+526861211300',
+  'https://www.fgebc.gob.mx',
+  ARRAY['abuse'],
+  'verified'
+);
+
+-- === Tijuana (02004) ===
+
+-- Dept. Control Animal (primary)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000010',
+  'primary', 'control_animal',
+  'Ayuntamiento de Tijuana',
+  'Departamento de Control Animal',
+  'control.animal@tijuana.gob.mx',
+  '+526646888800',
+  'https://www.tijuana.gob.mx',
+  ARRAY['abuse', 'stray', 'missing', 'injured', 'dead_animal', 'dangerous_dog', 'distress'],
+  'verified'
+);
+
+-- Seguridad Pública (enforcement — abuse, dangerous dogs)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000010',
+  'enforcement', 'seguridad_publica',
+  'Secretaría de Seguridad Ciudadana de Tijuana',
+  'Dirección de Seguridad Pública',
+  'seguridad@tijuana.gob.mx',
+  '+526646841300',
+  'https://www.tijuana.gob.mx/seguridad',
+  ARRAY['abuse', 'dangerous_dog'],
+  'verified'
+);
+
+-- Juez Cívico (specialized — noise nuisance)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000010',
+  'specialized', 'seguridad_publica',
+  'Juzgados Cívicos Municipales de Tijuana',
+  'Juez Cívico',
+  'juzgados.civicos@tijuana.gob.mx',
+  '+526646841400',
+  'https://www.tijuana.gob.mx/juzgados-civicos',
+  ARRAY['noise_nuisance'],
+  'verified'
+);
+
+-- === Mexicali (02002) ===
+
+-- CEMCA (primary)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000012',
+  'primary', 'control_animal',
+  'Ayuntamiento de Mexicali',
+  'Centro Municipal de Control Animal (CEMCA)',
+  'cemca@mexicali.gob.mx',
+  '+526865522200',
+  'https://www.mexicali.gob.mx',
+  ARRAY['abuse', 'stray', 'missing', 'injured', 'dead_animal', 'dangerous_dog', 'distress'],
+  'verified'
+);
+
+-- Seguridad Pública (enforcement)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000012',
+  'enforcement', 'seguridad_publica',
+  'Dirección de Seguridad Pública Municipal de Mexicali',
+  NULL,
+  'seguridad@mexicali.gob.mx',
+  '+526865522300',
+  'https://www.mexicali.gob.mx/seguridad',
+  ARRAY['abuse', 'dangerous_dog'],
+  'verified'
+);
+
+-- === Ensenada (02001) ===
+
+-- Dirección de Ecología (primary)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000013',
+  'primary', 'ecologia',
+  'Ayuntamiento de Ensenada',
+  'Dirección de Ecología',
+  'ecologia@ensenada.gob.mx',
+  '+526461780100',
+  'https://www.ensenada.gob.mx',
+  ARRAY['abuse', 'stray', 'missing', 'injured', 'dead_animal', 'distress', 'wildlife'],
+  'verified'
+);
+
+-- Dirección de Seguridad Pública (enforcement)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000013',
+  'enforcement', 'seguridad_publica',
+  'Dirección de Seguridad Pública de Ensenada',
+  NULL,
+  'seguridad@ensenada.gob.mx',
+  '+526461780200',
+  'https://www.ensenada.gob.mx/seguridad',
+  ARRAY['abuse', 'dangerous_dog'],
+  'verified'
+);
+
+-- Servicios Médicos (specialized — zoonotic)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000013',
+  'specialized', 'salud',
+  'Servicios Médicos Municipales de Ensenada',
+  NULL,
+  'salud@ensenada.gob.mx',
+  '+526461780300',
+  'https://www.ensenada.gob.mx/salud',
+  ARRAY['zoonotic'],
+  'unverified'
+);
+
+-- === Tecate (02003) ===
+
+-- Dept. Ecología (primary, only authority)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000014',
+  'primary', 'ecologia',
+  'Ayuntamiento de Tecate',
+  'Departamento de Ecología',
+  'ecologia@tecate.gob.mx',
+  '+526656543300',
+  'https://www.tecate.gob.mx',
+  ARRAY['abuse', 'stray', 'missing', 'injured', 'dead_animal', 'dangerous_dog', 'distress'],
+  'unverified'
+);
+
+-- === Playas de Rosarito (02005) ===
+
+-- Dept. Control Animal (primary)
+INSERT INTO jurisdiction_authorities (
+  jurisdiction_id, authority_type, dependency_category,
+  dependency_name, department_name, email, phone, url,
+  handles_report_types, verification
+) VALUES (
+  '00000000-0000-0000-0000-000000000011',
+  'primary', 'control_animal',
+  'Ayuntamiento de Playas de Rosarito',
+  'Departamento de Control Animal',
+  'control.animal@rosarito.gob.mx',
+  '+526613612000',
+  'https://www.rosarito.gob.mx',
+  ARRAY['abuse', 'stray', 'missing', 'injured', 'dead_animal', 'dangerous_dog', 'distress'],
+  'unverified'
+);
+
+-- === San Quintín (02006) & San Felipe (02007) ===
+-- No local animal authority — state-level SMADS is the fallback
 
 -- =============================================================================
 -- 5. Cases (30 total: 25 original + 5 new injured cases)
