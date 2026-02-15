@@ -29,6 +29,14 @@ interface Jurisdiction {
   authority_email: string | null;
 }
 
+interface JurisdictionAuthority {
+  id: string;
+  authority_type: string;
+  dependency_name: string;
+  dependency_category: string;
+  email: string | null;
+}
+
 interface CaseMedia {
   url: string;
   thumbnail_url: string | null;
@@ -301,7 +309,53 @@ serve(async (req) => {
       const reminderCount = caseItem.escalation_reminder_count;
       const jurisdiction = caseItem.jurisdiction as unknown as Jurisdiction;
 
-      if (!jurisdiction || !jurisdiction.authority_email) {
+      if (!jurisdiction) {
+        console.error(`Case ${caseItem.id}: No jurisdiction found`);
+        continue;
+      }
+
+      // Find matching authority from jurisdiction_authorities table
+      const { data: authorities, error: authoritiesError } = await supabase
+        .from('jurisdiction_authorities')
+        .select(
+          'id, authority_type, dependency_name, dependency_category, email',
+        )
+        .eq('jurisdiction_id', jurisdiction.id)
+        .contains('handles_report_types', [caseItem.category]);
+
+      if (authoritiesError) {
+        console.error(
+          `Case ${caseItem.id}: Error fetching authorities:`,
+          authoritiesError,
+        );
+      }
+
+      let selectedAuthority: JurisdictionAuthority | null = null;
+      let authorityEmail: string | null = null;
+
+      // Authority selection logic (same as escalate-case):
+      // 1. Prefer primary authority if exists
+      // 2. Fall back to any matching authority
+      // 3. Fall back to legacy jurisdiction.authority_email
+      if (authorities && authorities.length > 0) {
+        const primaryAuthority = authorities.find(
+          (auth) => auth.authority_type === 'primary' && auth.email,
+        );
+        selectedAuthority =
+          (primaryAuthority as JurisdictionAuthority | undefined) ||
+          (authorities.find((auth) => auth.email) as
+            | JurisdictionAuthority
+            | undefined) ||
+          null;
+        authorityEmail = selectedAuthority?.email || null;
+      }
+
+      // Backward compatibility: fall back to jurisdiction.authority_email
+      if (!authorityEmail) {
+        authorityEmail = jurisdiction.authority_email;
+      }
+
+      if (!authorityEmail) {
         console.error(`Case ${caseItem.id}: No authority email configured`);
         continue;
       }
@@ -359,7 +413,7 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             from: 'Lomito <reports@lomito.org>',
-            to: jurisdiction.authority_email,
+            to: authorityEmail,
             reply_to: `case-${caseItem.id}@reply.lomito.org`,
             subject: `[Lomito] Recordatorio ${reminderNumber}: ${category} - ${jurisdiction.name} - Folio ${folio}`,
             html: htmlContent,
@@ -393,18 +447,28 @@ serve(async (req) => {
         }
 
         // Insert timeline event
+        const timelineDetails: Record<string, unknown> = {
+          type: 'reminder',
+          day: reminderNumber === 1 ? 5 : reminderNumber === 2 ? 15 : 30,
+          reminder_number: reminderNumber,
+          email_id: emailResult.id,
+        };
+
+        // Include authority details if from jurisdiction_authorities table
+        if (selectedAuthority) {
+          timelineDetails.authority_id = selectedAuthority.id;
+          timelineDetails.dependency_name = selectedAuthority.dependency_name;
+          timelineDetails.dependency_category =
+            selectedAuthority.dependency_category;
+        }
+
         const { error: timelineError } = await supabase
           .from('case_timeline')
           .insert({
             case_id: caseItem.id,
             actor_id: null,
             action: 'escalated',
-            details: {
-              type: 'reminder',
-              day: reminderNumber === 1 ? 5 : reminderNumber === 2 ? 15 : 30,
-              reminder_number: reminderNumber,
-              email_id: emailResult.id,
-            },
+            details: timelineDetails,
           });
 
         if (timelineError) {

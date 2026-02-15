@@ -31,6 +31,14 @@ interface Jurisdiction {
   escalation_enabled: boolean;
 }
 
+interface JurisdictionAuthority {
+  id: string;
+  authority_type: string;
+  dependency_name: string;
+  dependency_category: string;
+  email: string | null;
+}
+
 interface CaseMedia {
   url: string;
   thumbnail_url: string | null;
@@ -284,8 +292,44 @@ serve(async (req) => {
       );
     }
 
-    // Validate jurisdiction has authority email
-    if (!jurisdiction.authority_email) {
+    // Find matching authority from jurisdiction_authorities table
+    const { data: authorities, error: authoritiesError } = await supabase
+      .from('jurisdiction_authorities')
+      .select('id, authority_type, dependency_name, dependency_category, email')
+      .eq('jurisdiction_id', jurisdiction.id)
+      .contains('handles_report_types', [caseData.category]);
+
+    if (authoritiesError) {
+      console.error('Error fetching authorities:', authoritiesError);
+    }
+
+    let selectedAuthority: JurisdictionAuthority | null = null;
+    let authorityEmail: string | null = null;
+
+    // Authority selection logic:
+    // 1. Prefer primary authority if exists
+    // 2. Fall back to any matching authority
+    // 3. Fall back to legacy jurisdiction.authority_email
+    if (authorities && authorities.length > 0) {
+      const primaryAuthority = authorities.find(
+        (auth) => auth.authority_type === 'primary' && auth.email,
+      );
+      selectedAuthority =
+        (primaryAuthority as JurisdictionAuthority | undefined) ||
+        (authorities.find((auth) => auth.email) as
+          | JurisdictionAuthority
+          | undefined) ||
+        null;
+      authorityEmail = selectedAuthority?.email || null;
+    }
+
+    // Backward compatibility: fall back to jurisdiction.authority_email
+    if (!authorityEmail) {
+      authorityEmail = jurisdiction.authority_email;
+    }
+
+    // Validate we have an email to send to
+    if (!authorityEmail) {
       return new Response(
         JSON.stringify({
           error: 'No authority email configured for this jurisdiction',
@@ -348,7 +392,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: 'Lomito <reports@lomito.org>',
-        to: jurisdiction.authority_email,
+        to: authorityEmail,
         reply_to: `case-${caseId}@reply.lomito.org`,
         subject: `[Lomito] Reporte de ${category} - ${jurisdiction.name} - Folio ${folio}`,
         html: htmlContent,
@@ -398,17 +442,27 @@ serve(async (req) => {
     }
 
     // Insert timeline event
+    const timelineDetails: Record<string, unknown> = {
+      jurisdiction_id: jurisdiction.id,
+      authority_email: authorityEmail,
+      email_id: emailResult.id,
+    };
+
+    // Include authority details if from jurisdiction_authorities table
+    if (selectedAuthority) {
+      timelineDetails.authority_id = selectedAuthority.id;
+      timelineDetails.dependency_name = selectedAuthority.dependency_name;
+      timelineDetails.dependency_category =
+        selectedAuthority.dependency_category;
+    }
+
     const { error: timelineError } = await supabase
       .from('case_timeline')
       .insert({
         case_id: caseId,
         actor_id: actorId,
         action: 'escalated',
-        details: {
-          jurisdiction_id: jurisdiction.id,
-          authority_email: jurisdiction.authority_email,
-          email_id: emailResult.id,
-        },
+        details: timelineDetails,
       });
 
     if (timelineError) {
@@ -419,7 +473,8 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         email_id: emailResult.id,
-        escalated_to: jurisdiction.authority_email,
+        escalated_to: authorityEmail,
+        authority_id: selectedAuthority?.id || null,
       }),
       {
         status: 200,
