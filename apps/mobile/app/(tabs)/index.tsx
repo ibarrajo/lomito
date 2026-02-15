@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
 import { ClusterLayer } from '../../components/map/cluster-layer';
 import { JurisdictionLayer } from '../../components/map/jurisdiction-layer';
+import { JurisdictionInfoModal } from '../../components/map/jurisdiction-info-modal';
 import { CaseSummaryCard } from '../../components/map/case-summary-card';
 import { FilterBar } from '../../components/map/filter-bar';
 import { MapFilterSidebar } from '../../components/map/map-filter-sidebar';
@@ -24,7 +25,6 @@ import {
   iconSizes,
   typography,
 } from '@lomito/ui/src/theme/tokens';
-import { AppModal } from '@lomito/ui';
 import { useTranslation } from 'react-i18next';
 import type {
   CaseCategory,
@@ -62,9 +62,10 @@ export default function MapScreen() {
   const [displayMode, setDisplayMode] = useState<
     'pins' | 'heatmap' | 'clusters'
   >('clusters');
-  const [jurisdictionModal, setJurisdictionModal] = useState<string | null>(
-    null,
-  );
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const {
     selectedCategories,
@@ -186,12 +187,10 @@ export default function MapScreen() {
   );
 
   const handleJurisdictionPress = useCallback(
-    (_jurisdictionId: string, jurisdictionName: string) => {
-      setJurisdictionModal(
-        t('map.jurisdictionInfo', { name: jurisdictionName }),
-      );
+    (jurisdictionId: string, jurisdictionName: string) => {
+      setSelectedJurisdiction({ id: jurisdictionId, name: jurisdictionName });
     },
-    [t],
+    [],
   );
 
   const handleViewAll = useCallback(() => {
@@ -286,16 +285,11 @@ export default function MapScreen() {
           isLoading={isLoading}
         />
 
-        <AppModal
-          visible={!!jurisdictionModal}
-          title={jurisdictionModal ?? ''}
-          actions={[
-            {
-              label: t('common.ok'),
-              onPress: () => setJurisdictionModal(null),
-            },
-          ]}
-          onClose={() => setJurisdictionModal(null)}
+        <JurisdictionInfoModal
+          visible={!!selectedJurisdiction}
+          jurisdictionId={selectedJurisdiction?.id ?? ''}
+          jurisdictionName={selectedJurisdiction?.name ?? ''}
+          onClose={() => setSelectedJurisdiction(null)}
         />
       </View>
     );
@@ -358,13 +352,11 @@ export default function MapScreen() {
         <Text style={styles.fabText}>+</Text>
       </Pressable>
 
-      <AppModal
-        visible={!!jurisdictionModal}
-        title={jurisdictionModal ?? ''}
-        actions={[
-          { label: t('common.ok'), onPress: () => setJurisdictionModal(null) },
-        ]}
-        onClose={() => setJurisdictionModal(null)}
+      <JurisdictionInfoModal
+        visible={!!selectedJurisdiction}
+        jurisdictionId={selectedJurisdiction?.id ?? ''}
+        jurisdictionName={selectedJurisdiction?.name ?? ''}
+        onClose={() => setSelectedJurisdiction(null)}
       />
     </View>
   );

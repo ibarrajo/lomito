@@ -24,8 +24,16 @@ interface FilterBarProps {
 export const CATEGORIES: Array<CaseCategory | 'all'> = [
   'all',
   'abuse',
+  'injured',
   'stray',
   'missing',
+  'zoonotic',
+  'dead_animal',
+  'dangerous_dog',
+  'distress',
+  'illegal_sales',
+  'wildlife',
+  'noise_nuisance',
 ];
 export const STATUSES: Array<CaseStatus | 'all'> = [
   'all',

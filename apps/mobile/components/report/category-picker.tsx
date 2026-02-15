@@ -5,7 +5,20 @@
 
 import { View, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, Dog, Search, Heart, Check } from 'lucide-react-native';
+import {
+  AlertTriangle,
+  Dog,
+  Search,
+  Heart,
+  Check,
+  Bug,
+  Skull,
+  ShieldAlert,
+  Siren,
+  Ban,
+  Trees,
+  Volume2,
+} from 'lucide-react-native';
 import { H3, BodySmall } from '@lomito/ui';
 import {
   colors,
@@ -33,6 +46,12 @@ const CATEGORIES: Array<{
     icon: AlertTriangle,
   },
   {
+    key: 'injured',
+    color: colors.error,
+    backgroundColor: colors.errorBackground,
+    icon: Heart,
+  },
+  {
     key: 'stray',
     color: colors.warning,
     backgroundColor: colors.warningBackground,
@@ -45,10 +64,46 @@ const CATEGORIES: Array<{
     icon: Search,
   },
   {
-    key: 'injured',
-    color: colors.error,
-    backgroundColor: colors.errorBackground,
-    icon: Heart,
+    key: 'zoonotic',
+    color: colors.category.zoonotic.pin,
+    backgroundColor: colors.category.zoonotic.background,
+    icon: Bug,
+  },
+  {
+    key: 'dead_animal',
+    color: colors.category.dead_animal.pin,
+    backgroundColor: colors.category.dead_animal.background,
+    icon: Skull,
+  },
+  {
+    key: 'dangerous_dog',
+    color: colors.category.dangerous_dog.pin,
+    backgroundColor: colors.category.dangerous_dog.background,
+    icon: ShieldAlert,
+  },
+  {
+    key: 'distress',
+    color: colors.category.distress.pin,
+    backgroundColor: colors.category.distress.background,
+    icon: Siren,
+  },
+  {
+    key: 'illegal_sales',
+    color: colors.category.illegal_sales.pin,
+    backgroundColor: colors.category.illegal_sales.background,
+    icon: Ban,
+  },
+  {
+    key: 'wildlife',
+    color: colors.category.wildlife.pin,
+    backgroundColor: colors.category.wildlife.background,
+    icon: Trees,
+  },
+  {
+    key: 'noise_nuisance',
+    color: colors.category.noise_nuisance.pin,
+    backgroundColor: colors.category.noise_nuisance.background,
+    icon: Volume2,
   },
 ];
 
