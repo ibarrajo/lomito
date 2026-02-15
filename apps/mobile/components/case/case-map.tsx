@@ -16,8 +16,9 @@ interface CaseMapProps {
 
 const CATEGORY_PIN_COLORS: Record<CaseCategory, string> = {
   abuse: colors.category.abuse.pin,
-  stray: colors.category.stray.pin,
+  injured: colors.category.injured.pin,
   missing: colors.category.missing.pin,
+  stray: colors.category.stray.pin,
 };
 
 export function CaseMap({ longitude, latitude, category }: CaseMapProps) {

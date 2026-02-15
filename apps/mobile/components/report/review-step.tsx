@@ -42,8 +42,9 @@ export function ReviewStep({
       { pin: string; background: string }
     > = {
       abuse: { pin: colors.error, background: colors.errorBackground },
-      stray: { pin: colors.warning, background: colors.warningBackground },
+      injured: { pin: colors.error, background: colors.errorBackground },
       missing: { pin: colors.info, background: colors.infoBackground },
+      stray: { pin: colors.warning, background: colors.warningBackground },
     };
     return categoryColors[category];
   };

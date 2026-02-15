@@ -32,13 +32,17 @@ export const colors = {
       pin: '#C53030',
       background: '#FFF5F5',
     },
-    stray: {
-      pin: '#DD6B20',
-      background: '#FFFAF0',
+    injured: {
+      pin: '#DC2626',
+      background: '#FEF2F2',
     },
     missing: {
       pin: '#2B6CB0',
       background: '#EBF8FF',
+    },
+    stray: {
+      pin: '#DD6B20',
+      background: '#FFFAF0',
     },
     resolved: {
       pin: '#276749',

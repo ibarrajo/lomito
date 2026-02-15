@@ -38,8 +38,9 @@ export const STATUSES: Array<CaseStatus | 'all'> = [
 export const CATEGORY_COLORS: Record<CaseCategory | 'all', string> = {
   all: colors.neutral500,
   abuse: colors.category.abuse.pin,
-  stray: colors.category.stray.pin,
+  injured: colors.category.injured.pin,
   missing: colors.category.missing.pin,
+  stray: colors.category.stray.pin,
 };
 
 export const FilterBar = memo(function FilterBar({

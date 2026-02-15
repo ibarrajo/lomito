@@ -5,14 +5,13 @@
 
 import { View, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, Dog, Search } from 'lucide-react-native';
+import { AlertTriangle, Dog, Search, Heart, Check } from 'lucide-react-native';
 import { H3, BodySmall } from '@lomito/ui';
 import {
   colors,
   spacing,
   borderRadius,
   shadowStyles,
-  iconSizes,
 } from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types';
 
@@ -29,21 +28,27 @@ const CATEGORIES: Array<{
 }> = [
   {
     key: 'abuse',
-    color: colors.category.abuse.pin,
-    backgroundColor: colors.category.abuse.background,
+    color: colors.error,
+    backgroundColor: colors.errorBackground,
     icon: AlertTriangle,
   },
   {
     key: 'stray',
-    color: colors.category.stray.pin,
-    backgroundColor: colors.category.stray.background,
+    color: colors.warning,
+    backgroundColor: colors.warningBackground,
     icon: Dog,
   },
   {
     key: 'missing',
-    color: colors.category.missing.pin,
-    backgroundColor: colors.category.missing.background,
+    color: colors.info,
+    backgroundColor: colors.infoBackground,
     icon: Search,
+  },
+  {
+    key: 'injured',
+    color: colors.error,
+    backgroundColor: colors.errorBackground,
+    icon: Heart,
   },
 ];
 
@@ -65,31 +70,34 @@ export function CategoryPicker({ selected, onSelect }: CategoryPickerProps) {
             accessibilityState={{ selected: isSelected }}
             style={({ pressed }) => [
               styles.card,
-              { borderLeftColor: category.color },
-              isSelected && styles.cardSelected,
+              {
+                borderColor: isSelected ? colors.primary : colors.neutral200,
+                backgroundColor: isSelected
+                  ? 'rgba(19, 236, 200, 0.05)'
+                  : colors.white,
+              },
               pressed && styles.cardPressed,
             ]}
           >
+            {isSelected && (
+              <View style={styles.checkmark}>
+                <Check size={16} color={colors.primary} strokeWidth={2.5} />
+              </View>
+            )}
             <View
               style={[
-                styles.iconArea,
+                styles.iconCircle,
                 { backgroundColor: category.backgroundColor },
               ]}
             >
-              <IconComponent
-                size={iconSizes.default}
-                color={category.color}
-                strokeWidth={2}
-              />
+              <IconComponent size={40} color={category.color} strokeWidth={2} />
             </View>
-            <View style={styles.content}>
-              <H3>{t(`category.${category.key}`)}</H3>
-              <BodySmall color={colors.neutral500}>
-                {t(
-                  `report.category${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Description`,
-                )}
-              </BodySmall>
-            </View>
+            <H3 style={styles.title}>{t(`category.${category.key}`)}</H3>
+            <BodySmall color={colors.neutral500} style={styles.description}>
+              {t(
+                `report.category${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Description`,
+              )}
+            </BodySmall>
           </Pressable>
         );
       })}
@@ -99,35 +107,46 @@ export function CategoryPicker({ selected, onSelect }: CategoryPickerProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.white,
-    borderLeftWidth: 4,
+    alignItems: 'center',
     borderRadius: borderRadius.card,
-    flexDirection: 'row',
+    borderWidth: 2,
+    flexBasis: '48%',
+    gap: spacing.sm,
     marginBottom: spacing.md,
-    overflow: 'hidden',
     padding: spacing.md,
     ...shadowStyles.card,
   },
   cardPressed: {
     opacity: 0.7,
   },
-  cardSelected: {
-    borderLeftWidth: 6,
-    ...shadowStyles.elevated,
+  checkmark: {
+    alignItems: 'center',
+    backgroundColor: colors.primaryLight,
+    borderRadius: borderRadius.pill,
+    height: 24,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: spacing.sm,
+    top: spacing.sm,
+    width: 24,
   },
   container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: '4%',
     width: '100%',
   },
-  content: {
-    flex: 1,
-    gap: spacing.xs,
+  description: {
+    textAlign: 'center',
   },
-  iconArea: {
+  iconCircle: {
     alignItems: 'center',
-    borderRadius: borderRadius.button,
-    height: 48,
+    borderRadius: borderRadius.pill,
+    height: 80,
     justifyContent: 'center',
-    marginRight: spacing.md,
-    width: 48,
+    width: 80,
+  },
+  title: {
+    textAlign: 'center',
   },
 });

@@ -44,8 +44,9 @@ const STATUS_BADGE_COLORS: Record<CaseStatus, { color: string; bg: string }> = {
 
 const CATEGORY_BG_COLORS: Record<CaseCategory, string> = {
   abuse: colors.category.abuse.background,
-  stray: colors.category.stray.background,
+  injured: colors.category.injured.background,
   missing: colors.category.missing.background,
+  stray: colors.category.stray.background,
 };
 
 function getTimeAgo(dateString: string): string {

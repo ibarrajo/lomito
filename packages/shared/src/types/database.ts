@@ -9,7 +9,7 @@ export type CaseStatus =
   | 'resolved'
   | 'rejected'
   | 'archived';
-export type CaseCategory = 'abuse' | 'stray' | 'missing';
+export type CaseCategory = 'abuse' | 'stray' | 'missing' | 'injured';
 export type AnimalType = 'dog' | 'cat' | 'bird' | 'other';
 export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
 export type MediaType = 'image' | 'video';
