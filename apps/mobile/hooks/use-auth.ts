@@ -66,6 +66,17 @@ export function useAuth() {
     if (error) throw error;
   }, []);
 
+  const signInWithPassword = useCallback(
+    async (email: string, password: string) => {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+    },
+    [],
+  );
+
   const signUp = useCallback(
     async (email: string, password: string, metadata: SignUpMetadata) => {
       const { error } = await supabase.auth.signUp({
@@ -91,6 +102,7 @@ export function useAuth() {
     loading: state.loading,
     signInWithOtp,
     signInWithMagicLink,
+    signInWithPassword,
     verifyOtp,
     signUp,
     signOut,
