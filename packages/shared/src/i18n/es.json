@@ -67,7 +67,15 @@
     "acceptTerms": "Por favor acepta el aviso de privacidad y los términos de servicio",
     "codeInvalid": "Por favor ingresa un código válido de 6 dígitos",
     "emailLoginTab": "Iniciar sesión con correo",
-    "smsLoginTab": "Iniciar sesión con SMS"
+    "smsLoginTab": "Iniciar sesión con SMS",
+    "sidebarHeading": "Protegiendo a los animales de nuestra comunidad",
+    "sidebarSubtext": "Plataforma cívica para Tijuana",
+    "registerSidebarHeading": "Únete a nuestra comunidad",
+    "registerSidebarSubtext": "Juntos podemos proteger a los animales de Tijuana",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "phonePlaceholder": "+52 664 123 4567",
+    "namePlaceholder": "Juan Pérez",
+    "codePlaceholder": "000000"
   },
   "map": {
     "title": "Mapa de reportes",
@@ -99,7 +107,8 @@
     "lastSync": "Última sinc: hace {{time}}",
     "noRecentCases": "No hay casos recientes",
     "categoryLabel": "Categoría",
-    "statusLabel": "Estado"
+    "statusLabel": "Estado",
+    "placeholderText": "Configura EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN en .env para habilitar el mapa."
   },
   "report": {
     "newReport": "Nuevo reporte",

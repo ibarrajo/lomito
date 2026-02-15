@@ -83,7 +83,7 @@ export default function VerifyScreen() {
           label={t('auth.verificationCode')}
           value={code}
           onChangeText={setCode}
-          placeholder="000000"
+          placeholder={t('auth.codePlaceholder')}
           accessibilityLabel={t('auth.verificationCode')}
           keyboardType="number-pad"
           maxLength={6}

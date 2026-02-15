@@ -31,7 +31,7 @@ const MUNICIPALITIES = [
 const MODAL_OVERLAY_COLOR = 'rgba(0, 0, 0, 0.5)';
 
 export default function RegisterScreen() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
   const { signUp } = useAuth();
   const { isDesktop } = useBreakpoint();
@@ -114,14 +114,10 @@ export default function RegisterScreen() {
           <View style={styles.sidebarContent}>
             <Text style={styles.sidebarEmoji}>🐾</Text>
             <Text style={styles.sidebarHeading}>
-              {i18n.language === 'es'
-                ? 'Únete a nuestra comunidad'
-                : 'Join our community'}
+              {t('auth.registerSidebarHeading')}
             </Text>
             <Text style={styles.sidebarSubtext}>
-              {i18n.language === 'es'
-                ? 'Juntos podemos proteger a los animales de Tijuana'
-                : "Together we can protect Tijuana's animals"}
+              {t('auth.registerSidebarSubtext')}
             </Text>
           </View>
         </View>
@@ -150,7 +146,7 @@ export default function RegisterScreen() {
               label={t('auth.name')}
               value={fullName}
               onChangeText={setFullName}
-              placeholder="Juan Pérez"
+              placeholder={t('auth.namePlaceholder')}
               accessibilityLabel={t('auth.name')}
               autoCapitalize="words"
             />
@@ -159,7 +155,7 @@ export default function RegisterScreen() {
               label={t('auth.email')}
               value={email}
               onChangeText={setEmail}
-              placeholder="you@example.com"
+              placeholder={t('auth.emailPlaceholder')}
               accessibilityLabel={t('auth.email')}
               keyboardType="email-address"
               autoCapitalize="none"
@@ -170,7 +166,7 @@ export default function RegisterScreen() {
               label={t('auth.phone')}
               value={phone}
               onChangeText={setPhone}
-              placeholder="+52 664 123 4567"
+              placeholder={t('auth.phonePlaceholder')}
               accessibilityLabel={t('auth.phone')}
               keyboardType="phone-pad"
             />

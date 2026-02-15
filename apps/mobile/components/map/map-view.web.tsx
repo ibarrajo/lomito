@@ -7,6 +7,7 @@
 
 import { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import { TIJUANA_CENTER, DEFAULT_ZOOM } from '../../lib/mapbox.web';
 import type { ReactNode } from 'react';
@@ -34,6 +35,7 @@ export function MapView({
   cases,
   onPinPress,
 }: MapViewProps) {
+  const { t } = useTranslation();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const onPinPressRef = useRef(onPinPress);
@@ -258,10 +260,8 @@ export function MapView({
   if (!hasToken) {
     return (
       <View style={styles.placeholder}>
-        <Text style={styles.placeholderTitle}>Map</Text>
-        <Text style={styles.placeholderText}>
-          Set EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN in .env to enable the map.
-        </Text>
+        <Text style={styles.placeholderTitle}>{t('map.title')}</Text>
+        <Text style={styles.placeholderText}>{t('map.placeholderText')}</Text>
       </View>
     );
   }

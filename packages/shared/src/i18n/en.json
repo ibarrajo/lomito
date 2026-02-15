@@ -67,7 +67,15 @@
     "acceptTerms": "Please accept the privacy notice and terms of service",
     "codeInvalid": "Please enter a valid 6-digit code",
     "emailLoginTab": "Email login tab",
-    "smsLoginTab": "SMS login tab"
+    "smsLoginTab": "SMS login tab",
+    "sidebarHeading": "Protecting our community's animals",
+    "sidebarSubtext": "Civic platform for Tijuana",
+    "registerSidebarHeading": "Join our community",
+    "registerSidebarSubtext": "Together we can protect Tijuana's animals",
+    "emailPlaceholder": "you@example.com",
+    "phonePlaceholder": "+52 664 123 4567",
+    "namePlaceholder": "John Doe",
+    "codePlaceholder": "000000"
   },
   "map": {
     "title": "Report map",
@@ -99,7 +107,8 @@
     "lastSync": "Last sync: {{time}} ago",
     "noRecentCases": "No recent cases",
     "categoryLabel": "Category",
-    "statusLabel": "Status"
+    "statusLabel": "Status",
+    "placeholderText": "Set EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN in .env to enable the map."
   },
   "report": {
     "newReport": "New report",

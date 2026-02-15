@@ -12,7 +12,7 @@ import { isFeatureEnabled } from '@lomito/shared';
 type AuthMethod = 'email' | 'phone';
 
 export default function LoginScreen() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
   const { signInWithMagicLink, signInWithOtp } = useAuth();
 
@@ -74,14 +74,10 @@ export default function LoginScreen() {
           <View style={styles.sidebarContent}>
             <Text style={styles.sidebarEmoji}>🐾</Text>
             <Text style={styles.sidebarHeading}>
-              {i18n.language === 'es'
-                ? 'Protegiendo a los animales de nuestra comunidad'
-                : "Protecting our community's animals"}
+              {t('auth.sidebarHeading')}
             </Text>
             <Text style={styles.sidebarSubtext}>
-              {i18n.language === 'es'
-                ? 'Plataforma cívica para Tijuana'
-                : 'Civic platform for Tijuana'}
+              {t('auth.sidebarSubtext')}
             </Text>
           </View>
         </View>
@@ -148,7 +144,7 @@ export default function LoginScreen() {
                 label={t('auth.email')}
                 value={email}
                 onChangeText={setEmail}
-                placeholder="you@example.com"
+                placeholder={t('auth.emailPlaceholder')}
                 accessibilityLabel={t('auth.email')}
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -173,7 +169,7 @@ export default function LoginScreen() {
                 label={t('auth.phone')}
                 value={phone}
                 onChangeText={setPhone}
-                placeholder="+52 664 123 4567"
+                placeholder={t('auth.phonePlaceholder')}
                 accessibilityLabel={t('auth.phone')}
                 keyboardType="phone-pad"
                 autoCapitalize="none"
