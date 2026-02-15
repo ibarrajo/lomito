@@ -8,27 +8,25 @@ import {
 } from 'react-native';
 import { Redirect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { MapPin, ArrowRight, Search, Bell } from 'lucide-react-native';
+import { ArrowRight } from 'lucide-react-native';
 import { Container } from '@lomito/ui/src/components/container';
-import {
-  H1,
-  H2,
-  H3,
-  Body,
-  BodySmall,
-} from '@lomito/ui/src/components/typography';
+import { H1, H2, Body, BodySmall } from '@lomito/ui/src/components/typography';
 import {
   colors,
   spacing,
   borderRadius,
   shadowStyles,
 } from '@lomito/ui/src/theme/tokens';
-import { isFeatureEnabled } from '@lomito/shared';
 import { RecentReportsTicker } from '../../components/landing/recent-reports-ticker';
+import { HeroStatsBar } from '../../components/landing/hero-stats-bar';
+import { ProcessSteps } from '../../components/landing/process-steps';
+import { AccountabilitySection } from '../../components/landing/accountability-section';
+import { CtaBanner } from '../../components/landing/cta-banner';
+import { LandingFooter } from '../../components/landing/landing-footer';
 import { useAnalytics } from '../../hooks/use-analytics';
 
 export default function LandingPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
   const { trackEvent } = useAnalytics();
 
@@ -36,23 +34,20 @@ export default function LandingPage() {
     return <Redirect href="/auth/login" />;
   }
 
-  const handleLanguageToggle = () => {
-    const newLang = i18n.language === 'en' ? 'es' : 'en';
-    i18n.changeLanguage(newLang);
-  };
-
   return (
     <ScrollView style={styles.scrollView}>
-      {/* Hero — left-aligned, warm, with clear value prop */}
+      {/* Section 1: Hero */}
       <View style={styles.hero}>
         <Container>
           <View style={styles.heroInner}>
             <View style={styles.heroText}>
-              <BodySmall style={styles.heroTag}>
-                {i18n.language === 'es'
-                  ? 'Plataforma cívica para Tijuana'
-                  : 'Civic platform for Tijuana'}
-              </BodySmall>
+              {/* Active Now Badge */}
+              <View style={styles.activeBadge}>
+                <View style={styles.activeDot} />
+                <BodySmall style={styles.activeBadgeText}>
+                  {t('landing.activeNow')}
+                </BodySmall>
+              </View>
               <H1 style={styles.heroTitle}>{t('landing.heroTitle')}</H1>
               <Body style={styles.heroSubtitle}>
                 {t('landing.heroSubtitle')}
@@ -91,7 +86,7 @@ export default function LandingPage() {
                 </TouchableOpacity>
               </View>
             </View>
-            {/* Right side — step indicators as a visual instead of generic icons */}
+            {/* Right side — step indicators */}
             <View style={styles.heroVisual}>
               <View style={styles.stepCard}>
                 <View
@@ -142,66 +137,10 @@ export default function LandingPage() {
         </Container>
       </View>
 
-      {/* Features — asymmetric bento layout, not 3 identical cards */}
-      <View style={styles.featuresSection}>
-        <Container>
-          <H2 style={styles.featuresTitle}>{t('landing.howItWorksTitle')}</H2>
-          <View style={styles.bentoGrid}>
-            {/* Large card */}
-            <View style={[styles.bentoCard, styles.bentoLarge]}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  { backgroundColor: colors.primaryLight },
-                ]}
-              >
-                <MapPin size={24} color={colors.primary} strokeWidth={1.5} />
-              </View>
-              <H3 style={styles.featureTitle}>{t('landing.step1Title')}</H3>
-              <Body style={styles.featureDesc}>
-                {t('landing.step1Description')}
-              </Body>
-            </View>
-            {/* Two smaller cards stacked */}
-            <View style={styles.bentoStack}>
-              <View style={[styles.bentoCard, styles.bentoSmall]}>
-                <View
-                  style={[
-                    styles.featureIcon,
-                    { backgroundColor: colors.secondaryLight },
-                  ]}
-                >
-                  <Search
-                    size={20}
-                    color={colors.secondary}
-                    strokeWidth={1.5}
-                  />
-                </View>
-                <H3 style={styles.featureTitle}>{t('landing.step2Title')}</H3>
-                <Body style={styles.featureDesc}>
-                  {t('landing.step2Description')}
-                </Body>
-              </View>
-              <View style={[styles.bentoCard, styles.bentoSmall]}>
-                <View
-                  style={[
-                    styles.featureIcon,
-                    { backgroundColor: colors.successBackground },
-                  ]}
-                >
-                  <Bell size={20} color={colors.success} strokeWidth={1.5} />
-                </View>
-                <H3 style={styles.featureTitle}>{t('landing.step3Title')}</H3>
-                <Body style={styles.featureDesc}>
-                  {t('landing.step3Description')}
-                </Body>
-              </View>
-            </View>
-          </View>
-        </Container>
-      </View>
+      {/* Section 2: Hero Stats Bar */}
+      <HeroStatsBar />
 
-      {/* Recent Activity — map preview + recent reports */}
+      {/* Section 3: Live Impact Map */}
       <View style={styles.recentActivitySection}>
         <Container>
           <H2 style={styles.sectionTitle}>{t('landing.recentActivity')}</H2>
@@ -209,86 +148,41 @@ export default function LandingPage() {
             {t('landing.recentActivityDescription')}
           </BodySmall>
           <View style={styles.activityGrid}>
-            {/* Left side: decorative map placeholder */}
-            <View style={styles.mapPlaceholder}>
-              <Text style={styles.mapPlaceholderText}>Tijuana</Text>
+            <View style={styles.mapCard}>
+              <View style={styles.mapPlaceholder}>
+                <Text style={styles.mapPlaceholderText}>Tijuana</Text>
+              </View>
             </View>
-            {/* Right side: recent reports ticker */}
-            <View style={styles.tickerContainer}>
+            <View style={styles.tickerCard}>
               <RecentReportsTicker />
             </View>
           </View>
         </Container>
       </View>
 
-      {/* Community — compact, left-aligned */}
-      <View style={styles.communitySection}>
+      {/* Section 4: Process Steps */}
+      <View style={styles.processSection}>
         <Container>
-          <View style={styles.communityInner}>
-            <View style={styles.communityAccent} />
-            <View style={styles.communityText}>
-              <H2>{t('landing.communityTitle')}</H2>
-              <Body style={styles.communityDesc}>
-                {t('landing.communityDescription')}
-              </Body>
-            </View>
-          </View>
+          <H2 style={styles.sectionTitle}>{t('landing.processTitle')}</H2>
+          <View style={styles.processSpacer} />
+          <ProcessSteps />
         </Container>
       </View>
 
-      {/* Footer */}
-      <View style={styles.footer}>
+      {/* Section 5: Accountability Section */}
+      <View style={styles.accountabilitySection}>
         <Container>
-          <View style={styles.footerInner}>
-            <View style={styles.footerLeft}>
-              <Text style={styles.footerBrand}>Lomito.org</Text>
-              <BodySmall style={styles.footerTagline}>
-                {t('landing.footerTagline')}
-              </BodySmall>
-            </View>
-            <View style={styles.footerLinks}>
-              <TouchableOpacity
-                onPress={() => router.push('/about')}
-                accessibilityRole="link"
-              >
-                <Text style={styles.footerLink}>{t('about.title')}</Text>
-              </TouchableOpacity>
-              {isFeatureEnabled('donations') && (
-                <TouchableOpacity
-                  onPress={() => router.push('/donate')}
-                  accessibilityRole="link"
-                >
-                  <Text style={styles.footerLink}>{t('donate.title')}</Text>
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity
-                onPress={() => router.push('/legal/privacy')}
-                accessibilityRole="link"
-              >
-                <Text style={styles.footerLink}>{t('legal.privacy')}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => router.push('/legal/terms')}
-                accessibilityRole="link"
-              >
-                <Text style={styles.footerLink}>{t('legal.terms')}</Text>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              onPress={handleLanguageToggle}
-              accessibilityLabel={t('settings.language')}
-              accessibilityRole="button"
-            >
-              <Text style={styles.footerLangToggle}>
-                {i18n.language === 'en' ? 'Español' : 'English'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.footerDisclaimer}>
-            <BodySmall style={styles.footerDisclaimerText}>
-              {t('legal.disclaimerShort')}
-            </BodySmall>
-          </View>
+          <AccountabilitySection />
+        </Container>
+      </View>
+
+      {/* Section 6: CTA Banner */}
+      <CtaBanner />
+
+      {/* Section 7: Footer */}
+      <View style={styles.footerSection}>
+        <Container>
+          <LandingFooter />
         </Container>
       </View>
     </ScrollView>
@@ -296,57 +190,32 @@ export default function LandingPage() {
 }
 
 const styles = StyleSheet.create({
+  accountabilitySection: {
+    backgroundColor: colors.white,
+    paddingVertical: spacing.xxl,
+  },
+  activeBadge: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginBottom: spacing.md,
+  },
+  activeBadgeText: {
+    color: colors.success,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  activeDot: {
+    backgroundColor: colors.success,
+    borderRadius: 9999,
+    height: 8,
+    width: 8,
+  },
   activityGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.lg,
-  },
-  bentoCard: {
-    backgroundColor: colors.white,
-    borderColor: colors.neutral200,
-    borderRadius: borderRadius.card,
-    borderWidth: 1,
-    padding: spacing.lg,
-    ...shadowStyles.card,
-  },
-  bentoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-  },
-  bentoLarge: {
-    flex: 1.2,
-    minHeight: 180,
-    minWidth: 300,
-  },
-  bentoSmall: {
-    flex: 1,
-  },
-  bentoStack: {
-    flex: 1,
-    gap: spacing.md,
-    minWidth: 280,
-  },
-  communityAccent: {
-    backgroundColor: colors.primary,
-    borderRadius: 2,
-    width: 4,
-  },
-  communityDesc: {
-    color: colors.neutral500,
-    marginTop: spacing.sm,
-  },
-  communityInner: {
-    flexDirection: 'row',
-    gap: spacing.lg,
-  },
-  communitySection: {
-    backgroundColor: colors.white,
-    paddingVertical: spacing.xxl,
-  },
-  communityText: {
-    flex: 1,
-    maxWidth: 640,
   },
   ctaPrimary: {
     alignItems: 'center',
@@ -380,78 +249,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  featureDesc: {
-    color: colors.neutral500,
-  },
-  featureIcon: {
-    alignItems: 'center',
-    borderRadius: borderRadius.button,
-    height: 44,
-    justifyContent: 'center',
-    marginBottom: spacing.md,
-    width: 44,
-  },
-  featureTitle: {
-    marginBottom: spacing.xs,
-  },
-  featuresSection: {
-    paddingVertical: spacing.xxl,
-  },
-  featuresTitle: {
-    marginBottom: spacing.lg,
-  },
-  footer: {
-    borderTopColor: colors.neutral200,
-    borderTopWidth: 1,
-    paddingVertical: spacing.lg,
-  },
-  footerBrand: {
-    color: colors.primary,
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  footerDisclaimer: {
-    borderTopColor: colors.neutral200,
-    borderTopWidth: 1,
-    marginTop: spacing.md,
-    paddingTop: spacing.md,
-  },
-  footerDisclaimerText: {
-    color: colors.neutral400,
-    textAlign: 'center',
-  },
-  footerInner: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.lg,
-    justifyContent: 'space-between',
-  },
-  footerLangToggle: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  footerLeft: {
-    gap: spacing.xs,
-  },
-  footerLink: {
-    color: colors.neutral500,
-    fontSize: 14,
-  },
-  footerLinks: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-  },
-  footerTagline: {
-    color: colors.neutral500,
+  footerSection: {
+    backgroundColor: colors.white,
   },
   hero: {
     backgroundColor: colors.white,
-    borderBottomColor: colors.neutral200,
-    borderBottomWidth: 1,
-    paddingBottom: spacing.xxl,
+    paddingBottom: spacing.xl,
     paddingTop: spacing.xl,
   },
   heroInner: {
@@ -462,13 +265,6 @@ const styles = StyleSheet.create({
   heroSubtitle: {
     color: colors.neutral500,
     maxWidth: 480,
-  },
-  heroTag: {
-    color: colors.primary,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    marginBottom: spacing.md,
-    textTransform: 'uppercase',
   },
   heroText: {
     flex: 1,
@@ -484,6 +280,16 @@ const styles = StyleSheet.create({
     minWidth: 280,
     paddingVertical: spacing.md,
   },
+  mapCard: {
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.card,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 280,
+    overflow: 'hidden',
+    ...shadowStyles.card,
+  },
   mapPlaceholder: {
     alignItems: 'center',
     backgroundColor: colors.neutral100,
@@ -491,15 +297,20 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.card,
     borderStyle: 'dashed',
     borderWidth: 2,
-    flex: 1,
     justifyContent: 'center',
     minHeight: 280,
-    minWidth: 280,
   },
   mapPlaceholderText: {
     color: colors.neutral400,
     fontSize: 18,
     fontWeight: '600',
+  },
+  processSection: {
+    backgroundColor: colors.white,
+    paddingVertical: spacing.xxl,
+  },
+  processSpacer: {
+    height: spacing.lg,
   },
   recentActivitySection: {
     backgroundColor: colors.neutral100,
@@ -549,8 +360,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  tickerContainer: {
+  tickerCard: {
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.card,
+    borderWidth: 1,
     flex: 1,
     minWidth: 320,
+    overflow: 'hidden',
+    ...shadowStyles.card,
   },
 });
