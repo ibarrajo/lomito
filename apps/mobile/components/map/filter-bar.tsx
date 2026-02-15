@@ -13,22 +13,21 @@ import {
   typography,
 } from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory, CaseStatus } from '@lomito/shared/types/database';
-import type { FilterValue } from '../../hooks/use-map-filters';
 
 interface FilterBarProps {
-  selectedCategories: FilterValue<CaseCategory>;
-  selectedStatuses: FilterValue<CaseStatus>;
+  selectedCategories: CaseCategory | 'all';
+  selectedStatuses: CaseStatus | 'all';
   onToggleCategory: (category: CaseCategory | 'all') => void;
   onToggleStatus: (status: CaseStatus | 'all') => void;
 }
 
-const CATEGORIES: Array<CaseCategory | 'all'> = [
+export const CATEGORIES: Array<CaseCategory | 'all'> = [
   'all',
   'abuse',
   'stray',
   'missing',
 ];
-const STATUSES: Array<CaseStatus | 'all'> = [
+export const STATUSES: Array<CaseStatus | 'all'> = [
   'all',
   'pending',
   'verified',
@@ -36,21 +35,11 @@ const STATUSES: Array<CaseStatus | 'all'> = [
   'resolved',
 ];
 
-const CATEGORY_COLORS: Record<CaseCategory | 'all', string> = {
+export const CATEGORY_COLORS: Record<CaseCategory | 'all', string> = {
   all: colors.neutral500,
   abuse: colors.category.abuse.pin,
   stray: colors.category.stray.pin,
   missing: colors.category.missing.pin,
-};
-
-const STATUS_COLORS: Record<CaseStatus | 'all', string> = {
-  all: colors.neutral500,
-  pending: colors.warning,
-  verified: colors.info,
-  in_progress: colors.accent,
-  resolved: colors.success,
-  rejected: colors.error,
-  archived: colors.neutral400,
 };
 
 export const FilterBar = memo(function FilterBar({
@@ -63,33 +52,28 @@ export const FilterBar = memo(function FilterBar({
 
   const isCategorySelected = useCallback(
     (category: CaseCategory | 'all'): boolean => {
-      if (category === 'all') {
-        return selectedCategories === 'all';
-      }
-      return selectedCategories !== 'all' && selectedCategories.has(category);
+      return selectedCategories === category;
     },
     [selectedCategories],
   );
 
   const isStatusSelected = useCallback(
     (status: CaseStatus | 'all'): boolean => {
-      if (status === 'all') {
-        return selectedStatuses === 'all';
-      }
-      return selectedStatuses !== 'all' && selectedStatuses.has(status);
+      return selectedStatuses === status;
     },
     [selectedStatuses],
   );
 
   return (
     <View style={styles.container}>
-      {/* Category filters */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
+        {/* TYPE section */}
+        <Text style={styles.sectionLabel}>{t('map.filterType')}</Text>
         {CATEGORIES.map((category) => {
           const selected = isCategorySelected(category);
           const color = CATEGORY_COLORS[category];
@@ -103,19 +87,27 @@ export const FilterBar = memo(function FilterBar({
               key={category}
               style={[
                 styles.pill,
-                selected && { backgroundColor: color },
-                !selected && { borderColor: color, borderWidth: 1 },
+                selected && { backgroundColor: colors.primary },
+                !selected && {
+                  borderColor: colors.neutral200,
+                  borderWidth: 1,
+                },
               ]}
               onPress={() => onToggleCategory(category)}
               accessibilityLabel={`${t('map.filterByCategory')}: ${label}`}
               accessibilityRole="button"
               accessibilityState={{ selected }}
             >
+              {category !== 'all' && (
+                <View
+                  style={[styles.categoryDot, { backgroundColor: color }]}
+                />
+              )}
               <Text
                 style={[
                   styles.pillText,
                   selected && styles.pillTextSelected,
-                  !selected && { color },
+                  !selected && { color: colors.neutral700 },
                 ]}
               >
                 {label}
@@ -123,18 +115,14 @@ export const FilterBar = memo(function FilterBar({
             </Pressable>
           );
         })}
-      </ScrollView>
 
-      {/* Status filters */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-      >
+        {/* Divider */}
+        <View style={styles.divider} />
+
+        {/* STATUS section */}
+        <Text style={styles.sectionLabel}>{t('map.filterStatus')}</Text>
         {STATUSES.map((status) => {
           const selected = isStatusSelected(status);
-          const color = STATUS_COLORS[status];
           const label =
             status === 'all' ? t('map.allStatuses') : t(`status.${status}`);
 
@@ -143,8 +131,11 @@ export const FilterBar = memo(function FilterBar({
               key={status}
               style={[
                 styles.pill,
-                selected && { backgroundColor: color },
-                !selected && { borderColor: color, borderWidth: 1 },
+                selected && { backgroundColor: colors.primary },
+                !selected && {
+                  borderColor: colors.neutral200,
+                  borderWidth: 1,
+                },
               ]}
               onPress={() => onToggleStatus(status)}
               accessibilityLabel={`${t('map.filterByStatus')}: ${label}`}
@@ -155,7 +146,7 @@ export const FilterBar = memo(function FilterBar({
                 style={[
                   styles.pillText,
                   selected && styles.pillTextSelected,
-                  !selected && { color },
+                  !selected && { color: colors.neutral700 },
                 ]}
               >
                 {label}
@@ -169,14 +160,29 @@ export const FilterBar = memo(function FilterBar({
 });
 
 const styles = StyleSheet.create({
+  categoryDot: {
+    borderRadius: 4,
+    height: 8,
+    marginRight: 4,
+    width: 8,
+  },
   container: {
     backgroundColor: colors.white,
     borderBottomColor: colors.neutral200,
     borderBottomWidth: 1,
     paddingVertical: spacing.sm,
   },
+  divider: {
+    alignSelf: 'center',
+    backgroundColor: colors.neutral400,
+    height: 20,
+    marginHorizontal: spacing.sm,
+    width: 1,
+  },
   pill: {
+    alignItems: 'center',
     borderRadius: borderRadius.pill,
+    flexDirection: 'row',
     marginRight: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -190,10 +196,20 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   scrollContent: {
+    alignItems: 'center',
     gap: spacing.sm,
     paddingHorizontal: spacing.md,
   },
   scrollView: {
     flexGrow: 0,
+  },
+  sectionLabel: {
+    color: colors.neutral500,
+    fontFamily: typography.fontFamily.body,
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    marginRight: spacing.sm,
+    textTransform: 'uppercase',
   },
 });

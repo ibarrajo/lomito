@@ -6,7 +6,7 @@
 import { useState, useCallback } from 'react';
 import type { CaseCategory, CaseStatus } from '@lomito/shared/types/database';
 
-export type FilterValue<T> = Set<T> | 'all';
+export type FilterValue<T> = T | 'all';
 
 export interface MapFilters {
   selectedCategories: FilterValue<CaseCategory>;
@@ -15,7 +15,8 @@ export interface MapFilters {
 
 // Type for Supabase query builder (simplified to avoid complex generics)
 type QueryBuilder = {
-  in: (column: string, values: unknown[]) => QueryBuilder;
+  in: (column: string, values: string[]) => QueryBuilder;
+  eq: (column: string, value: string) => QueryBuilder;
 };
 
 export interface MapFiltersReturn extends MapFilters {
@@ -38,18 +39,12 @@ export function useMapFilters(): MapFiltersReturn {
     }
 
     setSelectedCategories((prev) => {
-      if (prev === 'all') {
-        return new Set([category]);
+      // If clicking the already-active value, revert to 'all'
+      if (prev === category) {
+        return 'all';
       }
-
-      const newSet = new Set(prev);
-      if (newSet.has(category)) {
-        newSet.delete(category);
-      } else {
-        newSet.add(category);
-      }
-
-      return newSet.size === 0 ? 'all' : newSet;
+      // Otherwise, select the new value
+      return category;
     });
   }, []);
 
@@ -60,18 +55,12 @@ export function useMapFilters(): MapFiltersReturn {
     }
 
     setSelectedStatuses((prev) => {
-      if (prev === 'all') {
-        return new Set([status]);
+      // If clicking the already-active value, revert to 'all'
+      if (prev === status) {
+        return 'all';
       }
-
-      const newSet = new Set(prev);
-      if (newSet.has(status)) {
-        newSet.delete(status);
-      } else {
-        newSet.add(status);
-      }
-
-      return newSet.size === 0 ? 'all' : newSet;
+      // Otherwise, select the new value
+      return status;
     });
   }, []);
 
@@ -85,15 +74,13 @@ export function useMapFilters(): MapFiltersReturn {
       let filteredQuery = query;
 
       // Apply category filter
-      if (selectedCategories !== 'all' && selectedCategories.size > 0) {
-        const categories = Array.from(selectedCategories);
-        filteredQuery = filteredQuery.in('category', categories) as T;
+      if (selectedCategories !== 'all') {
+        filteredQuery = filteredQuery.eq('category', selectedCategories) as T;
       }
 
       // Apply status filter
-      if (selectedStatuses !== 'all' && selectedStatuses.size > 0) {
-        const statuses = Array.from(selectedStatuses);
-        filteredQuery = filteredQuery.in('status', statuses) as T;
+      if (selectedStatuses !== 'all') {
+        filteredQuery = filteredQuery.eq('status', selectedStatuses) as T;
       }
 
       return filteredQuery;

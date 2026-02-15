@@ -11,6 +11,8 @@ import { ClusterLayer } from '../../components/map/cluster-layer';
 import { JurisdictionLayer } from '../../components/map/jurisdiction-layer';
 import { CaseSummaryCard } from '../../components/map/case-summary-card';
 import { FilterBar } from '../../components/map/filter-bar';
+import { MapFilterSidebar } from '../../components/map/map-filter-sidebar';
+import { MapActivityPanel } from '../../components/map/map-activity-panel';
 import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
@@ -28,6 +30,7 @@ import type {
   CaseCategory,
   CaseStatus,
   AnimalType,
+  UrgencyLevel,
 } from '@lomito/shared/types/database';
 
 interface CaseSummary {
@@ -36,6 +39,7 @@ interface CaseSummary {
   animal_type: AnimalType;
   description: string;
   status: CaseStatus;
+  urgency: UrgencyLevel;
   location: { type: 'Point'; coordinates: [number, number] };
   created_at: string;
 }
@@ -45,6 +49,7 @@ export default function MapScreen() {
   const router = useRouter();
   const { isDesktop } = useBreakpoint();
   const [cases, setCases] = useState<CaseSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCase, setSelectedCase] = useState<CaseSummary | null>(null);
   const [showBoundaries, setShowBoundaries] = useState(false);
   const [mapBounds, setMapBounds] = useState<{
@@ -63,6 +68,7 @@ export default function MapScreen() {
     selectedStatuses,
     toggleCategory,
     toggleStatus,
+    clearFilters,
     buildQuery,
   } = useMapFilters();
 
@@ -73,10 +79,11 @@ export default function MapScreen() {
 
   const fetchCases = useCallback(async () => {
     try {
+      setIsLoading(true);
       let query = supabase
         .from('cases')
         .select(
-          'id, category, animal_type, description, status, location, created_at',
+          'id, category, animal_type, description, status, urgency, location, created_at',
         )
         .order('created_at', { ascending: false })
         .limit(100);
@@ -96,6 +103,8 @@ export default function MapScreen() {
       }
     } catch (error) {
       console.error('Unexpected error fetching cases:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [buildQuery]);
 
@@ -182,6 +191,83 @@ export default function MapScreen() {
     [t],
   );
 
+  const handleViewAll = useCallback(() => {
+    // TODO: navigate to a full case list page when available
+  }, []);
+
+  const isDesktopWeb = Platform.OS === 'web' && isDesktop;
+
+  // Desktop web: 3-column layout
+  if (isDesktopWeb) {
+    return (
+      <View style={styles.desktopContainer}>
+        <MapFilterSidebar
+          selectedCategories={selectedCategories}
+          selectedStatuses={selectedStatuses}
+          onToggleCategory={toggleCategory}
+          onToggleStatus={toggleStatus}
+          onReset={clearFilters}
+        />
+
+        <View style={styles.mapColumn}>
+          {/* Jurisdiction toggle button */}
+          <Pressable
+            style={styles.jurisdictionToggle}
+            onPress={handleToggleBoundaries}
+            accessibilityLabel={
+              showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')
+            }
+            accessibilityRole="button"
+          >
+            <Text style={styles.jurisdictionToggleText}>
+              {showBoundaries ? '🗺️' : '🗺️'}
+            </Text>
+          </Pressable>
+
+          <MapView
+            onRegionDidChange={handleRegionChange}
+            cases={geoJSONData}
+            onPinPress={handlePinPress}
+          >
+            <JurisdictionLayer
+              data={jurisdictions}
+              visible={showBoundaries}
+              onPress={handleJurisdictionPress}
+            />
+          </MapView>
+
+          {selectedCase && (
+            <CaseSummaryCard
+              caseData={selectedCase}
+              onClose={handleCloseCard}
+              onViewDetails={handleViewDetails}
+            />
+          )}
+        </View>
+
+        <MapActivityPanel
+          cases={cases}
+          onCasePress={handleViewDetails}
+          onViewAll={handleViewAll}
+          isLoading={isLoading}
+        />
+
+        <AppModal
+          visible={!!jurisdictionModal}
+          title={jurisdictionModal ?? ''}
+          actions={[
+            {
+              label: t('common.ok'),
+              onPress: () => setJurisdictionModal(null),
+            },
+          ]}
+          onClose={() => setJurisdictionModal(null)}
+        />
+      </View>
+    );
+  }
+
+  // Mobile / tablet: original layout
   return (
     <View style={styles.container}>
       <FilterBar
@@ -205,8 +291,15 @@ export default function MapScreen() {
         </Text>
       </Pressable>
 
-      <MapView onRegionDidChange={handleRegionChange}>
-        <ClusterLayer cases={geoJSONData} onPinPress={handlePinPress} />
+      <MapView
+        onRegionDidChange={handleRegionChange}
+        {...(Platform.OS === 'web'
+          ? { cases: geoJSONData, onPinPress: handlePinPress }
+          : {})}
+      >
+        {Platform.OS !== 'web' && (
+          <ClusterLayer cases={geoJSONData} onPinPress={handlePinPress} />
+        )}
         <JurisdictionLayer
           data={jurisdictions}
           visible={showBoundaries}
@@ -222,17 +315,14 @@ export default function MapScreen() {
         />
       )}
 
-      {/* FAB for New Report - hidden on desktop web since navbar has CTA */}
-      {(Platform.OS !== 'web' || !isDesktop) && (
-        <Pressable
-          style={styles.fab}
-          onPress={handleNewReport}
-          accessibilityLabel={t('report.newReport')}
-          accessibilityRole="button"
-        >
-          <Text style={styles.fabText}>+</Text>
-        </Pressable>
-      )}
+      <Pressable
+        style={styles.fab}
+        onPress={handleNewReport}
+        accessibilityLabel={t('report.newReport')}
+        accessibilityRole="button"
+      >
+        <Text style={styles.fabText}>+</Text>
+      </Pressable>
 
       <AppModal
         visible={!!jurisdictionModal}
@@ -249,6 +339,10 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  desktopContainer: {
+    flex: 1,
+    flexDirection: 'row',
   },
   fab: {
     alignItems: 'center',
@@ -283,5 +377,9 @@ const styles = StyleSheet.create({
   },
   jurisdictionToggleText: {
     fontSize: iconSizes.default,
+  },
+  mapColumn: {
+    flex: 1,
+    position: 'relative' as const,
   },
 });

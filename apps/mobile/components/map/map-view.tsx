@@ -17,8 +17,10 @@ interface Region {
 
 interface MapViewProps {
   children?: ReactNode;
+  cases?: GeoJSON.FeatureCollection;
   onMapReady?: () => void;
   onRegionDidChange?: (region: Region) => void;
+  onPinPress?: (caseId: string) => void;
 }
 
 export function MapView({
