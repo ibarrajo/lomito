@@ -92,11 +92,13 @@ export function ProfileSidebar() {
     <View style={styles.container}>
       <View style={styles.userSection}>
         <View style={[styles.avatar, { backgroundColor: colors.primary }]}>
-          <Body style={styles.avatarText} color={colors.white}>
+          <Body style={styles.avatarText} color={colors.secondary}>
             {initials}
           </Body>
         </View>
-        <H2 style={styles.userName}>{profile?.full_name || 'User'}</H2>
+        <H2 style={styles.userName}>
+          {profile?.full_name || t('common.user')}
+        </H2>
         {profile?.role && (
           <Badge
             label={t(`profile.${profile.role}`)}

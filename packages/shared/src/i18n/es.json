@@ -19,7 +19,8 @@
     "close": "Cerrar",
     "yes": "Sí",
     "no": "No",
-    "ok": "OK"
+    "ok": "OK",
+    "user": "Usuario"
   },
   "nav": {
     "map": "Mapa",
@@ -454,6 +455,7 @@
     "processStep3Desc": "Los casos se escalan automáticamente hasta resolverse. Cada resultado es registro público.",
     "accountabilityTitle": "Forzamos la rendición de cuentas",
     "accountabilitySubtitle": "Cada reporte activa una línea de tiempo de escalación automática",
+    "dayPrefix": "Día",
     "day1": "Reporte presentado",
     "day5": "Primer recordatorio al gobierno",
     "day15": "Seguimiento enviado",
@@ -469,6 +471,7 @@
     "footerResources": "Recursos",
     "footerBlog": "Blog",
     "footerFaq": "Preguntas frecuentes",
-    "footerContact": "Contacto"
+    "footerContact": "Contacto",
+    "footerLegal": "Legal"
   }
 }

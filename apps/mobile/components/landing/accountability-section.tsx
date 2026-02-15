@@ -40,7 +40,7 @@ export function AccountabilitySection() {
             <View style={styles.milestoneRow}>
               <View style={styles.dayContainer}>
                 <BodySmall style={styles.dayLabel}>
-                  Day {milestone.day}
+                  {t('landing.dayPrefix')} {milestone.day}
                 </BodySmall>
               </View>
               <View style={styles.dotContainer}>

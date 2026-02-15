@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
+    alignSelf: 'center',
     maxWidth: 640,
     paddingHorizontal: spacing.lg,
     width: '100%',

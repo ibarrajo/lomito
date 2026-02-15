@@ -82,7 +82,7 @@ export function LandingFooter() {
 
         {/* Column 4: Legal */}
         <View style={styles.column}>
-          <H3 style={styles.columnTitle}>Legal</H3>
+          <H3 style={styles.columnTitle}>{t('landing.footerLegal')}</H3>
           {legalLinks.map((link) => (
             <TouchableOpacity
               key={link.label}

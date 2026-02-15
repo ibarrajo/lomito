@@ -19,7 +19,8 @@
     "close": "Close",
     "yes": "Yes",
     "no": "No",
-    "ok": "OK"
+    "ok": "OK",
+    "user": "User"
   },
   "nav": {
     "map": "Map",
@@ -454,6 +455,7 @@
     "processStep3Desc": "Cases are escalated automatically until resolved. Every outcome is public record.",
     "accountabilityTitle": "We Force Accountability",
     "accountabilitySubtitle": "Every report triggers an automated escalation timeline",
+    "dayPrefix": "Day",
     "day1": "Report Filed",
     "day5": "First Government Reminder",
     "day15": "Follow-up Sent",
@@ -469,6 +471,7 @@
     "footerResources": "Resources",
     "footerBlog": "Blog",
     "footerFaq": "FAQ",
-    "footerContact": "Contact"
+    "footerContact": "Contact",
+    "footerLegal": "Legal"
   }
 }
