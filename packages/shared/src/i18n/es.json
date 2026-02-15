@@ -128,6 +128,9 @@
     "removePhoto": "Quitar foto",
     "fromCamera": "Tomar foto",
     "fromGallery": "Elegir de galería",
+    "takePhoto": "Tomar Foto",
+    "chooseFromGallery": "Elegir de Galería",
+    "cancelAction": "Cancelar",
     "location": "Ubicación",
     "submit": "Enviar reporte",
     "step1Title": "¿Qué sucedió?",
@@ -192,7 +195,9 @@
     "following": "Siguiendo",
     "share": "Compartir",
     "shareText": "Mira este reporte de bienestar animal en Lomito: {{url}}",
-    "linkCopied": "Enlace copiado"
+    "linkCopied": "Enlace copiado",
+    "photoOf": "{{current}} de {{total}}",
+    "closeViewer": "Cerrar visor de fotos"
   },
   "timelineAction": {
     "created": "Reporte creado",

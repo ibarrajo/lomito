@@ -128,6 +128,9 @@
     "removePhoto": "Remove photo",
     "fromCamera": "Take photo",
     "fromGallery": "Choose from gallery",
+    "takePhoto": "Take Photo",
+    "chooseFromGallery": "Choose from Gallery",
+    "cancelAction": "Cancel",
     "location": "Location",
     "submit": "Submit report",
     "step1Title": "What happened?",
@@ -192,7 +195,9 @@
     "following": "Following",
     "share": "Share",
     "shareText": "Check out this animal welfare report on Lomito: {{url}}",
-    "linkCopied": "Link copied"
+    "linkCopied": "Link copied",
+    "photoOf": "{{current}} of {{total}}",
+    "closeViewer": "Close photo viewer"
   },
   "timelineAction": {
     "created": "Report created",

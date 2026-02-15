@@ -3,14 +3,19 @@
  * Grid-based photo picker for the report form with camera and gallery selection.
  */
 
-import React from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import React, { useRef } from 'react';
+import { View, StyleSheet, Pressable, Platform } from 'react-native';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { Image as ImageIcon, X } from 'lucide-react-native';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 import { BodySmall, Skeleton } from '@lomito/ui';
 import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { useImagePicker } from '../../hooks/use-image-picker';
+import { PhotoActionSheet } from './photo-action-sheet';
 
 const MAX_PHOTOS = 5;
 
@@ -28,7 +33,9 @@ interface PhotoPickerProps {
  */
 export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
   const { t } = useTranslation();
-  const { images, pickFromGallery, removeImage, loading } = useImagePicker();
+  const { images, pickFromCamera, pickFromGallery, removeImage, loading } =
+    useImagePicker();
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   // Notify parent of image changes
   React.useEffect(() => {
@@ -37,84 +44,97 @@ export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
     }
   }, [images, onImagesChange]);
 
-  const handleAddPhoto = async () => {
-    // Show action sheet to choose camera or gallery
-    // For now, default to gallery (iOS/Android will show system picker)
-    // TODO: Add action sheet when @gorhom/bottom-sheet is configured
-    pickFromGallery();
+  const handleAddPhoto = () => {
+    // On web, go directly to gallery (no bottom sheet support)
+    if (Platform.OS === 'web') {
+      pickFromGallery();
+      return;
+    }
+
+    // On native, show bottom sheet
+    bottomSheetRef.current?.present();
   };
 
   const canAddMore = images.length < MAX_PHOTOS;
 
   return (
-    <View style={styles.container}>
-      {/* Photo Grid */}
-      <View style={styles.grid}>
-        {/* Existing Photos */}
-        {images.map((image, index) => (
-          <View key={index} style={styles.photoContainer}>
-            <Image
-              source={{ uri: image.uri }}
-              style={styles.photo}
-              contentFit="cover"
-              accessibilityLabel={t('report.photos')}
-            />
-            {/* Remove Button */}
+    <BottomSheetModalProvider>
+      <View style={styles.container}>
+        {/* Photo Grid */}
+        <View style={styles.grid}>
+          {/* Existing Photos */}
+          {images.map((image, index) => (
+            <View key={index} style={styles.photoContainer}>
+              <Image
+                source={{ uri: image.uri }}
+                style={styles.photo}
+                contentFit="cover"
+                accessibilityLabel={t('report.photos')}
+              />
+              {/* Remove Button */}
+              <Pressable
+                style={styles.removeButton}
+                onPress={() => removeImage(index)}
+                accessibilityLabel={t('report.removePhoto')}
+                accessibilityRole="button"
+              >
+                <X size={16} color={colors.white} strokeWidth={2.5} />
+              </Pressable>
+            </View>
+          ))}
+
+          {/* Add Photo Card */}
+          {canAddMore && (
             <Pressable
-              style={styles.removeButton}
-              onPress={() => removeImage(index)}
-              accessibilityLabel={t('report.removePhoto')}
+              style={styles.addPhotoCard}
+              onPress={handleAddPhoto}
+              disabled={loading}
+              accessibilityLabel={t('report.addPhotos')}
               accessibilityRole="button"
             >
-              <X size={16} color={colors.white} strokeWidth={2.5} />
+              {loading ? (
+                <Skeleton width={80} height={24} borderRadius={spacing.xs} />
+              ) : (
+                <>
+                  <View style={styles.addPhotoIconContainer}>
+                    <ImageIcon
+                      size={24}
+                      color={colors.neutral500}
+                      strokeWidth={1.5}
+                    />
+                  </View>
+                  <BodySmall
+                    color={colors.neutral700}
+                    style={styles.addPhotoText}
+                  >
+                    {t('report.addPhoto')}
+                  </BodySmall>
+                </>
+              )}
             </Pressable>
-          </View>
-        ))}
+          )}
+        </View>
 
-        {/* Add Photo Card */}
-        {canAddMore && (
-          <Pressable
-            style={styles.addPhotoCard}
-            onPress={handleAddPhoto}
-            disabled={loading}
-            accessibilityLabel={t('report.addPhotos')}
-            accessibilityRole="button"
-          >
-            {loading ? (
-              <Skeleton width={80} height={24} borderRadius={spacing.xs} />
-            ) : (
-              <>
-                <View style={styles.addPhotoIconContainer}>
-                  <ImageIcon
-                    size={24}
-                    color={colors.neutral500}
-                    strokeWidth={1.5}
-                  />
-                </View>
-                <BodySmall
-                  color={colors.neutral700}
-                  style={styles.addPhotoText}
-                >
-                  {t('report.addPhoto')}
-                </BodySmall>
-              </>
-            )}
-          </Pressable>
-        )}
-      </View>
-
-      {/* Photo Count Indicator */}
-      <View style={styles.footer}>
-        <BodySmall color={colors.neutral500}>
-          {t('report.maxPhotos')} ({images.length}/{MAX_PHOTOS})
-        </BodySmall>
-        {loading && (
+        {/* Photo Count Indicator */}
+        <View style={styles.footer}>
           <BodySmall color={colors.neutral500}>
-            {t('report.compressing')}
+            {t('report.maxPhotos')} ({images.length}/{MAX_PHOTOS})
           </BodySmall>
-        )}
+          {loading && (
+            <BodySmall color={colors.neutral500}>
+              {t('report.compressing')}
+            </BodySmall>
+          )}
+        </View>
+
+        {/* Photo Action Sheet (native only) */}
+        <PhotoActionSheet
+          ref={bottomSheetRef}
+          onCameraPress={pickFromCamera}
+          onGalleryPress={pickFromGallery}
+        />
       </View>
-    </View>
+    </BottomSheetModalProvider>
   );
 }
 
