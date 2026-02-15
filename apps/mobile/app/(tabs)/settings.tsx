@@ -129,6 +129,10 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
+  accountInfo: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
   container: {
     backgroundColor: colors.neutral100,
     flex: 1,
@@ -144,17 +148,6 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.xl,
-  },
-  sectionLabel: {
-    color: colors.neutral500,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.xs,
-    textTransform: 'uppercase',
-  },
-  accountInfo: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
   },
   navLink: {
     backgroundColor: colors.white,
@@ -172,6 +165,13 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.card,
     marginTop: spacing.md,
     paddingVertical: spacing.xs,
+  },
+  sectionLabel: {
+    color: colors.neutral500,
+    paddingBottom: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    textTransform: 'uppercase',
   },
   signOutButton: {
     alignItems: 'center',

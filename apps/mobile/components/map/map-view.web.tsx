@@ -86,21 +86,21 @@ export function MapView({ onMapReady, onRegionDidChange }: MapViewProps) {
 
 const styles = StyleSheet.create({
   placeholder: {
-    flex: 1,
-    backgroundColor: '#E8E0D8',
     alignItems: 'center',
+    backgroundColor: '#E8E0D8',
+    flex: 1,
     justifyContent: 'center',
     padding: 24,
   },
+  placeholderText: {
+    color: '#6B7280',
+    fontSize: 14,
+    textAlign: 'center',
+  },
   placeholderTitle: {
+    color: '#1F2328',
     fontSize: 24,
     fontWeight: '600',
-    color: '#1F2328',
     marginBottom: 8,
-  },
-  placeholderText: {
-    fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
   },
 });

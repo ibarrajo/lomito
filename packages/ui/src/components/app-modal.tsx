@@ -104,12 +104,14 @@ export function AppModal({
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(31, 35, 40, 0.5)',
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.lg,
+  actionSpacing: {
+    marginLeft: Platform.OS === 'web' ? spacing.sm : 0,
+  },
+  actions: {
+    alignItems: 'stretch',
+    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
+    gap: spacing.sm,
+    justifyContent: 'flex-end',
   },
   card: {
     backgroundColor: colors.white,
@@ -119,19 +121,17 @@ const styles = StyleSheet.create({
     width: '100%',
     ...shadowStyles.elevated,
   },
-  title: {
-    marginBottom: spacing.sm,
-  },
   message: {
     marginBottom: spacing.lg,
   },
-  actions: {
-    alignItems: 'stretch',
-    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
-    justifyContent: 'flex-end',
-    gap: spacing.sm,
+  overlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(31, 35, 40, 0.5)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.lg,
   },
-  actionSpacing: {
-    marginLeft: Platform.OS === 'web' ? spacing.sm : 0,
+  title: {
+    marginBottom: spacing.sm,
   },
 });

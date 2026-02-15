@@ -192,47 +192,55 @@ export default function LandingPage() {
 }
 
 const styles = StyleSheet.create({
-  // Hero
-  scrollView: {
-    backgroundColor: colors.neutral100,
-    flex: 1,
-  },
-  hero: {
-    backgroundColor: colors.white,
-    borderBottomColor: colors.neutral200,
-    borderBottomWidth: 1,
-    paddingBottom: spacing.xxl,
-    paddingTop: spacing.xl,
-  },
-  heroInner: {
+  activityGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.xxl,
+    gap: spacing.lg,
   },
-  heroText: {
-    flex: 1,
-    minWidth: 320,
-    paddingVertical: spacing.lg,
+  bentoCard: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.card,
+    padding: spacing.lg,
+    ...shadowStyles.card,
   },
-  heroTag: {
-    color: colors.primary,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    marginBottom: spacing.md,
-    textTransform: 'uppercase',
-  },
-  heroTitle: {
-    marginBottom: spacing.md,
-  },
-  heroSubtitle: {
-    color: colors.neutral500,
-    maxWidth: 480,
-  },
-  ctaRow: {
-    alignItems: 'center',
+  bentoGrid: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.md,
-    marginTop: spacing.lg,
+  },
+  bentoLarge: {
+    flex: 1.2,
+    minHeight: 180,
+    minWidth: 300,
+  },
+  bentoSmall: {
+    flex: 1,
+  },
+  bentoStack: {
+    flex: 1,
+    gap: spacing.md,
+    minWidth: 280,
+  },
+  communityAccent: {
+    backgroundColor: colors.primary,
+    borderRadius: 2,
+    width: 4,
+  },
+  communityDesc: {
+    color: colors.neutral500,
+    marginTop: spacing.sm,
+  },
+  communityInner: {
+    flexDirection: 'row',
+    gap: spacing.lg,
+  },
+  communitySection: {
+    backgroundColor: colors.white,
+    paddingVertical: spacing.xxl,
+  },
+  communityText: {
+    flex: 1,
+    maxWidth: 640,
   },
   ctaPrimary: {
     alignItems: 'center',
@@ -248,6 +256,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
+  ctaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginTop: spacing.lg,
+  },
   ctaSecondary: {
     borderColor: colors.neutral200,
     borderRadius: borderRadius.button,
@@ -260,76 +274,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  // Hero visual — vertical steps
-  heroVisual: {
-    flex: 1,
-    maxWidth: 380,
-    minWidth: 280,
-    paddingVertical: spacing.md,
-  },
-  stepCard: {
-    backgroundColor: colors.neutral100,
-    borderRadius: borderRadius.card,
-    flexDirection: 'row',
-    gap: spacing.md,
-    padding: spacing.md,
-  },
-  stepDot: {
-    borderRadius: 9999,
-    height: 10,
-    marginTop: 5,
-    width: 10,
-  },
-  stepContent: {
-    flex: 1,
-  },
-  stepLabel: {
-    color: colors.neutral900,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  stepDesc: {
+  featureDesc: {
     color: colors.neutral500,
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 2,
-  },
-  stepConnector: {
-    backgroundColor: colors.neutral200,
-    height: 20,
-    marginLeft: 20,
-    width: 1,
-  },
-  // Features bento
-  featuresSection: {
-    paddingVertical: spacing.xxl,
-  },
-  featuresTitle: {
-    marginBottom: spacing.lg,
-  },
-  bentoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-  },
-  bentoLarge: {
-    flex: 1.2,
-    minHeight: 180,
-    minWidth: 300,
-  },
-  bentoStack: {
-    flex: 1,
-    gap: spacing.md,
-    minWidth: 280,
-  },
-  bentoSmall: {
-    flex: 1,
-  },
-  bentoCard: {
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.card,
-    padding: spacing.lg,
-    ...shadowStyles.card,
   },
   featureIcon: {
     alignItems: 'center',
@@ -342,25 +288,95 @@ const styles = StyleSheet.create({
   featureTitle: {
     marginBottom: spacing.xs,
   },
-  featureDesc: {
-    color: colors.neutral500,
-  },
-  // Recent Activity
-  recentActivitySection: {
-    backgroundColor: colors.neutral100,
+  featuresSection: {
     paddingVertical: spacing.xxl,
   },
-  sectionTitle: {
-    marginBottom: spacing.xs,
-  },
-  sectionSubtitle: {
-    color: colors.neutral500,
+  featuresTitle: {
     marginBottom: spacing.lg,
   },
-  activityGrid: {
+  footer: {
+    borderTopColor: colors.neutral200,
+    borderTopWidth: 1,
+    paddingVertical: spacing.lg,
+  },
+  footerBrand: {
+    color: colors.primary,
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  footerDisclaimer: {
+    borderTopColor: colors.neutral200,
+    borderTopWidth: 1,
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+  },
+  footerDisclaimerText: {
+    color: colors.neutral400,
+    textAlign: 'center',
+  },
+  footerInner: {
+    alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.lg,
+    justifyContent: 'space-between',
+  },
+  footerLangToggle: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  footerLeft: {
+    gap: spacing.xs,
+  },
+  footerLink: {
+    color: colors.neutral500,
+    fontSize: 14,
+  },
+  footerLinks: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.md,
+  },
+  footerTagline: {
+    color: colors.neutral500,
+  },
+  hero: {
+    backgroundColor: colors.white,
+    borderBottomColor: colors.neutral200,
+    borderBottomWidth: 1,
+    paddingBottom: spacing.xxl,
+    paddingTop: spacing.xl,
+  },
+  heroInner: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xxl,
+  },
+  heroSubtitle: {
+    color: colors.neutral500,
+    maxWidth: 480,
+  },
+  heroTag: {
+    color: colors.primary,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    marginBottom: spacing.md,
+    textTransform: 'uppercase',
+  },
+  heroText: {
+    flex: 1,
+    minWidth: 320,
+    paddingVertical: spacing.lg,
+  },
+  heroTitle: {
+    marginBottom: spacing.md,
+  },
+  heroVisual: {
+    flex: 1,
+    maxWidth: 380,
+    minWidth: 280,
+    paddingVertical: spacing.md,
   },
   mapPlaceholder: {
     alignItems: 'center',
@@ -379,78 +395,56 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  tickerContainer: {
-    flex: 1,
-    minWidth: 320,
-  },
-  // Community
-  communitySection: {
-    backgroundColor: colors.white,
+  recentActivitySection: {
+    backgroundColor: colors.neutral100,
     paddingVertical: spacing.xxl,
   },
-  communityInner: {
-    flexDirection: 'row',
-    gap: spacing.lg,
-  },
-  communityAccent: {
-    backgroundColor: colors.primary,
-    borderRadius: 2,
-    width: 4,
-  },
-  communityText: {
+  scrollView: {
+    backgroundColor: colors.neutral100,
     flex: 1,
-    maxWidth: 640,
   },
-  communityDesc: {
+  sectionSubtitle: {
     color: colors.neutral500,
-    marginTop: spacing.sm,
+    marginBottom: spacing.lg,
   },
-  // Footer
-  footer: {
-    borderTopColor: colors.neutral200,
-    borderTopWidth: 1,
-    paddingVertical: spacing.lg,
+  sectionTitle: {
+    marginBottom: spacing.xs,
   },
-  footerInner: {
-    alignItems: 'center',
+  stepCard: {
+    backgroundColor: colors.neutral100,
+    borderRadius: borderRadius.card,
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.lg,
-    justifyContent: 'space-between',
-  },
-  footerLeft: {
-    gap: spacing.xs,
-  },
-  footerBrand: {
-    color: colors.primary,
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  footerTagline: {
-    color: colors.neutral500,
-  },
-  footerLinks: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: spacing.md,
+    padding: spacing.md,
   },
-  footerLink: {
+  stepConnector: {
+    backgroundColor: colors.neutral200,
+    height: 20,
+    marginLeft: 20,
+    width: 1,
+  },
+  stepContent: {
+    flex: 1,
+  },
+  stepDesc: {
     color: colors.neutral500,
-    fontSize: 14,
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 2,
   },
-  footerLangToggle: {
-    color: colors.primary,
+  stepDot: {
+    borderRadius: 9999,
+    height: 10,
+    marginTop: 5,
+    width: 10,
+  },
+  stepLabel: {
+    color: colors.neutral900,
     fontSize: 14,
     fontWeight: '600',
   },
-  footerDisclaimer: {
-    borderTopColor: colors.neutral200,
-    borderTopWidth: 1,
-    marginTop: spacing.md,
-    paddingTop: spacing.md,
-  },
-  footerDisclaimerText: {
-    color: colors.neutral400,
-    textAlign: 'center',
+  tickerContainer: {
+    flex: 1,
+    minWidth: 320,
   },
 });

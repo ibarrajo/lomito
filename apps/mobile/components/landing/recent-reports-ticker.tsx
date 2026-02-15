@@ -87,8 +87,25 @@ export function RecentReportsTicker() {
 }
 
 const styles = StyleSheet.create({
+  categoryDot: {
+    borderRadius: borderRadius.pill,
+    height: 8,
+    width: 8,
+  },
   container: {
     gap: spacing.sm,
+  },
+  locationText: {
+    color: colors.neutral700,
+    flex: 1,
+    fontSize: typography.body.fontSize,
+    fontWeight: '400',
+  },
+  reportContent: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
   },
   reportRow: {
     alignItems: 'center',
@@ -101,27 +118,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
-  categoryDot: {
-    borderRadius: borderRadius.pill,
-    height: 8,
-    width: 8,
-  },
-  reportContent: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-  },
-  locationText: {
-    color: colors.neutral700,
-    flex: 1,
-    fontSize: typography.body.fontSize,
-    fontWeight: '400',
-  },
-  timeText: {
-    color: colors.neutral400,
-    fontSize: typography.small.fontSize,
-  },
   statusBadge: {
     borderRadius: borderRadius.button,
     paddingHorizontal: spacing.sm,
@@ -130,5 +126,9 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: typography.caption.fontSize,
     fontWeight: '600',
+  },
+  timeText: {
+    color: colors.neutral400,
+    fontSize: typography.small.fontSize,
   },
 });

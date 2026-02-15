@@ -52,16 +52,16 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   content: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: borderRadius.card,
     alignItems: 'center',
+    borderRadius: borderRadius.card,
+    height: 48,
     justifyContent: 'center',
     marginRight: spacing.md,
+    width: 48,
   },
   textContainer: {
     flex: 1,

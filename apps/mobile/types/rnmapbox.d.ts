@@ -5,7 +5,7 @@
  */
 
 declare module '@rnmapbox/maps' {
-  import type { Component, ComponentType, ReactNode } from 'react';
+  import type { ComponentType, ReactNode } from 'react';
   import type { ViewStyle } from 'react-native';
 
   export interface CameraProps {

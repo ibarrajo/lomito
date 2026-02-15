@@ -95,34 +95,31 @@ const styles = StyleSheet.create({
     ...typography.h3,
     color: colors.neutral900,
   },
-  methodsList: {
-    gap: spacing.md,
-  },
   methodCard: {
-    flexDirection: 'row',
     alignItems: 'center',
-    padding: spacing.md,
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
     borderRadius: borderRadius.card,
     borderWidth: 2,
-    borderColor: colors.neutral200,
-    backgroundColor: colors.white,
+    flexDirection: 'row',
+    padding: spacing.md,
     ...shadowStyles.card,
   },
   methodCardSelected: {
-    borderColor: colors.primary,
     backgroundColor: colors.primaryLight,
-  },
-  methodIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.neutral100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.md,
+    borderColor: colors.primary,
   },
   methodContent: {
     flex: 1,
+  },
+  methodIconContainer: {
+    alignItems: 'center',
+    backgroundColor: colors.neutral100,
+    borderRadius: 24,
+    height: 48,
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    width: 48,
   },
   methodTitle: {
     ...typography.h3,
@@ -132,14 +129,13 @@ const styles = StyleSheet.create({
   methodTitleSelected: {
     color: colors.primary,
   },
-  methodDescription: {
-    ...typography.small,
-    color: colors.neutral500,
+  methodsList: {
+    gap: spacing.md,
   },
   selectedIndicator: {
-    width: 20,
-    height: 20,
-    borderRadius: borderRadius.card,
     backgroundColor: colors.primary,
+    borderRadius: borderRadius.card,
+    height: 20,
+    width: 20,
   },
 });

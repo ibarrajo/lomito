@@ -90,30 +90,63 @@ const styles = StyleSheet.create({
   container: {
     gap: spacing.md,
   },
+  currencyPrefix: {
+    ...typography.h2,
+    color: colors.neutral700,
+    marginRight: spacing.xs,
+  },
+  currencySuffix: {
+    ...typography.small,
+    color: colors.neutral500,
+    marginLeft: spacing.xs,
+  },
+  customContainer: {
+    gap: spacing.sm,
+  },
+  customInput: {
+    flex: 1,
+    ...typography.h2,
+    color: colors.neutral900,
+    paddingVertical: spacing.md,
+  },
+  customInputWrapper: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.input,
+    borderWidth: 2,
+    flexDirection: 'row',
+    paddingHorizontal: spacing.md,
+    ...shadowStyles.card,
+  },
+  customLabel: {
+    ...typography.small,
+    color: colors.neutral700,
+    fontWeight: '600',
+  },
   label: {
     ...typography.h3,
     color: colors.neutral900,
   },
-  presetGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
+  minAmountHint: {
+    ...typography.caption,
+    color: colors.neutral500,
   },
   presetButton: {
-    flex: 1,
-    minWidth: '45%',
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
     borderRadius: borderRadius.button,
     borderWidth: 2,
-    borderColor: colors.neutral200,
-    backgroundColor: colors.white,
-    alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
+    minWidth: '45%',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
   presetButtonSelected: {
-    borderColor: colors.primary,
     backgroundColor: colors.primaryLight,
+    borderColor: colors.primary,
   },
   presetButtonText: {
     ...typography.h3,
@@ -122,42 +155,9 @@ const styles = StyleSheet.create({
   presetButtonTextSelected: {
     color: colors.primary,
   },
-  customContainer: {
-    gap: spacing.sm,
-  },
-  customLabel: {
-    ...typography.small,
-    color: colors.neutral700,
-    fontWeight: '600',
-  },
-  customInputWrapper: {
+  presetGrid: {
     flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.neutral200,
-    borderRadius: borderRadius.input,
-    paddingHorizontal: spacing.md,
-    backgroundColor: colors.white,
-    ...shadowStyles.card,
-  },
-  currencyPrefix: {
-    ...typography.h2,
-    color: colors.neutral700,
-    marginRight: spacing.xs,
-  },
-  customInput: {
-    flex: 1,
-    ...typography.h2,
-    color: colors.neutral900,
-    paddingVertical: spacing.md,
-  },
-  currencySuffix: {
-    ...typography.small,
-    color: colors.neutral500,
-    marginLeft: spacing.xs,
-  },
-  minAmountHint: {
-    ...typography.caption,
-    color: colors.neutral500,
+    flexWrap: 'wrap',
+    gap: spacing.sm,
   },
 });

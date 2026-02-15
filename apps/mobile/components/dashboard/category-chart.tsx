@@ -95,45 +95,45 @@ export const CategoryChart = memo(function CategoryChart({ data }: CategoryChart
 });
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: spacing.md,
+  bar: {
+    borderRadius: spacing.xs,
+    height: '100%',
+  },
+  barContainer: {
+    backgroundColor: colors.neutral200,
+    borderRadius: spacing.xs,
+    flex: 1,
+    height: 24,
+    marginHorizontal: spacing.sm,
+    overflow: 'hidden',
   },
   chartContainer: {
     gap: spacing.md,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  labelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 100,
-  },
   colorDot: {
-    width: 8,
-    height: 8,
     borderRadius: spacing.xs,
+    height: 8,
     marginRight: spacing.sm,
+    width: 8,
+  },
+  count: {
+    fontWeight: '600',
+    textAlign: 'right',
+    width: 40,
   },
   label: {
     flex: 1,
   },
-  barContainer: {
-    flex: 1,
-    height: 24,
-    backgroundColor: colors.neutral200,
-    borderRadius: spacing.xs,
-    overflow: 'hidden',
-    marginHorizontal: spacing.sm,
+  labelContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: 100,
   },
-  bar: {
-    height: '100%',
-    borderRadius: spacing.xs,
+  row: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
-  count: {
-    width: 40,
-    textAlign: 'right',
-    fontWeight: '600',
+  title: {
+    marginBottom: spacing.md,
   },
 });

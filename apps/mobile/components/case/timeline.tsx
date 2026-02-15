@@ -155,9 +155,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: spacing.sm,
   },
-  eventMeta: {
-    marginTop: spacing.xs,
-  },
   eventTime: {
     marginTop: spacing.xs,
   },

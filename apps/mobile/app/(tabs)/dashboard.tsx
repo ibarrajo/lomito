@@ -162,35 +162,35 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
+  bottomPadding: {
+    height: spacing.xl,
+  },
   container: {
-    flex: 1,
     backgroundColor: colors.neutral100,
+    flex: 1,
   },
   content: {
     flex: 1,
     padding: spacing.md,
   },
-  header: {
-    marginBottom: spacing.lg,
-    color: colors.neutral900,
-  },
-  skeleton: {
-    marginBottom: spacing.md,
-  },
   errorContainer: {
-    padding: spacing.lg,
     backgroundColor: colors.errorBackground,
     borderRadius: borderRadius.button,
+    padding: spacing.lg,
+  },
+  halfCard: {
+    flex: 1,
+  },
+  header: {
+    color: colors.neutral900,
+    marginBottom: spacing.lg,
   },
   row: {
     flexDirection: 'row',
     gap: spacing.md,
     marginBottom: spacing.md,
   },
-  halfCard: {
-    flex: 1,
-  },
-  bottomPadding: {
-    height: spacing.xl,
+  skeleton: {
+    marginBottom: spacing.md,
   },
 });

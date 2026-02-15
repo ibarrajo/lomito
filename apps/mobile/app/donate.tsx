@@ -178,6 +178,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 44,
   },
+  comingSoonTitle: {
+    marginBottom: spacing.md,
+  },
+  comingSoonWrapper: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.xxl,
+  },
   container: {
     backgroundColor: colors.neutral100,
     flex: 1,
@@ -251,14 +260,5 @@ const styles = StyleSheet.create({
   },
   trustTitle: {
     marginBottom: spacing.sm,
-  },
-  comingSoonWrapper: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.xxl,
-  },
-  comingSoonTitle: {
-    marginBottom: spacing.md,
   },
 });

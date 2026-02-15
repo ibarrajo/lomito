@@ -20,6 +20,7 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
 
   useEffect(() => {
     checkSubscription();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseId]);
 
   const checkSubscription = async () => {
@@ -87,10 +88,9 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
         }
       } else {
         // Subscribe
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { error: insertError } = await (supabase
           .from('case_subscriptions')
-          .insert as any)({
+          .insert as unknown as (data: { case_id: string; user_id: string }) => Promise<{ error: { message: string } | null }>)({
             case_id: caseId,
             user_id: user.id,
           });

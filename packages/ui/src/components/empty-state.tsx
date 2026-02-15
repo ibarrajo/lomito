@@ -56,18 +56,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.xl,
   },
+  cta: {
+    marginTop: spacing.sm,
+  },
+  description: {
+    marginBottom: spacing.lg,
+    textAlign: 'center',
+  },
   iconContainer: {
     marginBottom: spacing.md,
   },
   title: {
     marginBottom: spacing.sm,
     textAlign: 'center',
-  },
-  description: {
-    marginBottom: spacing.lg,
-    textAlign: 'center',
-  },
-  cta: {
-    marginTop: spacing.sm,
   },
 });

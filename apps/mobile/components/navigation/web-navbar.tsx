@@ -305,6 +305,30 @@ export function WebNavbar() {
 }
 
 const styles = StyleSheet.create({
+  activeIndicator: {
+    backgroundColor: colors.primary,
+    bottom: 0,
+    height: 2,
+    left: spacing.md,
+    position: 'absolute',
+    right: spacing.md,
+  },
+  avatar: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 9999,
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
+  },
+  avatarContainer: {
+    position: 'relative',
+  },
+  avatarText: {
+    ...typography.button,
+    color: colors.white,
+    fontSize: 15,
+  },
   container: {
     ...Platform.select({
       web: {
@@ -321,43 +345,55 @@ const styles = StyleSheet.create({
         right: 0,
       },
     }),
-    height: layout.navbarHeight,
     backgroundColor: colors.white,
-    borderBottomWidth: 1,
     borderBottomColor: colors.neutral200,
+    borderBottomWidth: 1,
+    height: layout.navbarHeight,
     ...shadowStyles.card,
   },
   content: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: 'row',
     height: '100%',
-    paddingHorizontal: spacing.lg,
-    maxWidth: layout.maxContentWidth,
+    justifyContent: 'space-between',
     marginHorizontal: 'auto',
+    maxWidth: layout.maxContentWidth,
+    paddingHorizontal: spacing.lg,
     width: '100%',
   },
-  wordmark: {
-    ...typography.h3,
-    color: colors.primary,
-    fontFamily: typography.fontFamily.display,
-  },
-  navLinks: {
-    flexDirection: 'row',
+  ctaButton: {
     alignItems: 'center',
-    gap: spacing.sm,
+    backgroundColor: colors.primary,
+    borderRadius: 8,
+    flexDirection: 'row',
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  ctaButtonText: {
+    ...typography.button,
+    color: colors.white,
+  },
+  languageText: {
+    ...typography.button,
+    color: colors.neutral700,
+    fontSize: 15,
+  },
+  languageToggle: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   navLink: {
-    paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     position: 'relative',
   },
   navLinkActive: {
     // Active state handled by activeIndicator
   },
   navLinkContent: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
     gap: spacing.xs,
   },
   navLinkText: {
@@ -368,30 +404,30 @@ const styles = StyleSheet.create({
   navLinkTextActive: {
     color: colors.primary,
   },
-  activeIndicator: {
-    position: 'absolute',
-    bottom: 0,
-    left: spacing.md,
-    right: spacing.md,
-    height: 2,
-    backgroundColor: colors.primary,
+  navLinks: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
   },
   rightSection: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
     gap: spacing.md,
   },
-  languageToggle: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-  },
-  languageText: {
-    ...typography.button,
-    color: colors.neutral700,
-    fontSize: 15,
-  },
-  avatarContainer: {
-    position: 'relative',
+  userMenu: {
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.card,
+    borderWidth: 1,
+    position: 'absolute',
+    right: 0,
+    top: 48,
+    width: 220,
+    ...shadowStyles.elevated,
+    ...Platform.select({
+      web: { zIndex: 1001 },
+      default: {},
+    }),
   },
   userMenuBackdrop: {
     ...Platform.select({
@@ -406,54 +442,20 @@ const styles = StyleSheet.create({
       default: {},
     }),
   },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 9999,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: {
-    ...typography.button,
-    color: colors.white,
-    fontSize: 15,
-  },
-  userMenu: {
-    position: 'absolute',
-    top: 48,
-    right: 0,
-    width: 220,
-    backgroundColor: colors.white,
-    borderRadius: borderRadius.card,
-    borderWidth: 1,
-    borderColor: colors.neutral200,
-    ...shadowStyles.elevated,
-    ...Platform.select({
-      web: { zIndex: 1001 },
-      default: {},
-    }),
+  userMenuDivider: {
+    backgroundColor: colors.neutral100,
+    height: 1,
+    marginVertical: 2,
   },
   userMenuHeader: {
+    borderBottomColor: colors.neutral100,
+    borderBottomWidth: 1,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.neutral100,
-  },
-  userMenuName: {
-    ...typography.button,
-    color: colors.neutral900,
-    fontSize: 14,
-  },
-  userMenuEmail: {
-    ...typography.body,
-    color: colors.neutral500,
-    fontSize: 12,
-    marginTop: 2,
   },
   userMenuItem: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
     gap: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm + 2,
@@ -466,22 +468,14 @@ const styles = StyleSheet.create({
     color: colors.neutral700,
     fontSize: 14,
   },
-  userMenuDivider: {
-    height: 1,
-    backgroundColor: colors.neutral100,
-    marginVertical: 2,
-  },
-  ctaButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    backgroundColor: colors.primary,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: 8,
-  },
-  ctaButtonText: {
+  userMenuName: {
     ...typography.button,
-    color: colors.white,
+    color: colors.neutral900,
+    fontSize: 14,
+  },
+  wordmark: {
+    ...typography.h3,
+    color: colors.primary,
+    fontFamily: typography.fontFamily.display,
   },
 });

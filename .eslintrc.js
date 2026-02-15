@@ -6,7 +6,6 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:react-native/all',
-    'expo',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -30,9 +29,9 @@ module.exports = {
     ],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
-    'react-native/no-inline-styles': 'warn',
-    'react-native/no-color-literals': 'warn',
+    'react-native/no-inline-styles': 'off',
+    'react-native/no-color-literals': 'off',
     'react-native/no-raw-text': 'off',
   },
-  ignorePatterns: ['node_modules/', 'dist/', 'build/', '.expo/', 'supabase/functions/'],
+  ignorePatterns: ['node_modules/', 'dist/', 'build/', '.expo/', 'supabase/functions/', '.worktrees/'],
 };

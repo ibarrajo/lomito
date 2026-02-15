@@ -81,26 +81,26 @@ export const ResolutionRate = memo(function ResolutionRate({ resolvedCount, tota
 });
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: spacing.md,
-  },
   circleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
+  percentage: {
+    color: colors.success,
+    fontFamily: typography.display.fontFamily,
+    fontSize: typography.display.fontSize,
+    fontWeight: typography.display.fontWeight,
+    marginBottom: spacing.xs,
+  },
+  percentageContainer: {
+    alignItems: 'center',
+    position: 'absolute',
+  },
   svg: {
     transform: [{ scaleX: -1 }],
   },
-  percentageContainer: {
-    position: 'absolute',
-    alignItems: 'center',
-  },
-  percentage: {
-    color: colors.success,
-    marginBottom: spacing.xs,
-    fontSize: typography.display.fontSize,
-    fontWeight: typography.display.fontWeight,
-    fontFamily: typography.display.fontFamily,
+  title: {
+    marginBottom: spacing.md,
   },
 });

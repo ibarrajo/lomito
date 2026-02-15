@@ -4,9 +4,7 @@
  */
 
 import { View, StyleSheet } from 'react-native';
-/* eslint-disable import/no-unresolved -- @rnmapbox/maps will be installed in a later task */
 import MapboxGL from '@rnmapbox/maps';
-/* eslint-enable import/no-unresolved */
 import { colors, borderRadius, shadowStyles } from '@lomito/ui/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types/database';
 

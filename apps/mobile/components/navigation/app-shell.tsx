@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  content: {
+    flex: 1,
+  },
   contentWrapper: {
     flex: 1,
     paddingTop: layout.navbarHeight,
-  },
-  content: {
-    flex: 1,
   },
 });

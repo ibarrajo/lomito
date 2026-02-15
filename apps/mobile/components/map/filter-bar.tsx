@@ -153,25 +153,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: spacing.sm,
   },
-  scrollView: {
-    flexGrow: 0,
-  },
-  scrollContent: {
-    paddingHorizontal: spacing.md,
-    gap: spacing.sm,
-  },
   pill: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
     borderRadius: borderRadius.pill,
     marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   pillText: {
+    fontFamily: typography.fontFamily.body,
     fontSize: typography.small.fontSize,
     fontWeight: '600',
-    fontFamily: typography.fontFamily.body,
   },
   pillTextSelected: {
     color: colors.white,
+  },
+  scrollContent: {
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  scrollView: {
+    flexGrow: 0,
   },
 });

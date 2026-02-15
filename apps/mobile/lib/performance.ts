@@ -34,7 +34,7 @@ export function measureColdStart(): number {
  * Measures screen transition duration.
  * Call at the start of navigation and again when screen is fully rendered.
  */
-let transitionStartTimes: Record<string, number> = {};
+const transitionStartTimes: Record<string, number> = {};
 
 export function measureScreenTransition(
   screenName: string,

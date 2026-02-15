@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   optionSelected: {
-    borderWidth: 2,
     borderColor: 'rgba(0, 0, 0, 0.1)',
+    borderWidth: 2,
   },
   text: {
     fontFamily: typography.body.fontFamily,
