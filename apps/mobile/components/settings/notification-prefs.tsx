@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     borderRadius: borderRadius.card,
-    marginBottom: spacing.lg,
+    overflow: 'hidden',
     padding: spacing.md,
   },
   disabledLabel: {

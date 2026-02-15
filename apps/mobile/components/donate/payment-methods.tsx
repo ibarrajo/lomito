@@ -94,6 +94,9 @@ export function PaymentMethods({
                 >
                   {t(method.titleKey)}
                 </Text>
+                <Text style={styles.methodDescription}>
+                  {t(method.descriptionKey)}
+                </Text>
               </View>
 
               {isSelected && <View style={styles.selectedIndicator} />}
@@ -129,6 +132,11 @@ const styles = StyleSheet.create({
   },
   methodContent: {
     flex: 1,
+  },
+  methodDescription: {
+    ...typography.caption,
+    color: colors.neutral500,
+    marginTop: spacing.xs,
   },
   methodIconContainer: {
     alignItems: 'center',

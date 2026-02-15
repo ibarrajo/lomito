@@ -28,8 +28,6 @@ const MUNICIPALITIES = [
   'Mexicali',
 ];
 
-const MODAL_OVERLAY_COLOR = 'rgba(0, 0, 0, 0.5)';
-
 export default function RegisterScreen() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -433,7 +431,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   modalOverlay: {
-    backgroundColor: MODAL_OVERLAY_COLOR,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     flex: 1,
     justifyContent: 'flex-end',
   },

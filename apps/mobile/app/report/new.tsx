@@ -223,7 +223,9 @@ export default function NewReportScreen() {
           >
             <Body color={colors.primary}>{t('common.back')}</Body>
           </Pressable>
-          <Body color={colors.neutral500}>{currentStep + 1} / 5</Body>
+          <Body color={colors.neutral500}>
+            {t('report.stepIndicator', { current: currentStep + 1, total: 5 })}
+          </Body>
         </View>
         <H1 style={styles.title}>{stepTitles[currentStep]}</H1>
 
@@ -237,6 +239,10 @@ export default function NewReportScreen() {
                 step === currentStep && styles.stepDotActive,
                 step < currentStep && styles.stepDotCompleted,
               ]}
+              accessibilityLabel={t('report.stepProgress', {
+                current: step + 1,
+                total: 5,
+              })}
             />
           ))}
         </View>

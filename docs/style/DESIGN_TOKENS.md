@@ -35,6 +35,14 @@
 | color-neutral-100 | #F6F8F8 | Page backgrounds, card fills     |
 | color-white       | #FFFFFF | Card surfaces, input backgrounds |
 
+### Dark Surfaces
+
+| Token                 | Hex     | Usage                                                  |
+| --------------------- | ------- | ------------------------------------------------------ |
+| color-dark-bg         | #101d22 | Dark mode page backgrounds (hero sections)             |
+| color-dark-surface    | #18282f | Dark mode card surfaces, section backgrounds           |
+| color-dark-surface-lt | #20343d | Dark mode elevated surfaces, hover states, input fills |
+
 ### Semantic (Case Categories)
 
 | Category   | Pin Color | Hex     | Background |
@@ -263,6 +271,102 @@ All page content wraps in a `Container` component:
 - Prose content (about, legal): max-width 720px for readability
 - Auth forms (login, register): max-width 440px, centered
 - Single-action pages (donate): max-width 560px, centered
+
+## Component Patterns
+
+### Split-Pane Layouts
+
+Desktop moderation and government dashboards use a split-pane pattern:
+
+- **Left sidebar (320px)**: Scrollable list of items (pending cases, reports) with search input and status badges
+- **Right detail panel (fills remaining width)**: Full detail view of selected item
+- **Selection state**: Selected item in sidebar has `primaryLight` background and `primary` border
+- **Empty state**: Right panel shows centered empty state when no item is selected
+- **Example components**: `queue-sidebar.tsx`, `review-detail-panel.tsx`, `case-detail-panel.tsx`
+
+### KPI Cards
+
+Used in government dashboard and impact screens:
+
+- **Structure**: Icon (emoji, 32px) + Large value (H1) + Label (small) + Optional trend indicator
+- **Layout**: Centered content, white background, card border, flex: 1 for equal widths in row
+- **Trend colors**: Green (success) for up, red (error) for down, gray (neutral500) for neutral
+- **Min width**: 150px to prevent excessive squishing on mobile
+- **Example component**: `kpi-card.tsx`
+
+### Data Visualization
+
+Custom chart components for dashboard screens:
+
+#### Bar Chart
+
+- **Y-axis**: Left-aligned labels (0-100 scale), right-aligned text in caption size
+- **Bars**: Rounded corners (4px), primaryDark fill, responsive height based on max value
+- **X-axis labels**: Jurisdiction names below bars in small font, truncated if needed
+- **Example component**: `jurisdiction-bar-chart.tsx`
+
+#### Line Chart
+
+- **Grid lines**: Horizontal lines at 25/50/75/100, neutral200 color
+- **Line**: Primary color, 2px stroke width, connected points
+- **Points**: Circles at data points, primary fill
+- **Example component**: `trend-line-chart.tsx`
+
+#### Ranking Table
+
+- **Rows**: Rank number + jurisdiction name + metric value + visual bar indicator
+- **Bar indicator**: Horizontal bar showing relative value, primaryDark fill
+- **Top performer**: First row gets success color accent
+- **Example component**: `efficiency-ranking-table.tsx`
+
+### Gamification Badges
+
+User profile gamification system:
+
+- **Badge display**: Pill-shaped badge with primary background, secondary text
+- **Levels**: "Civic Guardian Lvl 1-4" based on case count (1, 3, 6, 11 thresholds)
+- **Progress text**: "N more reports to reach Lvl X" in neutral500 below badge
+- **Hidden for level 0**: Badge only shows once user has submitted at least 1 case
+- **Example component**: `gamification-badge.tsx`
+
+### Trust Badges
+
+Security/compliance badges for payment pages:
+
+- **Layout**: Icon (Shield/Lock, success color) + Title (bold) + Description (caption)
+- **Structure**: Horizontal card with left icon, right content (title stacked on description)
+- **Examples**: "SSL Secure - 256-bit encryption", "PCI DSS Compliant - Payment security"
+- **Example component**: `trust-badges.tsx`
+
+### Community Discussion Thread
+
+Profile screen discussion/comment component pattern:
+
+- **Thread items**: Avatar (48px circle) + Name + Timestamp + Message text
+- **Actions**: Reply/Like buttons in neutral500, active state in primary
+- **Nesting**: Indented replies with subtle left border to show thread hierarchy
+- **Loading skeleton**: Gray placeholders while content loads
+- **Example component**: `neighborhood-watch.tsx`
+
+### Donation Progress Widget
+
+Visual progress indicator for fundraising:
+
+- **Progress bar**: Full-width bar with primaryDark fill showing percentage
+- **Labels**: Current amount / goal amount above bar, percentage inside bar
+- **Variants**: Can show "X days left" timer or supporter count
+- **Call to action**: Primary button below with "Donate Now" text
+
+## Design Alignment
+
+Lomito's current design was aligned with Stitch designs (Project ID: 17139143970723271940) during a QA pass in February 2025. Key decisions:
+
+- **Primary color**: Kept Lomito's mint (#13ECC8) instead of Stitch's teal variants for brand consistency
+- **Light mode default**: Stitch designs were dark-mode heavy; we use light mode by default with dark hero sections for visual interest
+- **Desktop-first wireframes**: Stitch provided desktop layouts; we adapted to mobile-first responsive patterns using breakpoints
+- **Component library**: Used Stitch as inspiration but built components in React Native with design tokens, not pixel-perfect copies
+
+See `STITCH_SCREEN_MAP.md` for full screen mapping.
 
 ## Design Anti-Patterns (Avoiding the AI-Generated Look)
 

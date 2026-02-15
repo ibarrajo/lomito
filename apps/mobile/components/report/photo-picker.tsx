@@ -118,13 +118,18 @@ export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
         {/* Photo Count Indicator */}
         <View style={styles.footer}>
           <BodySmall color={colors.neutral500}>
-            {t('report.maxPhotos')} ({images.length}/{MAX_PHOTOS})
+            {t('report.photoSpecs')}
           </BodySmall>
           {loading && (
             <BodySmall color={colors.neutral500}>
               {t('report.compressing')}
             </BodySmall>
           )}
+        </View>
+        <View style={styles.photoCount}>
+          <BodySmall color={colors.neutral500}>
+            {images.length} / {MAX_PHOTOS} {t('report.photos').toLowerCase()}
+          </BodySmall>
         </View>
 
         {/* Photo Action Sheet (native only) */}
@@ -180,6 +185,10 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     position: 'relative',
     width: '48%',
+  },
+  photoCount: {
+    alignItems: 'center',
+    marginTop: spacing.xs,
   },
   removeButton: {
     alignItems: 'center',

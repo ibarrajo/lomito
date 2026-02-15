@@ -32,25 +32,25 @@ export function ImpactSidebar() {
         <View style={styles.fundItem}>
           <View style={styles.fundHeader}>
             <BodySmall color={colors.neutral700}>
-              {t('donate.rescueVet')}
+              {t('donate.shelterInfra')}
             </BodySmall>
             <BodySmall color={colors.neutral500} style={styles.percentage}>
-              68%
+              60%
             </BodySmall>
           </View>
-          <ProgressBar progress={68} color={colors.primary} />
+          <ProgressBar progress={60} color={colors.primary} />
         </View>
 
         <View style={styles.fundItem}>
           <View style={styles.fundHeader}>
             <BodySmall color={colors.neutral700}>
-              {t('donate.shelterInfra')}
+              {t('donate.rescueVet')}
             </BodySmall>
             <BodySmall color={colors.neutral500} style={styles.percentage}>
-              22%
+              30%
             </BodySmall>
           </View>
-          <ProgressBar progress={22} color={colors.accent} />
+          <ProgressBar progress={30} color={colors.accent} />
         </View>
 
         <View style={styles.fundItem}>

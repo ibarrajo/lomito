@@ -18,6 +18,8 @@ interface ModerationCase {
   created_at: string;
   jurisdiction_id: string | null;
   reporter_id: string;
+  flag_count?: number;
+  media?: Array<{ url: string; thumbnail_url?: string }>;
 }
 
 interface UseModerationQueueResult {
@@ -40,7 +42,7 @@ export function useModerationQueue(): UseModerationQueueResult {
       const { data, error: queryError } = await supabase
         .from('cases')
         .select(
-          'id, category, animal_type, description, urgency, status, location, created_at, jurisdiction_id, reporter_id',
+          'id, category, animal_type, description, urgency, status, location, created_at, jurisdiction_id, reporter_id, flag_count, case_media(url, thumbnail_url)',
         )
         .eq('status', 'pending')
         .order('urgency', { ascending: false })
@@ -53,7 +55,29 @@ export function useModerationQueue(): UseModerationQueueResult {
       }
 
       if (data) {
-        setCases(data as ModerationCase[]);
+        const transformedCases = data.map((item: unknown) => {
+          const caseItem = item as {
+            id: string;
+            category: CaseCategory;
+            animal_type: AnimalType;
+            description: string;
+            urgency: UrgencyLevel;
+            status: CaseStatus;
+            location: { type: 'Point'; coordinates: [number, number] };
+            created_at: string;
+            jurisdiction_id: string | null;
+            reporter_id: string;
+            flag_count?: number;
+            case_media?: Array<{ url: string; thumbnail_url?: string }>;
+          };
+
+          return {
+            ...caseItem,
+            media: caseItem.case_media,
+          };
+        });
+
+        setCases(transformedCases as ModerationCase[]);
       }
     } catch (err) {
       console.error('Unexpected error fetching moderation queue:', err);

@@ -134,7 +134,7 @@ export function Timeline({ events }: TimelineProps) {
             {/* Icon and line */}
             <View style={styles.iconColumn}>
               <View style={styles.iconCircle}>
-                <Body color={colors.white}>{icon}</Body>
+                <Body color={colors.secondary}>{icon}</Body>
               </View>
               {!isLast && <View style={styles.verticalLine} />}
             </View>

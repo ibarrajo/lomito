@@ -26,6 +26,11 @@ export const colors = {
   neutral100: '#F6F8F8',
   white: '#FFFFFF',
 
+  // Dark surfaces (for landing page dark theme sections)
+  darkBg: '#101d22',
+  darkSurface: '#18282f',
+  darkSurfaceLight: '#20343d',
+
   // Category colors (for case pins and backgrounds)
   category: {
     abuse: {

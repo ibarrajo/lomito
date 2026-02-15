@@ -21,6 +21,7 @@ import { RecentReportsTicker } from '../../components/landing/recent-reports-tic
 import { HeroStatsBar } from '../../components/landing/hero-stats-bar';
 import { ProcessSteps } from '../../components/landing/process-steps';
 import { AccountabilitySection } from '../../components/landing/accountability-section';
+import { TransparencySection } from '../../components/landing/transparency-section';
 import { CtaBanner } from '../../components/landing/cta-banner';
 import { LandingFooter } from '../../components/landing/landing-footer';
 import { useAnalytics } from '../../hooks/use-analytics';
@@ -36,7 +37,7 @@ export default function LandingPage() {
 
   return (
     <ScrollView style={styles.scrollView}>
-      {/* Section 1: Hero */}
+      {/* Section 1: Hero (Dark) */}
       <View style={styles.hero}>
         <Container>
           <View style={styles.heroInner}>
@@ -86,53 +87,6 @@ export default function LandingPage() {
                 </TouchableOpacity>
               </View>
             </View>
-            {/* Right side — step indicators */}
-            <View style={styles.heroVisual}>
-              <View style={styles.stepCard}>
-                <View
-                  style={[styles.stepDot, { backgroundColor: colors.primary }]}
-                />
-                <View style={styles.stepContent}>
-                  <Text style={styles.stepLabel}>
-                    {t('landing.step1Title')}
-                  </Text>
-                  <Text style={styles.stepDesc}>
-                    {t('landing.step1Description')}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.stepConnector} />
-              <View style={styles.stepCard}>
-                <View
-                  style={[styles.stepDot, { backgroundColor: colors.accent }]}
-                />
-                <View style={styles.stepContent}>
-                  <Text style={styles.stepLabel}>
-                    {t('landing.step2Title')}
-                  </Text>
-                  <Text style={styles.stepDesc}>
-                    {t('landing.step2Description')}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.stepConnector} />
-              <View style={styles.stepCard}>
-                <View
-                  style={[
-                    styles.stepDot,
-                    { backgroundColor: colors.secondary },
-                  ]}
-                />
-                <View style={styles.stepContent}>
-                  <Text style={styles.stepLabel}>
-                    {t('landing.step3Title')}
-                  </Text>
-                  <Text style={styles.stepDesc}>
-                    {t('landing.step3Description')}
-                  </Text>
-                </View>
-              </View>
-            </View>
           </View>
         </Container>
       </View>
@@ -140,12 +94,12 @@ export default function LandingPage() {
       {/* Section 2: Hero Stats Bar */}
       <HeroStatsBar />
 
-      {/* Section 3: Live Impact Map */}
+      {/* Section 3: Live Impact Map + Recent Activity */}
       <View style={styles.recentActivitySection}>
         <Container>
-          <H2 style={styles.sectionTitle}>{t('landing.recentActivity')}</H2>
+          <H2 style={styles.sectionTitle}>{t('landing.liveImpactMapTitle')}</H2>
           <BodySmall style={styles.sectionSubtitle}>
-            {t('landing.recentActivityDescription')}
+            {t('landing.liveImpactMapDescription')}
           </BodySmall>
           <View style={styles.activityGrid}>
             <View style={styles.mapCard}>
@@ -169,17 +123,24 @@ export default function LandingPage() {
         </Container>
       </View>
 
-      {/* Section 5: Accountability Section */}
+      {/* Section 5: Transparency Section */}
+      <View style={styles.transparencySection}>
+        <Container>
+          <TransparencySection />
+        </Container>
+      </View>
+
+      {/* Section 6: Accountability Section */}
       <View style={styles.accountabilitySection}>
         <Container>
           <AccountabilitySection />
         </Container>
       </View>
 
-      {/* Section 6: CTA Banner */}
+      {/* Section 7: CTA Banner */}
       <CtaBanner />
 
-      {/* Section 7: Footer */}
+      {/* Section 8: Footer */}
       <View style={styles.footerSection}>
         <Container>
           <LandingFooter />
@@ -191,7 +152,7 @@ export default function LandingPage() {
 
 const styles = StyleSheet.create({
   accountabilitySection: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.neutral100,
     paddingVertical: spacing.xxl,
   },
   activeBadge: {
@@ -201,13 +162,13 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   activeBadgeText: {
-    color: colors.success,
+    color: colors.primary,
     fontWeight: '600',
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   activeDot: {
-    backgroundColor: colors.success,
+    backgroundColor: colors.primary,
     borderRadius: 9999,
     height: 8,
     width: 8,
@@ -238,47 +199,49 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
   },
   ctaSecondary: {
-    borderColor: colors.neutral200,
+    borderColor: colors.primaryLight,
     borderRadius: borderRadius.button,
-    borderWidth: 1,
+    borderWidth: 2,
     paddingHorizontal: spacing.lg,
     paddingVertical: 14,
   },
   ctaSecondaryText: {
-    color: colors.neutral700,
+    color: colors.white,
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   footerSection: {
     backgroundColor: colors.white,
   },
   hero: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.secondary,
     paddingBottom: spacing.xl,
     paddingTop: spacing.xl,
   },
   heroInner: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.xxl,
+    alignItems: 'center',
+    flexDirection: 'column',
+    gap: spacing.lg,
   },
   heroSubtitle: {
-    color: colors.neutral500,
-    maxWidth: 480,
+    color: colors.neutral400,
+    fontSize: 16,
+    lineHeight: 24,
+    maxWidth: 680,
+    textAlign: 'center',
   },
   heroText: {
-    flex: 1,
-    minWidth: 320,
+    alignItems: 'center',
     paddingVertical: spacing.lg,
+    width: '100%',
   },
   heroTitle: {
+    color: colors.white,
+    fontSize: 40,
+    fontWeight: '700',
+    lineHeight: 48,
     marginBottom: spacing.md,
-  },
-  heroVisual: {
-    flex: 1,
-    maxWidth: 380,
-    minWidth: 280,
-    paddingVertical: spacing.md,
+    textAlign: 'center',
   },
   mapCard: {
     backgroundColor: colors.white,
@@ -327,39 +290,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: spacing.xs,
   },
-  stepCard: {
-    backgroundColor: colors.neutral100,
-    borderRadius: borderRadius.card,
-    flexDirection: 'row',
-    gap: spacing.md,
-    padding: spacing.md,
-  },
-  stepConnector: {
-    backgroundColor: colors.neutral200,
-    height: 20,
-    marginLeft: 20,
-    width: 1,
-  },
-  stepContent: {
-    flex: 1,
-  },
-  stepDesc: {
-    color: colors.neutral500,
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 2,
-  },
-  stepDot: {
-    borderRadius: 9999,
-    height: 10,
-    marginTop: 5,
-    width: 10,
-  },
-  stepLabel: {
-    color: colors.neutral900,
-    fontSize: 14,
-    fontWeight: '600',
-  },
   tickerCard: {
     backgroundColor: colors.white,
     borderColor: colors.neutral200,
@@ -369,5 +299,9 @@ const styles = StyleSheet.create({
     minWidth: 320,
     overflow: 'hidden',
     ...shadowStyles.card,
+  },
+  transparencySection: {
+    backgroundColor: colors.white,
+    paddingVertical: spacing.xxl,
   },
 });

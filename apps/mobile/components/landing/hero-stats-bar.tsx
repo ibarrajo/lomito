@@ -34,25 +34,25 @@ export function HeroStatsBar() {
         <View style={styles.statItem}>
           <H2 style={styles.statNumber}>{displayStats.activeCases}</H2>
           <BodySmall style={styles.statLabel}>
-            {t('landing.statsActiveCases')}
+            {t('landing.statsActiveCasesLong')}
           </BodySmall>
         </View>
         <View style={styles.statItem}>
           <H2 style={styles.statNumber}>{displayStats.resolvedCases}</H2>
           <BodySmall style={styles.statLabel}>
-            {t('landing.statsResolved')}
+            {t('landing.statsResolvedLong')}
           </BodySmall>
         </View>
         <View style={styles.statItem}>
           <H2 style={styles.statNumber}>{displayStats.livesSaved}</H2>
           <BodySmall style={styles.statLabel}>
-            {t('landing.statsLivesSaved')}
+            {t('landing.statsLivesSavedLong')}
           </BodySmall>
         </View>
         <View style={styles.statItem}>
           <H2 style={styles.statNumber}>{displayStats.avgResponse}</H2>
           <BodySmall style={styles.statLabel}>
-            {t('landing.statsAvgResponse')}
+            {t('landing.statsAvgResponseLong')}
           </BodySmall>
         </View>
       </View>
@@ -62,10 +62,10 @@ export function HeroStatsBar() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.neutral100,
-    borderTopColor: colors.neutral200,
+    backgroundColor: colors.darkSurface,
+    borderTopColor: colors.darkSurfaceLight,
     borderTopWidth: 1,
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.xl,
   },
   grid: {
     alignItems: 'center',
@@ -75,21 +75,26 @@ const styles = StyleSheet.create({
   gridMobile: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.md,
+    gap: spacing.lg,
     justifyContent: 'space-between',
   },
   statItem: {
     alignItems: 'center',
     flex: 1,
-    minWidth: 120,
+    minWidth: 140,
   },
   statLabel: {
-    color: colors.neutral500,
+    color: colors.neutral400,
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.5,
     textAlign: 'center',
     textTransform: 'uppercase',
   },
   statNumber: {
     color: colors.primary,
+    fontSize: 32,
+    fontWeight: '700',
     marginBottom: spacing.xs,
   },
 });

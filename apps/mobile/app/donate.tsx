@@ -18,6 +18,7 @@ import { AmountPicker } from '../components/donate/amount-picker';
 import { PaymentMethods } from '../components/donate/payment-methods';
 import { FrequencyToggle } from '../components/donate/frequency-toggle';
 import { ImpactSidebar } from '../components/donate/impact-sidebar';
+import { TrustBadges } from '../components/donate/trust-badges';
 import { useDonate } from '../hooks/use-donate';
 import {
   colors,
@@ -195,6 +196,9 @@ export default function DonateScreen() {
                 {selectedMethod === 'mercado_pago' && t('donate.cardInfo')}
               </BodySmall>
             </View>
+
+            {/* Trust Badges */}
+            <TrustBadges />
 
             {/* Impact Sidebar (Mobile Only - Below Form) */}
             {!isDesktop && <ImpactSidebar />}

@@ -154,6 +154,9 @@
     "cancelAction": "Cancelar",
     "location": "Ubicación",
     "submit": "Enviar reporte",
+    "stepIndicator": "Paso {{current}} de {{total}}",
+    "stepProgress": "Paso {{current}} de {{total}}",
+    "photoSpecs": "JPG, PNG (Máx 5MB cada una)",
     "step1Title": "¿Qué sucedió?",
     "step2Title": "¿Dónde está?",
     "step3Title": "Cuéntanos más",
@@ -254,7 +257,17 @@
     "daysAgo": "hace {{count}} días",
     "hoursAgo": "hace {{count}} horas",
     "reportedByName": "Reportado por {{name}}",
-    "noPhotosAvailable": "No hay fotos disponibles"
+    "noPhotosAvailable": "No hay fotos disponibles",
+    "communityDiscussion": "Discusión de la comunidad",
+    "noComments": "No hay comentarios aún",
+    "beFirstComment": "Sé el primero en comentar",
+    "writeComment": "Escribe un comentario...",
+    "postComment": "Publicar",
+    "donationProgress": "Progreso de donaciones",
+    "donationGoal": "Meta: {{amount}} MXN",
+    "donationRaised": "{{amount}} MXN recaudados",
+    "contribute": "Contribuir",
+    "donationDescription": "Ayuda a cubrir los costos de rescate y veterinaria para este caso"
   },
   "timelineAction": {
     "created": "Reporte creado",
@@ -303,7 +316,34 @@
     "verifySuccess": "Reporte verificado",
     "rejectSuccess": "Reporte rechazado",
     "flagSuccess": "Reporte señalado",
-    "actionError": "Error al procesar la acción"
+    "actionError": "Error al procesar la acción",
+    "searchPlaceholder": "Buscar por ID de caso o descripción...",
+    "filterByPriority": "Filtrar por prioridad",
+    "newBadge": "Nuevo",
+    "flaggedBadge": "Señalado",
+    "highPriority": "Alta Prioridad",
+    "moderatorStatus": "Moderador",
+    "evidence": "Evidencia",
+    "viewFullSize": "Ver tamaño completo",
+    "analysis": "Auto-Análisis",
+    "duplicateCheck": "Verificación de Duplicados",
+    "noDuplicatesFound": "No se encontraron duplicados",
+    "duplicatesFound": "{{count}} posibles duplicados encontrados",
+    "sensitiveContent": "Contenido Sensible",
+    "noSensitiveContent": "No se detectó contenido sensible",
+    "sensitiveContentDetected": "Contenido sensible detectado",
+    "userReliability": "Confiabilidad del Usuario",
+    "reliabilityScore": "Confiabilidad: {{score}}%",
+    "verifyAndPublish": "Verificar y Publicar",
+    "requestInfo": "Solicitar Información",
+    "locationVerification": "Verificación de Ubicación",
+    "coordinates": "Coordenadas",
+    "print": "Imprimir",
+    "submitterScore": "Puntuación del Remitente",
+    "keyboardShortcuts": "Atajos de Teclado",
+    "pressV": "Presiona V para verificar",
+    "pressR": "Presiona R para rechazar",
+    "selectCase": "Selecciona un caso para revisar"
   },
   "flag": {
     "report": "Señalar reporte",
@@ -334,7 +374,10 @@
     "signOut": "Cerrar sesión",
     "language": "Idioma",
     "account": "Cuenta",
-    "signOutError": "Error al cerrar sesión"
+    "signOutError": "Error al cerrar sesión",
+    "sectionPreferences": "Preferencias",
+    "sectionAbout": "Acerca de",
+    "sectionLegal": "Legal"
   },
   "escalation": {
     "escalate": "Escalar a autoridades",
@@ -375,7 +418,16 @@
     "folioDescription": "Asigna un número de folio o identificador del sistema gubernamental",
     "responseRequired": "La respuesta es requerida",
     "responseError": "Error al publicar respuesta",
-    "responseDescription": "Escribe la respuesta oficial que será visible públicamente"
+    "responseDescription": "Escribe la respuesta oficial que será visible públicamente",
+    "assignedCases": "Casos Asignados",
+    "expiringCases": "Por Vencer",
+    "avgResolutionTime": "Tiempo Promedio de Resolución",
+    "systemStatus": "Estado del Sistema",
+    "assignResponsibility": "Asignar Responsabilidad",
+    "assignmentPlaceholder": "ej., Unidad 04, Respuesta a Emergencias",
+    "uploadEvidence": "Subir Evidencia",
+    "selectFile": "Seleccionar Archivo",
+    "fileHint": "PDF, JPG, PNG — Máx 5MB"
   },
   "about": {
     "title": "Acerca de Lomito",
@@ -454,7 +506,14 @@
     "contactEmail": "contacto@lomito.org",
     "oneTime": "Única vez",
     "monthly": "Mensual",
-    "popular": "Popular"
+    "popular": "Popular",
+    "sslSecure": "SSL Seguro",
+    "sslDescription": "Cifrado de 256 bits",
+    "pciCompliant": "Certificado PCI DSS",
+    "pciDescription": "Seguridad bancaria",
+    "cardDescription": "Visa, Mastercard y más",
+    "oxxoDescription": "Pago en efectivo en tiendas OXXO",
+    "speiDescription": "Transferencia bancaria directa"
   },
   "dashboard": {
     "title": "Tablero de impacto",
@@ -488,6 +547,9 @@
     "disclaimer": "Lomito es una plataforma cívica independiente creada por y para la comunidad. No es un sitio web gubernamental ni está patrocinado, avalado o afiliado a ninguna entidad de gobierno.",
     "disclaimerShort": "Lomito no es un sitio gubernamental"
   },
+  "footer": {
+    "copyright": "© 2026 Lomito.org — Plataforma Cívica de Bienestar Animal"
+  },
   "profile": {
     "title": "Perfil",
     "myReports": "Mis Reportes",
@@ -501,6 +563,29 @@
     "moderator": "Moderador",
     "government": "Gobierno",
     "admin": "Administrador",
+    "welcome": "Bienvenido, {{name}}",
+    "gamification": {
+      "level": "Niv {{level}}",
+      "civicGuardian": "Guardián Cívico",
+      "nextLevel": "Siguiente nivel: {{nextCount}} reportes"
+    },
+    "impact": {
+      "animalsAssisted": "Animales Asistidos",
+      "casesResolved": "Casos Resueltos",
+      "totalDonations": "Donaciones Totales",
+      "pending": "{{count}} pendientes",
+      "nextMilestone": "Siguiente hito: {{name}} ({{amount}})"
+    },
+    "viewMode": {
+      "grid": "Cuadrícula",
+      "list": "Lista"
+    },
+    "sort": {
+      "label": "Ordenar por",
+      "newest": "Más recientes",
+      "status": "Estado",
+      "oldest": "Más antiguos"
+    },
     "sidebar": {
       "dashboard": "Tablero",
       "myProfile": "Mi Perfil",
@@ -564,7 +649,21 @@
     "footerBlog": "Blog",
     "footerFaq": "Preguntas frecuentes",
     "footerContact": "Contacto",
-    "footerLegal": "Legal"
+    "footerLegal": "Legal",
+    "liveImpactMapTitle": "Mapa de Impacto en Vivo",
+    "liveImpactMapDescription": "Visualización en tiempo real de casos de bienestar animal en Tijuana",
+    "transparencyTitle": "Construido sobre Transparencia",
+    "transparencySubtitle": "Cada reporte es público. Cada resultado se rastrea. Ningún dato está oculto.",
+    "openSourceDataTitle": "Datos de Código Abierto",
+    "openSourceDataDesc": "Todos los datos de casos son públicos y accesibles vía API. Descarga, analiza y verifica de forma independiente.",
+    "permanentHistoryTitle": "Historial Permanente",
+    "permanentHistoryDesc": "Cada reporte, respuesta y resultado se almacena permanentemente. La inacción del gobierno es registro público.",
+    "communityVerificationTitle": "Verificación Comunitaria",
+    "communityVerificationDesc": "Moderadores ciudadanos revisan reportes antes de escalar. Sin punto único de control.",
+    "statsActiveCasesLong": "Casos Activos",
+    "statsResolvedLong": "Resueltos Este Mes",
+    "statsLivesSavedLong": "Vidas Salvadas",
+    "statsAvgResponseLong": "Tiempo Promedio de Respuesta"
   },
   "authority": {
     "type": {
@@ -607,6 +706,33 @@
     "transparency": "Transparencia",
     "transparencyDescription": "Creemos en la transparencia total. Todos los datos son en tiempo real y de acceso público.",
     "categoryBreakdown": "Por categoría",
+    "livesImpacted": "Vidas Impactadas",
+    "resolutionRate": "Tasa de Resolución",
+    "responseTime": "Tiempo de Respuesta",
+    "resolutionVsGoal": "{{rate}}% vs {{goal}}% meta",
+    "responseImprovement": "-{{improvement}} hrs de mejora",
+    "responseTimeValue": "{{hours}} hrs",
+    "casesByJurisdiction": "Casos Resueltos por Jurisdicción",
+    "sixMonthTrend": "Tendencia Semestral",
+    "reported": "Reportados",
+    "resolved": "Resueltos",
+    "monthJan": "Ene",
+    "monthFeb": "Feb",
+    "monthMar": "Mar",
+    "monthApr": "Abr",
+    "monthMay": "May",
+    "monthJun": "Jun",
+    "efficiencyRanking": "Ranking de Eficiencia",
+    "rank": "Rango",
+    "jurisdiction": "Jurisdicción",
+    "total": "Total",
+    "avgResponse": "Respuesta Prom",
+    "efficiency": "Eficiencia",
+    "status": "Estado",
+    "highPerformance": "Alto Desempeño",
+    "average": "Promedio",
+    "needsImprovement": "Necesita Mejora",
+    "pageInfo": "Página {{current}} de {{total}}",
     "joinCta": "Únete a la comunidad",
     "joinDescription": "Ayuda a proteger a los animales de tu vecindario"
   },

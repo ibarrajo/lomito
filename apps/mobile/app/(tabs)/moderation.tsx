@@ -10,9 +10,11 @@ import {
   RefreshControl,
   Modal,
   Pressable,
+  Platform,
 } from 'react-native';
 import { Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useCallback } from 'react';
 import { H1, Body } from '@lomito/ui/components/typography';
 import { AppModal, TextInput, Button } from '@lomito/ui';
 import { Skeleton } from '@lomito/ui/components/skeleton';
@@ -21,10 +23,17 @@ import { colors, spacing } from '@lomito/ui/theme/tokens';
 import { useModerationQueue } from '../../hooks/use-moderation-queue';
 import { useReviewActions } from '../../components/moderation/review-actions';
 import { CaseReviewCard } from '../../components/moderation/case-review-card';
+import { QueueSidebar } from '../../components/moderation/queue-sidebar';
+import { ReviewDetailPanel } from '../../components/moderation/review-detail-panel';
+import { useBreakpoint } from '../../hooks/use-breakpoint';
 
 export default function ModerationScreen() {
   const { t } = useTranslation();
   const { cases, loading, error, refetch } = useModerationQueue();
+  const { isDesktop } = useBreakpoint();
+  const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const {
     handleVerify,
     handleReject,
@@ -44,6 +53,62 @@ export default function ModerationScreen() {
     confirmFlagAction,
   } = useReviewActions(refetch);
 
+  const selectedCase = selectedCaseId
+    ? cases.find((c) => c.id === selectedCaseId)
+    : null;
+
+  const handleSelectCase = useCallback((caseId: string) => {
+    setSelectedCaseId(caseId);
+  }, []);
+
+  const handleVerifySelected = useCallback(() => {
+    if (selectedCaseId) {
+      handleVerify(selectedCaseId);
+    }
+  }, [selectedCaseId, handleVerify]);
+
+  const handleRejectSelected = useCallback(() => {
+    if (selectedCaseId) {
+      handleReject(selectedCaseId);
+    }
+  }, [selectedCaseId, handleReject]);
+
+  const handleRequestInfo = useCallback(() => {
+    if (selectedCaseId) {
+      handleFlag(selectedCaseId);
+    }
+  }, [selectedCaseId, handleFlag]);
+
+  useEffect(() => {
+    if (cases.length > 0 && !selectedCaseId && isDesktop) {
+      setSelectedCaseId(cases[0].id);
+    }
+  }, [cases, selectedCaseId, isDesktop]);
+
+  useEffect(() => {
+    if (!isDesktop || Platform.OS !== 'web') return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+        return;
+      }
+
+      if (event.key === 'v' || event.key === 'V') {
+        event.preventDefault();
+        handleVerifySelected();
+      } else if (event.key === 'r' || event.key === 'R') {
+        event.preventDefault();
+        handleRejectSelected();
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isDesktop, handleVerifySelected, handleRejectSelected]);
+
   if (loading && cases.length === 0) {
     return (
       <View style={styles.container}>
@@ -53,9 +118,11 @@ export default function ModerationScreen() {
             headerBackTitle: t('common.back'),
           }}
         />
-        <View style={styles.header}>
-          <H1>{t('moderation.pendingCases')}</H1>
-        </View>
+        {!isDesktop && (
+          <View style={styles.header}>
+            <H1>{t('moderation.pendingCases')}</H1>
+          </View>
+        )}
         <View style={styles.loadingContainer}>
           <Skeleton width="100%" height={180} borderRadius={12} />
           <View style={styles.spacer} />
@@ -76,12 +143,138 @@ export default function ModerationScreen() {
             headerBackTitle: t('common.back'),
           }}
         />
-        <View style={styles.header}>
-          <H1>{t('moderation.pendingCases')}</H1>
-        </View>
+        {!isDesktop && (
+          <View style={styles.header}>
+            <H1>{t('moderation.pendingCases')}</H1>
+          </View>
+        )}
         <View style={styles.errorContainer}>
           <Body color={colors.error}>{error}</Body>
         </View>
+      </View>
+    );
+  }
+
+  if (isDesktop) {
+    return (
+      <View style={styles.container}>
+        <Stack.Screen
+          options={{
+            title: t('moderation.queue'),
+            headerBackTitle: t('common.back'),
+          }}
+        />
+        <View style={styles.desktopLayout}>
+          <QueueSidebar
+            cases={cases}
+            selectedCaseId={selectedCaseId}
+            onSelectCase={handleSelectCase}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+          <ReviewDetailPanel
+            caseData={selectedCase ?? null}
+            onVerify={handleVerifySelected}
+            onReject={handleRejectSelected}
+            onRequestInfo={handleRequestInfo}
+            loading={loading}
+          />
+        </View>
+
+        <AppModal
+          visible={!!confirmVerify}
+          title={t('moderation.confirmVerify')}
+          actions={[
+            {
+              label: t('moderation.verify'),
+              onPress: confirmVerifyAction,
+            },
+            {
+              label: t('common.cancel'),
+              onPress: () => setConfirmVerify(null),
+              variant: 'ghost',
+            },
+          ]}
+          onClose={() => setConfirmVerify(null)}
+        />
+
+        <AppModal
+          visible={!!confirmFlag}
+          title={t('moderation.confirmFlag')}
+          actions={[
+            {
+              label: t('moderation.flag'),
+              onPress: confirmFlagAction,
+            },
+            {
+              label: t('common.cancel'),
+              onPress: () => setConfirmFlag(null),
+              variant: 'ghost',
+            },
+          ]}
+          onClose={() => setConfirmFlag(null)}
+        />
+
+        <Modal
+          visible={!!confirmReject}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setConfirmReject(null)}
+        >
+          <Pressable
+            style={styles.modalOverlay}
+            onPress={() => setConfirmReject(null)}
+          >
+            <View style={styles.modalContent}>
+              <Body style={styles.modalTitle}>
+                {t('moderation.confirmReject')}
+              </Body>
+              <TextInput
+                label={t('moderation.rejectReason')}
+                value={rejectReason}
+                onChangeText={setRejectReason}
+                placeholder={t('moderation.rejectReason')}
+                accessibilityLabel={t('moderation.rejectReason')}
+              />
+              <View style={styles.modalActions}>
+                <Button
+                  onPress={() => setConfirmReject(null)}
+                  variant="ghost"
+                  accessibilityLabel={t('common.cancel')}
+                >
+                  {t('common.cancel')}
+                </Button>
+                <Button
+                  onPress={confirmRejectAction}
+                  accessibilityLabel={t('moderation.reject')}
+                >
+                  {t('moderation.reject')}
+                </Button>
+              </View>
+            </View>
+          </Pressable>
+        </Modal>
+
+        <AppModal
+          visible={!!modal}
+          title={modal?.title ?? ''}
+          message={modal?.message}
+          actions={[
+            {
+              label: t('common.ok'),
+              onPress: () => {
+                const onDismiss = modal?.onDismiss;
+                setModal(null);
+                onDismiss?.();
+              },
+            },
+          ]}
+          onClose={() => {
+            const onDismiss = modal?.onDismiss;
+            setModal(null);
+            onDismiss?.();
+          }}
+        />
       </View>
     );
   }
@@ -236,6 +429,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     flex: 1,
+  },
+  desktopLayout: {
+    flex: 1,
+    flexDirection: 'row',
   },
   emptyContainer: {
     alignItems: 'center',

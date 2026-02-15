@@ -73,7 +73,6 @@ export default function MapScreen() {
     toggleCategory,
     toggleStatus,
     clearFilters,
-    buildQuery,
   } = useMapFilters();
 
   const { data: jurisdictions } = useJurisdictions({
@@ -84,18 +83,35 @@ export default function MapScreen() {
   const fetchCases = useCallback(async () => {
     try {
       setIsLoading(true);
-      let query = supabase
-        .from('cases')
-        .select(
-          'id, category, animal_type, description, status, urgency, location, created_at',
-        )
-        .order('created_at', { ascending: false })
-        .limit(100);
 
-      // Apply filters
-      query = buildQuery(query);
+      // Build filter arrays from selected categories/statuses
+      const filterCategories =
+        selectedCategories.length > 0 ? selectedCategories : null;
+      const filterStatuses =
+        selectedStatuses.length > 0 ? selectedStatuses : null;
 
-      const { data, error } = await query;
+      // Use RPC function to get cases with GeoJSON locations
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data, error } = (await (supabase as any).rpc(
+        'get_cases_for_map',
+        {
+          limit_count: 100,
+          filter_categories: filterCategories,
+          filter_statuses: filterStatuses,
+        },
+      )) as {
+        data: Array<{
+          id: string;
+          category: string;
+          animal_type: string;
+          description: string;
+          status: string;
+          urgency: string;
+          location_geojson: { type: 'Point'; coordinates: [number, number] };
+          created_at: string;
+        }> | null;
+        error: { message: string } | null;
+      };
 
       if (error) {
         console.error('Error fetching cases:', error);
@@ -103,14 +119,25 @@ export default function MapScreen() {
       }
 
       if (data) {
-        setCases(data as CaseSummary[]);
+        // Map the RPC result to our CaseSummary type
+        const mappedCases = data.map((row) => ({
+          id: row.id,
+          category: row.category as CaseCategory,
+          animal_type: row.animal_type as AnimalType,
+          description: row.description,
+          status: row.status as CaseStatus,
+          urgency: row.urgency as UrgencyLevel,
+          location: row.location_geojson,
+          created_at: row.created_at,
+        }));
+        setCases(mappedCases);
       }
     } catch (error) {
       console.error('Unexpected error fetching cases:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [buildQuery]);
+  }, [selectedCategories, selectedStatuses]);
 
   useEffect(() => {
     fetchCases();

@@ -154,6 +154,9 @@
     "cancelAction": "Cancel",
     "location": "Location",
     "submit": "Submit report",
+    "stepIndicator": "Step {{current}} of {{total}}",
+    "stepProgress": "Step {{current}} of {{total}}",
+    "photoSpecs": "JPG, PNG (Max 5MB each)",
     "step1Title": "What happened?",
     "step2Title": "Where is it?",
     "step3Title": "Tell us more",
@@ -254,7 +257,17 @@
     "daysAgo": "{{count}} days ago",
     "hoursAgo": "{{count}} hours ago",
     "reportedByName": "Reported by {{name}}",
-    "noPhotosAvailable": "No photos available"
+    "noPhotosAvailable": "No photos available",
+    "communityDiscussion": "Community Discussion",
+    "noComments": "No comments yet",
+    "beFirstComment": "Be the first to comment",
+    "writeComment": "Write a comment...",
+    "postComment": "Post",
+    "donationProgress": "Donation Progress",
+    "donationGoal": "Goal: {{amount}} MXN",
+    "donationRaised": "{{amount}} MXN raised",
+    "contribute": "Contribute",
+    "donationDescription": "Help cover rescue and veterinary costs for this case"
   },
   "timelineAction": {
     "created": "Report created",
@@ -303,7 +316,34 @@
     "verifySuccess": "Report verified",
     "rejectSuccess": "Report rejected",
     "flagSuccess": "Report flagged",
-    "actionError": "Error processing action"
+    "actionError": "Error processing action",
+    "searchPlaceholder": "Search by case ID or description...",
+    "filterByPriority": "Filter by priority",
+    "newBadge": "New",
+    "flaggedBadge": "Flagged",
+    "highPriority": "High Priority",
+    "moderatorStatus": "Moderator",
+    "evidence": "Evidence",
+    "viewFullSize": "View full size",
+    "analysis": "Auto-Analysis",
+    "duplicateCheck": "Duplicate Check",
+    "noDuplicatesFound": "No duplicates found",
+    "duplicatesFound": "{{count}} potential duplicates found",
+    "sensitiveContent": "Sensitive Content",
+    "noSensitiveContent": "No sensitive content detected",
+    "sensitiveContentDetected": "Sensitive content detected",
+    "userReliability": "User Reliability",
+    "reliabilityScore": "Reliability: {{score}}%",
+    "verifyAndPublish": "Verify & Publish",
+    "requestInfo": "Request Information",
+    "locationVerification": "Location Verification",
+    "coordinates": "Coordinates",
+    "print": "Print",
+    "submitterScore": "Submitter Score",
+    "keyboardShortcuts": "Keyboard Shortcuts",
+    "pressV": "Press V to verify",
+    "pressR": "Press R to reject",
+    "selectCase": "Select a case to review"
   },
   "flag": {
     "report": "Flag report",
@@ -334,7 +374,10 @@
     "signOut": "Sign out",
     "language": "Language",
     "account": "Account",
-    "signOutError": "Failed to sign out"
+    "signOutError": "Failed to sign out",
+    "sectionPreferences": "Preferences",
+    "sectionAbout": "About",
+    "sectionLegal": "Legal"
   },
   "escalation": {
     "escalate": "Escalate to authorities",
@@ -375,7 +418,16 @@
     "folioDescription": "Assign a folio or tracking number from the government system",
     "responseRequired": "Response is required",
     "responseError": "Error posting response",
-    "responseDescription": "Write the official response that will be publicly visible"
+    "responseDescription": "Write the official response that will be publicly visible",
+    "assignedCases": "Assigned Cases",
+    "expiringCases": "Expiring Soon",
+    "avgResolutionTime": "Avg. Resolution Time",
+    "systemStatus": "System Status",
+    "assignResponsibility": "Assign Responsibility",
+    "assignmentPlaceholder": "e.g., Unit 04, Emergency Response",
+    "uploadEvidence": "Upload Evidence",
+    "selectFile": "Select File",
+    "fileHint": "PDF, JPG, PNG — Max 5MB"
   },
   "about": {
     "title": "About Lomito",
@@ -454,7 +506,14 @@
     "contactEmail": "contacto@lomito.org",
     "oneTime": "One-time",
     "monthly": "Monthly",
-    "popular": "Popular"
+    "popular": "Popular",
+    "sslSecure": "SSL Secure",
+    "sslDescription": "256-bit encryption",
+    "pciCompliant": "PCI DSS Compliant",
+    "pciDescription": "Bank-level security",
+    "cardDescription": "Visa, Mastercard, and more",
+    "oxxoDescription": "Cash payment at OXXO stores",
+    "speiDescription": "Direct bank transfer"
   },
   "dashboard": {
     "title": "Impact Dashboard",
@@ -488,6 +547,9 @@
     "disclaimer": "Lomito is an independent civic platform created by and for the community. It is not a government website and is not sponsored, endorsed, or affiliated with any government entity.",
     "disclaimerShort": "Lomito is not a government website"
   },
+  "footer": {
+    "copyright": "© 2026 Lomito.org — Civic Animal Welfare Platform"
+  },
   "profile": {
     "title": "Profile",
     "myReports": "My Reports",
@@ -501,6 +563,29 @@
     "moderator": "Moderator",
     "government": "Government",
     "admin": "Administrator",
+    "welcome": "Welcome, {{name}}",
+    "gamification": {
+      "level": "Lvl {{level}}",
+      "civicGuardian": "Civic Guardian",
+      "nextLevel": "Next level: {{nextCount}} reports"
+    },
+    "impact": {
+      "animalsAssisted": "Animals Assisted",
+      "casesResolved": "Cases Resolved",
+      "totalDonations": "Total Donations",
+      "pending": "{{count}} pending",
+      "nextMilestone": "Next milestone: {{name}} ({{amount}})"
+    },
+    "viewMode": {
+      "grid": "Grid",
+      "list": "List"
+    },
+    "sort": {
+      "label": "Sort by",
+      "newest": "Newest First",
+      "status": "Status",
+      "oldest": "Oldest First"
+    },
     "sidebar": {
       "dashboard": "Dashboard",
       "myProfile": "My Profile",
@@ -564,7 +649,21 @@
     "footerBlog": "Blog",
     "footerFaq": "FAQ",
     "footerContact": "Contact",
-    "footerLegal": "Legal"
+    "footerLegal": "Legal",
+    "liveImpactMapTitle": "Live Impact Map",
+    "liveImpactMapDescription": "Real-time visualization of animal welfare cases across Tijuana",
+    "transparencyTitle": "Built on Transparency",
+    "transparencySubtitle": "Every report is public. Every outcome is tracked. No data is hidden.",
+    "openSourceDataTitle": "Open Source Data",
+    "openSourceDataDesc": "All case data is public and accessible via API. Download, analyze, and verify independently.",
+    "permanentHistoryTitle": "Permanent History",
+    "permanentHistoryDesc": "Every report, response, and outcome is permanently stored. Government inaction is public record.",
+    "communityVerificationTitle": "Community-Led Verification",
+    "communityVerificationDesc": "Citizen moderators review reports before escalation. No single point of control.",
+    "statsActiveCasesLong": "Active Cases",
+    "statsResolvedLong": "Resolved This Month",
+    "statsLivesSavedLong": "Lives Saved",
+    "statsAvgResponseLong": "Avg Response Time"
   },
   "authority": {
     "type": {
@@ -608,7 +707,34 @@
     "transparencyDescription": "We believe in full transparency. All data is real-time and publicly accessible.",
     "categoryBreakdown": "By Category",
     "joinCta": "Join the Community",
-    "joinDescription": "Help protect animals in your neighborhood"
+    "joinDescription": "Help protect animals in your neighborhood",
+    "livesImpacted": "Lives Impacted",
+    "resolutionRate": "Resolution Rate",
+    "responseTime": "Response Time",
+    "resolutionVsGoal": "{{rate}}% vs {{goal}}% goal",
+    "responseImprovement": "-{{improvement}} hrs improvement",
+    "responseTimeValue": "{{hours}} hrs",
+    "casesByJurisdiction": "Cases Resolved by Jurisdiction",
+    "sixMonthTrend": "Six-Month Trend",
+    "reported": "Reported",
+    "resolved": "Resolved",
+    "monthJan": "Jan",
+    "monthFeb": "Feb",
+    "monthMar": "Mar",
+    "monthApr": "Apr",
+    "monthMay": "May",
+    "monthJun": "Jun",
+    "efficiencyRanking": "Efficiency Ranking",
+    "rank": "Rank",
+    "jurisdiction": "Jurisdiction",
+    "total": "Total",
+    "avgResponse": "Avg Response",
+    "efficiency": "Efficiency",
+    "status": "Status",
+    "highPerformance": "High Performance",
+    "average": "Average",
+    "needsImprovement": "Needs Improvement",
+    "pageInfo": "Page {{current}} of {{total}}"
   },
   "authoritySubmission": {
     "title": "Suggest Authority Contact",
