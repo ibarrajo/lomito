@@ -5,7 +5,7 @@
  */
 export const featureFlags = {
   /** Enable the donations page and donate nav links */
-  donations: false,
+  donations: true,
   /** Enable SMS/phone login tab on auth screens */
   smsLogin: false,
   /** Enable push notifications settings */

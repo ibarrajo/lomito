@@ -29,7 +29,13 @@
     "settings": "Settings",
     "notifications": "Notifications",
     "moderation": "Moderation",
-    "government": "Government"
+    "government": "Government",
+    "home": "Lomito home",
+    "closeMenu": "Close menu",
+    "switchToSpanish": "Switch to Spanish",
+    "switchToEnglish": "Switch to English",
+    "selectSpanish": "Select Spanish language",
+    "selectEnglish": "Select English language"
   },
   "auth": {
     "login": "Log in",

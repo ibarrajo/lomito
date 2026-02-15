@@ -29,7 +29,13 @@
     "settings": "Configuración",
     "notifications": "Notificaciones",
     "moderation": "Moderación",
-    "government": "Gobierno"
+    "government": "Gobierno",
+    "home": "Inicio de Lomito",
+    "closeMenu": "Cerrar menú",
+    "switchToSpanish": "Cambiar a español",
+    "switchToEnglish": "Cambiar a inglés",
+    "selectSpanish": "Seleccionar idioma español",
+    "selectEnglish": "Seleccionar idioma inglés"
   },
   "auth": {
     "login": "Iniciar sesión",

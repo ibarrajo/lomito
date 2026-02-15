@@ -50,7 +50,7 @@ export function LanguagePicker() {
       <Pressable
         style={styles.option}
         onPress={() => handleLanguageChange('es')}
-        accessibilityLabel={`Select Spanish language`}
+        accessibilityLabel={t('nav.selectSpanish')}
         accessibilityRole="radio"
         accessibilityState={{ checked: currentLanguage === 'es' }}
       >
@@ -68,7 +68,7 @@ export function LanguagePicker() {
       <Pressable
         style={styles.option}
         onPress={() => handleLanguageChange('en')}
-        accessibilityLabel={`Select English language`}
+        accessibilityLabel={t('nav.selectEnglish')}
         accessibilityRole="radio"
         accessibilityState={{ checked: currentLanguage === 'en' }}
       >

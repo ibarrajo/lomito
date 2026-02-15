@@ -45,7 +45,7 @@ export default function PublicLayout() {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.push('/(public)')}
-          accessibilityLabel="Lomito home"
+          accessibilityLabel={t('nav.home')}
           accessibilityRole="link"
         >
           <Text style={styles.wordmark}>Lomito.org</Text>

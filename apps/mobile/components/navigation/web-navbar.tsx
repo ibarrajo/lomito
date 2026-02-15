@@ -136,7 +136,7 @@ export function WebNavbar() {
         {/* Left: Wordmark */}
         <TouchableOpacity
           onPress={() => navigateTo('/(tabs)')}
-          accessibilityLabel="Lomito home"
+          accessibilityLabel={t('nav.home')}
           accessibilityRole="link"
         >
           <Text style={styles.wordmark}>Lomito.org</Text>
@@ -228,7 +228,11 @@ export function WebNavbar() {
           <TouchableOpacity
             style={styles.languageToggle}
             onPress={toggleLanguage}
-            accessibilityLabel={`Switch to ${i18n.language === 'en' ? 'Spanish' : 'English'}`}
+            accessibilityLabel={t(
+              i18n.language === 'en'
+                ? 'nav.switchToSpanish'
+                : 'nav.switchToEnglish',
+            )}
             accessibilityRole="button"
           >
             <Text style={styles.languageText}>
@@ -255,7 +259,7 @@ export function WebNavbar() {
                 <Pressable
                   style={styles.userMenuBackdrop}
                   onPress={() => setShowUserMenu(false)}
-                  accessibilityLabel="Close menu"
+                  accessibilityLabel={t('nav.closeMenu')}
                 />
                 <View style={styles.userMenu}>
                   {profile && (
@@ -274,6 +278,7 @@ export function WebNavbar() {
                       setShowUserMenu(false);
                       navigateTo('/(tabs)/profile');
                     }}
+                    accessibilityLabel={t('nav.profile')}
                     accessibilityRole="link"
                   >
                     <User
@@ -294,6 +299,7 @@ export function WebNavbar() {
                       setShowUserMenu(false);
                       navigateTo('/(tabs)/settings');
                     }}
+                    accessibilityLabel={t('nav.settings')}
                     accessibilityRole="link"
                   >
                     <Settings
@@ -315,6 +321,7 @@ export function WebNavbar() {
                       setShowUserMenu(false);
                       signOut();
                     }}
+                    accessibilityLabel={t('settings.signOut')}
                     accessibilityRole="button"
                   >
                     <LogOut size={16} color={colors.error} strokeWidth={1.5} />
