@@ -21,8 +21,10 @@ import { UrgencyPicker } from '../../components/report/urgency-picker';
 import { LocationPicker } from '../../components/report/location-picker';
 import { PhotoPicker } from '../../components/report/photo-picker';
 import { ReviewStep } from '../../components/report/review-step';
+import { ReportSidebar } from '../../components/report/report-sidebar';
 import { useCreateCase } from '../../hooks/use-create-case';
 import { useAnalytics } from '../../hooks/use-analytics';
+import { useBreakpoint } from '../../hooks/use-breakpoint';
 
 interface ReportFormData {
   category: CaseCategory | null;
@@ -38,6 +40,7 @@ export default function NewReportScreen() {
   const router = useRouter();
   const { createCase, loading } = useCreateCase();
   const { trackEvent } = useAnalytics();
+  const { isDesktop } = useBreakpoint();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<ReportFormData>({
@@ -239,33 +242,45 @@ export default function NewReportScreen() {
         </View>
       </View>
 
-      {/* Step Content */}
-      {currentStep === 1 ? (
-        // Map step needs full height
-        <View style={styles.contentMap}>{renderStep()}</View>
-      ) : (
-        // Other steps use scrollview
-        <ScrollView
-          style={styles.content}
-          contentContainerStyle={styles.contentContainer}
-        >
-          {renderStep()}
-        </ScrollView>
-      )}
+      {/* Main Content Area - Desktop layout with sidebar */}
+      <View style={styles.mainContent}>
+        {/* Desktop Sidebar */}
+        {isDesktop && (
+          <View style={styles.sidebarContainer}>
+            <ReportSidebar />
+          </View>
+        )}
 
-      {/* Navigation Buttons (except on review step) */}
-      {currentStep < 4 && (
-        <View style={styles.footer}>
-          <Button
-            variant="primary"
-            onPress={handleNext}
-            disabled={!canProceedFromStep(currentStep)}
-            accessibilityLabel={t('common.next')}
-          >
-            {t('common.next')}
-          </Button>
+        {/* Form Content */}
+        <View style={[styles.formContainer, isDesktop && styles.formDesktop]}>
+          {currentStep === 1 ? (
+            // Map step needs full height
+            <View style={styles.contentMap}>{renderStep()}</View>
+          ) : (
+            // Other steps use scrollview
+            <ScrollView
+              style={styles.content}
+              contentContainerStyle={styles.contentContainer}
+            >
+              {renderStep()}
+            </ScrollView>
+          )}
+
+          {/* Navigation Buttons (except on review step) */}
+          {currentStep < 4 && (
+            <View style={styles.footer}>
+              <Button
+                variant="primary"
+                onPress={handleNext}
+                disabled={!canProceedFromStep(currentStep)}
+                accessibilityLabel={t('common.next')}
+              >
+                {t('common.next')}
+              </Button>
+            </View>
+          )}
         </View>
-      )}
+      </View>
     </SafeAreaView>
   );
 }
@@ -290,6 +305,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     padding: spacing.md,
   },
+  formContainer: {
+    flex: 1,
+  },
+  formDesktop: {
+    flex: 8,
+  },
   header: {
     backgroundColor: colors.white,
     borderBottomColor: colors.neutral200,
@@ -303,6 +324,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: spacing.sm,
   },
+  mainContent: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: spacing.lg,
+    paddingHorizontal: spacing.md,
+  },
   mapInstruction: {
     backgroundColor: colors.white,
     padding: spacing.md,
@@ -313,6 +340,10 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     marginBottom: spacing.md,
+  },
+  sidebarContainer: {
+    flex: 4,
+    paddingTop: spacing.lg,
   },
   stepContent: {
     padding: spacing.md,

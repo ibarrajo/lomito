@@ -1,16 +1,18 @@
 /**
  * Category Picker Component
- * Grid of selectable category cards with colored borders.
+ * Grid of selectable category cards with colored borders and icons.
  */
 
 import { View, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { AlertTriangle, Dog, Search } from 'lucide-react-native';
 import { H3, BodySmall } from '@lomito/ui';
 import {
   colors,
   spacing,
   borderRadius,
   shadowStyles,
+  iconSizes,
 } from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types';
 
@@ -23,21 +25,25 @@ const CATEGORIES: Array<{
   key: CaseCategory;
   color: string;
   backgroundColor: string;
+  icon: typeof AlertTriangle;
 }> = [
   {
     key: 'abuse',
     color: colors.category.abuse.pin,
     backgroundColor: colors.category.abuse.background,
+    icon: AlertTriangle,
   },
   {
     key: 'stray',
     color: colors.category.stray.pin,
     backgroundColor: colors.category.stray.background,
+    icon: Dog,
   },
   {
     key: 'missing',
     color: colors.category.missing.pin,
     backgroundColor: colors.category.missing.background,
+    icon: Search,
   },
 ];
 
@@ -48,6 +54,7 @@ export function CategoryPicker({ selected, onSelect }: CategoryPickerProps) {
     <View style={styles.container}>
       {CATEGORIES.map((category) => {
         const isSelected = selected === category.key;
+        const IconComponent = category.icon;
 
         return (
           <Pressable
@@ -68,7 +75,13 @@ export function CategoryPicker({ selected, onSelect }: CategoryPickerProps) {
                 styles.iconArea,
                 { backgroundColor: category.backgroundColor },
               ]}
-            />
+            >
+              <IconComponent
+                size={iconSizes.default}
+                color={category.color}
+                strokeWidth={2}
+              />
+            </View>
             <View style={styles.content}>
               <H3>{t(`category.${category.key}`)}</H3>
               <BodySmall color={colors.neutral500}>
@@ -110,8 +123,10 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   iconArea: {
+    alignItems: 'center',
     borderRadius: borderRadius.button,
     height: 48,
+    justifyContent: 'center',
     marginRight: spacing.md,
     width: 48,
   },
