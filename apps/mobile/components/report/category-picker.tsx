@@ -150,7 +150,10 @@ export function CategoryPicker({ selected, onSelect }: CategoryPickerProps) {
             <H3 style={styles.title}>{t(`category.${category.key}`)}</H3>
             <BodySmall color={colors.neutral500} style={styles.description}>
               {t(
-                `report.category${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Description`,
+                `report.category${category.key
+                  .split('_')
+                  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                  .join('')}Description`,
               )}
             </BodySmall>
           </Pressable>

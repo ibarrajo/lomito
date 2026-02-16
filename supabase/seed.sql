@@ -22,7 +22,16 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   aud,
-  role
+  role,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change_token_current,
+  email_change,
+  phone,
+  phone_change,
+  phone_change_token,
+  reauthentication_token
 )
 VALUES (
   '00000000-0000-0000-0000-000000000001',
@@ -35,7 +44,16 @@ VALUES (
   '{"provider":"email","providers":["email"]}'::jsonb,
   '{"full_name":"Dev Admin"}'::jsonb,
   'authenticated',
-  'authenticated'
+  'authenticated',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  ''
 );
 
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
@@ -71,7 +89,16 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   aud,
-  role
+  role,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change_token_current,
+  email_change,
+  phone,
+  phone_change,
+  phone_change_token,
+  reauthentication_token
 )
 VALUES (
   '00000000-0000-0000-0000-000000000002',
@@ -84,7 +111,16 @@ VALUES (
   '{"provider":"email","providers":["email"]}'::jsonb,
   '{"full_name":"María García López"}'::jsonb,
   'authenticated',
-  'authenticated'
+  'authenticated',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  ''
 );
 
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
@@ -120,7 +156,16 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   aud,
-  role
+  role,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change_token_current,
+  email_change,
+  phone,
+  phone_change,
+  phone_change_token,
+  reauthentication_token
 )
 VALUES (
   '00000000-0000-0000-0000-000000000003',
@@ -133,7 +178,16 @@ VALUES (
   '{"provider":"email","providers":["email"]}'::jsonb,
   '{"full_name":"Carlos Mendoza Ruiz"}'::jsonb,
   'authenticated',
-  'authenticated'
+  'authenticated',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  ''
 );
 
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
@@ -169,7 +223,16 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   aud,
-  role
+  role,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change_token_current,
+  email_change,
+  phone,
+  phone_change,
+  phone_change_token,
+  reauthentication_token
 )
 VALUES (
   '00000000-0000-0000-0000-000000000004',
@@ -182,7 +245,16 @@ VALUES (
   '{"provider":"email","providers":["email"]}'::jsonb,
   '{"full_name":"Ana Rodríguez Vega"}'::jsonb,
   'authenticated',
-  'authenticated'
+  'authenticated',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  ''
 );
 
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
@@ -218,7 +290,16 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   aud,
-  role
+  role,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change_token_current,
+  email_change,
+  phone,
+  phone_change,
+  phone_change_token,
+  reauthentication_token
 )
 VALUES (
   '00000000-0000-0000-0000-000000000005',
@@ -231,7 +312,16 @@ VALUES (
   '{"provider":"email","providers":["email"]}'::jsonb,
   '{"full_name":"Roberto Sánchez Díaz"}'::jsonb,
   'authenticated',
-  'authenticated'
+  'authenticated',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  ''
 );
 
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
@@ -267,7 +357,16 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   aud,
-  role
+  role,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change_token_current,
+  email_change,
+  phone,
+  phone_change,
+  phone_change_token,
+  reauthentication_token
 )
 VALUES (
   '00000000-0000-0000-0000-000000000006',
@@ -280,7 +379,16 @@ VALUES (
   '{"provider":"email","providers":["email"]}'::jsonb,
   '{"full_name":"Laura Torres Mora"}'::jsonb,
   'authenticated',
-  'authenticated'
+  'authenticated',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  ''
 );
 
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)

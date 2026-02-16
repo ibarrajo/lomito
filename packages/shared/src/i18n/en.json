@@ -423,6 +423,7 @@
     "expiringCases": "Expiring Soon",
     "avgResolutionTime": "Avg. Resolution Time",
     "systemStatus": "System Status",
+    "systemStatusOperational": "Operational",
     "assignResponsibility": "Assign Responsibility",
     "assignmentPlaceholder": "e.g., Unit 04, Emergency Response",
     "uploadEvidence": "Upload Evidence",

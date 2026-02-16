@@ -50,6 +50,7 @@ export function StatsRow({ stats, loading }: StatsRowProps) {
 
   // Response Time
   const responseTime = stats ? stats.avg_resolution_days : 0;
+  const responseTimeHours = Math.round(responseTime * 24 * 10) / 10; // Round to 1 decimal
   const responseTimeTrend: {
     direction: 'up' | 'down' | 'neutral';
     label: string;
@@ -90,8 +91,8 @@ export function StatsRow({ stats, loading }: StatsRowProps) {
             loading
               ? '--'
               : t('impact.responseTimeValue', {
-                  hours: responseTime * 24,
-                  defaultValue: `${responseTime * 24} hrs`,
+                  hours: responseTimeHours,
+                  defaultValue: `${responseTimeHours} hrs`,
                 })
           }
           trend={responseTimeTrend}

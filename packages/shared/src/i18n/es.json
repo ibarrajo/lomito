@@ -423,6 +423,7 @@
     "expiringCases": "Por Vencer",
     "avgResolutionTime": "Tiempo Promedio de Resolución",
     "systemStatus": "Estado del Sistema",
+    "systemStatusOperational": "Operativo",
     "assignResponsibility": "Asignar Responsabilidad",
     "assignmentPlaceholder": "ej., Unidad 04, Respuesta a Emergencias",
     "uploadEvidence": "Subir Evidencia",

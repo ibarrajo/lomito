@@ -98,7 +98,9 @@ export function ReviewDetailPanel({
   const isHighPriority =
     caseData.urgency === 'high' || caseData.urgency === 'critical';
 
-  const [longitude, latitude] = caseData.location.coordinates;
+  // Extract coordinates from location (GeoJSON Point)
+  const longitude = caseData.location.coordinates[0];
+  const latitude = caseData.location.coordinates[1];
 
   const submitterScore = 85;
   const hasDuplicates = false;

@@ -86,9 +86,9 @@ export default function MapScreen() {
 
       // Build filter arrays from selected categories/statuses
       const filterCategories =
-        selectedCategories.length > 0 ? selectedCategories : null;
+        selectedCategories !== 'all' ? [selectedCategories] : null;
       const filterStatuses =
-        selectedStatuses.length > 0 ? selectedStatuses : null;
+        selectedStatuses !== 'all' ? [selectedStatuses] : null;
 
       // Use RPC function to get cases with GeoJSON locations
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

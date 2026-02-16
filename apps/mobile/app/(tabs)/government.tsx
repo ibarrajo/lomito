@@ -93,7 +93,7 @@ export default function GovernmentScreen() {
       totalAssigned,
       expiringCases,
       avgResolutionTime: avgResolutionTime.toFixed(1),
-      systemStatus: t('government.systemStatus'),
+      systemStatus: t('government.systemStatusOperational'),
     };
   }, [cases, t]);
 

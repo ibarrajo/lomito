@@ -79,7 +79,13 @@ logs/
 
 # Screenshots / QA artifacts
 *.png
+!apps/mobile/assets/**/*.png
 .playwright-mcp/
+
+# Development artifacts
+docs/stitch-designs/
+docs/data/
+.claude-agent.log
 
 # Python / Agent runner
 __pycache__/

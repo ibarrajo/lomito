@@ -33,14 +33,26 @@ export function useCase(caseId: string): UseCaseResult {
     setError(null);
 
     try {
-      // Fetch case data
-      const { data: caseRecord, error: caseError } = await supabase
-        .from('cases')
-        .select('*')
-        .eq('id', caseId)
-        .single();
+      // Fetch case data using RPC to get location as GeoJSON instead of WKB hex
+      // The RPC returns an array of records with location_geojson instead of location
+      type CaseRPCResult = Omit<Case, 'location'> & {
+        location_geojson: { type: 'Point'; coordinates: [number, number] };
+      };
+
+      const { data: caseRecords, error: caseError } =
+        await // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (supabase as any).rpc('get_case_by_id', { case_uuid: caseId });
 
       if (caseError) throw caseError;
+
+      const rawRecord = caseRecords?.[0] as CaseRPCResult | undefined;
+      if (!rawRecord) throw new Error('Case not found');
+
+      // Map location_geojson to location for Case type compatibility
+      const caseRecord: Case = {
+        ...rawRecord,
+        location: rawRecord.location_geojson,
+      };
 
       setCaseData(caseRecord);
 

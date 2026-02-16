@@ -85,7 +85,9 @@ export default function CaseDetailScreen() {
     );
   }
 
-  const [longitude, latitude] = caseData.location.coordinates;
+  // Safely extract coordinates from location (GeoJSON Point)
+  const longitude = caseData.location.coordinates[0];
+  const latitude = caseData.location.coordinates[1];
 
   const handleFollowPress = () => {
     toggleSubscription();
