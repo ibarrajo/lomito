@@ -283,7 +283,10 @@ export default function RegisterScreen() {
             onPress={() => setShowMunicipalityPicker(false)}
             accessibilityLabel={t('common.close')}
           >
-            <View style={styles.modalContent}>
+            <Pressable
+              style={styles.modalContent}
+              onPress={(e) => e.stopPropagation()}
+            >
               <View style={styles.modalHeader}>
                 <H1 accessibilityLabel={t('auth.municipality')}>
                   {t('auth.municipality')}
@@ -310,7 +313,7 @@ export default function RegisterScreen() {
                   </Body>
                 </Pressable>
               ))}
-            </View>
+            </Pressable>
           </Pressable>
         </Modal>
 

@@ -31,7 +31,7 @@ export function PageFooter() {
 
   const communityLinks = [
     { label: t('about.title'), route: '/about' },
-    { label: t('impact.title'), route: '/(public)/impact' },
+    { label: t('impact.title'), route: '/impact' },
     { label: t('donate.title'), route: '/donate' },
   ];
 

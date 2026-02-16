@@ -37,24 +37,33 @@ export function LegalTextRenderer({ text }: LegalTextRendererProps) {
 
   return (
     <View style={styles.container}>
-      {paragraphs.map((paragraph, index) => {
-        const trimmed = paragraph.trim();
-        if (!trimmed) return null;
+      {paragraphs
+        .map((paragraph, index) => {
+          const trimmed = paragraph.trim();
+          if (!trimmed) return null;
 
-        if (isHeading(trimmed)) {
+          // Create unique key by combining index with first 20 chars of content
+          const uniqueKey = `para-${index}-${trimmed.substring(0, 20)}`;
+
+          if (isHeading(trimmed)) {
+            return (
+              <H2 key={uniqueKey} style={styles.heading}>
+                {trimmed}
+              </H2>
+            );
+          }
+
           return (
-            <H2 key={index} style={styles.heading}>
+            <Body
+              key={uniqueKey}
+              style={styles.paragraph}
+              color={colors.neutral700}
+            >
               {trimmed}
-            </H2>
+            </Body>
           );
-        }
-
-        return (
-          <Body key={index} style={styles.paragraph} color={colors.neutral700}>
-            {trimmed}
-          </Body>
-        );
-      })}
+        })
+        .filter(Boolean)}
     </View>
   );
 }

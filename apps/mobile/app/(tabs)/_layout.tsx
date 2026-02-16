@@ -16,7 +16,7 @@ import { useBreakpoint } from '../../hooks/use-breakpoint';
 export default function TabLayout() {
   const { t } = useTranslation();
   const { profile, loading } = useUserProfile();
-  const { isDesktop } = useBreakpoint();
+  const { isDesktop, isTablet } = useBreakpoint();
 
   const isModerator =
     profile?.role === 'moderator' || profile?.role === 'admin';
@@ -24,6 +24,7 @@ export default function TabLayout() {
     profile?.role === 'government' || profile?.role === 'admin';
 
   const hideTabBar = Platform.OS === 'web' && isDesktop;
+  const compactLabels = Platform.OS === 'web' && isTablet;
 
   return (
     <Tabs
@@ -37,7 +38,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t('nav.map'),
+          title: compactLabels ? t('nav.mapShort') : t('nav.map'),
           tabBarIcon: ({ color }) => (
             <Map size={iconSizes.default} color={color} />
           ),
@@ -46,7 +47,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="dashboard"
         options={{
-          title: t('nav.dashboard'),
+          title: compactLabels ? t('nav.dashboardShort') : t('nav.dashboard'),
           tabBarIcon: ({ color }) => (
             <BarChart3 size={iconSizes.default} color={color} />
           ),
@@ -56,7 +57,9 @@ export default function TabLayout() {
         <Tabs.Screen
           name="moderation"
           options={{
-            title: t('nav.moderation'),
+            title: compactLabels
+              ? t('nav.moderationShort')
+              : t('nav.moderation'),
             tabBarIcon: ({ color }) => (
               <Shield size={iconSizes.default} color={color} />
             ),
@@ -67,7 +70,9 @@ export default function TabLayout() {
         <Tabs.Screen
           name="government"
           options={{
-            title: t('nav.government'),
+            title: compactLabels
+              ? t('nav.governmentShort')
+              : t('nav.government'),
             tabBarIcon: ({ color }) => (
               <Building2 size={iconSizes.default} color={color} />
             ),
@@ -77,7 +82,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: t('nav.profile'),
+          title: compactLabels ? t('nav.profileShort') : t('nav.profile'),
           tabBarIcon: ({ color }) => (
             <User size={iconSizes.default} color={color} />
           ),
@@ -86,7 +91,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: t('nav.settings'),
+          title: compactLabels ? t('nav.settingsShort') : t('nav.settings'),
           tabBarIcon: ({ color }) => (
             <Settings size={iconSizes.default} color={color} />
           ),

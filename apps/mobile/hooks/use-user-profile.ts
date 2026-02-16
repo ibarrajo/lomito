@@ -25,14 +25,19 @@ export function useUserProfile(): UseUserProfileResult {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+
     async function fetchProfile() {
       try {
+        if (!mounted) return;
         setLoading(true);
         setError(null);
 
         const {
           data: { user },
         } = await supabase.auth.getUser();
+
+        if (!mounted) return;
 
         if (!user) {
           setProfile(null);
@@ -46,6 +51,8 @@ export function useUserProfile(): UseUserProfileResult {
           .eq('id', user.id)
           .single();
 
+        if (!mounted) return;
+
         if (queryError) {
           console.error('Error fetching user profile:', queryError);
           setError(queryError.message);
@@ -56,14 +63,29 @@ export function useUserProfile(): UseUserProfileResult {
           setProfile(data as UserProfile);
         }
       } catch (err) {
+        if (!mounted) return;
         console.error('Unexpected error fetching profile:', err);
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     }
 
     fetchProfile();
+
+    // Subscribe to auth state changes to refetch profile
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      fetchProfile();
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   return {

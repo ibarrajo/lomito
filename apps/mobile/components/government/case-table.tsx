@@ -95,7 +95,11 @@ export const CaseTable = memo(function CaseTable({
   }
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.scrollView}
+    >
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.headerRow}>
@@ -232,7 +236,8 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   container: {
-    minWidth: '100%',
+    flex: 1,
+    minWidth: 720,
   },
   expiration: {
     color: colors.neutral700,
@@ -275,5 +280,8 @@ const styles = StyleSheet.create({
   },
   rowSelected: {
     backgroundColor: colors.primaryLight,
+  },
+  scrollView: {
+    flex: 1,
   },
 });

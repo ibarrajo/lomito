@@ -55,7 +55,11 @@ function RootLayoutNav() {
     const publicRoutes = ['(public)', 'auth', 'about', 'donate', 'legal'];
     const inPublicRoute = publicRoutes.includes(currentSegment);
 
-    if (!session && !inPublicRoute) {
+    // Special case: treat root '/' as public route (resolves to (public)/index)
+    const isRootPath = pathname === '/' || pathname === '/(public)';
+    const shouldTreatAsPublic = inPublicRoute || isRootPath;
+
+    if (!session && !shouldTreatAsPublic) {
       // Redirect unauthenticated users to login
       router.replace('/auth/login');
     } else if (session && inAuthGroup) {
@@ -69,7 +73,7 @@ function RootLayoutNav() {
       // Redirect authenticated users away from public landing on web
       router.replace('/(tabs)');
     }
-  }, [session, loading, segments, router]);
+  }, [session, loading, segments, router, pathname]);
 
   if (loading) {
     return (

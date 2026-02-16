@@ -32,8 +32,14 @@ export function PublicWebHeader() {
   const { session } = useAuth();
   const { isMobile } = useBreakpoint();
 
-  // Don't render on native, mobile web, or when authenticated (WebNavbar handles it)
-  if (Platform.OS !== 'web' || isMobile || session) {
+  // Don't render on native or when authenticated (WebNavbar handles it)
+  // Only render on tablet/desktop web for unauthenticated users
+  if (Platform.OS !== 'web' || session) {
+    return null;
+  }
+
+  // Don't render on mobile web (mobile tabs handle navigation)
+  if (isMobile) {
     return null;
   }
 
