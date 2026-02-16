@@ -73,7 +73,6 @@ export function AppModal({
         style={styles.overlay}
         onPress={onClose}
         accessibilityLabel="Close modal"
-        accessibilityRole="button"
       >
         <Animated.View style={[styles.card, animatedStyle]}>
           <Pressable onPress={(e) => e.stopPropagation()}>

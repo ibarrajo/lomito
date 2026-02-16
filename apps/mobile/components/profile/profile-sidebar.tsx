@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     borderRadius: borderRadius.card,
-    height: '100%',
     padding: spacing.lg,
     ...shadowStyles.card,
   },

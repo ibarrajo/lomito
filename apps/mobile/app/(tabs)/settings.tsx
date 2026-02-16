@@ -149,16 +149,18 @@ export default function SettingsScreen() {
           </View>
 
           {/* Sign Out Button */}
-          <Pressable
-            style={styles.signOutButton}
-            onPress={handleSignOut}
-            accessibilityLabel={t('settings.signOut')}
-            accessibilityRole="button"
-          >
-            <Text style={styles.signOutButtonText}>
-              {t('settings.signOut')}
-            </Text>
-          </Pressable>
+          <View style={styles.signOutContainer}>
+            <Pressable
+              style={styles.signOutButton}
+              onPress={handleSignOut}
+              accessibilityLabel={t('settings.signOut')}
+              accessibilityRole="button"
+            >
+              <Text style={styles.signOutButtonText}>
+                {t('settings.signOut')}
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
 
@@ -255,14 +257,18 @@ const styles = StyleSheet.create({
   },
   signOutButton: {
     alignItems: 'center',
-    backgroundColor: colors.error,
+    backgroundColor: colors.white,
+    borderColor: colors.error,
     borderRadius: borderRadius.button,
+    borderWidth: 1,
     justifyContent: 'center',
-    marginTop: spacing.lg,
     paddingVertical: spacing.md,
   },
   signOutButtonText: {
     ...typography.button,
-    color: colors.white,
+    color: colors.error,
+  },
+  signOutContainer: {
+    marginTop: spacing.lg,
   },
 });

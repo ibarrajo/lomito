@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     flex: 9,
   },
   sidebar: {
+    alignSelf: 'flex-start',
     flex: 3,
   },
 });
