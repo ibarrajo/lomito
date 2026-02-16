@@ -52,12 +52,8 @@ function RootLayoutNav() {
     const inPublicRoute = publicRoutes.includes(segments[0] as string);
 
     if (!session && !inPublicRoute) {
-      // Redirect to public landing (web) or login (native)
-      if (Platform.OS === 'web') {
-        router.replace('/(public)');
-      } else {
-        router.replace('/auth/login');
-      }
+      // Redirect unauthenticated users to login
+      router.replace('/auth/login');
     } else if (session && inAuthGroup) {
       // Redirect to main app if authenticated
       router.replace('/(tabs)');

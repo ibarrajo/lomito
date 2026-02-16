@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   navLink: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
     position: 'relative',
   },
@@ -458,12 +458,16 @@ const styles = StyleSheet.create({
   navLinks: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.sm,
+    flexShrink: 1,
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+    overflow: 'hidden',
   },
   rightSection: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.md,
+    flexShrink: 0,
+    gap: spacing.sm,
   },
   userMenu: {
     backgroundColor: colors.white,

@@ -41,7 +41,7 @@ interface CaseDetailPanelProps {
   escalatedAt: string | null;
   governmentResponseAt: string | null;
   createdAt: string;
-  location: { type: 'Point'; coordinates: [number, number] };
+  location: { type: 'Point'; coordinates: [number, number] } | null;
   onAssignFolio: (caseId: string) => void;
   onPostResponse: (caseId: string) => void;
   onUpdateStatus: (caseId: string) => void;
@@ -105,7 +105,7 @@ export function CaseDetailPanel({
         {/* Case ID and Badges */}
         <View style={styles.section}>
           <Caption style={styles.caseId}>
-            {folio || caseId.slice(0, 8).toUpperCase()}
+            {folio || t('government.noFolio')}
           </Caption>
           <View style={styles.badges}>
             <Badge
@@ -152,8 +152,8 @@ export function CaseDetailPanel({
           <View style={styles.metaRow}>
             <Caption style={styles.metaLabel}>{t('case.location')}:</Caption>
             <Caption style={styles.metaValue}>
-              {location.coordinates[1].toFixed(5)},{' '}
-              {location.coordinates[0].toFixed(5)}
+              {location?.coordinates?.[1]?.toFixed(5) ?? '0.00000'},{' '}
+              {location?.coordinates?.[0]?.toFixed(5) ?? '0.00000'}
             </Caption>
           </View>
         </View>

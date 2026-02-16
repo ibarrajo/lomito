@@ -79,15 +79,19 @@ export default function CaseDetailScreen() {
           }}
         />
         <View style={styles.errorContainer}>
-          <Body color={colors.error}>{error || t('common.error')}</Body>
+          <Body color={colors.error}>
+            {error === 'CASE_NOT_FOUND'
+              ? t('case.notFound')
+              : error || t('common.error')}
+          </Body>
         </View>
       </View>
     );
   }
 
   // Safely extract coordinates from location (GeoJSON Point)
-  const longitude = caseData.location.coordinates[0];
-  const latitude = caseData.location.coordinates[1];
+  const longitude = caseData.location?.coordinates?.[0] ?? 0;
+  const latitude = caseData.location?.coordinates?.[1] ?? 0;
 
   const handleFollowPress = () => {
     toggleSubscription();

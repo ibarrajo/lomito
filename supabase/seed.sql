@@ -28,9 +28,6 @@ INSERT INTO auth.users (
   email_change_token_new,
   email_change_token_current,
   email_change,
-  phone,
-  phone_change,
-  phone_change_token,
   reauthentication_token
 )
 VALUES (
@@ -45,9 +42,6 @@ VALUES (
   '{"full_name":"Dev Admin"}'::jsonb,
   'authenticated',
   'authenticated',
-  '',
-  '',
-  '',
   '',
   '',
   '',
@@ -95,9 +89,6 @@ INSERT INTO auth.users (
   email_change_token_new,
   email_change_token_current,
   email_change,
-  phone,
-  phone_change,
-  phone_change_token,
   reauthentication_token
 )
 VALUES (
@@ -112,9 +103,6 @@ VALUES (
   '{"full_name":"María García López"}'::jsonb,
   'authenticated',
   'authenticated',
-  '',
-  '',
-  '',
   '',
   '',
   '',
@@ -162,9 +150,6 @@ INSERT INTO auth.users (
   email_change_token_new,
   email_change_token_current,
   email_change,
-  phone,
-  phone_change,
-  phone_change_token,
   reauthentication_token
 )
 VALUES (
@@ -179,9 +164,6 @@ VALUES (
   '{"full_name":"Carlos Mendoza Ruiz"}'::jsonb,
   'authenticated',
   'authenticated',
-  '',
-  '',
-  '',
   '',
   '',
   '',
@@ -229,9 +211,6 @@ INSERT INTO auth.users (
   email_change_token_new,
   email_change_token_current,
   email_change,
-  phone,
-  phone_change,
-  phone_change_token,
   reauthentication_token
 )
 VALUES (
@@ -246,9 +225,6 @@ VALUES (
   '{"full_name":"Ana Rodríguez Vega"}'::jsonb,
   'authenticated',
   'authenticated',
-  '',
-  '',
-  '',
   '',
   '',
   '',
@@ -296,9 +272,6 @@ INSERT INTO auth.users (
   email_change_token_new,
   email_change_token_current,
   email_change,
-  phone,
-  phone_change,
-  phone_change_token,
   reauthentication_token
 )
 VALUES (
@@ -313,9 +286,6 @@ VALUES (
   '{"full_name":"Roberto Sánchez Díaz"}'::jsonb,
   'authenticated',
   'authenticated',
-  '',
-  '',
-  '',
   '',
   '',
   '',
@@ -363,9 +333,6 @@ INSERT INTO auth.users (
   email_change_token_new,
   email_change_token_current,
   email_change,
-  phone,
-  phone_change,
-  phone_change_token,
   reauthentication_token
 )
 VALUES (
@@ -380,9 +347,6 @@ VALUES (
   '{"full_name":"Laura Torres Mora"}'::jsonb,
   'authenticated',
   'authenticated',
-  '',
-  '',
-  '',
   '',
   '',
   '',

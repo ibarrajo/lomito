@@ -2,6 +2,7 @@
   "common": {
     "loading": "Cargando...",
     "error": "Error",
+    "accessDenied": "No tienes permiso para acceder a esta página.",
     "retry": "Reintentar",
     "cancel": "Cancelar",
     "save": "Guardar",
@@ -76,7 +77,7 @@
     "smsLoginTab": "Iniciar sesión con SMS",
     "magicLinkTab": "Enlace mágico",
     "passwordTab": "Contraseña",
-    "passwordLogin": "Contraseña",
+    "passwordLogin": "Iniciar sesión",
     "checkYourEmail": "Revisa tu correo",
     "checkEmailHeading": "¡Ya casi!",
     "checkEmailSubtext": "Enviamos un enlace mágico a tu bandeja de entrada",
@@ -223,6 +224,7 @@
   },
   "case": {
     "details": "Detalles del caso",
+    "notFound": "Caso no encontrado.",
     "timeline": "Historial",
     "photos": "Fotos",
     "jurisdiction": "Jurisdicción",
@@ -399,6 +401,7 @@
     "caseCount_one": "{{count}} caso",
     "caseCount_other": "{{count}} casos",
     "assignFolio": "Asignar folio",
+    "noFolio": "Sin folio",
     "postResponse": "Publicar respuesta",
     "officialResponse": "Respuesta oficial",
     "responsePlaceholder": "Escribe la respuesta oficial...",

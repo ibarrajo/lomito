@@ -166,7 +166,7 @@ export const CaseTable = memo(function CaseTable({
             >
               <View style={styles.cell}>
                 <Caption style={styles.folioText}>
-                  {caseItem.folio || caseItem.id.slice(0, 8)}
+                  {caseItem.folio || '—'}
                 </Caption>
               </View>
               <View style={styles.cell}>

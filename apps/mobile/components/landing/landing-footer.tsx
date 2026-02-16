@@ -1,4 +1,10 @@
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Linking,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Facebook, Twitter, Instagram } from 'lucide-react-native';
@@ -128,6 +134,7 @@ export function LandingFooter() {
           <TouchableOpacity
             accessibilityLabel="Facebook"
             accessibilityRole="link"
+            onPress={() => Linking.openURL('https://facebook.com/lomito.org')}
           >
             <Facebook
               size={iconSizes.default}
@@ -138,6 +145,7 @@ export function LandingFooter() {
           <TouchableOpacity
             accessibilityLabel="Twitter"
             accessibilityRole="link"
+            onPress={() => Linking.openURL('https://x.com/lomito_org')}
           >
             <Twitter
               size={iconSizes.default}
@@ -148,6 +156,7 @@ export function LandingFooter() {
           <TouchableOpacity
             accessibilityLabel="Instagram"
             accessibilityRole="link"
+            onPress={() => Linking.openURL('https://instagram.com/lomito.org')}
           >
             <Instagram
               size={iconSizes.default}

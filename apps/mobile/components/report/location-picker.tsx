@@ -6,7 +6,11 @@
 import { View, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import MapboxGL, { TIJUANA_CENTER, DEFAULT_ZOOM } from '../../lib/mapbox';
+import MapboxGL, {
+  TIJUANA_CENTER,
+  DEFAULT_ZOOM,
+  STREET_STYLE_URL,
+} from '../../lib/mapbox';
 import { Caption } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 
@@ -40,7 +44,7 @@ export function LocationPicker({
       <View style={styles.mapContainer}>
         <MapboxGL.MapView
           style={styles.map}
-          styleURL={MapboxGL.StyleURL.Street}
+          styleURL={STREET_STYLE_URL}
           onRegionDidChange={handleRegionDidChange}
         >
           <MapboxGL.Camera

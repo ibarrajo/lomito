@@ -26,11 +26,15 @@ import { CaseReviewCard } from '../../components/moderation/case-review-card';
 import { QueueSidebar } from '../../components/moderation/queue-sidebar';
 import { ReviewDetailPanel } from '../../components/moderation/review-detail-panel';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { useUserProfile } from '../../hooks/use-user-profile';
 
 export default function ModerationScreen() {
   const { t } = useTranslation();
   const { cases, loading, error, refetch } = useModerationQueue();
   const { isDesktop } = useBreakpoint();
+  const { profile, loading: profileLoading } = useUserProfile();
+  const isAuthorized =
+    profile?.role === 'moderator' || profile?.role === 'admin';
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -93,6 +97,15 @@ export default function ModerationScreen() {
         return;
       }
 
+      const target = event.target as HTMLElement;
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
       if (event.key === 'v' || event.key === 'V') {
         event.preventDefault();
         handleVerifySelected();
@@ -108,6 +121,17 @@ export default function ModerationScreen() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isDesktop, handleVerifySelected, handleRejectSelected]);
+
+  if (!profileLoading && !isAuthorized) {
+    return (
+      <View style={styles.container}>
+        <Stack.Screen options={{ title: t('moderation.queue') }} />
+        <View style={styles.accessDenied}>
+          <Body color={colors.error}>{t('common.accessDenied')}</Body>
+        </View>
+      </View>
+    );
+  }
 
   if (loading && cases.length === 0) {
     return (
@@ -426,6 +450,12 @@ export default function ModerationScreen() {
 }
 
 const styles = StyleSheet.create({
+  accessDenied: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.xl,
+  },
   container: {
     backgroundColor: colors.white,
     flex: 1,

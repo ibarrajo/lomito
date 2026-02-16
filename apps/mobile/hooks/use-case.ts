@@ -46,7 +46,7 @@ export function useCase(caseId: string): UseCaseResult {
       if (caseError) throw caseError;
 
       const rawRecord = caseRecords?.[0] as CaseRPCResult | undefined;
-      if (!rawRecord) throw new Error('Case not found');
+      if (!rawRecord) throw new Error('CASE_NOT_FOUND');
 
       // Map location_geojson to location for Case type compatibility
       const caseRecord: Case = {

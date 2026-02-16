@@ -4,7 +4,7 @@
  */
 
 import { View, StyleSheet } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import MapboxGL, { STREET_STYLE_URL } from '../../lib/mapbox';
 import { colors, borderRadius, shadowStyles } from '@lomito/ui/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types/database';
 
@@ -35,7 +35,7 @@ export function CaseMap({ longitude, latitude, category }: CaseMapProps) {
     <View style={styles.container}>
       <MapboxGL.MapView
         style={styles.map}
-        styleURL={MapboxGL.StyleURL.Street}
+        styleURL={STREET_STYLE_URL}
         compassEnabled={false}
         scaleBarEnabled={false}
       >

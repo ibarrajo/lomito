@@ -31,7 +31,7 @@ interface CaseDetail {
   urgency: UrgencyLevel;
   description: string;
   created_at: string;
-  location: { type: 'Point'; coordinates: [number, number] };
+  location: { type: 'Point'; coordinates: [number, number] } | null;
   reporter_id: string;
   flag_count?: number;
   media?: Array<{ url: string; thumbnail_url?: string }>;
@@ -99,8 +99,8 @@ export function ReviewDetailPanel({
     caseData.urgency === 'high' || caseData.urgency === 'critical';
 
   // Extract coordinates from location (GeoJSON Point)
-  const longitude = caseData.location.coordinates[0];
-  const latitude = caseData.location.coordinates[1];
+  const longitude = caseData.location?.coordinates?.[0] ?? 0;
+  const latitude = caseData.location?.coordinates?.[1] ?? 0;
 
   const submitterScore = 85;
   const hasDuplicates = false;

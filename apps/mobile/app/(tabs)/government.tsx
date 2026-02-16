@@ -27,6 +27,7 @@ import {
   typography,
 } from '@lomito/ui/theme/tokens';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { useUserProfile } from '../../hooks/use-user-profile';
 import { useGovernmentCases } from '../../hooks/use-government-cases';
 import { useGovernmentActions } from '../../hooks/use-government-actions';
 import { CaseActionCard } from '../../components/government/case-action-card';
@@ -48,6 +49,9 @@ type FilterStatus =
 export default function GovernmentScreen() {
   const { t } = useTranslation();
   const { isDesktop } = useBreakpoint();
+  const { profile, loading: profileLoading } = useUserProfile();
+  const isAuthorized =
+    profile?.role === 'government' || profile?.role === 'admin';
   const [statusFilter, setStatusFilter] = useState<FilterStatus>('all');
   const [folioModalVisible, setFolioModalVisible] = useState(false);
   const [responseModalVisible, setResponseModalVisible] = useState(false);
@@ -146,6 +150,17 @@ export default function GovernmentScreen() {
     { key: 'in_progress', label: t('status.in_progress') },
     { key: 'resolved', label: t('status.resolved') },
   ];
+
+  if (!profileLoading && !isAuthorized) {
+    return (
+      <View style={styles.container}>
+        <Stack.Screen options={{ title: t('government.portal') }} />
+        <View style={styles.accessDenied}>
+          <Body color={colors.error}>{t('common.accessDenied')}</Body>
+        </View>
+      </View>
+    );
+  }
 
   if (loading && cases.length === 0) {
     return (
@@ -401,6 +416,12 @@ export default function GovernmentScreen() {
 }
 
 const styles = StyleSheet.create({
+  accessDenied: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.xl,
+  },
   container: {
     backgroundColor: colors.white,
     flex: 1,

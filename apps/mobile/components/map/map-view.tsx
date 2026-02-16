@@ -4,7 +4,11 @@
  */
 
 import { StyleSheet, View } from 'react-native';
-import MapboxGL, { TIJUANA_CENTER, DEFAULT_ZOOM } from '../../lib/mapbox';
+import MapboxGL, {
+  TIJUANA_CENTER,
+  DEFAULT_ZOOM,
+  STREET_STYLE_URL,
+} from '../../lib/mapbox';
 import type { ReactNode } from 'react';
 
 interface Region {
@@ -64,7 +68,7 @@ export function MapView({
     <View style={styles.container}>
       <MapboxGL.MapView
         style={styles.map}
-        styleURL={MapboxGL.StyleURL.Street}
+        styleURL={STREET_STYLE_URL}
         onDidFinishLoadingMap={onMapReady}
         onRegionDidChange={handleRegionDidChange}
         compassEnabled={false}
