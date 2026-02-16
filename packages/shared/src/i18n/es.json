@@ -231,6 +231,7 @@
   "case": {
     "details": "Detalles del caso",
     "notFound": "Caso no encontrado.",
+    "fetchError": "Error al cargar el caso",
     "timeline": "Historial",
     "photos": "Fotos",
     "jurisdiction": "Jurisdicción",

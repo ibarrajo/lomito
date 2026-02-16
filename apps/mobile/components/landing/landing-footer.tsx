@@ -28,24 +28,14 @@ export function LandingFooter() {
     { label: t('nav.dashboard'), route: '/auth/login' },
   ];
 
-  const resourceLinks = [
-    { label: t('about.title'), route: '/about' },
-    { label: t('landing.footerBlog'), route: '#' },
-    { label: t('landing.footerFaq'), route: '#' },
-  ];
+  const resourceLinks = [{ label: t('about.title'), route: '/about' }];
 
   const legalLinks = [
     { label: t('legal.privacy'), route: '/legal/privacy' },
     { label: t('legal.terms'), route: '/legal/terms' },
-    { label: t('landing.footerContact'), route: '#' },
   ];
 
-  const communityLinks = [
-    { label: t('landing.volunteer'), route: '#' },
-    { label: t('landing.partnerNGOs'), route: '#' },
-    { label: t('landing.successStories'), route: '#' },
-    { label: t('landing.blog'), route: '#' },
-  ];
+  const communityLinks: { label: string; route: string }[] = [];
 
   const getGridStyle = () => {
     if (isMobile) return styles.gridMobile;
@@ -84,9 +74,7 @@ export function LandingFooter() {
           {resourceLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => {
-                if (link.route !== '#') router.push(link.route as never);
-              }}
+              onPress={() => router.push(link.route as never)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>
@@ -95,20 +83,22 @@ export function LandingFooter() {
         </View>
 
         {/* Column 4: Community */}
-        <View style={styles.column}>
-          <H3 style={styles.columnTitle}>{t('landing.footerCommunity')}</H3>
-          {communityLinks.map((link) => (
-            <TouchableOpacity
-              key={link.label}
-              onPress={() => {
-                if (link.route !== '#') router.push(link.route as never);
-              }}
-              accessibilityRole="link"
-            >
-              <Text style={styles.link}>{link.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        {communityLinks.length > 0 && (
+          <View style={styles.column}>
+            <H3 style={styles.columnTitle}>{t('landing.footerCommunity')}</H3>
+            {communityLinks.map((link) => (
+              <TouchableOpacity
+                key={link.label}
+                onPress={() => {
+                  if (link.route !== '#') router.push(link.route as never);
+                }}
+                accessibilityRole="link"
+              >
+                <Text style={styles.link}>{link.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
 
         {/* Column 5: Legal */}
         <View style={styles.column}>
@@ -116,9 +106,7 @@ export function LandingFooter() {
           {legalLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => {
-                if (link.route !== '#') router.push(link.route as never);
-              }}
+              onPress={() => router.push(link.route as never)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>
@@ -134,7 +122,7 @@ export function LandingFooter() {
           <TouchableOpacity
             accessibilityLabel="Facebook"
             accessibilityRole="link"
-            onPress={() => Linking.openURL('https://facebook.com/lomito.org')}
+            onPress={() => Linking.openURL('https://facebook.com/LomitoOrg')}
           >
             <Facebook
               size={iconSizes.default}
@@ -145,7 +133,7 @@ export function LandingFooter() {
           <TouchableOpacity
             accessibilityLabel="Twitter"
             accessibilityRole="link"
-            onPress={() => Linking.openURL('https://x.com/lomito_org')}
+            onPress={() => Linking.openURL('https://x.com/LomitoOrg')}
           >
             <Twitter
               size={iconSizes.default}

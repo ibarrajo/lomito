@@ -78,8 +78,7 @@ export function useCase(caseId: string): UseCaseResult {
 
       setTimeline(timelineRecords || []);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to fetch case';
+      const errorMessage = err instanceof Error ? err.message : 'FETCH_ERROR';
       setError(errorMessage);
       console.error('Error fetching case:', err);
     } finally {

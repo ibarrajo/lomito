@@ -404,10 +404,10 @@ export default function LoginScreen() {
                 <Button
                   onPress={handlePasswordLogin}
                   loading={loading}
-                  accessibilityLabel={t('auth.passwordLogin')}
+                  accessibilityLabel={t('auth.login')}
                   style={styles.submitButton}
                 >
-                  {t('auth.passwordLogin')}
+                  {t('auth.login')}
                 </Button>
               </View>
             )}

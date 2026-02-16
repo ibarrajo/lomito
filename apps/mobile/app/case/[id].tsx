@@ -82,7 +82,9 @@ export default function CaseDetailScreen() {
           <Body color={colors.error}>
             {error === 'CASE_NOT_FOUND'
               ? t('case.notFound')
-              : error || t('common.error')}
+              : error === 'FETCH_ERROR'
+                ? t('case.fetchError')
+                : t('common.error')}
           </Body>
         </View>
       </View>

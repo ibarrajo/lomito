@@ -231,6 +231,7 @@
   "case": {
     "details": "Case Details",
     "notFound": "Case not found.",
+    "fetchError": "Failed to fetch case",
     "timeline": "Timeline",
     "photos": "Photos",
     "jurisdiction": "Jurisdiction",
