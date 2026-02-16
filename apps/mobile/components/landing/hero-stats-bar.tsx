@@ -30,7 +30,7 @@ export function HeroStatsBar() {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.grid, isMobile && styles.gridMobile]}>
+      <View style={[styles.grid, !isMobile && styles.gridTablet]}>
         <View style={styles.statItem}>
           <H2 style={styles.statNumber}>{displayStats.activeCases}</H2>
           <BodySmall style={styles.statLabel}>
@@ -70,13 +70,16 @@ const styles = StyleSheet.create({
   grid: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  gridMobile: {
-    flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.lg,
     justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+  },
+  gridTablet: {
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    justifyContent: 'space-around',
+    paddingHorizontal: 0,
   },
   statItem: {
     alignItems: 'center',

@@ -3,7 +3,7 @@
  * Color-coded marker for case locations on the map.
  */
 
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import MapboxGL from '../../lib/mapbox';
 import { colors, borderRadius } from '@lomito/ui/src/theme/tokens';
 import type { CaseCategory } from '@lomito/shared/types/database';
@@ -47,10 +47,18 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     height: 24,
     justifyContent: 'center',
-    shadowColor: PIN_SHADOW_COLOR,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
     width: 24,
+    ...(Platform.select({
+      web: {
+        boxShadow: '0 2px 4px rgba(30, 41, 59, 0.3)',
+      },
+      default: {
+        shadowColor: PIN_SHADOW_COLOR,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 3,
+      },
+    }) as object),
   },
 });

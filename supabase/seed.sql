@@ -849,7 +849,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'stray',
   'dog',
-  'Stray dog with injured leg spotted near the market on Avenida Revolución. Appears to be limping and in pain.',
+  'Perro callejero con pata lesionada avistado cerca del mercado en Avenida Revolución. Parece estar cojeando y con dolor.',
   ST_SetSRID(ST_MakePoint(-117.0195, 32.5270), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
@@ -858,7 +858,7 @@ VALUES (
   now() - interval '2 days'
 );
 
--- Case 2: Abuse - Playas de Tijuana - verified - Carlos - folio TJ-2026-001
+-- Case 2: Abuse - Playas de Tijuana - verified - Carlos - folio TIJ-2025-000001
 INSERT INTO cases (
   id,
   reporter_id,
@@ -878,17 +878,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'abuse',
   'dog',
-  'Possible animal abuse reported - dog chained outside without shelter or water. Neighbors report constant barking and distress.',
+  'Posible maltrato animal reportado - perro encadenado afuera sin refugio ni agua. Los vecinos reportan ladridos constantes y angustia.',
   ST_SetSRID(ST_MakePoint(-117.1232, 32.5218), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'critical',
   'verified',
-  'TJ-2026-001',
+  'TIJ-2025-000001',
   now() - interval '5 days',
   now() - interval '4 days'
 );
 
--- Case 3: Missing cat - Zona Río - in_progress - María - folio TJ-2026-002
+-- Case 3: Missing cat - Zona Río - in_progress - María - folio TIJ-2025-000002
 INSERT INTO cases (
   id,
   reporter_id,
@@ -908,12 +908,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'missing',
   'cat',
-  'Missing tabby cat, last seen near Parque Morelos. Orange and white stripes, wearing blue collar with bell.',
+  'Gato atigrado perdido, visto por última vez cerca del Parque Morelos. Rayas naranjas y blancas, usa collar azul con cascabel.',
   ST_SetSRID(ST_MakePoint(-117.0102, 32.5172), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
   'in_progress',
-  'TJ-2026-002',
+  'TIJ-2025-000002',
   now() - interval '7 days',
   now() - interval '6 days'
 );
@@ -937,7 +937,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'stray',
   'dog',
-  'Pack of 3 stray dogs roaming near elementary school. They appear friendly but may pose safety concerns for children.',
+  'Manada de 3 perros callejeros deambulando cerca de escuela primaria. Parecen amigables pero pueden representar preocupaciones de seguridad para los niños.',
   ST_SetSRID(ST_MakePoint(-116.9602, 32.5448), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
@@ -946,7 +946,7 @@ VALUES (
   now() - interval '3 days'
 );
 
--- Case 5: Abuse - La Mesa - resolved - Admin - folio TJ-2026-003
+-- Case 5: Abuse - La Mesa - resolved - Admin - folio TIJ-2025-000003
 INSERT INTO cases (
   id,
   reporter_id,
@@ -966,17 +966,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000001',
   'abuse',
   'cat',
-  'Cat stuck on rooftop for 2 days, owner cannot reach. Appears dehydrated and distressed.',
+  'Gato atrapado en azotea por 2 días, el dueño no puede alcanzarlo. Parece deshidratado y angustiado.',
   ST_SetSRID(ST_MakePoint(-116.9498, 32.5102), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
   'resolved',
-  'TJ-2026-003',
+  'TIJ-2025-000003',
   now() - interval '15 days',
   now() - interval '10 days'
 );
 
--- Case 6: Stray - Zona Norte - verified - Laura - folio TJ-2026-004
+-- Case 6: Stray - Zona Norte - verified - Laura - folio TIJ-2025-000004
 INSERT INTO cases (
   id,
   reporter_id,
@@ -996,12 +996,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000006',
   'stray',
   'dog',
-  'Injured stray dog hiding under parked cars. Has visible wounds and is very scared of people.',
+  'Perro callejero herido escondiéndose bajo autos estacionados. Tiene heridas visibles y está muy asustado de las personas.',
   ST_SetSRID(ST_MakePoint(-117.0228, 32.5352), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'critical',
   'verified',
-  'TJ-2026-004',
+  'TIJ-2025-000004',
   now() - interval '4 days',
   now() - interval '3 days'
 );
@@ -1025,7 +1025,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'missing',
   'dog',
-  'Small white chihuahua missing since yesterday. Wearing pink harness, very friendly and responds to "Luna".',
+  'Chihuahua blanco pequeño perdido desde ayer. Usa arnés rosa, muy amigable y responde al nombre "Luna".',
   ST_SetSRID(ST_MakePoint(-117.0082, 32.5318), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
@@ -1034,7 +1034,7 @@ VALUES (
   now() - interval '1 day'
 );
 
--- Case 8: Abuse - Hipódromo - in_progress - Carlos - folio TJ-2026-005
+-- Case 8: Abuse - Hipódromo - in_progress - Carlos - folio TIJ-2025-000005
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1054,12 +1054,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'abuse',
   'dog',
-  'Dog left in hot car in parking lot. Windows barely cracked, dog appears to be panting heavily.',
+  'Perro dejado en auto caliente en estacionamiento. Ventanas apenas abiertas, el perro parece estar jadeando fuertemente.',
   ST_SetSRID(ST_MakePoint(-117.0252, 32.5088), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'critical',
   'in_progress',
-  'TJ-2026-005',
+  'TIJ-2025-000005',
   now() - interval '6 hours',
   now() - interval '5 hours'
 );
@@ -1083,7 +1083,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'stray',
   'cat',
-  'Multiple stray cats living in abandoned building. Appear malnourished and some look sick.',
+  'Múltiples gatos callejeros viviendo en edificio abandonado. Parecen desnutridos y algunos se ven enfermos.',
   ST_SetSRID(ST_MakePoint(-117.0348, 32.5152), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
@@ -1092,7 +1092,7 @@ VALUES (
   now() - interval '8 days'
 );
 
--- Case 10: Missing - Cacho - resolved - Admin - folio TJ-2026-006
+-- Case 10: Missing - Cacho - resolved - Admin - folio TIJ-2025-000006
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1112,17 +1112,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000001',
   'missing',
   'cat',
-  'Black cat with white paws missing. Last seen in the neighborhood, very shy but microchipped.',
+  'Gato negro con patas blancas perdido. Visto por última vez en el vecindario, muy tímido pero tiene microchip.',
   ST_SetSRID(ST_MakePoint(-117.0178, 32.5082), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'low',
   'resolved',
-  'TJ-2026-006',
+  'TIJ-2025-000006',
   now() - interval '20 days',
   now() - interval '12 days'
 );
 
--- Case 11: Stray - Sánchez Taboada - verified - Carlos - folio TJ-2026-007
+-- Case 11: Stray - Sánchez Taboada - verified - Carlos - folio TIJ-2025-000007
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1142,17 +1142,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'stray',
   'dog',
-  'Pregnant stray dog seeking shelter near construction site. Needs immediate rescue before giving birth.',
+  'Perra callejera preñada buscando refugio cerca de sitio de construcción. Necesita rescate inmediato antes de dar a luz.',
   ST_SetSRID(ST_MakePoint(-116.9798, 32.4902), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
   'verified',
-  'TJ-2026-007',
+  'TIJ-2025-000007',
   now() - interval '9 days',
   now() - interval '8 days'
 );
 
--- Case 12: Abuse - Francisco Villa - in_progress - Laura - folio TJ-2026-008
+-- Case 12: Abuse - Francisco Villa - in_progress - Laura - folio TIJ-2025-000008
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1172,12 +1172,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000006',
   'abuse',
   'bird',
-  'Parrots in very small cage, appears to be illegal wildlife trafficking. Birds look distressed and malnourished.',
+  'Loros en jaula muy pequeña, parece ser tráfico ilegal de fauna. Las aves se ven angustiadas y desnutridas.',
   ST_SetSRID(ST_MakePoint(-116.9702, 32.4798), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
   'in_progress',
-  'TJ-2026-008',
+  'TIJ-2025-000008',
   now() - interval '11 days',
   now() - interval '10 days'
 );
@@ -1201,7 +1201,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'missing',
   'dog',
-  'Golden retriever escaped from yard during storm. Very friendly, wearing red collar with contact info.',
+  'Golden retriever escapó del patio durante tormenta. Muy amigable, usa collar rojo con información de contacto.',
   ST_SetSRID(ST_MakePoint(-116.9198, 32.4702), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
@@ -1210,7 +1210,7 @@ VALUES (
   now() - interval '12 hours'
 );
 
--- Case 14: Stray - Zona Centro - resolved - Admin - folio TJ-2026-009
+-- Case 14: Stray - Zona Centro - resolved - Admin - folio TIJ-2025-000009
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1230,17 +1230,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000001',
   'stray',
   'cat',
-  'Kitten found abandoned in cardboard box near metro station. Very young, needs immediate care.',
+  'Gatito encontrado abandonado en caja de cartón cerca de estación del metro. Muy joven, necesita atención inmediata.',
   ST_SetSRID(ST_MakePoint(-117.0188, 32.5265), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
   'resolved',
-  'TJ-2026-009',
+  'TIJ-2025-000009',
   now() - interval '18 days',
   now() - interval '16 days'
 );
 
--- Case 15: Abuse - Playas de Tijuana - verified - Admin - folio TJ-2026-010
+-- Case 15: Abuse - Playas de Tijuana - verified - Admin - folio TIJ-2025-000010
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1260,12 +1260,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000001',
   'abuse',
   'dog',
-  'Dog being kept in extremely unsanitary conditions. Feces everywhere, no clean water visible.',
+  'Perro mantenido en condiciones extremadamente insalubres. Heces por todas partes, no se ve agua limpia.',
   ST_SetSRID(ST_MakePoint(-117.1225, 32.5215), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
   'verified',
-  'TJ-2026-010',
+  'TIJ-2025-000010',
   now() - interval '6 days',
   now() - interval '5 days'
 );
@@ -1289,7 +1289,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'missing',
   'cat',
-  'Siamese cat missing from apartment building. Indoor cat that escaped through window.',
+  'Gato siamés perdido del edificio de apartamentos. Gato de interior que escapó por la ventana.',
   ST_SetSRID(ST_MakePoint(-117.0095, 32.5168), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'low',
@@ -1298,7 +1298,7 @@ VALUES (
   now() - interval '4 days'
 );
 
--- Case 17: Stray - Otay - in_progress - Carlos - folio TJ-2026-011
+-- Case 17: Stray - Otay - in_progress - Carlos - folio TIJ-2025-000011
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1318,17 +1318,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'stray',
   'dog',
-  'Elderly dog wandering busy street, appears disoriented and at risk of being hit by traffic.',
+  'Perro anciano deambulando por calle transitada, parece desorientado y en riesgo de ser atropellado.',
   ST_SetSRID(ST_MakePoint(-116.9595, 32.5455), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'critical',
   'in_progress',
-  'TJ-2026-011',
+  'TIJ-2025-000011',
   now() - interval '14 hours',
   now() - interval '13 hours'
 );
 
--- Case 18: Abuse - La Mesa - verified - Laura - folio TJ-2026-012
+-- Case 18: Abuse - La Mesa - verified - Laura - folio TIJ-2025-000012
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1348,17 +1348,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000006',
   'abuse',
   'other',
-  'Rabbit being kept in tiny cage outdoors with no shade. Temperature extremely high, animal showing signs of heat stress.',
+  'Conejo mantenido en jaula diminuta al aire libre sin sombra. Temperatura extremadamente alta, animal mostrando signos de estrés por calor.',
   ST_SetSRID(ST_MakePoint(-116.9505, 32.5095), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
   'verified',
-  'TJ-2026-012',
+  'TIJ-2025-000012',
   now() - interval '10 days',
   now() - interval '9 days'
 );
 
--- Case 19: Missing - Zona Norte - resolved - Admin - folio TJ-2026-013
+-- Case 19: Missing - Zona Norte - resolved - Admin - folio TIJ-2025-000013
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1378,12 +1378,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000001',
   'missing',
   'dog',
-  'Beagle escaped during walk, slipped out of collar. Very food motivated and friendly with people.',
+  'Beagle escapó durante paseo, se salió del collar. Muy motivado por comida y amigable con personas.',
   ST_SetSRID(ST_MakePoint(-117.0235, 32.5345), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
   'resolved',
-  'TJ-2026-013',
+  'TIJ-2025-000013',
   now() - interval '25 days',
   now() - interval '22 days'
 );
@@ -1407,7 +1407,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'stray',
   'cat',
-  'Injured cat with damaged eye spotted in alley. Needs veterinary attention urgently.',
+  'Gato herido con ojo dañado avistado en callejón. Necesita atención veterinaria urgentemente.',
   ST_SetSRID(ST_MakePoint(-117.0075, 32.5325), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
@@ -1416,7 +1416,7 @@ VALUES (
   now() - interval '1 day'
 );
 
--- Case 21: Abuse - Hipódromo - in_progress - Carlos - folio TJ-2026-014
+-- Case 21: Abuse - Hipódromo - in_progress - Carlos - folio TIJ-2025-000014
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1436,12 +1436,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'abuse',
   'dog',
-  'Dog being used for fighting training. Multiple scars visible, very aggressive behavior indicating abuse.',
+  'Perro usado para entrenamiento de peleas. Múltiples cicatrices visibles, comportamiento muy agresivo indicando maltrato.',
   ST_SetSRID(ST_MakePoint(-117.0245, 32.5092), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'critical',
   'in_progress',
-  'TJ-2026-014',
+  'TIJ-2025-000014',
   now() - interval '13 days',
   now() - interval '12 days'
 );
@@ -1465,7 +1465,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'missing',
   'bird',
-  'Pet cockatiel escaped through open door. Grey and yellow feathers, responds to whistling.',
+  'Cacatúa mascota escapó por puerta abierta. Plumas grises y amarillas, responde a silbidos.',
   ST_SetSRID(ST_MakePoint(-117.0355, 32.5148), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'low',
@@ -1474,7 +1474,7 @@ VALUES (
   now() - interval '3 days'
 );
 
--- Case 23: Stray - Cacho - resolved - Admin - folio TJ-2026-015
+-- Case 23: Stray - Cacho - resolved - Admin - folio TIJ-2025-000015
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1494,17 +1494,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000001',
   'stray',
   'dog',
-  'Stray puppy found near dumpster, approximately 2-3 months old. Needs food and shelter urgently.',
+  'Cachorro callejero encontrado cerca de contenedor de basura, aproximadamente 2-3 meses de edad. Necesita comida y refugio urgentemente.',
   ST_SetSRID(ST_MakePoint(-117.0172, 32.5078), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
   'resolved',
-  'TJ-2026-015',
+  'TIJ-2025-000015',
   now() - interval '28 days',
   now() - interval '25 days'
 );
 
--- Case 24: Abuse - Sánchez Taboada - in_progress - Carlos - folio TJ-2026-016
+-- Case 24: Abuse - Sánchez Taboada - in_progress - Carlos - folio TIJ-2025-000016
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1524,12 +1524,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'abuse',
   'cat',
-  'Multiple cats being hoarded in residence. Strong odor, animals appear sick and malnourished.',
+  'Múltiples gatos acumulados en residencia. Olor fuerte, los animales parecen enfermos y desnutridos.',
   ST_SetSRID(ST_MakePoint(-116.9805, 32.4898), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
   'in_progress',
-  'TJ-2026-016',
+  'TIJ-2025-000016',
   now() - interval '17 days',
   now() - interval '16 days'
 );
@@ -1553,7 +1553,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'missing',
   'dog',
-  'Husky mix missing since this morning. Blue eyes, grey and white fur, very vocal.',
+  'Mezcla de husky perdido desde esta mañana. Ojos azules, pelaje gris y blanco, muy vocal.',
   ST_SetSRID(ST_MakePoint(-116.9695, 32.4805), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
@@ -1562,7 +1562,7 @@ VALUES (
   now() - interval '8 hours'
 );
 
--- Case 26: Injured - Zona Centro - verified - María - folio TJ-2026-017
+-- Case 26: Injured - Zona Centro - verified - María - folio TIJ-2025-000017
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1582,17 +1582,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'injured',
   'dog',
-  'Dog hit by car on Boulevard Agua Caliente. Appears to have broken leg, cannot walk. Lying on sidewalk.',
+  'Perro atropellado por auto en Boulevard Agua Caliente. Parece tener pata rota, no puede caminar. Está acostado en la banqueta.',
   ST_SetSRID(ST_MakePoint(-117.0150, 32.5200), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'high',
   'verified',
-  'TJ-2026-017',
+  'TIJ-2025-000017',
   now() - interval '2 days',
   now() - interval '1 day 18 hours'
 );
 
--- Case 27: Injured - Otay - in_progress - Carlos - folio TJ-2026-018
+-- Case 27: Injured - Otay - in_progress - Carlos - folio TIJ-2025-000018
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1612,12 +1612,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'injured',
   'cat',
-  'Cat found with severe burns, possibly from chemicals. Hiding under car, needs immediate vet attention.',
+  'Gato encontrado con quemaduras severas, posiblemente por químicos. Escondido bajo auto, necesita atención veterinaria inmediata.',
   ST_SetSRID(ST_MakePoint(-116.9550, 32.5400), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'critical',
   'in_progress',
-  'TJ-2026-018',
+  'TIJ-2025-000018',
   now() - interval '18 hours',
   now() - interval '17 hours'
 );
@@ -1641,7 +1641,7 @@ VALUES (
   '00000000-0000-0000-0000-000000000006',
   'injured',
   'dog',
-  'Puppy found by the beach with deep cuts, possibly from barbed wire. Bleeding and whimpering.',
+  'Cachorro encontrado en la playa con cortes profundos, posiblemente de alambre de púas. Sangrando y gimiendo.',
   ST_SetSRID(ST_MakePoint(-117.0600, 32.3600), 4326)::geography,
   '00000000-0000-0000-0000-000000000011',
   'high',
@@ -1650,7 +1650,7 @@ VALUES (
   now() - interval '6 hours'
 );
 
--- Case 29: Injured - Chapultepec - verified - María - folio TJ-2026-019
+-- Case 29: Injured - Chapultepec - verified - María - folio TIJ-2025-000019
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1670,17 +1670,17 @@ VALUES (
   '00000000-0000-0000-0000-000000000002',
   'injured',
   'bird',
-  'Injured pelican found on beach, appears to have fishing line wrapped around wing.',
+  'Pelícano herido encontrado en playa, parece tener hilo de pescar enrollado alrededor del ala.',
   ST_SetSRID(ST_MakePoint(-117.0340, 32.5145), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'medium',
   'verified',
-  'TJ-2026-019',
+  'TIJ-2025-000019',
   now() - interval '5 days',
   now() - interval '4 days 12 hours'
 );
 
--- Case 30: Injured - Hipódromo - in_progress - Carlos - folio TJ-2026-020
+-- Case 30: Injured - Hipódromo - in_progress - Carlos - folio TIJ-2025-000020
 INSERT INTO cases (
   id,
   reporter_id,
@@ -1700,12 +1700,12 @@ VALUES (
   '00000000-0000-0000-0000-000000000003',
   'injured',
   'dog',
-  'Large dog with open wound on side, possibly from machete. Very aggressive due to pain, approach with caution.',
+  'Perro grande con herida abierta en costado, posiblemente de machete. Muy agresivo por el dolor, acercarse con precaución.',
   ST_SetSRID(ST_MakePoint(-117.0240, 32.5095), 4326)::geography,
   '00000000-0000-0000-0000-000000000010',
   'critical',
   'in_progress',
-  'TJ-2026-020',
+  'TIJ-2025-000020',
   now() - interval '1 day',
   now() - interval '23 hours'
 );

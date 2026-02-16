@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Dimensions,
   SafeAreaView,
+  Platform,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
@@ -154,11 +155,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
-  counterText: {
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { height: 1, width: 0 },
-    textShadowRadius: 3,
-  },
+  counterText: Platform.select({
+    web: {
+      textShadow: '0 1px 3px rgba(0, 0, 0, 0.75)',
+    },
+    default: {
+      textShadowColor: 'rgba(0, 0, 0, 0.75)',
+      textShadowOffset: { height: 1, width: 0 },
+      textShadowRadius: 3,
+    },
+  }) as object,
   photo: {
     height: SCREEN_HEIGHT,
     width: SCREEN_WIDTH,

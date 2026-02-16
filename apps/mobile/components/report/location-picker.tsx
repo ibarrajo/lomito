@@ -3,7 +3,7 @@
  * Map with a centered pin that updates as the user pans.
  */
 
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MapboxGL, {
@@ -103,11 +103,19 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 3,
     height: 30,
-    shadowColor: colors.neutral900,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
     width: 30,
+    ...(Platform.select({
+      web: {
+        boxShadow: '0 2px 4px rgba(30, 41, 59, 0.3)',
+      },
+      default: {
+        shadowColor: colors.neutral900,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 3,
+      },
+    }) as object),
   },
   pinOverlay: {
     alignItems: 'center',

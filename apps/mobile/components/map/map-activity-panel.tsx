@@ -120,22 +120,48 @@ export const MapActivityPanel = memo(function MapActivityPanel({
       )}
 
       {/* Stats bar */}
-      <View style={styles.statsBar}>
-        <View style={styles.stat}>
-          <H3 color={colors.neutral900}>{stats.today}</H3>
-          <Caption color={colors.neutral500}>{t('map.todayCount')}</Caption>
+      {isLoading ? (
+        <View style={styles.statsBar}>
+          <View style={styles.stat}>
+            <Skeleton width={40} height={24} borderRadius={4} />
+            <View style={{ height: spacing.xs }} />
+            <Skeleton width={60} height={12} borderRadius={4} />
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.stat}>
+            <Skeleton width={40} height={24} borderRadius={4} />
+            <View style={{ height: spacing.xs }} />
+            <Skeleton width={60} height={12} borderRadius={4} />
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.stat}>
+            <Skeleton width={40} height={24} borderRadius={4} />
+            <View style={{ height: spacing.xs }} />
+            <Skeleton width={60} height={12} borderRadius={4} />
+          </View>
         </View>
-        <View style={styles.statDivider} />
-        <View style={styles.stat}>
-          <H3 color={colors.success}>{stats.resolved}</H3>
-          <Caption color={colors.neutral500}>{t('map.resolvedCount')}</Caption>
+      ) : (
+        <View style={styles.statsBar}>
+          <View style={styles.stat}>
+            <H3 color={colors.neutral900}>{stats.today}</H3>
+            <Caption color={colors.neutral500}>{t('map.todayCount')}</Caption>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.stat}>
+            <H3 color={colors.success}>{stats.resolved}</H3>
+            <Caption color={colors.neutral500}>
+              {t('map.resolvedCount')}
+            </Caption>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.stat}>
+            <H3 color={colors.error}>{stats.critical}</H3>
+            <Caption color={colors.neutral500}>
+              {t('map.criticalCount')}
+            </Caption>
+          </View>
         </View>
-        <View style={styles.statDivider} />
-        <View style={styles.stat}>
-          <H3 color={colors.error}>{stats.critical}</H3>
-          <Caption color={colors.neutral500}>{t('map.criticalCount')}</Caption>
-        </View>
-      </View>
+      )}
     </View>
   );
 });

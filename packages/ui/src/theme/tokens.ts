@@ -4,6 +4,8 @@
  * Read from /docs/style/DESIGN_TOKENS.md
  */
 
+import { Platform } from 'react-native';
+
 export const colors = {
   // Primary
   primary: '#13ECC8',
@@ -190,29 +192,46 @@ export const shadows = {
  * Shadow styles for React Native.
  * Uses shadowColor, shadowOffset, shadowOpacity, shadowRadius for iOS.
  * Uses elevation for Android.
+ * Uses boxShadow CSS string for web (to avoid deprecated shadow* style props).
  */
 export const shadowStyles = {
-  card: {
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  elevated: {
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  bottomSheet: {
-    shadowColor: '#1E293B',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 16,
-  },
+  card: Platform.select({
+    web: {
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)',
+    },
+    default: {
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.06,
+      shadowRadius: 3,
+      elevation: 2,
+    },
+  }),
+  elevated: Platform.select({
+    web: {
+      boxShadow:
+        '0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04)',
+    },
+    default: {
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.08,
+      shadowRadius: 12,
+      elevation: 8,
+    },
+  }),
+  bottomSheet: Platform.select({
+    web: {
+      boxShadow: '0 -4px 24px rgba(31, 35, 40, 0.15)',
+    },
+    default: {
+      shadowColor: '#1E293B',
+      shadowOffset: { width: 0, height: -4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 24,
+      elevation: 16,
+    },
+  }),
 } as const;
 
 export const iconSizes = {
