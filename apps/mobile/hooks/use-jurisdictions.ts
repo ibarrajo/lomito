@@ -91,6 +91,7 @@ export function useJurisdictions({
         const response = await fetch(url.toString(), {
           headers: {
             Authorization: `Bearer ${supabaseAnonKey}`,
+            apikey: supabaseAnonKey,
           },
         });
 

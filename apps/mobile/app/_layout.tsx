@@ -45,11 +45,15 @@ function RootLayoutNav() {
   useEffect(() => {
     if (loading) return;
 
-    const inAuthGroup = segments[0] === 'auth';
+    // Wait for segments to be resolved
+    const currentSegment = segments[0] as string | undefined;
+    if (!currentSegment) return;
+
+    const inAuthGroup = currentSegment === 'auth';
 
     // Routes accessible without authentication
     const publicRoutes = ['(public)', 'auth', 'about', 'donate', 'legal'];
-    const inPublicRoute = publicRoutes.includes(segments[0] as string);
+    const inPublicRoute = publicRoutes.includes(currentSegment);
 
     if (!session && !inPublicRoute) {
       // Redirect unauthenticated users to login
@@ -57,7 +61,11 @@ function RootLayoutNav() {
     } else if (session && inAuthGroup) {
       // Redirect to main app if authenticated
       router.replace('/(tabs)');
-    } else if (session && segments[0] === '(public)' && Platform.OS === 'web') {
+    } else if (
+      session &&
+      currentSegment === '(public)' &&
+      Platform.OS === 'web'
+    ) {
       // Redirect authenticated users away from public landing on web
       router.replace('/(tabs)');
     }

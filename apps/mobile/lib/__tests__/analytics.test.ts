@@ -114,7 +114,9 @@ describe('analytics client', () => {
         'https://test.supabase.co/functions/v1/track-event',
         expect.objectContaining({
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+          }),
         }),
       );
     });

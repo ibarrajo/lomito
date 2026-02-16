@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
+const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
 const BATCH_INTERVAL_MS = 2000;
 const MAX_BATCH_SIZE = 25;
 const CLIENT_ID_KEY = 'lomito_analytics_client_id';
@@ -52,7 +53,11 @@ function flush(): void {
 
   fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      apikey: SUPABASE_ANON_KEY,
+    },
     body: JSON.stringify({
       client_id: getClientId(),
       events,
