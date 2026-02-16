@@ -26,8 +26,11 @@ export function useUserProfile(): UseUserProfileResult {
 
   useEffect(() => {
     let mounted = true;
+    let fetchId = 0;
 
     async function fetchProfile() {
+      const currentFetchId = ++fetchId;
+
       try {
         if (!mounted) return;
         setLoading(true);
@@ -37,7 +40,7 @@ export function useUserProfile(): UseUserProfileResult {
           data: { user },
         } = await supabase.auth.getUser();
 
-        if (!mounted) return;
+        if (!mounted || currentFetchId !== fetchId) return;
 
         if (!user) {
           setProfile(null);
@@ -51,7 +54,7 @@ export function useUserProfile(): UseUserProfileResult {
           .eq('id', user.id)
           .single();
 
-        if (!mounted) return;
+        if (!mounted || currentFetchId !== fetchId) return;
 
         if (queryError) {
           console.error('Error fetching user profile:', queryError);
@@ -63,11 +66,11 @@ export function useUserProfile(): UseUserProfileResult {
           setProfile(data as UserProfile);
         }
       } catch (err) {
-        if (!mounted) return;
+        if (!mounted || currentFetchId !== fetchId) return;
         console.error('Unexpected error fetching profile:', err);
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
-        if (mounted) {
+        if (mounted && currentFetchId === fetchId) {
           setLoading(false);
         }
       }
@@ -78,7 +81,14 @@ export function useUserProfile(): UseUserProfileResult {
     // Subscribe to auth state changes to refetch profile
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(() => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        // Immediately clear profile on sign-out
+        setProfile(null);
+        setLoading(false);
+        fetchId++;
+        return;
+      }
       fetchProfile();
     });
 

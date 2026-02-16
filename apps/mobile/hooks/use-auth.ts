@@ -79,7 +79,7 @@ export function useAuth() {
 
   const signUp = useCallback(
     async (email: string, password: string, metadata: SignUpMetadata) => {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -87,6 +87,25 @@ export function useAuth() {
         },
       });
       if (error) throw error;
+
+      // Explicitly create profile as fallback if DB trigger doesn't fire
+      if (data.user) {
+        const { error: profileError } = await supabase.from('profiles').upsert(
+          {
+            id: data.user.id,
+            full_name: metadata.full_name,
+            phone: metadata.phone,
+            municipality: metadata.municipality,
+            role: 'citizen',
+            avatar_url: null,
+            push_token: null,
+          } as never,
+          { onConflict: 'id' },
+        );
+        if (profileError) {
+          console.error('Profile creation fallback failed:', profileError);
+        }
+      }
     },
     [],
   );

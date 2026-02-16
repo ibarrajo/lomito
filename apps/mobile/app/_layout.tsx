@@ -13,6 +13,7 @@ import {
   PublicSans_700Bold,
 } from '@expo-google-fonts/public-sans';
 import { useAuth } from '../hooks/use-auth';
+import { useUserProfile } from '../hooks/use-user-profile';
 import { useNotifications } from '../hooks/use-notifications';
 import { PerformanceMonitor } from '../lib/performance';
 import { trackPageView } from '../lib/analytics';
@@ -20,6 +21,7 @@ import { AppShell } from '../components/navigation/app-shell';
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
+  const { loading: profileLoading } = useUserProfile();
   const segments = useSegments();
   const router = useRouter();
   const pathname = usePathname();
@@ -42,8 +44,11 @@ function RootLayoutNav() {
     }
   }, [pathname]);
 
+  // Wait for both auth and profile to be ready before redirecting
+  const isReady = !loading && (!session || !profileLoading);
+
   useEffect(() => {
-    if (loading) return;
+    if (!isReady) return;
 
     // Wait for segments to be resolved
     const currentSegment = segments[0] as string | undefined;
@@ -73,9 +78,9 @@ function RootLayoutNav() {
       // Redirect authenticated users away from public landing on web
       router.replace('/(tabs)');
     }
-  }, [session, loading, segments, router, pathname]);
+  }, [session, isReady, segments, router, pathname]);
 
-  if (loading) {
+  if (!isReady) {
     return (
       <View style={styles.loadingContainer}>
         <Skeleton width="100%" height={60} style={styles.skeletonTop} />
