@@ -21,6 +21,7 @@ import {
   shadowStyles,
   typography,
 } from '@lomito/ui/theme/tokens';
+import { isFeatureEnabled } from '@lomito/shared';
 
 interface CaseSidebarProps {
   latitude: number;
@@ -158,44 +159,46 @@ export function CaseSidebar({
       </View>
 
       {/* Donation Progress Card */}
-      <View style={styles.card}>
-        <H3 style={styles.cardTitle}>{t('case.donationProgress')}</H3>
-        <View style={styles.donationContent}>
-          <View style={styles.donationStats}>
-            <Body style={styles.donationRaised}>
-              {t('case.donationRaised', { amount: donationRaised })}
-            </Body>
-            <Caption color={colors.neutral500}>
-              {t('case.donationGoal', { amount: donationGoal })}
-            </Caption>
-          </View>
-          <View style={styles.progressBarContainer}>
-            <View style={styles.progressBarBackground}>
-              <View
-                style={[
-                  styles.progressBarFill,
-                  { width: `${donationProgress}%` },
-                ]}
-              />
+      {isFeatureEnabled('donations') && (
+        <View style={styles.card}>
+          <H3 style={styles.cardTitle}>{t('case.donationProgress')}</H3>
+          <View style={styles.donationContent}>
+            <View style={styles.donationStats}>
+              <Body style={styles.donationRaised}>
+                {t('case.donationRaised', { amount: donationRaised })}
+              </Body>
+              <Caption color={colors.neutral500}>
+                {t('case.donationGoal', { amount: donationGoal })}
+              </Caption>
             </View>
+            <View style={styles.progressBarContainer}>
+              <View style={styles.progressBarBackground}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    { width: `${donationProgress}%` },
+                  ]}
+                />
+              </View>
+            </View>
+            <BodySmall
+              color={colors.neutral500}
+              style={styles.donationDescription}
+            >
+              {t('case.donationDescription')}
+            </BodySmall>
+            <Pressable
+              style={styles.contributeButton}
+              accessibilityLabel={t('case.contribute')}
+              accessibilityRole="button"
+            >
+              <Body color={colors.secondary} style={styles.contributeText}>
+                {t('case.contribute')}
+              </Body>
+            </Pressable>
           </View>
-          <BodySmall
-            color={colors.neutral500}
-            style={styles.donationDescription}
-          >
-            {t('case.donationDescription')}
-          </BodySmall>
-          <Pressable
-            style={styles.contributeButton}
-            accessibilityLabel={t('case.contribute')}
-            accessibilityRole="button"
-          >
-            <Body color={colors.secondary} style={styles.contributeText}>
-              {t('case.contribute')}
-            </Body>
-          </Pressable>
         </View>
-      </View>
+      )}
 
       {/* Location Card */}
       <View style={styles.card}>

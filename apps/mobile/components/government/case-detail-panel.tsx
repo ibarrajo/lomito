@@ -317,7 +317,6 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.neutral200,
     borderLeftWidth: 1,
     flex: 1,
-    maxWidth: 400,
     minWidth: 350,
     ...shadowStyles.card,
   },

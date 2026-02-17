@@ -4,7 +4,7 @@
  */
 
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -51,6 +51,18 @@ export default function NewReportScreen() {
     urgency: 'medium',
     photos: [],
   });
+
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  // Auto-scroll to animal type picker when category is selected
+  useEffect(() => {
+    if (currentStep === 0 && formData.category !== null) {
+      // Delay to allow the AnimalTypePicker to render
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [formData.category, currentStep]);
 
   const stepTitles = [
     t('report.step1Title'),
@@ -130,17 +142,19 @@ export default function NewReportScreen() {
               />
             </View>
 
-            <View style={styles.section}>
-              <Body style={styles.sectionLabel}>
-                {t('report.selectAnimalType')}
-              </Body>
-              <AnimalTypePicker
-                selected={formData.animalType}
-                onSelect={(animalType) =>
-                  setFormData({ ...formData, animalType })
-                }
-              />
-            </View>
+            {formData.category !== null && (
+              <View style={styles.section}>
+                <Body style={styles.sectionLabel}>
+                  {t('report.selectAnimalType')}
+                </Body>
+                <AnimalTypePicker
+                  selected={formData.animalType}
+                  onSelect={(animalType) =>
+                    setFormData({ ...formData, animalType })
+                  }
+                />
+              </View>
+            )}
           </View>
         );
 
@@ -265,6 +279,7 @@ export default function NewReportScreen() {
           ) : (
             // Other steps use scrollview
             <ScrollView
+              ref={scrollViewRef}
               style={styles.content}
               contentContainerStyle={styles.contentContainer}
             >

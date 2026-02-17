@@ -220,37 +220,74 @@ export default function GovernmentScreen() {
       </View>
 
       {/* KPI Cards Row */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.kpiContainer}
-        contentContainerStyle={styles.kpiContent}
-      >
-        <KpiCard
-          icon="📊"
-          value={kpis.totalAssigned}
-          label={t('government.assignedCases')}
-          accessibilityLabel={`${t('government.assignedCases')}: ${kpis.totalAssigned}`}
-        />
-        <KpiCard
-          icon="⏰"
-          value={kpis.expiringCases}
-          label={t('government.expiringCases')}
-          accessibilityLabel={`${t('government.expiringCases')}: ${kpis.expiringCases}`}
-        />
-        <KpiCard
-          icon="⏱️"
-          value={`${kpis.avgResolutionTime}d`}
-          label={t('government.avgResolutionTime')}
-          accessibilityLabel={`${t('government.avgResolutionTime')}: ${kpis.avgResolutionTime} days`}
-        />
-        <KpiCard
-          icon="✅"
-          value={kpis.systemStatus}
-          label={t('government.systemStatus')}
-          accessibilityLabel={`${t('government.systemStatus')}: ${kpis.systemStatus}`}
-        />
-      </ScrollView>
+      {isDesktop ? (
+        <View style={styles.kpiContainerDesktop}>
+          <View style={styles.kpiCardWrapper}>
+            <KpiCard
+              icon="📊"
+              value={kpis.totalAssigned}
+              label={t('government.assignedCases')}
+              accessibilityLabel={`${t('government.assignedCases')}: ${kpis.totalAssigned}`}
+            />
+          </View>
+          <View style={styles.kpiCardWrapper}>
+            <KpiCard
+              icon="⏰"
+              value={kpis.expiringCases}
+              label={t('government.expiringCases')}
+              accessibilityLabel={`${t('government.expiringCases')}: ${kpis.expiringCases}`}
+            />
+          </View>
+          <View style={styles.kpiCardWrapper}>
+            <KpiCard
+              icon="⏱️"
+              value={`${kpis.avgResolutionTime}d`}
+              label={t('government.avgResolutionTime')}
+              accessibilityLabel={`${t('government.avgResolutionTime')}: ${kpis.avgResolutionTime} days`}
+            />
+          </View>
+          <View style={styles.kpiCardWrapper}>
+            <KpiCard
+              icon="✅"
+              value={kpis.systemStatus}
+              label={t('government.systemStatus')}
+              accessibilityLabel={`${t('government.systemStatus')}: ${kpis.systemStatus}`}
+            />
+          </View>
+        </View>
+      ) : (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.kpiContainer}
+          contentContainerStyle={styles.kpiContent}
+        >
+          <KpiCard
+            icon="📊"
+            value={kpis.totalAssigned}
+            label={t('government.assignedCases')}
+            accessibilityLabel={`${t('government.assignedCases')}: ${kpis.totalAssigned}`}
+          />
+          <KpiCard
+            icon="⏰"
+            value={kpis.expiringCases}
+            label={t('government.expiringCases')}
+            accessibilityLabel={`${t('government.expiringCases')}: ${kpis.expiringCases}`}
+          />
+          <KpiCard
+            icon="⏱️"
+            value={`${kpis.avgResolutionTime}d`}
+            label={t('government.avgResolutionTime')}
+            accessibilityLabel={`${t('government.avgResolutionTime')}: ${kpis.avgResolutionTime} days`}
+          />
+          <KpiCard
+            icon="✅"
+            value={kpis.systemStatus}
+            label={t('government.systemStatus')}
+            accessibilityLabel={`${t('government.systemStatus')}: ${kpis.systemStatus}`}
+          />
+        </ScrollView>
+      )}
 
       {/* Filter pills */}
       <ScrollView
@@ -477,10 +514,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingTop: spacing.lg,
   },
+  kpiCardWrapper: {
+    flex: 1,
+  },
   kpiContainer: {
     borderBottomColor: colors.neutral200,
     borderBottomWidth: 1,
     flexGrow: 0,
+  },
+  kpiContainerDesktop: {
+    borderBottomColor: colors.neutral200,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.lg,
   },
   kpiContent: {
     gap: spacing.md,
@@ -500,6 +548,6 @@ const styles = StyleSheet.create({
     height: spacing.md,
   },
   tableContainer: {
-    flex: 1,
+    flex: 2,
   },
 });

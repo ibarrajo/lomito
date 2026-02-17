@@ -11,9 +11,12 @@ import { RoadmapSection } from '../components/about/roadmap-section';
 import { LinksSection } from '../components/about/links-section';
 import { PageFooter } from '../components/shared/page-footer';
 import { PublicWebHeader } from '../components/navigation/public-web-header';
+import { useAuth } from '../hooks/use-auth';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
+  const { session } = useAuth();
+  const isWeb = Platform.OS === 'web';
 
   return (
     <>
@@ -48,7 +51,7 @@ export default function AboutScreen() {
           <RoadmapSection />
           <LinksSection />
         </Container>
-        <PageFooter />
+        {!session && isWeb && <PageFooter />}
       </ScrollView>
     </>
   );

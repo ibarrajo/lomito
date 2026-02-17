@@ -19,7 +19,7 @@ import {
   Trees,
   Volume2,
 } from 'lucide-react-native';
-import { H3, BodySmall } from '@lomito/ui';
+import { H3 } from '@lomito/ui';
 import {
   colors,
   spacing,
@@ -148,14 +148,6 @@ export function CategoryPicker({ selected, onSelect }: CategoryPickerProps) {
               <IconComponent size={40} color={category.color} strokeWidth={2} />
             </View>
             <H3 style={styles.title}>{t(`category.${category.key}`)}</H3>
-            <BodySmall color={colors.neutral500} style={styles.description}>
-              {t(
-                `report.category${category.key
-                  .split('_')
-                  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                  .join('')}Description`,
-              )}
-            </BodySmall>
           </Pressable>
         );
       })}
@@ -193,9 +185,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: '4%',
     width: '100%',
-  },
-  description: {
-    textAlign: 'center',
   },
   iconCircle: {
     alignItems: 'center',

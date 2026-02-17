@@ -7,9 +7,13 @@ import { PRIVACY_NOTICE_EN } from '@lomito/shared/src/legal/privacy-en';
 import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
 import { PageFooter } from '../../components/shared/page-footer';
 import { PublicWebHeader } from '../../components/navigation/public-web-header';
+import { useAuth } from '../../hooks/use-auth';
+import { Platform } from 'react-native';
 
 export default function PrivacyScreen() {
   const { t, i18n } = useTranslation();
+  const { session } = useAuth();
+  const isWeb = Platform.OS === 'web';
 
   const privacyText =
     i18n.language === 'es' ? PRIVACY_NOTICE_ES : PRIVACY_NOTICE_EN;
@@ -28,7 +32,7 @@ export default function PrivacyScreen() {
           </View>
           <LegalTextRenderer text={privacyText} />
         </Container>
-        <PageFooter />
+        {!session && isWeb && <PageFooter />}
       </ScrollView>
     </View>
   );

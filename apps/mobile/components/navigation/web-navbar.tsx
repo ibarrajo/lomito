@@ -264,7 +264,11 @@ export function WebNavbar() {
                 <View style={styles.userMenu}>
                   {profile && (
                     <View style={styles.userMenuHeader}>
-                      <Text style={styles.userMenuName} numberOfLines={1}>
+                      <Text
+                        style={styles.userMenuName}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
                         {profile.full_name || '?'}
                       </Text>
                     </View>

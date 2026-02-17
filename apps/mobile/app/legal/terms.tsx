@@ -7,9 +7,13 @@ import { TERMS_OF_SERVICE_EN } from '@lomito/shared/src/legal/terms-en';
 import { LegalTextRenderer } from '../../components/legal/legal-text-renderer';
 import { PageFooter } from '../../components/shared/page-footer';
 import { PublicWebHeader } from '../../components/navigation/public-web-header';
+import { useAuth } from '../../hooks/use-auth';
+import { Platform } from 'react-native';
 
 export default function TermsScreen() {
   const { t, i18n } = useTranslation();
+  const { session } = useAuth();
+  const isWeb = Platform.OS === 'web';
 
   const termsText =
     i18n.language === 'es' ? TERMS_OF_SERVICE_ES : TERMS_OF_SERVICE_EN;
@@ -28,7 +32,7 @@ export default function TermsScreen() {
           </View>
           <LegalTextRenderer text={termsText} />
         </Container>
-        <PageFooter />
+        {!session && isWeb && <PageFooter />}
       </ScrollView>
     </View>
   );

@@ -33,6 +33,7 @@ import { useAnalytics } from '../hooks/use-analytics';
 import { PageFooter } from '../components/shared/page-footer';
 import { PublicWebHeader } from '../components/navigation/public-web-header';
 import { useBreakpoint } from '../hooks/use-breakpoint';
+import { useAuth } from '../hooks/use-auth';
 
 type PaymentMethod = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -41,6 +42,7 @@ export default function DonateScreen() {
   const router = useRouter();
   const { createDonation, loading, error } = useDonate();
   const { trackEvent } = useAnalytics();
+  const { session } = useAuth();
 
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [selectedMethod, setSelectedMethod] =
@@ -128,7 +130,7 @@ export default function DonateScreen() {
             {t('donate.comingSoonDescription')}
           </Body>
         </View>
-        <PageFooter />
+        {!session && isWeb && <PageFooter />}
       </View>
     );
   }
@@ -236,7 +238,7 @@ export default function DonateScreen() {
           )}
         </View>
 
-        {isWeb && <PageFooter />}
+        {!session && isWeb && <PageFooter />}
       </ScrollView>
 
       <AppModal
@@ -355,6 +357,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: colors.secondary,
+    textAlign: 'center',
   },
   trustBody: {
     lineHeight: 22,
