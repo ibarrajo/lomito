@@ -16,6 +16,14 @@ export default defineConfig({
   resolve: {
     alias: {
       'react-native': path.resolve(__dirname, '__mocks__/react-native.ts'),
+      'posthog-react-native': path.resolve(
+        __dirname,
+        '__mocks__/posthog-react-native.ts',
+      ),
+      '@react-native-async-storage/async-storage': path.resolve(
+        __dirname,
+        '__mocks__/async-storage.ts',
+      ),
       '@lomito/shared': path.resolve(__dirname, 'packages/shared/src'),
       '@lomito/ui': path.resolve(__dirname, 'packages/ui/src'),
     },
