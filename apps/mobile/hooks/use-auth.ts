@@ -32,10 +32,15 @@ export function useAuth() {
       });
     });
 
-    // Listen for auth changes
+    // Listen for auth changes — only clear session on explicit sign-out
+    // to prevent flickering during token refresh
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session && event !== 'SIGNED_OUT') {
+        // Ignore transient null-session events (e.g. during token refresh)
+        return;
+      }
       setState({
         session,
         user: session?.user ?? null,

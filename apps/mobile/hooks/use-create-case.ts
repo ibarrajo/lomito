@@ -50,11 +50,8 @@ export function useCreateCase(): CreateCaseResult {
         throw err;
       }
 
-      // Convert location to PostGIS Point format (GeoJSON string for PostgREST)
-      const locationPoint = JSON.stringify({
-        type: 'Point',
-        coordinates: [data.location.longitude, data.location.latitude],
-      });
+      // Convert location to EWKT format for PostGIS geography column
+      const locationPoint = `SRID=4326;POINT(${data.location.longitude} ${data.location.latitude})`;
 
       // Insert the case - using type assertion because Database types may not be fully generated yet
       const insertData = {

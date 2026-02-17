@@ -14,10 +14,12 @@ import {
   borderRadius,
 } from '@lomito/ui/src/theme/tokens';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../hooks/use-auth';
 
 export default function PublicLayout() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { session } = useAuth();
 
   return (
     <View style={styles.container}>
@@ -70,14 +72,27 @@ export default function PublicLayout() {
         >
           <Text style={styles.wordmark}>Lomito.org</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => router.push('/auth/login')}
-          accessibilityLabel={t('auth.login')}
-          accessibilityRole="button"
-        >
-          <Text style={styles.loginButtonText}>{t('auth.login')}</Text>
-        </TouchableOpacity>
+        {session ? (
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => router.push('/(tabs)/dashboard')}
+            accessibilityLabel={t('landing.ctaGoToDashboard')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.loginButtonText}>
+              {t('landing.ctaGoToDashboard')}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => router.push('/auth/login')}
+            accessibilityLabel={t('auth.login')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.loginButtonText}>{t('auth.login')}</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <Stack screenOptions={{ headerShown: false }} />
     </View>

@@ -3,6 +3,7 @@
  * Resizes and compresses images before upload to meet performance budget.
  */
 
+import { Platform } from 'react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
 
 export interface CompressedImage {
@@ -17,6 +18,53 @@ const JPEG_QUALITY = 0.8;
 const THUMBNAIL_MAX_DIMENSION = 400;
 
 /**
+ * Web-specific compression using Canvas API.
+ * expo-image-manipulator hangs on web, so we use native browser APIs.
+ */
+async function compressImageWeb(
+  uri: string,
+  maxDimension: number,
+  quality: number,
+): Promise<CompressedImage> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const { width, height } = img;
+      const longestEdge = Math.max(width, height);
+      let targetWidth = width;
+      let targetHeight = height;
+
+      if (longestEdge > maxDimension) {
+        const scale = maxDimension / longestEdge;
+        targetWidth = Math.round(width * scale);
+        targetHeight = Math.round(height * scale);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Failed to get canvas context'));
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+      resolve({
+        uri: dataUrl,
+        width: targetWidth,
+        height: targetHeight,
+      });
+    };
+    img.onerror = () => reject(new Error('Failed to load image'));
+    img.src = uri;
+  });
+}
+
+/**
  * Compresses an image to meet performance requirements.
  * - Resizes: longest edge max 1200px, maintains aspect ratio
  * - Compresses: JPEG quality 0.8
@@ -26,6 +74,11 @@ const THUMBNAIL_MAX_DIMENSION = 400;
  * @returns Compressed image with metadata
  */
 export async function compressImage(uri: string): Promise<CompressedImage> {
+  // Use Canvas API on web — expo-image-manipulator hangs on web platform
+  if (Platform.OS === 'web') {
+    return compressImageWeb(uri, MAX_DIMENSION, JPEG_QUALITY);
+  }
+
   try {
     // Get image dimensions to calculate resize
     const imageInfo = await ImageManipulator.manipulateAsync(uri, [], {
@@ -79,6 +132,11 @@ export async function compressImage(uri: string): Promise<CompressedImage> {
  * @returns Thumbnail image with metadata
  */
 export async function generateThumbnail(uri: string): Promise<CompressedImage> {
+  // Use Canvas API on web — expo-image-manipulator hangs on web platform
+  if (Platform.OS === 'web') {
+    return compressImageWeb(uri, THUMBNAIL_MAX_DIMENSION, JPEG_QUALITY);
+  }
+
   try {
     // Get image dimensions
     const imageInfo = await ImageManipulator.manipulateAsync(uri, [], {
