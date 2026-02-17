@@ -1,7 +1,9 @@
 -- Update get_case_by_id to include incident_at
 -- Rollback: Re-run previous version of function from 20250217000002
 
-CREATE OR REPLACE FUNCTION get_case_by_id(case_uuid UUID)
+DROP FUNCTION IF EXISTS get_case_by_id(UUID);
+
+CREATE FUNCTION get_case_by_id(case_uuid UUID)
 RETURNS TABLE (
   id UUID,
   reporter_id UUID,

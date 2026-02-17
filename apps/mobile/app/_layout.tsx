@@ -16,7 +16,7 @@ import { useAuth } from '../hooks/use-auth';
 import { useUserProfile } from '../hooks/use-user-profile';
 import { useNotifications } from '../hooks/use-notifications';
 import { PerformanceMonitor } from '../lib/performance';
-import { trackPageView } from '../lib/analytics';
+import { initAnalytics, trackPageView } from '../lib/analytics';
 import { AppShell } from '../components/navigation/app-shell';
 
 function RootLayoutNav() {
@@ -30,8 +30,14 @@ function RootLayoutNav() {
   // Initialize notifications only when user is authenticated
   useNotifications();
 
-  // Measure cold start on first render
+  // Initialize analytics and measure cold start on first render
   useEffect(() => {
+    initAnalytics().catch((err: unknown) => {
+      if (__DEV__) {
+        console.warn('[Analytics] Init failed:', err);
+      }
+    });
+
     const coldStartTime = PerformanceMonitor.measureColdStart();
     if (coldStartTime > 0) {
       console.log(`App cold start completed in ${coldStartTime}ms`);

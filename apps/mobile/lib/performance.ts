@@ -3,6 +3,8 @@
  * Tools for measuring and logging app performance metrics.
  */
 
+import { trackEvent } from './analytics';
+
 const START_TIME = Date.now();
 let coldStartMeasured = false;
 
@@ -82,12 +84,13 @@ export function logPerformanceMetric(name: string, durationMs: number): void {
     );
   }
 
-  // In production: send to PostHog
-  // TODO: Integrate with PostHog analytics when implemented
-  // posthog.capture('performance_metric', {
-  //   metric_name: name,
-  //   duration_ms: durationMs,
-  // });
+  // In production: send to PostHog via unified analytics module
+  if (!__DEV__) {
+    trackEvent('performance_metric', {
+      metric_name: name,
+      duration_ms: String(Math.round(durationMs)),
+    });
+  }
 }
 
 /**

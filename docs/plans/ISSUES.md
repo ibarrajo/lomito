@@ -13,8 +13,25 @@ Items here need human input before the relevant task can proceed.
 ### ISSUE-004: Edge Function secrets deployment
 
 - **Blocks:** Payments (Mercado Pago), analytics (GA4), email notifications (Resend)
-- **Needed:** Set secrets via `supabase secrets set` for: `SUPABASE_SERVICE_ROLE_KEY`, `MERCADO_PAGO_ACCESS_TOKEN`, `MERCADO_PAGO_WEBHOOK_SECRET`, `GA4_MEASUREMENT_ID`, `GA4_API_SECRET`, `RESEND_API_KEY`
-- **Status:** OPEN
+- **Secrets Status:**
+  - RESEND_API_KEY: SET
+  - GA4_MEASUREMENT_ID: SET
+  - GA4_API_SECRET: SET
+  - POSTHOG_API_KEY: SET (as Supabase secret)
+  - MERCADO_PAGO_ACCESS_TOKEN: PENDING (need Mercado Pago account)
+  - MERCADO_PAGO_WEBHOOK_SECRET: PENDING (need Mercado Pago account)
+  - INBOUND_EMAIL_WEBHOOK_SECRET: PENDING (need Resend inbound webhook config)
+- **Edge Functions Deployed (8/8):**
+  - send-notification
+  - track-event
+  - escalate-case
+  - auto-escalation-check
+  - jurisdiction-boundaries
+  - create-donation
+  - donation-webhook
+  - inbound-email
+- **Database Migrations:** All migrations pushed to production
+- **Status:** PARTIALLY RESOLVED
 
 ## Resolved
 

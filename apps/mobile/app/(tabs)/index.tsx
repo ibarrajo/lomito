@@ -17,6 +17,7 @@ import { MapActivityPanel } from '../../components/map/map-activity-panel';
 import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { useAnalytics } from '../../hooks/use-analytics';
 import { supabase } from '../../lib/supabase';
 import {
   colors,
@@ -70,10 +71,38 @@ export default function MapScreen() {
   const {
     selectedCategories,
     selectedStatuses,
-    toggleCategory,
-    toggleStatus,
-    clearFilters,
+    toggleCategory: _toggleCategory,
+    toggleStatus: _toggleStatus,
+    clearFilters: _clearFilters,
   } = useMapFilters();
+  const { trackEvent } = useAnalytics();
+
+  const toggleCategory = useCallback(
+    (category: Parameters<typeof _toggleCategory>[0]) => {
+      _toggleCategory(category);
+      trackEvent('map_filter_applied', {
+        filter_type: 'category',
+        filter_value: category,
+      });
+    },
+    [_toggleCategory, trackEvent],
+  );
+
+  const toggleStatus = useCallback(
+    (status: Parameters<typeof _toggleStatus>[0]) => {
+      _toggleStatus(status);
+      trackEvent('map_filter_applied', {
+        filter_type: 'status',
+        filter_value: status,
+      });
+    },
+    [_toggleStatus, trackEvent],
+  );
+
+  const clearFilters = useCallback(() => {
+    _clearFilters();
+    trackEvent('map_filter_cleared', {});
+  }, [_clearFilters, trackEvent]);
 
   const { data: jurisdictions } = useJurisdictions({
     bounds: mapBounds,

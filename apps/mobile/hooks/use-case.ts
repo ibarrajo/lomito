@@ -10,7 +10,37 @@ import type {
   Case,
   CaseMedia,
   CaseTimeline,
+  CaseStatus,
+  UrgencyLevel,
 } from '@lomito/shared/types/database';
+
+/**
+ * Fields from a realtime UPDATE payload on the `cases` table that are safe to
+ * apply directly (i.e. no PostGIS geometry conversion required).
+ */
+interface CaseUpdatePayload {
+  status: CaseStatus;
+  urgency: UrgencyLevel;
+  flag_count: number;
+  folio: string | null;
+  escalated_at: string | null;
+  marked_unresponsive: boolean;
+  government_response_at: string | null;
+  incident_at: string | null;
+  updated_at: string;
+}
+
+function isCaseUpdatePayload(value: unknown): value is CaseUpdatePayload {
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return (
+    typeof v['status'] === 'string' &&
+    typeof v['urgency'] === 'string' &&
+    typeof v['flag_count'] === 'number' &&
+    typeof v['marked_unresponsive'] === 'boolean' &&
+    typeof v['updated_at'] === 'string'
+  );
+}
 
 interface UseCaseResult {
   caseData: Case | null;
@@ -90,7 +120,7 @@ export function useCase(caseId: string): UseCaseResult {
     fetchCase();
 
     // Set up realtime subscription for timeline updates
-    const channel = supabase
+    const timelineChannel = supabase
       .channel(`case_timeline:${caseId}`)
       .on(
         'postgres_changes',
@@ -123,9 +153,47 @@ export function useCase(caseId: string): UseCaseResult {
       )
       .subscribe();
 
-    // Cleanup subscription on unmount
+    // Set up realtime subscription for case status changes.
+    // The realtime payload carries the raw PostGIS WKB hex in `location`,
+    // so we update only the non-location fields and keep the GeoJSON location
+    // that was returned by the get_case_by_id RPC on initial fetch.
+    const caseChannel = supabase
+      .channel(`case_status:${caseId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'cases',
+          filter: `id=eq.${caseId}`,
+        },
+        (payload) => {
+          const raw: unknown = payload.new;
+          if (!isCaseUpdatePayload(raw)) return;
+
+          setCaseData((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              status: raw.status,
+              urgency: raw.urgency,
+              flag_count: raw.flag_count,
+              folio: raw.folio,
+              escalated_at: raw.escalated_at,
+              marked_unresponsive: raw.marked_unresponsive,
+              government_response_at: raw.government_response_at,
+              incident_at: raw.incident_at,
+              updated_at: raw.updated_at,
+            };
+          });
+        },
+      )
+      .subscribe();
+
+    // Cleanup both subscriptions on unmount
     return () => {
-      channel.unsubscribe();
+      timelineChannel.unsubscribe();
+      caseChannel.unsubscribe();
     };
   }, [caseId, fetchCase]);
 
