@@ -107,19 +107,21 @@ export default function CaseDetailScreen() {
           headerBackTitle: t('common.back'),
           headerRight: () => (
             <View style={styles.headerButtons}>
-              <Pressable
-                onPress={handleFollowPress}
-                disabled={subscriptionLoading}
-                style={styles.followButton}
-                accessibilityLabel={
-                  isSubscribed ? t('case.unfollow') : t('case.follow')
-                }
-                accessibilityRole="button"
-              >
-                <Text style={styles.followIcon}>
-                  {isSubscribed ? '❤️' : '🤍'}
-                </Text>
-              </Pressable>
+              {profile && (
+                <Pressable
+                  onPress={handleFollowPress}
+                  disabled={subscriptionLoading}
+                  style={styles.followButton}
+                  accessibilityLabel={
+                    isSubscribed ? t('case.unfollow') : t('case.follow')
+                  }
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.followIcon}>
+                    {isSubscribed ? '❤️' : '🤍'}
+                  </Text>
+                </Pressable>
+              )}
               <ShareButton
                 caseId={caseData.id}
                 folio={caseData.folio}
@@ -127,10 +129,12 @@ export default function CaseDetailScreen() {
                   trackEvent('share_click', { case_id: caseData.id })
                 }
               />
-              <FlagButton
-                caseId={caseData.id}
-                reporterId={caseData.reporter_id}
-              />
+              {profile && (
+                <FlagButton
+                  caseId={caseData.id}
+                  reporterId={caseData.reporter_id}
+                />
+              )}
             </View>
           ),
         }}
@@ -263,6 +267,7 @@ export default function CaseDetailScreen() {
               subscriptionLoading={subscriptionLoading}
               onSubscribeToggle={toggleSubscription}
               caseId={caseData.id}
+              isAuthenticated={!!profile}
             />
           </View>
         </View>

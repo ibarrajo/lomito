@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { View, StyleSheet, Pressable, Platform, TextInput } from 'react-native';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import {
   MessageCircle,
@@ -32,6 +33,7 @@ interface CaseSidebarProps {
   subscriptionLoading: boolean;
   onSubscribeToggle: () => void;
   caseId: string;
+  isAuthenticated: boolean;
 }
 
 export function CaseSidebar({
@@ -42,8 +44,10 @@ export function CaseSidebar({
   subscriptionLoading,
   onSubscribeToggle,
   caseId,
+  isAuthenticated,
 }: CaseSidebarProps) {
   const { t } = useTranslation();
+  const router = useRouter();
   const [commentText, setCommentText] = useState('');
   const [linkCopied, setLinkCopied] = useState(false);
 
@@ -131,34 +135,52 @@ export function CaseSidebar({
             ))}
           </View>
         )}
-        <View style={styles.commentInputContainer}>
-          <TextInput
-            style={styles.commentInput}
-            placeholder={t('case.writeComment')}
-            placeholderTextColor={colors.neutral400}
-            value={commentText}
-            onChangeText={setCommentText}
-            multiline
-            maxLength={500}
-            accessibilityLabel={t('case.writeComment')}
-          />
-          <Pressable
-            style={[
-              styles.sendButton,
-              !commentText.trim() && styles.sendButtonDisabled,
-            ]}
-            onPress={handlePostComment}
-            disabled={!commentText.trim()}
-            accessibilityLabel={t('case.postComment')}
-            accessibilityRole="button"
-          >
-            <Send
-              size={18}
-              color={commentText.trim() ? colors.secondary : colors.neutral400}
-              strokeWidth={1.5}
+        {isAuthenticated ? (
+          <View style={styles.commentInputContainer}>
+            <TextInput
+              style={styles.commentInput}
+              placeholder={t('case.writeComment')}
+              placeholderTextColor={colors.neutral400}
+              value={commentText}
+              onChangeText={setCommentText}
+              multiline
+              maxLength={500}
+              accessibilityLabel={t('case.writeComment')}
             />
-          </Pressable>
-        </View>
+            <Pressable
+              style={[
+                styles.sendButton,
+                !commentText.trim() && styles.sendButtonDisabled,
+              ]}
+              onPress={handlePostComment}
+              disabled={!commentText.trim()}
+              accessibilityLabel={t('case.postComment')}
+              accessibilityRole="button"
+            >
+              <Send
+                size={18}
+                color={
+                  commentText.trim() ? colors.secondary : colors.neutral400
+                }
+                strokeWidth={1.5}
+              />
+            </Pressable>
+          </View>
+        ) : (
+          <View style={styles.authPrompt}>
+            <Body color={colors.neutral500}>{t('case.signInToComment')}</Body>
+            <Pressable
+              style={styles.authPromptButton}
+              onPress={() => router.push('/auth/login')}
+              accessibilityLabel={t('auth.login')}
+              accessibilityRole="button"
+            >
+              <Body color={colors.primary} style={styles.authPromptButtonText}>
+                {t('auth.login')}
+              </Body>
+            </Pressable>
+          </View>
+        )}
       </View>
 
       {/* Donation Progress Card */}
@@ -263,30 +285,58 @@ export function CaseSidebar({
       </View>
 
       {/* Subscribe Button */}
-      <Pressable
-        style={[
-          styles.subscribeButton,
-          isSubscribed && styles.subscribeButtonActive,
-        ]}
-        onPress={onSubscribeToggle}
-        disabled={subscriptionLoading}
-        accessibilityLabel={
-          isSubscribed ? t('case.subscribed') : t('case.subscribe')
-        }
-        accessibilityRole="button"
-      >
-        <Body
-          color={isSubscribed ? colors.secondary : colors.neutral700}
-          style={styles.subscribeText}
+      {isAuthenticated ? (
+        <Pressable
+          style={[
+            styles.subscribeButton,
+            isSubscribed && styles.subscribeButtonActive,
+          ]}
+          onPress={onSubscribeToggle}
+          disabled={subscriptionLoading}
+          accessibilityLabel={
+            isSubscribed ? t('case.subscribed') : t('case.subscribe')
+          }
+          accessibilityRole="button"
         >
-          {isSubscribed ? t('case.subscribed') : t('case.subscribe')}
-        </Body>
-      </Pressable>
+          <Body
+            color={isSubscribed ? colors.secondary : colors.neutral700}
+            style={styles.subscribeText}
+          >
+            {isSubscribed ? t('case.subscribed') : t('case.subscribe')}
+          </Body>
+        </Pressable>
+      ) : (
+        <Pressable
+          style={styles.subscribeButton}
+          onPress={() => router.push('/auth/login')}
+          accessibilityLabel={t('case.signInToFollow')}
+          accessibilityRole="button"
+        >
+          <Body color={colors.neutral700} style={styles.subscribeText}>
+            {t('case.signInToFollow')}
+          </Body>
+        </Pressable>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  authPrompt: {
+    alignItems: 'center',
+    backgroundColor: colors.neutral100,
+    borderRadius: borderRadius.card,
+    marginTop: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  authPromptButton: {
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  authPromptButtonText: {
+    fontWeight: '600',
+  },
   beFirstText: {
     marginTop: spacing.xs,
   },

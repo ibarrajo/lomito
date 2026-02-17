@@ -26,11 +26,13 @@ import { CtaBanner } from '../../components/landing/cta-banner';
 import { LandingFooter } from '../../components/landing/landing-footer';
 import { LandingMap } from '../../components/landing/landing-map';
 import { useAnalytics } from '../../hooks/use-analytics';
+import { useAuth } from '../../hooks/use-auth';
 
 export default function LandingPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const { trackEvent } = useAnalytics();
+  const { session } = useAuth();
 
   if (Platform.OS !== 'web') {
     return <Redirect href="/auth/login" />;
@@ -55,37 +57,75 @@ export default function LandingPage() {
                 {t('landing.heroSubtitle')}
               </Body>
               <View style={styles.ctaRow}>
-                <TouchableOpacity
-                  style={styles.ctaPrimary}
-                  onPress={() => {
-                    trackEvent('cta_click', { label: 'report_now' });
-                    router.push('/auth/register');
-                  }}
-                  accessibilityLabel={t('landing.ctaReport')}
-                  accessibilityRole="button"
-                >
-                  <Text style={styles.ctaPrimaryText}>
-                    {t('landing.ctaReport')}
-                  </Text>
-                  <ArrowRight
-                    size={18}
-                    color={colors.secondary}
-                    strokeWidth={2}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.ctaSecondary}
-                  onPress={() => {
-                    trackEvent('cta_click', { label: 'view_map' });
-                    router.push('/auth/login');
-                  }}
-                  accessibilityLabel={t('landing.ctaViewMap')}
-                  accessibilityRole="button"
-                >
-                  <Text style={styles.ctaSecondaryText}>
-                    {t('landing.ctaViewMap')}
-                  </Text>
-                </TouchableOpacity>
+                {session ? (
+                  <>
+                    <TouchableOpacity
+                      style={styles.ctaPrimary}
+                      onPress={() => {
+                        trackEvent('cta_click', { label: 'go_to_dashboard' });
+                        router.push('/(tabs)/dashboard');
+                      }}
+                      accessibilityLabel={t('landing.ctaGoToDashboard')}
+                      accessibilityRole="button"
+                    >
+                      <Text style={styles.ctaPrimaryText}>
+                        {t('landing.ctaGoToDashboard')}
+                      </Text>
+                      <ArrowRight
+                        size={18}
+                        color={colors.secondary}
+                        strokeWidth={2}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.ctaSecondary}
+                      onPress={() => {
+                        trackEvent('cta_click', { label: 'report_now' });
+                        router.push('/report/new');
+                      }}
+                      accessibilityLabel={t('landing.ctaReportNow')}
+                      accessibilityRole="button"
+                    >
+                      <Text style={styles.ctaSecondaryText}>
+                        {t('landing.ctaReportNow')}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      style={styles.ctaPrimary}
+                      onPress={() => {
+                        trackEvent('cta_click', { label: 'report_now' });
+                        router.push('/auth/register');
+                      }}
+                      accessibilityLabel={t('landing.ctaReport')}
+                      accessibilityRole="button"
+                    >
+                      <Text style={styles.ctaPrimaryText}>
+                        {t('landing.ctaReport')}
+                      </Text>
+                      <ArrowRight
+                        size={18}
+                        color={colors.secondary}
+                        strokeWidth={2}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.ctaSecondary}
+                      onPress={() => {
+                        trackEvent('cta_click', { label: 'view_map' });
+                        router.push('/auth/login');
+                      }}
+                      accessibilityLabel={t('landing.ctaViewMap')}
+                      accessibilityRole="button"
+                    >
+                      <Text style={styles.ctaSecondaryText}>
+                        {t('landing.ctaViewMap')}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )}
               </View>
             </View>
           </View>

@@ -317,7 +317,10 @@
     "contribute": "Contribuir",
     "donationDescription": "Ayuda a cubrir los costos de rescate y veterinaria para este caso",
     "locationNotes": "Dirección o referencia",
-    "staticMapAlt": "Mapa con la ubicación del caso"
+    "staticMapAlt": "Mapa con la ubicación del caso",
+    "signInToComment": "Inicia sesión para participar en la discusión",
+    "signInToFollow": "Inicia sesión para seguir este caso",
+    "signInToInteract": "Inicia sesión para interactuar"
   },
   "timelineAction": {
     "created": "Reporte creado",
@@ -723,7 +726,9 @@
     "statsActiveCasesLong": "Casos Activos",
     "statsResolvedLong": "Resueltos Este Mes",
     "statsLivesSavedLong": "Vidas Salvadas",
-    "statsAvgResponseLong": "Tiempo Promedio de Respuesta"
+    "statsAvgResponseLong": "Tiempo Promedio de Respuesta",
+    "ctaGoToDashboard": "Ir al Panel",
+    "ctaReportNow": "Reportar Ahora"
   },
   "authority": {
     "type": {

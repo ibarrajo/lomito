@@ -1,5 +1,5 @@
 import '../../../packages/shared/src/i18n/config';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Stack, usePathname, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, Platform } from 'react-native';
@@ -26,6 +26,9 @@ function RootLayoutNav() {
   const segments = useSegments();
   const router = useRouter();
   const pathname = usePathname();
+  // Stores the route the user originally wanted to visit before being
+  // redirected to login. Cleared once the post-auth redirect is performed.
+  const pendingRedirect = useRef<string | null>(null);
 
   // Initialize notifications only when user is authenticated
   useNotifications();
@@ -81,23 +84,19 @@ function RootLayoutNav() {
     const shouldTreatAsPublic = inPublicRoute || isRootPath;
 
     if (!session && !shouldTreatAsPublic) {
-      // Redirect unauthenticated users to login (prevent loop)
+      // Redirect unauthenticated users to login (prevent loop).
+      // Save their intended destination so we can restore it after auth.
       if (pathname !== '/auth/login') {
+        pendingRedirect.current = pathname;
         router.replace('/auth/login');
       }
     } else if (session && inAuthGroup) {
-      // Redirect to main app if authenticated (prevent loop)
+      // Redirect to main app if authenticated (prevent loop).
+      // Honour the saved redirect from before the login screen was shown.
       if (pathname !== '/' && !pathname.startsWith('/(tabs)')) {
-        router.replace('/(tabs)/dashboard');
-      }
-    } else if (
-      session &&
-      currentSegment === '(public)' &&
-      Platform.OS === 'web'
-    ) {
-      // Redirect authenticated users away from public landing on web (prevent loop)
-      if (!pathname.startsWith('/(tabs)')) {
-        router.replace('/(tabs)/dashboard');
+        const destination = pendingRedirect.current ?? '/(tabs)/dashboard';
+        pendingRedirect.current = null;
+        router.replace(destination as Parameters<typeof router.replace>[0]);
       }
     }
   }, [session, isReady, segments, router, pathname]);
