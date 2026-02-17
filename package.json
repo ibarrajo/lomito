@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "cd apps/mobile && npx expo start",
     "dev:web": "cd apps/mobile && npx expo start --web",
-    "build:web": "cd apps/mobile && npx expo export --platform web",
+    "build:web": "cd apps/mobile && mv .env.local .env.local.bak 2>/dev/null; npx expo export --platform web; mv .env.local.bak .env.local 2>/dev/null; true",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
