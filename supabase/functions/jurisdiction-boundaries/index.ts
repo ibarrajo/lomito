@@ -26,6 +26,10 @@ serve(async (req: Request) => {
     const east = parseFloat(url.searchParams.get('east') || '0');
     const north = parseFloat(url.searchParams.get('north') || '0');
     const zoom = parseFloat(url.searchParams.get('zoom') || '10');
+    const levelsParam = url.searchParams.get('levels');
+    const levels = levelsParam
+      ? levelsParam.split(',')
+      : ['delegacion', 'municipality'];
 
     // Validate bounds
     if (!west || !south || !east || !north) {
@@ -69,6 +73,7 @@ serve(async (req: Request) => {
       p_east: east,
       p_north: north,
       p_tolerance: tolerance,
+      p_levels: levels,
     });
 
     if (error) {

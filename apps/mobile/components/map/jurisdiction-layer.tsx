@@ -66,22 +66,34 @@ export function JurisdictionLayer({
       shape={data}
       onPress={handlePress}
     >
-      {/* Fill layer - semi-transparent overlay */}
+      {/* Fill layer - level-based semi-transparent overlay */}
       <MapboxGLAny.FillLayer
         id="jurisdictions-fill"
         style={{
-          fillColor: colors.secondary,
-          fillOpacity: 0.15,
+          fillColor: [
+            'match',
+            ['get', 'level'],
+            'municipality',
+            'transparent',
+            colors.secondary,
+          ],
+          fillOpacity: ['match', ['get', 'level'], 'municipality', 0, 0.08],
         }}
       />
 
-      {/* Line layer - visible borders */}
+      {/* Line layer - level-based visible borders */}
       <MapboxGLAny.LineLayer
         id="jurisdictions-line"
         style={{
-          lineColor: colors.secondary,
-          lineOpacity: 0.6,
-          lineWidth: 2,
+          lineColor: [
+            'match',
+            ['get', 'level'],
+            'municipality',
+            colors.secondary,
+            colors.primary,
+          ],
+          lineOpacity: ['match', ['get', 'level'], 'municipality', 0.7, 0.5],
+          lineWidth: ['match', ['get', 'level'], 'municipality', 3, 1.5],
         }}
       />
 

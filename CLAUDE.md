@@ -67,6 +67,17 @@ Shadows: Neutral-toned (rgba(0,0,0,0.06)) not warm defaults
 
 Full token reference: `docs/style/DESIGN_TOKENS.md`
 
+## Supabase Production Instance
+
+- **Project ref:** `jmhsuttikjjyfwbvojiu`
+- **URL:** `https://jmhsuttikjjyfwbvojiu.supabase.co`
+- **Source of truth:** `apps/mobile/.env` → `EXPO_PUBLIC_SUPABASE_URL`
+- **ALWAYS read `.env`** before using Supabase CLI or MCP tools — never guess the project ref.
+- Edge function deploy: `npx supabase functions deploy <name> --project-ref jmhsuttikjjyfwbvojiu`
+- SQL execution: Use MCP `execute_sql` with project ID `jmhsuttikjjyfwbvojiu`
+- Migration apply: Use MCP `apply_migration` or `supabase db push --linked`
+- **Never mix up projects** — this is a single-instance production Supabase. All CLI commands, MCP calls, and auth configs must target this ref.
+
 ## Key Technical Decisions
 
 1. **Expo managed workflow** with custom dev client (no ejecting). EAS Build for native binaries, EAS Update for OTA.

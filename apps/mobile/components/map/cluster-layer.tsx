@@ -60,7 +60,7 @@ export const ClusterLayer = memo(function ClusterLayer({
         id="clusters"
         filter={['has', 'point_count']}
         style={{
-          circleColor: colors.primary,
+          circleColor: colors.primaryDark,
           circleRadius: [
             'step',
             ['get', 'point_count'],
@@ -70,9 +70,9 @@ export const ClusterLayer = memo(function ClusterLayer({
             30,
             35, // radius for count >= 30
           ],
-          circleOpacity: 0.9,
-          circleStrokeWidth: 2,
-          circleStrokeColor: colors.white,
+          circleOpacity: 1,
+          circleStrokeWidth: 2.5,
+          circleStrokeColor: colors.secondary,
         }}
       />
 
@@ -83,7 +83,7 @@ export const ClusterLayer = memo(function ClusterLayer({
         style={{
           textField: ['get', 'point_count_abbreviated'],
           textSize: 14,
-          textColor: colors.white,
+          textColor: colors.secondary,
           textFont: ['Public Sans Bold', 'Arial Unicode MS Bold'],
           textAllowOverlap: true,
         }}

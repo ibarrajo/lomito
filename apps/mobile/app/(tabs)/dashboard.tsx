@@ -364,22 +364,22 @@ export default function MapScreen() {
   }, [router]);
 
   const handleToggleBoundaries = useCallback(() => {
-    setShowBoundaries((prev) => {
-      const next = !prev;
-      // Show tooltip briefly when activating boundaries
-      if (next) {
-        setShowBoundariesTooltip(true);
-        if (boundariesTooltipTimerRef.current)
-          clearTimeout(boundariesTooltipTimerRef.current);
-        boundariesTooltipTimerRef.current = setTimeout(
-          () => setShowBoundariesTooltip(false),
-          2500,
-        );
-      } else {
-        setShowBoundariesTooltip(false);
-      }
-      return next;
-    });
+    setShowBoundaries((prev) => !prev);
+  }, []);
+
+  const handleBoundariesHoverIn = useCallback(() => {
+    setShowBoundariesTooltip(true);
+    if (boundariesTooltipTimerRef.current)
+      clearTimeout(boundariesTooltipTimerRef.current);
+  }, []);
+
+  const handleBoundariesHoverOut = useCallback(() => {
+    if (boundariesTooltipTimerRef.current)
+      clearTimeout(boundariesTooltipTimerRef.current);
+    boundariesTooltipTimerRef.current = setTimeout(
+      () => setShowBoundariesTooltip(false),
+      300,
+    );
   }, []);
 
   const handleRegionChange = useCallback(
@@ -607,6 +607,8 @@ export default function MapScreen() {
                 showBoundaries && styles.jurisdictionToggleActive,
               ]}
               onPress={handleToggleBoundaries}
+              onHoverIn={handleBoundariesHoverIn}
+              onHoverOut={handleBoundariesHoverOut}
               accessibilityLabel={
                 showBoundaries
                   ? t('map.hideBoundaries')
@@ -614,9 +616,7 @@ export default function MapScreen() {
               }
               accessibilityRole="button"
             >
-              <Text style={styles.jurisdictionToggleText}>
-                {showBoundaries ? '🗺️' : '🗺️'}
-              </Text>
+              <Text style={styles.jurisdictionToggleText}>{'🏛️'}</Text>
             </Pressable>
           </View>
 
@@ -766,13 +766,71 @@ export default function MapScreen() {
             showBoundaries && styles.jurisdictionToggleActive,
           ]}
           onPress={handleToggleBoundaries}
+          onHoverIn={handleBoundariesHoverIn}
+          onHoverOut={handleBoundariesHoverOut}
           accessibilityLabel={
             showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')
           }
           accessibilityRole="button"
         >
-          <Text style={styles.jurisdictionToggleText}>
-            {showBoundaries ? '🗺️' : '🗺️'}
+          <Text style={styles.jurisdictionToggleText}>{'🏛️'}</Text>
+        </Pressable>
+      </View>
+
+      {/* POI toggle buttons */}
+      <View style={styles.poiToggleRow}>
+        <Pressable
+          style={[
+            styles.poiToggle,
+            showGovOffices && styles.poiToggleActiveGov,
+          ]}
+          onPress={toggleGovOffices}
+          accessibilityLabel={t('map.showGovOffices')}
+          accessibilityRole="button"
+        >
+          <Text
+            style={[
+              styles.poiToggleText,
+              showGovOffices && styles.poiToggleTextActive,
+            ]}
+          >
+            {'🏛️'}
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[
+            styles.poiToggle,
+            showShelters && styles.poiToggleActiveShelter,
+          ]}
+          onPress={toggleShelters}
+          accessibilityLabel={t('map.showShelters')}
+          accessibilityRole="button"
+        >
+          <Text
+            style={[
+              styles.poiToggleText,
+              showShelters && styles.poiToggleTextActive,
+            ]}
+          >
+            {'🐾'}
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[
+            styles.poiToggle,
+            showClinics && styles.poiToggleActiveClinic,
+          ]}
+          onPress={toggleClinics}
+          accessibilityLabel={t('map.showClinics')}
+          accessibilityRole="button"
+        >
+          <Text
+            style={[
+              styles.poiToggleText,
+              showClinics && styles.poiToggleTextActive,
+            ]}
+          >
+            {'🏥'}
           </Text>
         </Pressable>
       </View>
@@ -941,6 +999,44 @@ const styles = StyleSheet.create({
   mapColumn: {
     flex: 1,
     position: 'relative' as const,
+  },
+  poiToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
+    ...shadowStyles.card,
+  },
+  poiToggleActiveClinic: {
+    backgroundColor: '#05966920',
+    borderColor: '#059669',
+    borderWidth: 2,
+  },
+  poiToggleActiveGov: {
+    backgroundColor: '#2563EB20',
+    borderColor: '#2563EB',
+    borderWidth: 2,
+  },
+  poiToggleActiveShelter: {
+    backgroundColor: '#F2994A20',
+    borderColor: '#F2994A',
+    borderWidth: 2,
+  },
+  poiToggleRow: {
+    flexDirection: 'row',
+    gap: spacing.xs,
+    position: 'absolute',
+    right: spacing.md,
+    top: 130,
+    zIndex: 10,
+  },
+  poiToggleText: {
+    fontSize: 18,
+  },
+  poiToggleTextActive: {
+    // Active text style — emoji does not change but kept for consistency
   },
   // Search bar
   searchClearButton: {

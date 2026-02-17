@@ -101,11 +101,11 @@ export function MapView({
         source: 'cases-source',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#13ECC8', // colors.primary
+          'circle-color': '#0FBDA0', // colors.primaryDark — better map contrast
           'circle-radius': ['step', ['get', 'point_count'], 20, 10, 25, 30, 35],
-          'circle-opacity': 0.9,
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#FFFFFF',
+          'circle-opacity': 1,
+          'circle-stroke-width': 2.5,
+          'circle-stroke-color': '#1E293B', // colors.secondary (navy)
         },
       });
 
@@ -122,7 +122,7 @@ export function MapView({
           'text-allow-overlap': true,
         },
         paint: {
-          'text-color': '#FFFFFF',
+          'text-color': '#1E293B', // colors.secondary — navy on mint for WCAG contrast
         },
       });
 
@@ -260,8 +260,20 @@ export function MapView({
         type: 'fill',
         source: 'jurisdictions-source',
         paint: {
-          'fill-color': '#1E293B', // colors.secondary
-          'fill-opacity': 0.15,
+          'fill-color': [
+            'match',
+            ['get', 'level'],
+            'municipality',
+            'transparent',
+            '#1E293B', // delegacion default (colors.secondary)
+          ],
+          'fill-opacity': [
+            'match',
+            ['get', 'level'],
+            'municipality',
+            0,
+            0.08, // delegacion: very light fill
+          ],
         },
         layout: {
           visibility: 'none',
@@ -273,9 +285,21 @@ export function MapView({
         type: 'line',
         source: 'jurisdictions-source',
         paint: {
-          'line-color': '#1E293B',
-          'line-width': 2,
-          'line-opacity': 0.6,
+          'line-color': [
+            'match',
+            ['get', 'level'],
+            'municipality',
+            '#1E293B', // colors.secondary
+            '#13ECC8', // delegacion: primary/mint color
+          ],
+          'line-width': [
+            'match',
+            ['get', 'level'],
+            'municipality',
+            3,
+            1.5, // delegacion: thinner borders
+          ],
+          'line-opacity': ['match', ['get', 'level'], 'municipality', 0.7, 0.5],
         },
         layout: {
           visibility: 'none',
