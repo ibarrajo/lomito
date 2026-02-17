@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { H1, Body, Button, TextInput } from '@lomito/ui';
+import { H2, Body, Button, TextInput } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import type {
   CaseCategory,
@@ -22,14 +22,17 @@ import { LocationPicker } from '../../components/report/location-picker';
 import { PhotoPicker } from '../../components/report/photo-picker';
 import { ReviewStep } from '../../components/report/review-step';
 import { ReportSidebar } from '../../components/report/report-sidebar';
+import { StepProgressBar } from '../../components/report/step-progress-bar';
 import { useCreateCase } from '../../hooks/use-create-case';
 import { useAnalytics } from '../../hooks/use-analytics';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { uploadCaseImages } from '../../lib/image-upload';
 
 interface ReportFormData {
   category: CaseCategory | null;
   animalType: AnimalType | null;
   location: { latitude: number; longitude: number } | null;
+  locationNotes: string;
   description: string;
   urgency: UrgencyLevel;
   photos: string[];
@@ -47,6 +50,7 @@ export default function NewReportScreen() {
     category: null,
     animalType: null,
     location: null,
+    locationNotes: '',
     description: '',
     urgency: 'medium',
     photos: [],
@@ -70,6 +74,14 @@ export default function NewReportScreen() {
     t('report.step3Title'),
     t('report.step5Title'),
     t('report.step4Title'),
+  ];
+
+  const stepNames = [
+    t('report.stepName1'),
+    t('report.stepName2'),
+    t('report.stepName3'),
+    t('report.stepName4'),
+    t('report.stepName5'),
   ];
 
   const canProceedFromStep = (step: number): boolean => {
@@ -105,13 +117,18 @@ export default function NewReportScreen() {
     }
 
     try {
-      await createCase({
+      const newCaseId = await createCase({
         category: formData.category,
         animal_type: formData.animalType,
         description: formData.description,
         location: formData.location,
         urgency: formData.urgency,
       });
+
+      // Upload photos if any were added
+      if (formData.photos.length > 0) {
+        await uploadCaseImages(newCaseId, formData.photos);
+      }
 
       trackEvent('report_submit');
 
@@ -168,6 +185,17 @@ export default function NewReportScreen() {
                 setFormData({ ...formData, location })
               }
             />
+            <View style={styles.locationNotesStrip}>
+              <TextInput
+                label={t('report.locationNotes')}
+                value={formData.locationNotes}
+                onChangeText={(locationNotes) =>
+                  setFormData({ ...formData, locationNotes })
+                }
+                placeholder={t('report.locationNotesPlaceholder')}
+                accessibilityLabel={t('report.locationNotes')}
+              />
+            </View>
           </View>
         );
 
@@ -184,7 +212,7 @@ export default function NewReportScreen() {
                 placeholder={t('report.descriptionPlaceholder')}
                 accessibilityLabel={t('report.description')}
                 multiline
-                numberOfLines={6}
+                numberOfLines={9}
                 style={styles.textArea}
               />
             </View>
@@ -206,6 +234,7 @@ export default function NewReportScreen() {
           <View style={styles.stepContent}>
             <PhotoPicker
               onImagesChange={(photos) => setFormData({ ...formData, photos })}
+              onSkip={handleNext}
             />
           </View>
         );
@@ -235,31 +264,15 @@ export default function NewReportScreen() {
             accessibilityLabel={t('common.back')}
             accessibilityRole="button"
           >
-            <Body color={colors.primary}>{t('common.back')}</Body>
+            <Body color={colors.secondary}>{t('common.back')}</Body>
           </Pressable>
-          <Body color={colors.neutral500}>
-            {t('report.stepIndicator', { current: currentStep + 1, total: 5 })}
-          </Body>
         </View>
-        <H1 style={styles.title}>{stepTitles[currentStep]}</H1>
-
-        {/* Step Indicator */}
-        <View style={styles.stepIndicator}>
-          {[0, 1, 2, 3, 4].map((step) => (
-            <View
-              key={step}
-              style={[
-                styles.stepDot,
-                step === currentStep && styles.stepDotActive,
-                step < currentStep && styles.stepDotCompleted,
-              ]}
-              accessibilityLabel={t('report.stepProgress', {
-                current: step + 1,
-                total: 5,
-              })}
-            />
-          ))}
-        </View>
+        <StepProgressBar
+          steps={stepNames}
+          currentStep={currentStep}
+          onStepPress={(step) => setCurrentStep(step)}
+        />
+        <H2 style={styles.title}>{stepTitles[currentStep]}</H2>
       </View>
 
       {/* Main Content Area - Desktop layout with sidebar */}
@@ -345,6 +358,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: spacing.sm,
   },
+  locationNotesStrip: {
+    backgroundColor: colors.white,
+    borderTopColor: colors.neutral200,
+    borderTopWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
   mainContent: {
     flex: 1,
     flexDirection: 'row',
@@ -372,25 +392,8 @@ const styles = StyleSheet.create({
   stepContentMap: {
     flex: 1,
   },
-  stepDot: {
-    backgroundColor: colors.neutral200,
-    borderRadius: spacing.xs,
-    flex: 1,
-    height: 4,
-  },
-  stepDotActive: {
-    backgroundColor: colors.primary,
-  },
-  stepDotCompleted: {
-    backgroundColor: colors.secondary,
-  },
-  stepIndicator: {
-    flexDirection: 'row',
-    gap: spacing.xs,
-    marginTop: spacing.md,
-  },
   textArea: {
-    height: 120,
+    height: 180,
   },
   title: {
     marginTop: spacing.xs,

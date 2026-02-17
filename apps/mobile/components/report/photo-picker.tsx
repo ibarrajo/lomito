@@ -12,7 +12,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
-import { BodySmall, Skeleton } from '@lomito/ui';
+import { Body, BodySmall, Skeleton } from '@lomito/ui';
 import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { useImagePicker } from '../../hooks/use-image-picker';
 import { PhotoActionSheet } from './photo-action-sheet';
@@ -21,6 +21,7 @@ const MAX_PHOTOS = 5;
 
 interface PhotoPickerProps {
   onImagesChange?: (images: string[]) => void;
+  onSkip?: () => void;
 }
 
 /**
@@ -31,7 +32,7 @@ interface PhotoPickerProps {
  * - Shows compression loading state
  * - Remove functionality for each photo
  */
-export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
+export function PhotoPicker({ onImagesChange, onSkip }: PhotoPickerProps) {
   const { t } = useTranslation();
   const { images, pickFromCamera, pickFromGallery, removeImage, loading } =
     useImagePicker();
@@ -61,6 +62,11 @@ export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
   return (
     <BottomSheetModalProvider>
       <View style={styles.container}>
+        {/* Step intro */}
+        <Body color={colors.neutral500} style={styles.intro}>
+          {t('report.photosStepIntro')}
+        </Body>
+
         {/* Photo Grid */}
         <View style={styles.grid}>
           {/* Existing Photos */}
@@ -133,6 +139,19 @@ export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
           </BodySmall>
         </View>
 
+        {/* Skip link */}
+        {onSkip && (
+          <Pressable
+            onPress={onSkip}
+            accessibilityLabel={t('report.skipPhotos')}
+            accessibilityRole="button"
+          >
+            <Body color={colors.neutral500} style={styles.skipLink}>
+              {t('report.skipPhotos')}
+            </Body>
+          </Pressable>
+        )}
+
         {/* Photo Action Sheet (native only) */}
         <PhotoActionSheet
           ref={bottomSheetRef}
@@ -177,6 +196,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
+  intro: {
+    marginBottom: spacing.md,
+  },
   photo: {
     borderRadius: borderRadius.button,
     height: '100%',
@@ -201,5 +223,10 @@ const styles = StyleSheet.create({
     right: spacing.xs,
     top: spacing.xs,
     width: 24,
+  },
+  skipLink: {
+    marginTop: spacing.md,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
 });

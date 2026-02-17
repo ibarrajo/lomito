@@ -20,7 +20,7 @@ interface CreateCaseInput {
 }
 
 interface CreateCaseResult {
-  createCase: (data: CreateCaseInput) => Promise<void>;
+  createCase: (data: CreateCaseInput) => Promise<string>;
   loading: boolean;
   error: string | null;
   caseId: string | null;
@@ -31,7 +31,7 @@ export function useCreateCase(): CreateCaseResult {
   const [error, setError] = useState<string | null>(null);
   const [caseId, setCaseId] = useState<string | null>(null);
 
-  const createCase = async (data: CreateCaseInput) => {
+  const createCase = async (data: CreateCaseInput): Promise<string> => {
     try {
       setLoading(true);
       setError(null);
@@ -72,9 +72,12 @@ export function useCreateCase(): CreateCaseResult {
         throw insertError;
       }
 
-      if (newCase) {
-        setCaseId(newCase.id);
+      if (!newCase) {
+        throw new Error('Failed to get case ID');
       }
+
+      setCaseId(newCase.id);
+      return newCase.id;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create case');
       throw err;

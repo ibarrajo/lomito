@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
-const accessToken = process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
+export const accessToken = process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
 
 if (accessToken) {
   MapboxGL.setAccessToken(accessToken);

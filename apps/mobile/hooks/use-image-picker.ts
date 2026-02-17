@@ -4,6 +4,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { compressImage, type CompressedImage } from '../lib/image-compression';
 
@@ -38,11 +39,13 @@ export function useImagePicker(): ImagePickerResult {
         return;
       }
 
-      // Request camera permissions
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== 'granted') {
-        console.warn('Camera permission denied');
-        return;
+      // Request camera permissions (web has no permission API)
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          console.warn('Camera permission denied');
+          return;
+        }
       }
 
       setLoading(true);
@@ -77,12 +80,14 @@ export function useImagePicker(): ImagePickerResult {
         return;
       }
 
-      // Request media library permissions
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        console.warn('Media library permission denied');
-        return;
+      // Request media library permissions (web has no permission API)
+      if (Platform.OS !== 'web') {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          console.warn('Media library permission denied');
+          return;
+        }
       }
 
       setLoading(true);

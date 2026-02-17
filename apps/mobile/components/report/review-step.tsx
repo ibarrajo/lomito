@@ -3,10 +3,18 @@
  * Summary of all form data before submission.
  */
 
-import { View, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
+import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
-import { H3, Body, BodySmall, Button, Card, Badge } from '@lomito/ui';
+import { H3, Body, BodySmall, Caption, Button, Card, Badge } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { accessToken } from '../../lib/mapbox';
 import type {
   CaseCategory,
   AnimalType,
@@ -17,8 +25,10 @@ interface ReportFormData {
   category: CaseCategory | null;
   animalType: AnimalType | null;
   location: { latitude: number; longitude: number } | null;
+  locationNotes: string;
   description: string;
   urgency: UrgencyLevel;
+  photos: string[];
 }
 
 interface ReviewStepProps {
@@ -72,6 +82,11 @@ export function ReviewStep({
     return urgencyColors[urgency];
   };
 
+  const buildStaticMapUrl = (lat: number, lng: number) => {
+    const pin = `pin-s+13ECC8(${lng},${lat})`;
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${pin}/${lng},${lat},14/400x160@2x?access_token=${accessToken}`;
+  };
+
   return (
     <View style={styles.container}>
       {/* Category & Animal Type */}
@@ -119,10 +134,24 @@ export function ReviewStep({
               <BodySmall color={colors.primary}>{t('report.edit')}</BodySmall>
             </Pressable>
           </View>
-          <BodySmall color={colors.neutral500}>
+          <Image
+            source={{
+              uri: buildStaticMapUrl(
+                data.location.latitude,
+                data.location.longitude,
+              ),
+            }}
+            style={styles.staticMap}
+            contentFit="cover"
+            accessibilityLabel={t('report.staticMapAlt')}
+          />
+          <Caption color={colors.neutral500} style={styles.coordinates}>
             {data.location.latitude.toFixed(5)},{' '}
             {data.location.longitude.toFixed(5)}
-          </BodySmall>
+          </Caption>
+          {data.locationNotes.length > 0 && (
+            <Body style={styles.locationNotes}>{data.locationNotes}</Body>
+          )}
         </Card>
       )}
 
@@ -154,6 +183,51 @@ export function ReviewStep({
         </View>
       </Card>
 
+      {/* Photos */}
+      <Card style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <H3>{t('report.reviewPhotos')}</H3>
+          <Pressable
+            onPress={() => onEdit(3)}
+            accessibilityLabel={t('report.edit')}
+            accessibilityRole="button"
+          >
+            <BodySmall color={colors.primary}>{t('report.edit')}</BodySmall>
+          </Pressable>
+        </View>
+        {data.photos.length > 0 ? (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.photoScroll}
+          >
+            {data.photos.map((uri, index) => (
+              <Image
+                key={uri}
+                source={{ uri }}
+                style={styles.photoThumbnail}
+                contentFit="cover"
+                accessibilityLabel={`${t('report.photos')} ${index + 1}`}
+              />
+            ))}
+          </ScrollView>
+        ) : (
+          <View style={styles.noPhotosContent}>
+            <BodySmall color={colors.neutral500} style={styles.noPhotosMessage}>
+              {t('report.reviewNoPhotosMessage')}
+            </BodySmall>
+            <Button
+              variant="secondary"
+              onPress={() => onEdit(3)}
+              accessibilityLabel={t('report.addPhotoToReport')}
+              style={styles.addPhotoButton}
+            >
+              {t('report.addPhotoToReport')}
+            </Button>
+          </View>
+        )}
+      </Card>
+
       {/* Submit Button */}
       <Button
         variant="primary"
@@ -176,6 +250,9 @@ export function ReviewStep({
 }
 
 const styles = StyleSheet.create({
+  addPhotoButton: {
+    marginTop: spacing.sm,
+  },
   badges: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -185,6 +262,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: spacing.md,
+  },
+  coordinates: {
+    marginTop: spacing.xs,
   },
   description: {
     marginTop: spacing.sm,
@@ -199,6 +279,24 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
+  locationNotes: {
+    marginTop: spacing.xs,
+  },
+  noPhotosContent: {
+    marginTop: spacing.sm,
+  },
+  noPhotosMessage: {
+    marginBottom: spacing.xs,
+  },
+  photoScroll: {
+    marginTop: spacing.sm,
+  },
+  photoThumbnail: {
+    borderRadius: 8,
+    height: 80,
+    marginRight: spacing.sm,
+    width: 80,
+  },
   section: {
     marginBottom: spacing.md,
   },
@@ -206,6 +304,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  staticMap: {
+    borderRadius: 8,
+    height: 160,
+    marginTop: spacing.sm,
+    width: '100%',
   },
   submitButton: {
     marginTop: spacing.lg,
