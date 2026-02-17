@@ -378,6 +378,7 @@ export default function GovernmentScreen() {
               category={item.category}
               animalType={item.animal_type}
               urgency={item.urgency}
+              status={item.status}
               description={item.description}
               folio={item.folio}
               escalatedAt={item.escalated_at}

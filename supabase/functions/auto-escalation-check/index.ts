@@ -499,10 +499,10 @@ serve(async (req) => {
             await supabase.from('case_timeline').insert({
               case_id: caseItem.id,
               actor_id: null,
-              action: 'escalated',
+              action: 'marked_unresponsive',
               details: {
-                type: 'marked_unresponsive',
                 day: 30,
+                reason: 'no_government_response',
               },
             });
 

@@ -117,7 +117,6 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
       setLoading(true);
       setError(null);
 
-      // Update case status
       const { error: updateError } = await supabase
         .from('cases')
         .update({ status: newStatus } as never)
@@ -125,28 +124,6 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
 
       if (updateError) {
         throw updateError;
-      }
-
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-
-      // Insert timeline event
-      const { error: timelineError } = await supabase
-        .from('case_timeline')
-        .insert({
-          case_id: caseId,
-          actor_id: user.id,
-          action: 'status_changed',
-          details: { status: newStatus },
-        } as never);
-
-      if (timelineError) {
-        throw timelineError;
       }
     } catch (err) {
       console.error('Error updating case status:', err);

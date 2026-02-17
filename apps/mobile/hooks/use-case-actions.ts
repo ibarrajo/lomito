@@ -5,7 +5,7 @@ import type { CaseStatus } from '@lomito/shared/types/database';
 interface UseCaseActionsResult {
   updateCaseStatus: (caseId: string, newStatus: CaseStatus) => Promise<void>;
   rejectCase: (caseId: string, reason: string) => Promise<void>;
-  flagCase: (caseId: string) => Promise<void>;
+  reopenCase: (caseId: string) => Promise<void>;
   loading: boolean;
   error: string | null;
 }
@@ -22,7 +22,6 @@ export function useCaseActions(): UseCaseActionsResult {
       setLoading(true);
       setError(null);
 
-      // Update case status
       const { error: updateError } = await supabase
         .from('cases')
         .update({ status: newStatus } as never)
@@ -30,28 +29,6 @@ export function useCaseActions(): UseCaseActionsResult {
 
       if (updateError) {
         throw updateError;
-      }
-
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-
-      // Insert timeline event
-      const { error: timelineError } = await supabase
-        .from('case_timeline')
-        .insert({
-          case_id: caseId,
-          actor_id: user.id,
-          action: newStatus === 'verified' ? 'verified' : 'status_changed',
-          details: { status: newStatus },
-        } as never);
-
-      if (timelineError) {
-        throw timelineError;
       }
     } catch (err) {
       console.error('Error updating case status:', err);
@@ -68,7 +45,17 @@ export function useCaseActions(): UseCaseActionsResult {
       setLoading(true);
       setError(null);
 
-      // Update case status to rejected
+      // Set rejection reason as session variable for the DB trigger.
+      // Cast required: set_rejection_reason is pending in generated types until
+      // migration 20260218100001 is applied and types are regenerated.
+      await (
+        supabase.rpc as unknown as (
+          fn: string,
+          args: Record<string, string>,
+        ) => Promise<unknown>
+      )('set_rejection_reason', { p_reason: reason });
+
+      // Update case status — trigger writes timeline with reason
       const { error: updateError } = await supabase
         .from('cases')
         .update({ status: 'rejected' } as never)
@@ -76,28 +63,6 @@ export function useCaseActions(): UseCaseActionsResult {
 
       if (updateError) {
         throw updateError;
-      }
-
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-
-      // Insert timeline event with reason
-      const { error: timelineError } = await supabase
-        .from('case_timeline')
-        .insert({
-          case_id: caseId,
-          actor_id: user.id,
-          action: 'rejected',
-          details: { reason },
-        } as never);
-
-      if (timelineError) {
-        throw timelineError;
       }
     } catch (err) {
       console.error('Error rejecting case:', err);
@@ -109,57 +74,21 @@ export function useCaseActions(): UseCaseActionsResult {
     }
   }
 
-  async function flagCase(caseId: string): Promise<void> {
+  async function reopenCase(caseId: string): Promise<void> {
     try {
       setLoading(true);
       setError(null);
 
-      // Get current flag count
-      const { data: caseData, error: fetchError } = await supabase
-        .from('cases')
-        .select('flag_count')
-        .eq('id', caseId)
-        .single();
-
-      if (fetchError) {
-        throw fetchError;
-      }
-
-      // Increment flag count
-      const newFlagCount =
-        ((caseData as { flag_count: number })?.flag_count ?? 0) + 1;
       const { error: updateError } = await supabase
         .from('cases')
-        .update({ flag_count: newFlagCount } as never)
+        .update({ status: 'pending' } as never)
         .eq('id', caseId);
 
       if (updateError) {
         throw updateError;
       }
-
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-
-      // Insert timeline event
-      const { error: timelineError } = await supabase
-        .from('case_timeline')
-        .insert({
-          case_id: caseId,
-          actor_id: user.id,
-          action: 'flagged',
-          details: { flag_count: newFlagCount },
-        } as never);
-
-      if (timelineError) {
-        throw timelineError;
-      }
     } catch (err) {
-      console.error('Error flagging case:', err);
+      console.error('Error reopening case:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       throw err;
@@ -171,7 +100,7 @@ export function useCaseActions(): UseCaseActionsResult {
   return {
     updateCaseStatus,
     rejectCase,
-    flagCase,
+    reopenCase,
     loading,
     error,
   };

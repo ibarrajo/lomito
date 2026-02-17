@@ -365,7 +365,9 @@
     "staticMapAlt": "Map showing case location",
     "signInToComment": "Sign in to join the discussion",
     "signInToFollow": "Sign in to follow this case",
-    "signInToInteract": "Sign in to interact"
+    "signInToInteract": "Sign in to interact",
+    "unresponsiveBadge": "No response",
+    "statusTerminal": "This case is {{status}}"
   },
   "timelineAction": {
     "created": "Report created",
@@ -442,7 +444,10 @@
     "pressV": "Press V to verify",
     "pressR": "Press R to reject",
     "selectCase": "Select a case to review",
-    "noLocation": "No location data"
+    "noLocation": "No location data",
+    "reopen": "Reopen case",
+    "reopenConfirm": "This will return the case to pending status",
+    "reopenSuccess": "Case reopened"
   },
   "flag": {
     "report": "Flag report",

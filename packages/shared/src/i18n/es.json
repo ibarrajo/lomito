@@ -365,7 +365,9 @@
     "staticMapAlt": "Mapa con la ubicación del caso",
     "signInToComment": "Inicia sesión para participar en la discusión",
     "signInToFollow": "Inicia sesión para seguir este caso",
-    "signInToInteract": "Inicia sesión para interactuar"
+    "signInToInteract": "Inicia sesión para interactuar",
+    "unresponsiveBadge": "Sin respuesta",
+    "statusTerminal": "Este caso está {{status}}"
   },
   "timelineAction": {
     "created": "Reporte creado",
@@ -442,7 +444,10 @@
     "pressV": "Presiona V para verificar",
     "pressR": "Presiona R para rechazar",
     "selectCase": "Selecciona un caso para revisar",
-    "noLocation": "Sin datos de ubicación"
+    "noLocation": "Sin datos de ubicación",
+    "reopen": "Reabrir caso",
+    "reopenConfirm": "Esto regresará el caso a estado pendiente",
+    "reopenSuccess": "Caso reabierto"
   },
   "flag": {
     "report": "Señalar reporte",

@@ -20,6 +20,7 @@ import type {
   CaseCategory,
   AnimalType,
   UrgencyLevel,
+  CaseStatus,
 } from '@lomito/shared/types/database';
 import { differenceInDays } from 'date-fns';
 
@@ -28,6 +29,7 @@ interface CaseActionCardProps {
   category: CaseCategory;
   animalType: AnimalType;
   urgency: UrgencyLevel;
+  status: CaseStatus;
   description: string;
   folio: string | null;
   escalatedAt: string | null;
@@ -42,6 +44,7 @@ export const CaseActionCard = memo(function CaseActionCard({
   category,
   animalType,
   urgency,
+  status,
   description,
   folio,
   escalatedAt,
@@ -64,6 +67,8 @@ export const CaseActionCard = memo(function CaseActionCard({
   };
 
   const urgencyStyle = urgencyColors[urgency];
+
+  const isTerminal = status === 'rejected' || status === 'archived';
 
   function handleCardPress() {
     router.push(`/case/${id}`);
@@ -127,49 +132,59 @@ export const CaseActionCard = memo(function CaseActionCard({
         </View>
 
         {/* Action buttons */}
-        <View style={styles.actions}>
-          <Pressable
-            style={[styles.actionButton, styles.folioButton]}
-            onPress={(e) => {
-              e.stopPropagation();
-              onAssignFolio(id);
-            }}
-            accessibilityLabel={t('government.assignFolio')}
-            accessibilityRole="button"
-          >
-            <Text style={[styles.actionButtonText, styles.folioButtonText]}>
-              {t('government.assignFolio')}
-            </Text>
-          </Pressable>
+        {isTerminal ? (
+          <View style={styles.terminalMessage}>
+            <Caption style={styles.terminalText}>
+              {t('case.statusTerminal', { status: t(`status.${status}`) })}
+            </Caption>
+          </View>
+        ) : (
+          <View style={styles.actions}>
+            <Pressable
+              style={[styles.actionButton, styles.folioButton]}
+              onPress={(e) => {
+                e.stopPropagation();
+                onAssignFolio(id);
+              }}
+              accessibilityLabel={t('government.assignFolio')}
+              accessibilityRole="button"
+            >
+              <Text style={[styles.actionButtonText, styles.folioButtonText]}>
+                {t('government.assignFolio')}
+              </Text>
+            </Pressable>
 
-          <Pressable
-            style={[styles.actionButton, styles.responseButton]}
-            onPress={(e) => {
-              e.stopPropagation();
-              onPostResponse(id);
-            }}
-            accessibilityLabel={t('government.postResponse')}
-            accessibilityRole="button"
-          >
-            <Text style={[styles.actionButtonText, styles.responseButtonText]}>
-              {t('government.postResponse')}
-            </Text>
-          </Pressable>
+            <Pressable
+              style={[styles.actionButton, styles.responseButton]}
+              onPress={(e) => {
+                e.stopPropagation();
+                onPostResponse(id);
+              }}
+              accessibilityLabel={t('government.postResponse')}
+              accessibilityRole="button"
+            >
+              <Text
+                style={[styles.actionButtonText, styles.responseButtonText]}
+              >
+                {t('government.postResponse')}
+              </Text>
+            </Pressable>
 
-          <Pressable
-            style={[styles.actionButton, styles.statusButton]}
-            onPress={(e) => {
-              e.stopPropagation();
-              onUpdateStatus(id);
-            }}
-            accessibilityLabel={t('government.updateStatus')}
-            accessibilityRole="button"
-          >
-            <Text style={[styles.actionButtonText, styles.statusButtonText]}>
-              {t('government.updateStatus')}
-            </Text>
-          </Pressable>
-        </View>
+            <Pressable
+              style={[styles.actionButton, styles.statusButton]}
+              onPress={(e) => {
+                e.stopPropagation();
+                onUpdateStatus(id);
+              }}
+              accessibilityLabel={t('government.updateStatus')}
+              accessibilityRole="button"
+            >
+              <Text style={[styles.actionButtonText, styles.statusButtonText]}>
+                {t('government.updateStatus')}
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </Card>
     </Pressable>
   );
@@ -253,5 +268,16 @@ const styles = StyleSheet.create({
   },
   statusButtonText: {
     color: colors.primary,
+  },
+  terminalMessage: {
+    alignItems: 'center',
+    backgroundColor: colors.neutral100,
+    borderRadius: borderRadius.button,
+    marginTop: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  terminalText: {
+    color: colors.neutral500,
+    fontWeight: '600',
   },
 });

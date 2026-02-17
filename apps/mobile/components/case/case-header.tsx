@@ -69,6 +69,17 @@ export function CaseHeader({ caseData }: CaseHeaderProps) {
           backgroundColor={statusColors.background}
           accessibilityLabel={t(`status.${caseData.status}`)}
         />
+        {caseData.marked_unresponsive && (
+          <>
+            <View style={styles.badgeSpacer} />
+            <Badge
+              label={t('case.unresponsiveBadge')}
+              color={colors.warning}
+              backgroundColor={colors.warningBackground}
+              accessibilityLabel={t('case.unresponsiveBadge')}
+            />
+          </>
+        )}
       </View>
 
       {/* Animal type */}

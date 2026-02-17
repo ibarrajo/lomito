@@ -1,16 +1,18 @@
 /**
  * Review Actions
- * Handles moderation action dialogs (verify/reject/flag)
+ * Handles moderation action dialogs (verify/reject/flag/reopen)
  */
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { supabase } from '../../lib/supabase';
 import { useCaseActions } from '../../hooks/use-case-actions';
 
 interface UseReviewActionsResult {
   handleVerify: (caseId: string) => void;
   handleReject: (caseId: string) => void;
   handleFlag: (caseId: string) => void;
+  handleReopen: (caseId: string) => void;
   loading: boolean;
   error: string | null;
   modal: { title: string; message: string; onDismiss?: () => void } | null;
@@ -28,13 +30,16 @@ interface UseReviewActionsResult {
   setConfirmFlag: (confirm: { caseId: string } | null) => void;
   confirmVerifyAction: () => Promise<void>;
   confirmFlagAction: () => Promise<void>;
+  confirmReopen: { caseId: string } | null;
+  setConfirmReopen: (confirm: { caseId: string } | null) => void;
+  confirmReopenAction: () => Promise<void>;
 }
 
 export function useReviewActions(
   onSuccess?: () => void,
 ): UseReviewActionsResult {
   const { t } = useTranslation();
-  const { updateCaseStatus, rejectCase, flagCase, loading, error } =
+  const { updateCaseStatus, rejectCase, reopenCase, loading, error } =
     useCaseActions();
   const [modal, setModal] = useState<{
     title: string;
@@ -51,6 +56,9 @@ export function useReviewActions(
   const [confirmFlag, setConfirmFlag] = useState<{ caseId: string } | null>(
     null,
   );
+  const [confirmReopen, setConfirmReopen] = useState<{
+    caseId: string;
+  } | null>(null);
 
   function handleVerify(caseId: string): void {
     setConfirmVerify({ caseId });
@@ -111,7 +119,23 @@ export function useReviewActions(
     if (!confirmFlag) return;
 
     try {
-      await flagCase(confirmFlag.caseId);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      const { error: insertError } = await supabase.from('case_flags').insert({
+        case_id: confirmFlag.caseId,
+        reporter_id: user.id,
+        reason: 'moderation_flag',
+      } as never);
+
+      if (insertError) {
+        throw insertError;
+      }
+
       setConfirmFlag(null);
       setModal({
         title: t('common.done'),
@@ -127,10 +151,35 @@ export function useReviewActions(
     }
   }
 
+  function handleReopen(caseId: string): void {
+    setConfirmReopen({ caseId });
+  }
+
+  async function confirmReopenAction(): Promise<void> {
+    if (!confirmReopen) return;
+
+    try {
+      await reopenCase(confirmReopen.caseId);
+      setConfirmReopen(null);
+      setModal({
+        title: t('common.done'),
+        message: t('moderation.reopenSuccess'),
+      });
+      onSuccess?.();
+    } catch (err) {
+      setConfirmReopen(null);
+      setModal({
+        title: t('common.error'),
+        message: t('moderation.actionError'),
+      });
+    }
+  }
+
   return {
     handleVerify,
     handleReject,
     handleFlag,
+    handleReopen,
     loading,
     error,
     modal,
@@ -146,5 +195,8 @@ export function useReviewActions(
     setConfirmFlag,
     confirmVerifyAction,
     confirmFlagAction,
+    confirmReopen,
+    setConfirmReopen,
+    confirmReopenAction,
   };
 }
