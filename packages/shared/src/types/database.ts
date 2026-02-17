@@ -216,6 +216,14 @@ export interface Donation {
   created_at: string;
 }
 
+export interface CaseComment {
+  id: string;
+  case_id: string;
+  author_id: string;
+  body: string;
+  created_at: string;
+}
+
 export interface CaseFlag {
   id: string;
   case_id: string;
@@ -398,6 +406,15 @@ export interface Database {
           payment_url?: string | null;
         };
         Update: Partial<Omit<Donation, 'id' | 'created_at'>>;
+        Relationships: [];
+      };
+      case_comments: {
+        Row: CaseComment & Record<string, unknown>;
+        Insert: Omit<CaseComment, 'id' | 'created_at'> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: never;
         Relationships: [];
       };
       case_flags: {

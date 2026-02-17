@@ -4,7 +4,14 @@
  */
 
 import { useState } from 'react';
-import { View, StyleSheet, Pressable, Platform, TextInput } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  Platform,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +31,27 @@ import {
 } from '@lomito/ui/theme/tokens';
 import { isFeatureEnabled } from '@lomito/shared';
 import { accessToken } from '../../lib/mapbox';
+import { useCaseComments } from '../../hooks/use-case-comments';
+
+/**
+ * Converts an ISO date string to a short relative time label.
+ * Examples: "3m ago", "2h ago", "5d ago"
+ */
+function formatRelativeTime(isoDate: string): string {
+  const now = Date.now();
+  const then = new Date(isoDate).getTime();
+  const diffMs = now - then;
+  const diffMinutes = Math.floor(diffMs / 60_000);
+  if (diffMinutes < 60) {
+    return `${Math.max(diffMinutes, 1)}m ago`;
+  }
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) {
+    return `${diffHours}h ago`;
+  }
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays}d ago`;
+}
 
 interface CaseSidebarProps {
   latitude: number;
@@ -51,13 +79,12 @@ export function CaseSidebar({
   const [commentText, setCommentText] = useState('');
   const [linkCopied, setLinkCopied] = useState(false);
 
-  // Mock comments data (UI only for now)
-  const comments: Array<{
-    id: string;
-    author: string;
-    text: string;
-    timestamp: string;
-  }> = [];
+  const {
+    comments,
+    loading: commentsLoading,
+    posting,
+    postComment,
+  } = useCaseComments(caseId);
 
   // Mock donation data (UI only for now)
   const donationGoal = 2500;
@@ -98,9 +125,9 @@ export function CaseSidebar({
     }
   };
 
-  const handlePostComment = () => {
+  const handlePostComment = async () => {
     if (commentText.trim()) {
-      // TODO: Implement backend comment posting
+      await postComment(commentText);
       setCommentText('');
     }
   };
@@ -110,7 +137,11 @@ export function CaseSidebar({
       {/* Community Discussion Card */}
       <View style={styles.card}>
         <H3 style={styles.cardTitle}>{t('case.communityDiscussion')}</H3>
-        {comments.length === 0 ? (
+        {commentsLoading ? (
+          <View style={styles.noComments}>
+            <ActivityIndicator color={colors.primary} />
+          </View>
+        ) : comments.length === 0 ? (
           <View style={styles.noComments}>
             <Caption color={colors.neutral500}>{t('case.noComments')}</Caption>
             <BodySmall color={colors.neutral400} style={styles.beFirstText}>
@@ -123,12 +154,14 @@ export function CaseSidebar({
               <View key={comment.id} style={styles.commentItem}>
                 <View style={styles.commentAvatar} />
                 <View style={styles.commentContent}>
-                  <Body style={styles.commentAuthor}>{comment.author}</Body>
+                  <Body style={styles.commentAuthor}>
+                    {comment.author.full_name ?? t('common.user')}
+                  </Body>
                   <BodySmall color={colors.neutral700}>
-                    {comment.text}
+                    {comment.body}
                   </BodySmall>
                   <Caption color={colors.neutral400} style={styles.commentTime}>
-                    {comment.timestamp}
+                    {formatRelativeTime(comment.created_at)}
                   </Caption>
                 </View>
               </View>
@@ -150,17 +183,19 @@ export function CaseSidebar({
             <Pressable
               style={[
                 styles.sendButton,
-                !commentText.trim() && styles.sendButtonDisabled,
+                (!commentText.trim() || posting) && styles.sendButtonDisabled,
               ]}
               onPress={handlePostComment}
-              disabled={!commentText.trim()}
+              disabled={!commentText.trim() || posting}
               accessibilityLabel={t('case.postComment')}
               accessibilityRole="button"
             >
               <Send
                 size={18}
                 color={
-                  commentText.trim() ? colors.secondary : colors.neutral400
+                  commentText.trim() && !posting
+                    ? colors.secondary
+                    : colors.neutral400
                 }
                 strokeWidth={1.5}
               />

@@ -158,6 +158,7 @@ export default function NewReportScreen() {
       }
 
       // Subscribe user to case follow-up updates if opted in
+      // The DB trigger may already auto-subscribe the reporter, so use upsert
       if (followUp) {
         const {
           data: { user: currentUser },
@@ -165,7 +166,9 @@ export default function NewReportScreen() {
         if (currentUser) {
           await supabase
             .from('case_subscriptions')
-            .insert({ user_id: currentUser.id, case_id: newCaseId } as never);
+            .upsert({ user_id: currentUser.id, case_id: newCaseId } as never, {
+              onConflict: 'user_id,case_id',
+            });
         }
       }
 
