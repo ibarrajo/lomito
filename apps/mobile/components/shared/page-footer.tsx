@@ -1,20 +1,33 @@
+import { useState, useCallback, useRef } from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   Text,
   Platform,
-  Linking,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Facebook, Twitter, Instagram } from 'lucide-react-native';
-import { colors, spacing, iconSizes } from '@lomito/ui/src/theme/tokens';
+import { Facebook, Instagram } from 'lucide-react-native';
+import {
+  colors,
+  spacing,
+  iconSizes,
+  borderRadius,
+} from '@lomito/ui/src/theme/tokens';
 import { BodySmall } from '@lomito/ui';
 
 export function PageFooter() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  const tooltipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showTooltip = useCallback((key: string) => {
+    setActiveTooltip(key);
+    if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
+    tooltipTimerRef.current = setTimeout(() => setActiveTooltip(null), 2000);
+  }, []);
 
   if (Platform.OS !== 'web') return null;
 
@@ -98,39 +111,70 @@ export function PageFooter() {
 
       {/* Social Media Icons */}
       <View style={styles.socialRow}>
-        <TouchableOpacity
-          onPress={() => Linking.openURL('https://facebook.com/lomito.org')}
-          accessibilityLabel="Facebook"
-          accessibilityRole="link"
-        >
-          <Facebook
-            size={iconSizes.default}
-            color={colors.neutral400}
-            strokeWidth={1.5}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => Linking.openURL('https://twitter.com/lomito_org')}
-          accessibilityLabel="Twitter"
-          accessibilityRole="link"
-        >
-          <Twitter
-            size={iconSizes.default}
-            color={colors.neutral400}
-            strokeWidth={1.5}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => Linking.openURL('https://instagram.com/lomito.org')}
-          accessibilityLabel="Instagram"
-          accessibilityRole="link"
-        >
-          <Instagram
-            size={iconSizes.default}
-            color={colors.neutral400}
-            strokeWidth={1.5}
-          />
-        </TouchableOpacity>
+        <View style={styles.socialIconWrapper}>
+          {activeTooltip === 'facebook' && (
+            <View style={styles.tooltip}>
+              <Text style={styles.tooltipText}>
+                {t('landing.socialComingSoon')}
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity
+            onPress={() => showTooltip('facebook')}
+            accessibilityLabel="Facebook"
+            accessibilityRole="button"
+          >
+            <Facebook
+              size={iconSizes.default}
+              color={colors.neutral400}
+              strokeWidth={1.5}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.socialIconWrapper}>
+          {activeTooltip === 'x' && (
+            <View style={styles.tooltip}>
+              <Text style={styles.tooltipText}>
+                {t('landing.socialComingSoon')}
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity
+            onPress={() => showTooltip('x')}
+            accessibilityLabel="X"
+            accessibilityRole="button"
+          >
+            <Text
+              style={{
+                fontSize: iconSizes.default,
+                fontWeight: '800',
+                color: colors.neutral400,
+              }}
+            >
+              {'𝕏'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.socialIconWrapper}>
+          {activeTooltip === 'instagram' && (
+            <View style={styles.tooltip}>
+              <Text style={styles.tooltipText}>
+                {t('landing.socialComingSoon')}
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity
+            onPress={() => showTooltip('instagram')}
+            accessibilityLabel="Instagram"
+            accessibilityRole="button"
+          >
+            <Instagram
+              size={iconSizes.default}
+              color={colors.neutral400}
+              strokeWidth={1.5}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Bottom Bar: Copyright + Language Toggle */}
@@ -210,6 +254,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: spacing.xs,
   },
+  socialIconWrapper: {
+    alignItems: 'center',
+    position: 'relative',
+  },
   socialRow: {
     alignItems: 'center',
     alignSelf: 'center',
@@ -226,5 +274,21 @@ const styles = StyleSheet.create({
   tagline: {
     color: colors.neutral500,
     fontSize: 14,
+  },
+  tooltip: {
+    backgroundColor: colors.secondary,
+    borderRadius: borderRadius.tag,
+    bottom: '100%' as unknown as number,
+    left: '50%' as unknown as number,
+    marginBottom: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    position: 'absolute',
+    transform: [{ translateX: '-50%' as unknown as number }],
+  },
+  tooltipText: {
+    color: colors.white,
+    fontSize: 11,
+    fontWeight: '600',
   },
 });

@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Database, Clock, Users } from 'lucide-react-native';
+import { Globe, Clock, Users } from 'lucide-react-native';
 import { H2, H3, Body } from '@lomito/ui/src/components/typography';
 import {
   colors,
@@ -16,7 +16,7 @@ export function TransparencySection() {
 
   const features = [
     {
-      icon: Database,
+      icon: Globe,
       title: t('landing.openSourceDataTitle'),
       description: t('landing.openSourceDataDesc'),
     },
