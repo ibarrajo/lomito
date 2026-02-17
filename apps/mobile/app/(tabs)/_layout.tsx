@@ -24,7 +24,7 @@ export default function TabLayout() {
     profile?.role === 'government' || profile?.role === 'admin';
 
   const hideTabBar = Platform.OS === 'web' && isDesktop;
-  const compactLabels = Platform.OS === 'web' && isTablet;
+  const compactLabels = isTablet || (Platform.OS !== 'web' && !isDesktop);
 
   return (
     <Tabs

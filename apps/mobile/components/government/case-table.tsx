@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    minWidth: 720,
+    minWidth: 900,
   },
   expiration: {
     color: colors.neutral700,

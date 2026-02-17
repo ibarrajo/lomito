@@ -146,7 +146,7 @@ export function NeighborhoodWatch() {
   const { cases, loading, error } = useSubscribedCases();
 
   const handleBrowseCases = () => {
-    router.push('/(tabs)/map');
+    router.push('/(tabs)');
   };
 
   if (loading) {
