@@ -17,4 +17,6 @@ export const TIJUANA_CENTER = {
 
 export const DEFAULT_ZOOM = 12;
 
+export const STREET_STYLE_URL = 'mapbox://styles/mapbox/streets-v12';
+
 export default mapboxgl;
