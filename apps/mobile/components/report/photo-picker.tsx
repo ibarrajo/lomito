@@ -38,11 +38,12 @@ export function PhotoPicker({ onImagesChange }: PhotoPickerProps) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   // Notify parent of image changes
+  const onImagesChangeRef = useRef(onImagesChange);
+  onImagesChangeRef.current = onImagesChange;
+
   React.useEffect(() => {
-    if (onImagesChange) {
-      onImagesChange(images.map((img) => img.uri));
-    }
-  }, [images, onImagesChange]);
+    onImagesChangeRef.current?.(images.map((img) => img.uri));
+  }, [images]);
 
   const handleAddPhoto = () => {
     // On web, go directly to gallery (no bottom sheet support)

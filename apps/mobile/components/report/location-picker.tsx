@@ -4,7 +4,7 @@
  */
 
 import { View, StyleSheet, Platform } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MapboxGL, {
   TIJUANA_CENTER,
@@ -24,12 +24,19 @@ export function LocationPicker({
   onLocationChange,
 }: LocationPickerProps) {
   const { t } = useTranslation();
-  const [currentLocation, setCurrentLocation] = useState(
-    location || {
-      latitude: TIJUANA_CENTER.latitude,
-      longitude: TIJUANA_CENTER.longitude,
-    },
-  );
+  const initialLocation = location || {
+    latitude: TIJUANA_CENTER.latitude,
+    longitude: TIJUANA_CENTER.longitude,
+  };
+  const [currentLocation, setCurrentLocation] = useState(initialLocation);
+  const onLocationChangeRef = useRef(onLocationChange);
+  onLocationChangeRef.current = onLocationChange;
+
+  // Set initial location on mount so Next button is enabled immediately
+  useEffect(() => {
+    onLocationChangeRef.current(initialLocation);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleRegionDidChange = async () => {
     // In the real implementation, we would extract the center coordinate from the region change event

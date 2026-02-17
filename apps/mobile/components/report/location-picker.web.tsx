@@ -55,6 +55,11 @@ export function LocationPicker({
 
     mapRef.current = map;
 
+    map.on('load', () => {
+      // Set initial location immediately so Next button is enabled
+      onLocationChangeRef.current(initialLocation);
+    });
+
     map.on('moveend', () => {
       const center = map.getCenter();
       const newLocation = {
@@ -77,6 +82,7 @@ export function LocationPicker({
       map.remove();
       mapRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasToken, initialLocation.latitude, initialLocation.longitude]);
 
   // Update map center when location prop changes externally
