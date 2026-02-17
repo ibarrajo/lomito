@@ -23,7 +23,9 @@
     "eas:build:android": "cd apps/mobile && eas build --profile production --platform android",
     "eas:submit:ios": "cd apps/mobile && eas submit --platform ios",
     "eas:submit:android": "cd apps/mobile && eas submit --platform android",
-    "eas:update": "cd apps/mobile && eas update"
+    "eas:update": "cd apps/mobile && eas update",
+    "deploy": "npm run build:web && npx wrangler pages deploy --project-name lomito --branch main --commit-dirty=true",
+    "deploy:preview": "npm run build:web && npx wrangler pages deploy --project-name lomito --branch preview --commit-dirty=true"
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.16",

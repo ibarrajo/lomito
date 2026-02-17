@@ -1,0 +1,6 @@
+# Cloudflare Pages configuration for Lomito web app
+# https://developers.cloudflare.com/pages/configuration/wrangler-configuration/
+
+name = "lomito"
+compatibility_date = "2025-02-17"
+pages_build_output_dir = "apps/mobile/dist"
