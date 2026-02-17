@@ -48,12 +48,6 @@
       "expo-router",
       "expo-font",
       [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "Lomito needs your location to show animal welfare cases near you and to automatically detect your jurisdiction when submitting a report."
-        }
-      ],
-      [
         "expo-image-picker",
         {
           "photosPermission": "Lomito needs access to your photo library to attach photos to your reports.",
