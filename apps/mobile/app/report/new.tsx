@@ -3,7 +3,7 @@
  * Multi-step form for creating a new case report.
  */
 
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -176,7 +176,6 @@ export default function NewReportScreen() {
     } catch (err) {
       const message = resolveSubmitErrorMessage(err);
       setSubmitError(message);
-      Alert.alert(t('report.submitError'), message);
     }
   };
 
@@ -340,7 +339,7 @@ export default function NewReportScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       {/* Header */}
       <View style={styles.header}>
         <StepProgressBar
