@@ -203,6 +203,8 @@ export default function RegisterScreen() {
               accessibilityLabel={t('auth.password')}
               secureTextEntry
               autoCapitalize="none"
+              autoComplete="new-password"
+              textContentType="newPassword"
             />
 
             {/* Privacy and terms checkboxes */}
