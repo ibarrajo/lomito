@@ -57,7 +57,16 @@ function RootLayoutNav() {
     const inAuthGroup = currentSegment === 'auth';
 
     // Routes accessible without authentication
-    const publicRoutes = ['(public)', 'auth', 'about', 'donate', 'legal'];
+    const publicRoutes = [
+      '(public)',
+      'auth',
+      'about',
+      'donate',
+      'legal',
+      'impact',
+      'authority',
+      'case',
+    ];
     const inPublicRoute = publicRoutes.includes(currentSegment);
 
     // Special case: treat root '/' as public route (resolves to (public)/index)
@@ -65,18 +74,24 @@ function RootLayoutNav() {
     const shouldTreatAsPublic = inPublicRoute || isRootPath;
 
     if (!session && !shouldTreatAsPublic) {
-      // Redirect unauthenticated users to login
-      router.replace('/auth/login');
+      // Redirect unauthenticated users to login (prevent loop)
+      if (pathname !== '/auth/login') {
+        router.replace('/auth/login');
+      }
     } else if (session && inAuthGroup) {
-      // Redirect to main app if authenticated
-      router.replace('/(tabs)');
+      // Redirect to main app if authenticated (prevent loop)
+      if (pathname !== '/' && !pathname.startsWith('/(tabs)')) {
+        router.replace('/(tabs)');
+      }
     } else if (
       session &&
       currentSegment === '(public)' &&
       Platform.OS === 'web'
     ) {
-      // Redirect authenticated users away from public landing on web
-      router.replace('/(tabs)');
+      // Redirect authenticated users away from public landing on web (prevent loop)
+      if (!pathname.startsWith('/(tabs)')) {
+        router.replace('/(tabs)');
+      }
     }
   }, [session, isReady, segments, router, pathname]);
 

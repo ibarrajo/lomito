@@ -49,6 +49,7 @@ import {
 } from '@lomito/ui/src/theme/tokens';
 import { useUserProfile } from '../../hooks/use-user-profile';
 import { useAuth } from '../../hooks/use-auth';
+import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { isFeatureEnabled } from '@lomito/shared';
 
 export function WebNavbar() {
@@ -57,12 +58,16 @@ export function WebNavbar() {
   const { t, i18n } = useTranslation();
   const { profile, loading } = useUserProfile();
   const { signOut } = useAuth();
+  const { width } = useBreakpoint();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const isModerator =
     profile?.role === 'moderator' || profile?.role === 'admin';
   const isGovernment =
     profile?.role === 'government' || profile?.role === 'admin';
+
+  // Hide labels below wide breakpoint (1440px) to prevent overflow
+  const showLabels = width >= 1440;
 
   // Close dropdown when navigating
   useEffect(() => {
@@ -109,11 +114,13 @@ export function WebNavbar() {
       >
         <View style={styles.navLinkContent}>
           {icon}
-          <Text
-            style={[styles.navLinkText, isActive && styles.navLinkTextActive]}
-          >
-            {label}
-          </Text>
+          {showLabels && (
+            <Text
+              style={[styles.navLinkText, isActive && styles.navLinkTextActive]}
+            >
+              {label}
+            </Text>
+          )}
         </View>
         {isActive && <View style={styles.activeIndicator} />}
       </TouchableOpacity>
@@ -351,7 +358,9 @@ export function WebNavbar() {
               color={colors.secondary}
               strokeWidth={2}
             />
-            <Text style={styles.ctaButtonText}>{t('report.newReport')}</Text>
+            {showLabels && (
+              <Text style={styles.ctaButtonText}>{t('report.newReport')}</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -364,9 +373,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     bottom: 0,
     height: 2,
-    left: spacing.md,
+    left: spacing.xs,
     position: 'absolute',
-    right: spacing.md,
+    right: spacing.xs,
   },
   avatar: {
     alignItems: 'center',
