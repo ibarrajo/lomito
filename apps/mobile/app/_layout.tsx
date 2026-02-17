@@ -81,7 +81,20 @@ function RootLayoutNav() {
 
     // Special case: treat root '/' as public route (resolves to (public)/index)
     const isRootPath = pathname === '/' || pathname === '/(public)';
-    const shouldTreatAsPublic = inPublicRoute || isRootPath;
+
+    // Pathname-based public path check: guards against transient segment
+    // mismatches on web during hydration (e.g. segments briefly resolving to
+    // a different route before settling on the correct deep-link target).
+    // Case detail pages are always publicly accessible — anyone can view a case.
+    const isPublicPathname =
+      pathname.startsWith('/case/') ||
+      pathname.startsWith('/about') ||
+      pathname.startsWith('/donate') ||
+      pathname.startsWith('/legal/') ||
+      pathname.startsWith('/impact') ||
+      pathname.startsWith('/authority/');
+
+    const shouldTreatAsPublic = inPublicRoute || isRootPath || isPublicPathname;
 
     if (!session && !shouldTreatAsPublic) {
       // Redirect unauthenticated users to login (prevent loop).
@@ -101,21 +114,21 @@ function RootLayoutNav() {
     }
   }, [session, isReady, segments, router, pathname]);
 
-  if (!isReady) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Skeleton width="100%" height={60} style={styles.skeletonTop} />
-        <Skeleton width="90%" height={40} style={styles.skeletonItem} />
-        <Skeleton width="85%" height={40} style={styles.skeletonItem} />
-        <Skeleton width="92%" height={40} style={styles.skeletonItem} />
-        <Skeleton width="88%" height={40} style={styles.skeletonItem} />
-      </View>
-    );
-  }
-
+  // Always render the Stack so Expo Router preserves the initial URL on web.
+  // Conditionally rendering (returning skeleton instead of Stack) causes Expo
+  // Router to lose the deep-link URL when the Stack mounts for the first time.
   return (
     <AppShell>
       <StatusBar style="auto" />
+      {!isReady && (
+        <View style={[styles.loadingContainer, styles.loadingOverlay]}>
+          <Skeleton width="100%" height={60} style={styles.skeletonTop} />
+          <Skeleton width="90%" height={40} style={styles.skeletonItem} />
+          <Skeleton width="85%" height={40} style={styles.skeletonItem} />
+          <Skeleton width="92%" height={40} style={styles.skeletonItem} />
+          <Skeleton width="88%" height={40} style={styles.skeletonItem} />
+        </View>
+      )}
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(public)" />
         <Stack.Screen name="auth/login" />
@@ -172,6 +185,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: spacing.md,
+  },
+  loadingOverlay: {
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 100,
   },
   skeletonItem: {
     marginBottom: spacing.md,

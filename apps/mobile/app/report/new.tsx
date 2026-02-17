@@ -157,18 +157,26 @@ export default function NewReportScreen() {
         await uploadCaseImages(newCaseId, formData.photos);
       }
 
-      // Subscribe user to case follow-up updates if opted in
-      // The DB trigger may already auto-subscribe the reporter, so use upsert
+      // Subscribe user to case follow-up updates if opted in.
+      // The DB trigger may already auto-subscribe the reporter, so use upsert.
+      // Wrap in try-catch: if the subscription already exists and the UPDATE
+      // policy is missing (e.g. before migration runs), the error is non-critical
+      // because the subscription is already in place.
       if (followUp) {
-        const {
-          data: { user: currentUser },
-        } = await supabase.auth.getUser();
-        if (currentUser) {
-          await supabase
-            .from('case_subscriptions')
-            .upsert({ user_id: currentUser.id, case_id: newCaseId } as never, {
-              onConflict: 'user_id,case_id',
-            });
+        try {
+          const {
+            data: { user: currentUser },
+          } = await supabase.auth.getUser();
+          if (currentUser) {
+            await supabase
+              .from('case_subscriptions')
+              .upsert(
+                { user_id: currentUser.id, case_id: newCaseId } as never,
+                { onConflict: 'user_id,case_id' },
+              );
+          }
+        } catch {
+          // Subscription already exists (created by DB trigger). Non-critical.
         }
       }
 
