@@ -258,6 +258,7 @@ export default function CaseDetailScreen() {
             <CaseSidebar
               latitude={latitude}
               longitude={longitude}
+              locationNotes={caseData.location_notes}
               isSubscribed={isSubscribed}
               subscriptionLoading={subscriptionLoading}
               onSubscribeToggle={toggleSubscription}

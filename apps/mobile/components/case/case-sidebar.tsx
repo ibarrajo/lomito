@@ -5,9 +5,9 @@
 
 import { useState } from 'react';
 import { View, StyleSheet, Pressable, Platform, TextInput } from 'react-native';
+import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import {
-  MapPin,
   MessageCircle,
   Send,
   Twitter,
@@ -22,10 +22,12 @@ import {
   typography,
 } from '@lomito/ui/theme/tokens';
 import { isFeatureEnabled } from '@lomito/shared';
+import { accessToken } from '../../lib/mapbox';
 
 interface CaseSidebarProps {
   latitude: number;
   longitude: number;
+  locationNotes?: string | null;
   isSubscribed: boolean;
   subscriptionLoading: boolean;
   onSubscribeToggle: () => void;
@@ -35,6 +37,7 @@ interface CaseSidebarProps {
 export function CaseSidebar({
   latitude,
   longitude,
+  locationNotes,
   isSubscribed,
   subscriptionLoading,
   onSubscribeToggle,
@@ -203,12 +206,22 @@ export function CaseSidebar({
       {/* Location Card */}
       <View style={styles.card}>
         <H3 style={styles.cardTitle}>{t('case.location')}</H3>
-        <View style={styles.mapPlaceholder}>
-          <MapPin size={32} color={colors.neutral400} strokeWidth={1.5} />
-          <Caption color={colors.neutral500} style={styles.mapLabel}>
-            {latitude.toFixed(6)}, {longitude.toFixed(6)}
-          </Caption>
-        </View>
+        <Image
+          source={{
+            uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/pin-s+13ECC8(${longitude},${latitude})/${longitude},${latitude},14/400x200@2x?access_token=${accessToken}`,
+          }}
+          style={styles.staticMap}
+          contentFit="cover"
+          accessibilityLabel={t('case.staticMapAlt')}
+        />
+        {locationNotes ? (
+          <BodySmall color={colors.neutral700} style={styles.locationNotesText}>
+            {t('case.locationNotes')}: {locationNotes}
+          </BodySmall>
+        ) : null}
+        <Caption color={colors.neutral500} style={styles.mapCoordinates}>
+          {latitude.toFixed(6)}, {longitude.toFixed(6)}
+        </Caption>
       </View>
 
       {/* Share Card */}
@@ -355,16 +368,11 @@ const styles = StyleSheet.create({
   donationStats: {
     marginBottom: spacing.md,
   },
-  mapLabel: {
+  locationNotesText: {
     marginTop: spacing.sm,
   },
-  mapPlaceholder: {
-    alignItems: 'center',
-    backgroundColor: colors.neutral100,
-    borderRadius: borderRadius.card,
-    height: 200,
-    justifyContent: 'center',
-    width: '100%',
+  mapCoordinates: {
+    marginTop: spacing.xs,
   },
   noComments: {
     alignItems: 'center',
@@ -406,6 +414,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
+  },
+  staticMap: {
+    borderRadius: borderRadius.card,
+    height: 200,
+    width: '100%',
   },
   subscribeButton: {
     alignItems: 'center',

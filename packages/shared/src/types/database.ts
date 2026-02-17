@@ -160,6 +160,7 @@ export interface Case {
   animal_type: AnimalType;
   description: string;
   location: { type: 'Point'; coordinates: [number, number] };
+  location_notes: string | null;
   jurisdiction_id: string | null;
   urgency: UrgencyLevel;
   status: CaseStatus;
@@ -170,6 +171,7 @@ export interface Case {
   escalation_reminder_count: number;
   marked_unresponsive: boolean;
   government_response_at: string | null;
+  incident_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -283,6 +285,7 @@ export interface Database {
         Insert: Omit<
           Case,
           | 'id'
+          | 'location_notes'
           | 'jurisdiction_id'
           | 'status'
           | 'flag_count'
@@ -292,10 +295,12 @@ export interface Database {
           | 'escalation_reminder_count'
           | 'marked_unresponsive'
           | 'government_response_at'
+          | 'incident_at'
           | 'created_at'
           | 'updated_at'
         > & {
           id?: string;
+          location_notes?: string | null;
           jurisdiction_id?: string | null;
           status?: CaseStatus;
           flag_count?: number;
@@ -305,6 +310,7 @@ export interface Database {
           escalation_reminder_count?: number;
           marked_unresponsive?: boolean;
           government_response_at?: string | null;
+          incident_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -313,6 +319,7 @@ export interface Database {
           animal_type?: AnimalType;
           description?: string;
           location?: { type: 'Point'; coordinates: [number, number] };
+          location_notes?: string | null;
           jurisdiction_id?: string | null;
           urgency?: UrgencyLevel;
           status?: CaseStatus;
@@ -323,6 +330,7 @@ export interface Database {
           escalation_reminder_count?: number;
           marked_unresponsive?: boolean;
           government_response_at?: string | null;
+          incident_at?: string | null;
           updated_at?: string;
         };
       };

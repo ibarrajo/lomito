@@ -33,12 +33,19 @@ export function LocationPicker({
   const onLocationChangeRef = useRef(onLocationChange);
   const hasToken = Boolean(mapboxgl.accessToken);
 
-  const initialLocation = location || {
-    latitude: TIJUANA_CENTER.latitude,
-    longitude: TIJUANA_CENTER.longitude,
-  };
+  // Store initial location in a ref so it stays stable across re-renders.
+  // Using a ref prevents the map creation effect from re-running when the
+  // parent updates its location state in response to map events.
+  const initialLocationRef = useRef(
+    location || {
+      latitude: TIJUANA_CENTER.latitude,
+      longitude: TIJUANA_CENTER.longitude,
+    },
+  );
 
-  const [currentLocation, setCurrentLocation] = useState(initialLocation);
+  const [currentLocation, setCurrentLocation] = useState(
+    initialLocationRef.current,
+  );
 
   // Keep ref up to date
   onLocationChangeRef.current = onLocationChange;
@@ -46,10 +53,12 @@ export function LocationPicker({
   useEffect(() => {
     if (!hasToken || !mapContainerRef.current || mapRef.current) return;
 
+    const initLoc = initialLocationRef.current;
+
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: STREET_STYLE_URL,
-      center: [initialLocation.longitude, initialLocation.latitude],
+      center: [initLoc.longitude, initLoc.latitude],
       zoom: DEFAULT_ZOOM,
     });
 
@@ -57,7 +66,7 @@ export function LocationPicker({
 
     map.on('load', () => {
       // Set initial location immediately so Next button is enabled
-      onLocationChangeRef.current(initialLocation);
+      onLocationChangeRef.current(initLoc);
     });
 
     map.on('moveend', () => {
@@ -82,8 +91,9 @@ export function LocationPicker({
       map.remove();
       mapRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasToken, initialLocation.latitude, initialLocation.longitude]);
+    // Only depend on hasToken — map should be created once on mount.
+    // Initial location is captured in initialLocationRef to avoid re-runs.
+  }, [hasToken]);
 
   // Update map center when location prop changes externally
   useEffect(() => {
@@ -117,11 +127,12 @@ export function LocationPicker({
       <View style={styles.mapContainer}>
         <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
 
-        {/* Center pin overlay */}
+        {/* Center crosshair pin overlay */}
         <div style={pinOverlayStyle}>
           <div style={pinStyle}>
-            <div style={pinHeadStyle} />
-            <div style={pinTailStyle} />
+            <div style={crosshairHStyle} />
+            <div style={crosshairVStyle} />
+            <div style={pinCenterStyle} />
           </div>
         </div>
       </View>
@@ -159,7 +170,7 @@ const styles = StyleSheet.create({
   },
 });
 
-// CSS-in-JS for the pin (DOM-only styles)
+// CSS-in-JS for the crosshair pin (DOM-only styles)
 const pinOverlayStyle: React.CSSProperties = {
   position: 'absolute',
   top: 0,
@@ -174,25 +185,36 @@ const pinOverlayStyle: React.CSSProperties = {
 
 const pinStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'column',
   alignItems: 'center',
-  width: '30px',
+  justifyContent: 'center',
+  width: '40px',
   height: '40px',
+  position: 'relative',
 };
 
-const pinHeadStyle: React.CSSProperties = {
-  width: '30px',
-  height: '30px',
+const pinCenterStyle: React.CSSProperties = {
+  width: '12px',
+  height: '12px',
   backgroundColor: colors.primary,
-  border: `3px solid ${colors.white}`,
-  borderRadius: '15px',
-  boxShadow: '0 2px 4px rgba(30, 41, 59, 0.3)',
+  borderRadius: '50%',
+  border: `2px solid ${colors.secondary}`,
+  boxShadow:
+    '0 0 0 2px rgba(19, 236, 200, 0.3), 0 2px 8px rgba(30, 41, 59, 0.4)',
+  position: 'absolute',
 };
 
-const pinTailStyle: React.CSSProperties = {
-  width: '10px',
-  height: '10px',
-  backgroundColor: colors.primary,
-  transform: 'rotate(45deg)',
-  marginTop: '-5px',
+const crosshairHStyle: React.CSSProperties = {
+  width: '40px',
+  height: '2px',
+  backgroundColor: colors.secondary,
+  opacity: 0.7,
+  position: 'absolute',
+};
+
+const crosshairVStyle: React.CSSProperties = {
+  width: '2px',
+  height: '40px',
+  backgroundColor: colors.secondary,
+  opacity: 0.7,
+  position: 'absolute',
 };

@@ -42,7 +42,7 @@ export function ReportSidebar() {
           color={colors.primary}
           strokeWidth={2}
         />
-        <BodySmall style={styles.badgeText} color={colors.primary}>
+        <BodySmall style={styles.badgeText} color={colors.secondary}>
           {t('report.sidebar.securityBadge')}
         </BodySmall>
       </View>

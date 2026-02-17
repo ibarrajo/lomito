@@ -9,11 +9,12 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  Switch,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { H3, Body, BodySmall, Caption, Button, Card, Badge } from '@lomito/ui';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { accessToken } from '../../lib/mapbox';
 import type {
   CaseCategory,
@@ -29,6 +30,7 @@ interface ReportFormData {
   description: string;
   urgency: UrgencyLevel;
   photos: string[];
+  incidentAt: string | null;
 }
 
 interface ReviewStepProps {
@@ -36,6 +38,9 @@ interface ReviewStepProps {
   onEdit: (step: number) => void;
   onSubmit: () => void;
   loading: boolean;
+  error: string | null;
+  followUp: boolean;
+  onFollowUpChange: (value: boolean) => void;
 }
 
 export function ReviewStep({
@@ -43,6 +48,9 @@ export function ReviewStep({
   onEdit,
   onSubmit,
   loading,
+  error,
+  followUp,
+  onFollowUpChange,
 }: ReviewStepProps) {
   const { t } = useTranslation();
 
@@ -85,6 +93,31 @@ export function ReviewStep({
   const buildStaticMapUrl = (lat: number, lng: number) => {
     const pin = `pin-s+13ECC8(${lng},${lat})`;
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${pin}/${lng},${lat},14/400x160@2x?access_token=${accessToken}`;
+  };
+
+  const formatIncidentDate = (isoString: string): string => {
+    const date = new Date(isoString);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const incidentDay = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+
+    if (incidentDay.getTime() === today.getTime()) {
+      return t('report.incidentToday');
+    }
+    if (incidentDay.getTime() === yesterday.getTime()) {
+      return t('report.incidentYesterday');
+    }
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   };
 
   return (
@@ -181,6 +214,16 @@ export function ReviewStep({
             accessibilityLabel={`${t('report.urgency')}: ${t(`urgency.${data.urgency}`)}`}
           />
         </View>
+        {data.incidentAt !== null && (
+          <View style={styles.incidentTimeRow}>
+            <BodySmall color={colors.neutral500}>
+              {t('report.incidentTime')}:
+            </BodySmall>
+            <BodySmall color={colors.neutral700}>
+              {formatIncidentDate(data.incidentAt)}
+            </BodySmall>
+          </View>
+        )}
       </Card>
 
       {/* Photos */}
@@ -228,6 +271,36 @@ export function ReviewStep({
         )}
       </Card>
 
+      {/* Follow-up opt-in */}
+      <View style={styles.followUpSection}>
+        <View style={styles.followUpRow}>
+          <View style={styles.followUpTextContainer}>
+            <Body>{t('report.followUpTitle')}</Body>
+            <Caption color={colors.neutral500}>
+              {t('report.followUpDescription')}
+            </Caption>
+          </View>
+          <Switch
+            value={followUp}
+            onValueChange={onFollowUpChange}
+            trackColor={{ false: colors.neutral200, true: colors.primary }}
+            thumbColor={colors.white}
+            accessibilityLabel={t('report.followUpTitle')}
+          />
+        </View>
+      </View>
+
+      {/* Submission error banner */}
+      {error !== null && (
+        <View
+          style={styles.errorBanner}
+          accessibilityRole="alert"
+          accessibilityLabel={error}
+        >
+          <BodySmall color={colors.error}>{error}</BodySmall>
+        </View>
+      )}
+
       {/* Submit Button */}
       <Button
         variant="primary"
@@ -267,6 +340,35 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   description: {
+    marginTop: spacing.sm,
+  },
+  errorBanner: {
+    backgroundColor: colors.errorBackground,
+    borderColor: colors.error,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  followUpRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  followUpSection: {
+    backgroundColor: colors.neutral100,
+    borderRadius: borderRadius.card,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  followUpTextContainer: {
+    flex: 1,
+    marginRight: spacing.md,
+  },
+  incidentTimeRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
     marginTop: spacing.sm,
   },
   loadingOverlay: {
@@ -312,7 +414,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   submitButton: {
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
   },
   urgencyRow: {
     alignItems: 'center',

@@ -3,13 +3,15 @@
  * Multi-step form for creating a new case report.
  */
 
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { H2, Body, Button, TextInput } from '@lomito/ui';
-import { colors, spacing } from '@lomito/ui/src/theme/tokens';
+import { Image } from 'expo-image';
+import { H2, Body, Button, TextInput, Caption } from '@lomito/ui';
+import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
+import { accessToken } from '../../lib/mapbox';
 import type {
   CaseCategory,
   AnimalType,
@@ -23,10 +25,12 @@ import { PhotoPicker } from '../../components/report/photo-picker';
 import { ReviewStep } from '../../components/report/review-step';
 import { ReportSidebar } from '../../components/report/report-sidebar';
 import { StepProgressBar } from '../../components/report/step-progress-bar';
+import { IncidentTimePicker } from '../../components/report/incident-time-picker';
 import { useCreateCase } from '../../hooks/use-create-case';
 import { useAnalytics } from '../../hooks/use-analytics';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { uploadCaseImages } from '../../lib/image-upload';
+import { supabase } from '../../lib/supabase';
 
 interface ReportFormData {
   category: CaseCategory | null;
@@ -36,16 +40,19 @@ interface ReportFormData {
   description: string;
   urgency: UrgencyLevel;
   photos: string[];
+  incidentAt: string | null;
 }
 
 export default function NewReportScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { createCase, loading } = useCreateCase();
+  const { createCase, loading, error } = useCreateCase();
   const { trackEvent } = useAnalytics();
   const { isDesktop } = useBreakpoint();
 
   const [currentStep, setCurrentStep] = useState(0);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [followUp, setFollowUp] = useState(true);
   const [formData, setFormData] = useState<ReportFormData>({
     category: null,
     animalType: null,
@@ -54,9 +61,17 @@ export default function NewReportScreen() {
     description: '',
     urgency: 'medium',
     photos: [],
+    incidentAt: null,
   });
 
   const scrollViewRef = useRef<ScrollView>(null);
+
+  // Sync hook error into local submitError state so ReviewStep can display it
+  useEffect(() => {
+    if (error !== null) {
+      setSubmitError(error);
+    }
+  }, [error]);
 
   // Auto-scroll to animal type picker when category is selected
   useEffect(() => {
@@ -111,10 +126,20 @@ export default function NewReportScreen() {
     }
   };
 
+  const resolveSubmitErrorMessage = (err: unknown): string => {
+    if (err instanceof Error && err.message === 'AUTH_REQUIRED') {
+      return t('report.submitAuthError');
+    }
+    return t('report.submitUnknownError');
+  };
+
   const handleSubmit = async () => {
     if (!formData.category || !formData.animalType || !formData.location) {
       return;
     }
+
+    // Clear any previous submit error before trying again
+    setSubmitError(null);
 
     try {
       const newCaseId = await createCase({
@@ -122,7 +147,9 @@ export default function NewReportScreen() {
         animal_type: formData.animalType,
         description: formData.description,
         location: formData.location,
+        location_notes: formData.locationNotes || undefined,
         urgency: formData.urgency,
+        incident_at: formData.incidentAt || undefined,
       });
 
       // Upload photos if any were added
@@ -130,13 +157,26 @@ export default function NewReportScreen() {
         await uploadCaseImages(newCaseId, formData.photos);
       }
 
+      // Subscribe user to case follow-up updates if opted in
+      if (followUp) {
+        const {
+          data: { user: currentUser },
+        } = await supabase.auth.getUser();
+        if (currentUser) {
+          await supabase
+            .from('case_subscriptions')
+            .insert({ user_id: currentUser.id, case_id: newCaseId } as never);
+        }
+      }
+
       trackEvent('report_submit');
 
       // Navigate back to the map
       router.back();
-    } catch (error) {
-      // Error handling is done in the hook
-      console.error('Failed to create case:', error);
+    } catch (err) {
+      const message = resolveSubmitErrorMessage(err);
+      setSubmitError(message);
+      Alert.alert(t('report.submitError'), message);
     }
   };
 
@@ -201,31 +241,73 @@ export default function NewReportScreen() {
 
       case 2:
         return (
-          <View style={styles.stepContent}>
-            <View style={styles.section}>
-              <TextInput
-                label={t('report.description')}
-                value={formData.description}
-                onChangeText={(description) =>
-                  setFormData({ ...formData, description })
-                }
-                placeholder={t('report.descriptionPlaceholder')}
-                accessibilityLabel={t('report.description')}
-                multiline
-                numberOfLines={9}
-                style={styles.textArea}
-              />
+          <View
+            style={[styles.stepContent, isDesktop && styles.stepContentDesktop]}
+          >
+            <View style={isDesktop ? styles.detailsFormDesktop : undefined}>
+              <View style={styles.section}>
+                <IncidentTimePicker
+                  value={formData.incidentAt}
+                  onChange={(incidentAt) =>
+                    setFormData({ ...formData, incidentAt })
+                  }
+                />
+              </View>
+
+              <View style={styles.section}>
+                <TextInput
+                  label={t('report.description')}
+                  value={formData.description}
+                  onChangeText={(description) =>
+                    setFormData({ ...formData, description })
+                  }
+                  placeholder={t('report.descriptionPlaceholder')}
+                  accessibilityLabel={t('report.description')}
+                  multiline
+                  numberOfLines={12}
+                  style={styles.textArea}
+                  textAlignVertical="top"
+                />
+                <Caption color={colors.neutral500} style={styles.charCount}>
+                  {formData.description.length} / 2000
+                </Caption>
+              </View>
+
+              <View style={styles.section}>
+                <Body style={styles.sectionLabel}>
+                  {t('report.selectUrgency')}
+                </Body>
+                <UrgencyPicker
+                  selected={formData.urgency}
+                  onSelect={(urgency) => setFormData({ ...formData, urgency })}
+                />
+              </View>
             </View>
 
-            <View style={styles.section}>
-              <Body style={styles.sectionLabel}>
-                {t('report.selectUrgency')}
-              </Body>
-              <UrgencyPicker
-                selected={formData.urgency}
-                onSelect={(urgency) => setFormData({ ...formData, urgency })}
-              />
-            </View>
+            {/* Desktop mini-map for location reference */}
+            {isDesktop && formData.location && (
+              <View style={styles.miniMapContainer}>
+                <Caption color={colors.neutral500} style={styles.miniMapLabel}>
+                  {t('report.locationReference')}
+                </Caption>
+                <Image
+                  source={{
+                    uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/pin-s+13ECC8(${formData.location.longitude},${formData.location.latitude})/${formData.location.longitude},${formData.location.latitude},15/300x300@2x?access_token=${accessToken}`,
+                  }}
+                  style={styles.miniMap}
+                  contentFit="cover"
+                  accessibilityLabel={t('report.staticMapAlt')}
+                />
+                {formData.locationNotes.length > 0 && (
+                  <Caption
+                    color={colors.neutral700}
+                    style={styles.miniMapNotes}
+                  >
+                    {formData.locationNotes}
+                  </Caption>
+                )}
+              </View>
+            )}
           </View>
         );
 
@@ -246,6 +328,9 @@ export default function NewReportScreen() {
             onEdit={handleEdit}
             onSubmit={handleSubmit}
             loading={loading}
+            error={submitError}
+            followUp={followUp}
+            onFollowUpChange={setFollowUp}
           />
         );
 
@@ -258,15 +343,6 @@ export default function NewReportScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <Pressable
-            onPress={handleBack}
-            accessibilityLabel={t('common.back')}
-            accessibilityRole="button"
-          >
-            <Body color={colors.secondary}>{t('common.back')}</Body>
-          </Pressable>
-        </View>
         <StepProgressBar
           steps={stepNames}
           currentStep={currentStep}
@@ -303,14 +379,27 @@ export default function NewReportScreen() {
           {/* Navigation Buttons (except on review step) */}
           {currentStep < 4 && (
             <View style={styles.footer}>
-              <Button
-                variant="primary"
-                onPress={handleNext}
-                disabled={!canProceedFromStep(currentStep)}
-                accessibilityLabel={t('common.next')}
-              >
-                {t('common.next')}
-              </Button>
+              <View style={styles.footerButtons}>
+                {currentStep > 0 && (
+                  <Button
+                    variant="secondary"
+                    onPress={handleBack}
+                    accessibilityLabel={t('common.back')}
+                    style={styles.footerButtonBack}
+                  >
+                    {t('common.back')}
+                  </Button>
+                )}
+                <Button
+                  variant="primary"
+                  onPress={handleNext}
+                  disabled={!canProceedFromStep(currentStep)}
+                  accessibilityLabel={t('common.next')}
+                  style={styles.footerButtonNext}
+                >
+                  {t('common.next')}
+                </Button>
+              </View>
             </View>
           )}
         </View>
@@ -320,6 +409,10 @@ export default function NewReportScreen() {
 }
 
 const styles = StyleSheet.create({
+  charCount: {
+    marginTop: spacing.xs,
+    textAlign: 'right',
+  },
   container: {
     backgroundColor: colors.white,
     flex: 1,
@@ -333,11 +426,24 @@ const styles = StyleSheet.create({
   contentMap: {
     flex: 1,
   },
+  detailsFormDesktop: {
+    flex: 3,
+  },
   footer: {
     backgroundColor: colors.white,
     borderTopColor: colors.neutral200,
     borderTopWidth: 1,
     padding: spacing.md,
+  },
+  footerButtonBack: {
+    flex: 1,
+  },
+  footerButtonNext: {
+    flex: 2,
+  },
+  footerButtons: {
+    flexDirection: 'row',
+    gap: spacing.md,
   },
   formContainer: {
     flex: 1,
@@ -351,12 +457,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.md,
-  },
-  headerTop: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: spacing.sm,
   },
   locationNotesStrip: {
     backgroundColor: colors.white,
@@ -376,6 +476,22 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     textAlign: 'center',
   },
+  miniMap: {
+    aspectRatio: 1,
+    borderRadius: borderRadius.card,
+    width: '100%',
+  },
+  miniMapContainer: {
+    flex: 2,
+    maxWidth: 350,
+  },
+  miniMapLabel: {
+    marginBottom: spacing.sm,
+  },
+  miniMapNotes: {
+    fontStyle: 'italic',
+    marginTop: spacing.sm,
+  },
   section: {
     marginBottom: spacing.lg,
   },
@@ -389,11 +505,16 @@ const styles = StyleSheet.create({
   stepContent: {
     padding: spacing.md,
   },
+  stepContentDesktop: {
+    flexDirection: 'row',
+    gap: spacing.xl,
+  },
   stepContentMap: {
     flex: 1,
   },
   textArea: {
-    height: 180,
+    height: 240,
+    textAlignVertical: 'top',
   },
   title: {
     marginTop: spacing.xs,

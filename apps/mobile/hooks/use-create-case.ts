@@ -16,7 +16,9 @@ interface CreateCaseInput {
   animal_type: AnimalType;
   description: string;
   location: { latitude: number; longitude: number };
+  location_notes?: string;
   urgency: UrgencyLevel;
+  incident_at?: string;
 }
 
 interface CreateCaseResult {
@@ -43,7 +45,9 @@ export function useCreateCase(): CreateCaseResult {
       } = await supabase.auth.getUser();
 
       if (authError || !user) {
-        throw new Error('You must be logged in to submit a report');
+        const err = new Error('AUTH_REQUIRED');
+        err.name = 'AuthError';
+        throw err;
       }
 
       // Convert location to PostGIS Point format (GeoJSON)
@@ -59,7 +63,9 @@ export function useCreateCase(): CreateCaseResult {
         animal_type: data.animal_type,
         description: data.description,
         location: locationPoint,
+        location_notes: data.location_notes ?? null,
         urgency: data.urgency,
+        incident_at: data.incident_at ?? null,
       };
 
       const { data: newCase, error: insertError } = (await supabase

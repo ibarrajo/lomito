@@ -1,10 +1,13 @@
 /**
- * Photo Picker Component
+ * Photo Picker Component (Native)
  * Grid-based photo picker for the report form with camera and gallery selection.
+ * Shows a bottom sheet to choose between camera and gallery.
+ *
+ * Web variant: photo-picker.web.tsx
  */
 
 import React, { useRef } from 'react';
-import { View, StyleSheet, Pressable, Platform } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { Image as ImageIcon, X } from 'lucide-react-native';
@@ -25,8 +28,8 @@ interface PhotoPickerProps {
 }
 
 /**
- * Photo picker component for selecting and managing photos in the report form.
- * - Supports camera and gallery selection
+ * Native photo picker component for selecting and managing photos in the report form.
+ * - Supports camera and gallery selection via bottom sheet
  * - Grid layout (2 columns)
  * - Max 5 photos
  * - Shows compression loading state
@@ -47,13 +50,6 @@ export function PhotoPicker({ onImagesChange, onSkip }: PhotoPickerProps) {
   }, [images]);
 
   const handleAddPhoto = () => {
-    // On web, go directly to gallery (no bottom sheet support)
-    if (Platform.OS === 'web') {
-      pickFromGallery();
-      return;
-    }
-
-    // On native, show bottom sheet
     bottomSheetRef.current?.present();
   };
 
@@ -152,7 +148,7 @@ export function PhotoPicker({ onImagesChange, onSkip }: PhotoPickerProps) {
           </Pressable>
         )}
 
-        {/* Photo Action Sheet (native only) */}
+        {/* Photo Action Sheet */}
         <PhotoActionSheet
           ref={bottomSheetRef}
           onCameraPress={pickFromCamera}

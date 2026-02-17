@@ -202,14 +202,29 @@
     "reviewNoPhotos": "Sin fotos",
     "reviewNoPhotosMessage": "Los reportes con fotos tienen mejores resultados. Agrega una antes de enviar.",
     "addPhotoToReport": "Agregar foto",
+    "locationReference": "Referencia de ubicación",
     "staticMapAlt": "Mapa con la ubicación del reporte",
+    "submitError": "No se pudo enviar el reporte",
+    "submitAuthError": "Debes iniciar sesión para enviar un reporte. Por favor inicia sesión e intenta de nuevo.",
+    "submitUnknownError": "Ocurrió un error inesperado. Por favor intenta de nuevo.",
+    "whenIncident": "¿Cuándo ocurrió?",
+    "incidentJustNow": "Ahora mismo",
+    "incidentToday": "Hoy",
+    "incidentYesterday": "Ayer",
+    "incidentThisWeek": "Esta semana",
+    "incidentOverWeek": "Hace más de una semana",
+    "incidentSelectDate": "Elegir fecha",
+    "incidentTime": "Fecha del incidente",
+    "incidentDateInvalid": "Por favor ingresa una fecha válida (AAAA-MM-DD)",
     "sidebar": {
       "securityBadge": "Anónimo y seguro",
       "title": "Tu reporte importa",
       "reviewTime": "Los reportes se revisan en 48 horas",
       "identityProtected": "Tu identidad permanece protegida",
       "authoritiesNotified": "Las autoridades son notificadas cuando es necesario"
-    }
+    },
+    "followUpTitle": "Recibir actualizaciones",
+    "followUpDescription": "Recibe notificaciones cuando haya novedades en tu caso"
   },
   "category": {
     "abuse": "Maltrato",
@@ -297,7 +312,9 @@
     "donationGoal": "Meta: {{amount}} MXN",
     "donationRaised": "{{amount}} MXN recaudados",
     "contribute": "Contribuir",
-    "donationDescription": "Ayuda a cubrir los costos de rescate y veterinaria para este caso"
+    "donationDescription": "Ayuda a cubrir los costos de rescate y veterinaria para este caso",
+    "locationNotes": "Dirección o referencia",
+    "staticMapAlt": "Mapa con la ubicación del caso"
   },
   "timelineAction": {
     "created": "Reporte creado",

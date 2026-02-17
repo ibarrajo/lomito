@@ -202,7 +202,22 @@
     "reviewNoPhotos": "No photos added",
     "reviewNoPhotosMessage": "Reports with photos have better outcomes. Add one before submitting.",
     "addPhotoToReport": "Add a photo",
+    "locationReference": "Location reference",
     "staticMapAlt": "Map showing report location",
+    "submitError": "Failed to submit report",
+    "submitAuthError": "You must be logged in to submit a report. Please log in and try again.",
+    "submitUnknownError": "An unexpected error occurred. Please try again.",
+    "whenIncident": "When did this happen?",
+    "incidentJustNow": "Just now",
+    "incidentToday": "Today",
+    "incidentYesterday": "Yesterday",
+    "incidentThisWeek": "This week",
+    "incidentOverWeek": "Over a week ago",
+    "incidentSelectDate": "Select date",
+    "incidentTime": "Incident time",
+    "incidentDateInvalid": "Please enter a valid date (YYYY-MM-DD)",
+    "followUpTitle": "Receive follow-up updates",
+    "followUpDescription": "Get notified when there are updates on your case",
     "sidebar": {
       "securityBadge": "Anonymous & Secure",
       "title": "Your report matters",
@@ -297,7 +312,9 @@
     "donationGoal": "Goal: {{amount}} MXN",
     "donationRaised": "{{amount}} MXN raised",
     "contribute": "Contribute",
-    "donationDescription": "Help cover rescue and veterinary costs for this case"
+    "donationDescription": "Help cover rescue and veterinary costs for this case",
+    "locationNotes": "Address / Reference",
+    "staticMapAlt": "Map showing case location"
   },
   "timelineAction": {
     "created": "Report created",
