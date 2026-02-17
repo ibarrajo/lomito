@@ -53,32 +53,26 @@ export default function TabLayout() {
           ),
         }}
       />
-      {!loading && isModerator && (
-        <Tabs.Screen
-          name="moderation"
-          options={{
-            title: compactLabels
-              ? t('nav.moderationShort')
-              : t('nav.moderation'),
-            tabBarIcon: ({ color }) => (
-              <Shield size={iconSizes.default} color={color} />
-            ),
-          }}
-        />
-      )}
-      {!loading && isGovernment && (
-        <Tabs.Screen
-          name="government"
-          options={{
-            title: compactLabels
-              ? t('nav.governmentShort')
-              : t('nav.government'),
-            tabBarIcon: ({ color }) => (
-              <Building2 size={iconSizes.default} color={color} />
-            ),
-          }}
-        />
-      )}
+      <Tabs.Screen
+        name="moderation"
+        options={{
+          href: !loading && isModerator ? undefined : null,
+          title: compactLabels ? t('nav.moderationShort') : t('nav.moderation'),
+          tabBarIcon: ({ color }) => (
+            <Shield size={iconSizes.default} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="government"
+        options={{
+          href: !loading && isGovernment ? undefined : null,
+          title: compactLabels ? t('nav.governmentShort') : t('nav.government'),
+          tabBarIcon: ({ color }) => (
+            <Building2 size={iconSizes.default} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="profile"
         options={{

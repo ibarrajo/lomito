@@ -79,6 +79,7 @@ export const ImpactMetrics = memo(function ImpactMetrics({
 const styles = StyleSheet.create({
   container: {
     marginVertical: spacing.md,
+    overflow: 'visible',
   },
   metricCard: {
     marginRight: spacing.md,

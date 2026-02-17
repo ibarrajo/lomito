@@ -198,8 +198,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral100,
     borderLeftColor: colors.neutral200,
     borderLeftWidth: 1,
-    flex: 1,
-    width: layout.mapPanelWidth,
+    flexBasis: layout.mapPanelWidth,
+    flexGrow: 0,
+    flexShrink: 1,
+    minWidth: 280,
   },
   separator: {
     height: spacing.sm,

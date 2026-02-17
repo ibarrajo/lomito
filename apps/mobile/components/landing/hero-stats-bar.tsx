@@ -1,21 +1,15 @@
 import { View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { H2, BodySmall } from '@lomito/ui/src/components/typography';
+import { Skeleton } from '@lomito/ui';
 import { colors, spacing } from '@lomito/ui/src/theme/tokens';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { useDashboardStats } from '../../hooks/use-dashboard-stats';
 
-const FALLBACK_STATS = {
-  activeCases: 0,
-  resolvedCases: 0,
-  livesSaved: '0',
-  avgResponse: '--',
-};
-
 export function HeroStatsBar() {
   const { t } = useTranslation();
   const { isMobile } = useBreakpoint();
-  const { stats } = useDashboardStats();
+  const { stats, loading } = useDashboardStats();
 
   const displayStats = stats
     ? {
@@ -26,35 +20,42 @@ export function HeroStatsBar() {
           ? `${Math.round(stats.avg_resolution_days * 24)}h`
           : '--',
       }
-    : FALLBACK_STATS;
+    : null;
+
+  const labels = [
+    t('landing.statsActiveCasesLong'),
+    t('landing.statsResolvedLong'),
+    t('landing.statsLivesSavedLong'),
+    t('landing.statsAvgResponseLong'),
+  ];
+
+  const values = displayStats
+    ? [
+        displayStats.activeCases,
+        displayStats.resolvedCases,
+        displayStats.livesSaved,
+        displayStats.avgResponse,
+      ]
+    : [];
 
   return (
     <View style={styles.container}>
       <View style={[styles.grid, !isMobile && styles.gridTablet]}>
-        <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{displayStats.activeCases}</H2>
-          <BodySmall style={styles.statLabel}>
-            {t('landing.statsActiveCasesLong')}
-          </BodySmall>
-        </View>
-        <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{displayStats.resolvedCases}</H2>
-          <BodySmall style={styles.statLabel}>
-            {t('landing.statsResolvedLong')}
-          </BodySmall>
-        </View>
-        <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{displayStats.livesSaved}</H2>
-          <BodySmall style={styles.statLabel}>
-            {t('landing.statsLivesSavedLong')}
-          </BodySmall>
-        </View>
-        <View style={styles.statItem}>
-          <H2 style={styles.statNumber}>{displayStats.avgResponse}</H2>
-          <BodySmall style={styles.statLabel}>
-            {t('landing.statsAvgResponseLong')}
-          </BodySmall>
-        </View>
+        {labels.map((label, i) => (
+          <View key={label} style={styles.statItem}>
+            {loading || !displayStats ? (
+              <Skeleton
+                width={64}
+                height={32}
+                borderRadius={spacing.xs}
+                style={styles.skeletonNumber}
+              />
+            ) : (
+              <H2 style={styles.statNumber}>{values[i]}</H2>
+            )}
+            <BodySmall style={styles.statLabel}>{label}</BodySmall>
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -80,6 +81,9 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     justifyContent: 'space-around',
     paddingHorizontal: 0,
+  },
+  skeletonNumber: {
+    marginBottom: spacing.xs,
   },
   statItem: {
     alignItems: 'center',
