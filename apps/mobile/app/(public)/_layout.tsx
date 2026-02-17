@@ -25,6 +25,15 @@ export default function PublicLayout() {
         <Head>
           <title>Lomito — Plataforma cívica para bienestar animal</title>
           <meta
+            name="description"
+            content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad. Plataforma cívica para Tijuana."
+          />
+          <meta name="theme-color" content="#13ECC8" />
+          {/* OpenGraph */}
+          <meta property="og:site_name" content="Lomito" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://lomito.org" />
+          <meta
             property="og:title"
             content="Lomito — Plataforma cívica para bienestar animal"
           />
@@ -32,14 +41,25 @@ export default function PublicLayout() {
             property="og:description"
             content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad"
           />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://lomito.org" />
-          <meta property="og:site_name" content="Lomito" />
+          <meta property="og:image" content="https://lomito.org/og-image.png" />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:locale" content="es_MX" />
+          <meta property="og:locale:alternate" content="en_US" />
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
           <meta
-            name="description"
-            content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad. Plataforma cívica para Tijuana."
+            name="twitter:title"
+            content="Lomito — Plataforma cívica para bienestar animal"
           />
-          <meta name="theme-color" content="#13ECC8" />
+          <meta
+            name="twitter:description"
+            content="Reporta y da seguimiento a problemas de bienestar animal en tu comunidad"
+          />
+          <meta
+            name="twitter:image"
+            content="https://lomito.org/og-image.png"
+          />
         </Head>
       )}
       <View style={styles.header}>

@@ -7,6 +7,7 @@ import {
   Text,
 } from 'react-native';
 import { Redirect, useRouter } from 'expo-router';
+import Head from 'expo-router/head';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react-native';
 import { Container } from '@lomito/ui/src/components/container';
@@ -40,6 +41,18 @@ export default function LandingPage() {
 
   return (
     <ScrollView style={styles.scrollView}>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Lomito — {t('landing.heroTitle')}</title>
+          <meta name="description" content={t('landing.heroSubtitle')} />
+          <meta
+            property="og:title"
+            content={`Lomito — ${t('landing.heroTitle')}`}
+          />
+          <meta property="og:description" content={t('landing.heroSubtitle')} />
+          <meta property="og:url" content="https://lomito.org" />
+        </Head>
+      )}
       {/* Section 1: Hero (Dark) */}
       <View style={styles.hero}>
         <Container>

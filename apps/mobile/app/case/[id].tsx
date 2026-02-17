@@ -4,8 +4,16 @@
  */
 
 import { useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Pressable, Text } from 'react-native';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Pressable,
+  Text,
+  Platform,
+} from 'react-native';
 import { useLocalSearchParams, Stack, Link } from 'expo-router';
+import Head from 'expo-router/head';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react-native';
 import { H2, Body, Caption } from '@lomito/ui/components/typography';
@@ -99,8 +107,33 @@ export default function CaseDetailScreen() {
     toggleSubscription();
   };
 
+  const ogTitle = `${t(`category.${caseData.category}`)} — ${t(`status.${caseData.status}`)} | Lomito`;
+  const ogDescription = caseData.description
+    ? caseData.description.slice(0, 160)
+    : t('case.details');
+  const ogImage =
+    media?.[0]?.thumbnail_url ||
+    media?.[0]?.url ||
+    'https://lomito.org/og-image.png';
+
   return (
     <View style={styles.container}>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>{ogTitle}</title>
+          <meta name="description" content={ogDescription} />
+          <meta property="og:title" content={ogTitle} />
+          <meta property="og:description" content={ogDescription} />
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content={`https://lomito.org/case/${id}`} />
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:site_name" content="Lomito" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={ogTitle} />
+          <meta name="twitter:description" content={ogDescription} />
+          <meta name="twitter:image" content={ogImage} />
+        </Head>
+      )}
       <Stack.Screen
         options={{
           title: t('case.details'),

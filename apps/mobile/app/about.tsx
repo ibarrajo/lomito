@@ -1,6 +1,7 @@
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 import { Container, H1, Body } from '@lomito/ui';
 import { colors, spacing, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { WhySection } from '../components/about/why-section';
@@ -20,6 +21,23 @@ export default function AboutScreen() {
 
   return (
     <>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Lomito — {t('about.title')}</title>
+          <meta name="description" content={t('about.missionText')} />
+          <meta property="og:title" content={`Lomito — ${t('about.title')}`} />
+          <meta property="og:description" content={t('about.missionText')} />
+          <meta property="og:url" content="https://lomito.org/about" />
+          <meta property="og:image" content="https://lomito.org/og-image.png" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={`Lomito — ${t('about.title')}`} />
+          <meta name="twitter:description" content={t('about.missionText')} />
+          <meta
+            name="twitter:image"
+            content="https://lomito.org/og-image.png"
+          />
+        </Head>
+      )}
       <Stack.Screen
         options={{
           headerShown: Platform.OS !== 'web',

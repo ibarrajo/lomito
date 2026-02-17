@@ -98,7 +98,17 @@
     "emailPlaceholder": "you@example.com",
     "phonePlaceholder": "+52 664 123 4567",
     "namePlaceholder": "John Doe",
-    "codePlaceholder": "000000"
+    "codePlaceholder": "000000",
+    "callback": {
+      "verifying": "Verifying your link...",
+      "pleaseWait": "Please wait while we sign you in.",
+      "success": "You're in!",
+      "redirecting": "Redirecting to your dashboard...",
+      "errorTitle": "Link expired or invalid",
+      "errorGeneric": "Something went wrong verifying your link. Please try again.",
+      "linkExpiredHint": "Magic links expire after 1 hour. Request a new one to sign in.",
+      "tryAgain": "Back to login"
+    }
   },
   "map": {
     "title": "Report map",

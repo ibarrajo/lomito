@@ -80,6 +80,7 @@ logs/
 # Screenshots / QA artifacts
 *.png
 !apps/mobile/assets/**/*.png
+!apps/mobile/public/**/*.png
 .playwright-mcp/
 
 # Development artifacts

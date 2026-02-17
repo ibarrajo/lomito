@@ -6,8 +6,10 @@ import {
   Text,
   Linking,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import Head from 'expo-router/head';
 import { useTranslation } from 'react-i18next';
 import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
 import {
@@ -242,6 +244,17 @@ export default function LoginScreen() {
 
   return (
     <View style={[styles.container, isDesktop && styles.containerRow]}>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Lomito — {t('auth.login')}</title>
+          <meta name="description" content={t('auth.sidebarSubtext')} />
+          <meta property="og:title" content={`Lomito — ${t('auth.login')}`} />
+          <meta property="og:description" content={t('auth.sidebarSubtext')} />
+          <meta property="og:url" content="https://lomito.org/auth/login" />
+          <meta property="og:image" content="https://lomito.org/og-image.png" />
+          <meta name="twitter:card" content="summary_large_image" />
+        </Head>
+      )}
       {isDesktop && (
         <View style={styles.sidebar}>
           <View style={styles.sidebarContent}>

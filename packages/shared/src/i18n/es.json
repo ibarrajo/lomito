@@ -98,7 +98,17 @@
     "emailPlaceholder": "tu@ejemplo.com",
     "phonePlaceholder": "+52 664 123 4567",
     "namePlaceholder": "Juan Pérez",
-    "codePlaceholder": "000000"
+    "codePlaceholder": "000000",
+    "callback": {
+      "verifying": "Verificando tu enlace...",
+      "pleaseWait": "Por favor espera mientras te conectamos.",
+      "success": "¡Estás dentro!",
+      "redirecting": "Redirigiendo a tu tablero...",
+      "errorTitle": "Enlace expirado o inválido",
+      "errorGeneric": "Algo salió mal al verificar tu enlace. Por favor intenta de nuevo.",
+      "linkExpiredHint": "Los enlaces mágicos expiran después de 1 hora. Solicita uno nuevo para iniciar sesión.",
+      "tryAgain": "Volver al inicio de sesión"
+    }
   },
   "map": {
     "title": "Mapa de reportes",

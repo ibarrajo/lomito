@@ -3,7 +3,8 @@
  * Stitch-aligned dashboard showing platform impact with rich data visualizations.
  */
 
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Platform } from 'react-native';
+import Head from 'expo-router/head';
 import { useTranslation } from 'react-i18next';
 import { Container } from '@lomito/ui/components/container';
 import { H1, Body } from '@lomito/ui/components/typography';
@@ -20,6 +21,15 @@ export default function ImpactPage() {
 
   return (
     <ScrollView style={styles.scrollView}>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Lomito — {t('impact.title')}</title>
+          <meta name="description" content={t('impact.subtitle')} />
+          <meta property="og:title" content={`Lomito — ${t('impact.title')}`} />
+          <meta property="og:description" content={t('impact.subtitle')} />
+          <meta property="og:url" content="https://lomito.org/impact" />
+        </Head>
+      )}
       {/* Hero Section */}
       <View style={styles.heroSection}>
         <Container>

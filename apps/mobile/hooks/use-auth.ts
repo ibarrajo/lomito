@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Platform } from 'react-native';
 import { supabase } from '../lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
 
@@ -53,7 +54,15 @@ export function useAuth() {
   }, []);
 
   const signInWithMagicLink = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.signInWithOtp({ email });
+    const siteUrl =
+      process.env.EXPO_PUBLIC_SITE_URL ||
+      (Platform.OS === 'web' ? window.location.origin : undefined);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        ...(siteUrl ? { emailRedirectTo: siteUrl } : {}),
+      },
+    });
     if (error) throw error;
   }, []);
 

@@ -6,8 +6,10 @@ import {
   Modal,
   ScrollView,
   Text,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import Head from 'expo-router/head';
 import { useTranslation } from 'react-i18next';
 import { Button, TextInput, H1, Body, BodySmall, AppModal } from '@lomito/ui';
 import {
@@ -107,6 +109,23 @@ export default function RegisterScreen() {
     <View
       style={[styles.outerContainer, isDesktop && styles.outerContainerRow]}
     >
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Lomito — {t('auth.register')}</title>
+          <meta name="description" content={t('auth.registerSidebarSubtext')} />
+          <meta
+            property="og:title"
+            content={`Lomito — ${t('auth.register')}`}
+          />
+          <meta
+            property="og:description"
+            content={t('auth.registerSidebarSubtext')}
+          />
+          <meta property="og:url" content="https://lomito.org/auth/register" />
+          <meta property="og:image" content="https://lomito.org/og-image.png" />
+          <meta name="twitter:card" content="summary_large_image" />
+        </Head>
+      )}
       {isDesktop && (
         <View style={styles.sidebar}>
           <View style={styles.sidebarContent}>
