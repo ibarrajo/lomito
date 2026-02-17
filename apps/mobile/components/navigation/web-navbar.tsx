@@ -88,9 +88,6 @@ export function WebNavbar() {
 
   const isActivePath = useCallback(
     (path: string) => {
-      if (path === '/(tabs)') {
-        return pathname === '/' || pathname === '/(tabs)';
-      }
       // Strip /(tabs) prefix for comparison since Expo Router strips it from pathname
       const cleanPath = path.replace('/(tabs)', '');
       return pathname === cleanPath || pathname.startsWith(cleanPath + '/');
@@ -142,7 +139,7 @@ export function WebNavbar() {
       <View style={styles.content}>
         {/* Left: Wordmark */}
         <TouchableOpacity
-          onPress={() => navigateTo('/(tabs)')}
+          onPress={() => navigateTo('/(tabs)/dashboard')}
           accessibilityLabel={t('nav.home')}
           accessibilityRole="link"
         >
@@ -153,22 +150,24 @@ export function WebNavbar() {
         <View style={styles.navLinks}>
           {renderNavLink(
             t('nav.map'),
-            '/(tabs)',
+            '/(tabs)/dashboard',
             <Map
               size={iconSizes.inline}
               color={
-                isActivePath('/(tabs)') ? colors.primary : colors.neutral700
+                isActivePath('/(tabs)/dashboard')
+                  ? colors.primary
+                  : colors.neutral700
               }
               strokeWidth={1.5}
             />,
           )}
           {renderNavLink(
             t('nav.dashboard'),
-            '/(tabs)/dashboard',
+            '/(tabs)/stats',
             <BarChart3
               size={iconSizes.inline}
               color={
-                isActivePath('/(tabs)/dashboard')
+                isActivePath('/(tabs)/stats')
                   ? colors.primary
                   : colors.neutral700
               }

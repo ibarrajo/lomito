@@ -65,7 +65,7 @@ export default function ModerationScreen() {
   // Redirect unauthorized users to map tab
   useEffect(() => {
     if (!profileLoading && !isAuthorized) {
-      router.replace('/(tabs)');
+      router.replace('/(tabs)/dashboard');
     }
   }, [profileLoading, isAuthorized, router]);
 

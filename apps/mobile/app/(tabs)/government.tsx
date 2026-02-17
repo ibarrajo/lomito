@@ -73,7 +73,7 @@ export default function GovernmentScreen() {
   // Redirect unauthorized users to map tab
   useEffect(() => {
     if (!profileLoading && !isAuthorized) {
-      router.replace('/(tabs)');
+      router.replace('/(tabs)/dashboard');
     }
   }, [profileLoading, isAuthorized, router]);
 

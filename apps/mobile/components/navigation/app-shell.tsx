@@ -30,8 +30,9 @@ export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
 
   // Routes that should NOT have a footer (fullscreen routes)
-  // Only hide footer on: map (tabs index), report flow
-  const isMapScreen = pathname === '/' || pathname === '/(tabs)';
+  // Only hide footer on: map dashboard, report flow
+  const isMapScreen =
+    pathname === '/dashboard' || pathname === '/(tabs)/dashboard';
   const isReportFlow = pathname.startsWith('/report');
   const shouldShowFooter = !isMapScreen && !isReportFlow;
 

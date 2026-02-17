@@ -88,7 +88,7 @@ function RootLayoutNav() {
     } else if (session && inAuthGroup) {
       // Redirect to main app if authenticated (prevent loop)
       if (pathname !== '/' && !pathname.startsWith('/(tabs)')) {
-        router.replace('/(tabs)');
+        router.replace('/(tabs)/dashboard');
       }
     } else if (
       session &&
@@ -97,7 +97,7 @@ function RootLayoutNav() {
     ) {
       // Redirect authenticated users away from public landing on web (prevent loop)
       if (!pathname.startsWith('/(tabs)')) {
-        router.replace('/(tabs)');
+        router.replace('/(tabs)/dashboard');
       }
     }
   }, [session, isReady, segments, router, pathname]);

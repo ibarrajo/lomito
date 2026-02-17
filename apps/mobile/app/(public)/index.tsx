@@ -24,6 +24,7 @@ import { AccountabilitySection } from '../../components/landing/accountability-s
 import { TransparencySection } from '../../components/landing/transparency-section';
 import { CtaBanner } from '../../components/landing/cta-banner';
 import { LandingFooter } from '../../components/landing/landing-footer';
+import { LandingMap } from '../../components/landing/landing-map';
 import { useAnalytics } from '../../hooks/use-analytics';
 
 export default function LandingPage() {
@@ -103,9 +104,7 @@ export default function LandingPage() {
           </BodySmall>
           <View style={styles.activityGrid}>
             <View style={styles.mapCard}>
-              <View style={styles.mapPlaceholder}>
-                <Text style={styles.mapPlaceholderText}>Tijuana</Text>
-              </View>
+              <LandingMap height={400} />
             </View>
             <View style={styles.tickerCard}>
               <RecentReportsTicker />
@@ -252,21 +251,6 @@ const styles = StyleSheet.create({
     minWidth: 280,
     overflow: 'hidden',
     ...shadowStyles.card,
-  },
-  mapPlaceholder: {
-    alignItems: 'center',
-    backgroundColor: colors.neutral100,
-    borderColor: colors.neutral200,
-    borderRadius: borderRadius.card,
-    borderStyle: 'dashed',
-    borderWidth: 2,
-    justifyContent: 'center',
-    minHeight: 280,
-  },
-  mapPlaceholderText: {
-    color: colors.neutral400,
-    fontSize: 18,
-    fontWeight: '600',
   },
   processSection: {
     backgroundColor: colors.white,

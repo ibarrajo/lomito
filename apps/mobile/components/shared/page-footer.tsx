@@ -24,9 +24,9 @@ export function PageFooter() {
   };
 
   const platformLinks = [
-    { label: t('nav.map'), route: '/' },
+    { label: t('nav.map'), route: '/(tabs)/dashboard' },
     { label: t('report.newReport'), route: '/report/new' },
-    { label: t('nav.dashboard'), route: '/(tabs)/dashboard' },
+    { label: t('nav.dashboard'), route: '/(tabs)/stats' },
   ];
 
   const communityLinks = [

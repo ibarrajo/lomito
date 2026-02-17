@@ -37,7 +37,7 @@ export function ProfileSidebar() {
       key: 'dashboard',
       icon: Home,
       label: t('profile.sidebar.dashboard'),
-      route: '/(tabs)/dashboard',
+      route: '/(tabs)/stats',
     },
     {
       key: 'profile',

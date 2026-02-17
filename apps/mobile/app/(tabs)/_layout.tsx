@@ -35,8 +35,10 @@ export default function TabLayout() {
         tabBarStyle: hideTabBar ? { display: 'none' } : undefined,
       }}
     >
+      {/* Hidden redirect — sends / to /dashboard */}
+      <Tabs.Screen name="index" options={{ href: null }} />
       <Tabs.Screen
-        name="index"
+        name="dashboard"
         options={{
           title: compactLabels ? t('nav.mapShort') : t('nav.map'),
           tabBarIcon: ({ color }) => (
@@ -45,7 +47,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="dashboard"
+        name="stats"
         options={{
           title: compactLabels ? t('nav.dashboardShort') : t('nav.dashboard'),
           tabBarIcon: ({ color }) => (
