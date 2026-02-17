@@ -21,7 +21,8 @@ import { AppShell } from '../components/navigation/app-shell';
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
-  const { loading: profileLoading } = useUserProfile();
+  // Only fetch profile when authenticated — avoids blocking public routes
+  const { loading: profileLoading } = useUserProfile(!!session);
   const segments = useSegments();
   const router = useRouter();
   const pathname = usePathname();

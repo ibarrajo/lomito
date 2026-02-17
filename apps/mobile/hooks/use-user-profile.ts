@@ -19,12 +19,19 @@ interface UseUserProfileResult {
   error: string | null;
 }
 
-export function useUserProfile(): UseUserProfileResult {
+export function useUserProfile(enabled: boolean = true): UseUserProfileResult {
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Skip fetching when disabled (unauthenticated users)
+    if (!enabled) {
+      setProfile(null);
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
     let fetchId = 0;
 
@@ -96,7 +103,7 @@ export function useUserProfile(): UseUserProfileResult {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [enabled]);
 
   return {
     profile,

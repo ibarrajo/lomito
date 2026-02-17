@@ -79,6 +79,9 @@ export function useAuth() {
 
   const signUp = useCallback(
     async (email: string, password: string, metadata: SignUpMetadata) => {
+      // Clear any stale session before creating a new account
+      await supabase.auth.signOut();
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
