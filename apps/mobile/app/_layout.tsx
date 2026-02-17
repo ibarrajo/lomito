@@ -127,6 +127,7 @@ function RootLayoutNav() {
         <Stack.Screen name="report" />
         <Stack.Screen name="about" />
         <Stack.Screen name="donate" />
+        <Stack.Screen name="impact" />
         <Stack.Screen name="legal" />
       </Stack>
     </AppShell>
