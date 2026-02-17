@@ -3,8 +3,17 @@
  * Full-screen map with case pins, clustering, filters, and summary cards.
  */
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text, Pressable, Platform } from 'react-native';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Platform,
+  TextInput,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
 import { ClusterLayer } from '../../components/map/cluster-layer';
@@ -18,11 +27,13 @@ import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { useAnalytics } from '../../hooks/use-analytics';
+import { useSearchCases } from '../../hooks/use-search-cases';
 import { supabase } from '../../lib/supabase';
 import {
   colors,
   spacing,
   shadowStyles,
+  borderRadius,
   iconSizes,
   typography,
 } from '@lomito/ui/src/theme/tokens';
@@ -33,6 +44,7 @@ import type {
   AnimalType,
   UrgencyLevel,
 } from '@lomito/shared/types/database';
+import type { SearchResult } from '../../hooks/use-search-cases';
 
 interface CaseSummary {
   id: string;
@@ -67,6 +79,53 @@ export default function MapScreen() {
     id: string;
     name: string;
   } | null>(null);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const searchInputRef = useRef<TextInput>(null);
+
+  const {
+    results: searchResults,
+    loading: searchLoading,
+    error: searchError,
+    search,
+    clearResults,
+  } = useSearchCases();
+
+  const handleSearchChange = useCallback(
+    (text: string) => {
+      setSearchQuery(text);
+      search(text);
+    },
+    [search],
+  );
+
+  const handleSearchFocus = useCallback(() => {
+    setSearchFocused(true);
+  }, []);
+
+  const handleSearchBlur = useCallback(() => {
+    // Small delay so result row tap can register before overlay closes
+    setTimeout(() => setSearchFocused(false), 150);
+  }, []);
+
+  const handleSearchClear = useCallback(() => {
+    setSearchQuery('');
+    clearResults();
+    setSearchFocused(false);
+    searchInputRef.current?.blur();
+  }, [clearResults]);
+
+  const handleSearchResultPress = useCallback(
+    (caseId: string) => {
+      handleSearchClear();
+      router.push(`/case/${caseId}`);
+    },
+    [handleSearchClear, router],
+  );
+
+  const showSearchDropdown =
+    searchFocused && (searchQuery.trim().length > 0 || searchLoading);
 
   const {
     selectedCategories,
@@ -255,6 +314,72 @@ export default function MapScreen() {
 
   const isDesktopWeb = Platform.OS === 'web' && isDesktop;
 
+  // Helper: format time since creation
+  const formatTimeAgo = useCallback((isoDate: string): string => {
+    const diffMs = Date.now() - new Date(isoDate).getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 60) return `${diffMins}m`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h`;
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays}d`;
+  }, []);
+
+  // Helper: get category pin color
+  const getCategoryColor = useCallback((category: CaseCategory): string => {
+    const map: Record<CaseCategory, string> = {
+      abuse: colors.category.abuse.pin,
+      injured: colors.category.injured.pin,
+      missing: colors.category.missing.pin,
+      stray: colors.category.stray.pin,
+      zoonotic: colors.category.zoonotic.pin,
+      dead_animal: colors.category.dead_animal.pin,
+      dangerous_dog: colors.category.dangerous_dog.pin,
+      distress: colors.category.distress.pin,
+      illegal_sales: colors.category.illegal_sales.pin,
+      wildlife: colors.category.wildlife.pin,
+      noise_nuisance: colors.category.noise_nuisance.pin,
+    };
+    return map[category] ?? colors.neutral500;
+  }, []);
+
+  // Render a single search result row
+  const renderSearchResult = useCallback(
+    ({ item }: { item: SearchResult }) => (
+      <Pressable
+        style={styles.searchResultRow}
+        onPress={() => handleSearchResultPress(item.id)}
+        accessibilityLabel={`${t(`category.${item.category}`)} — ${item.description}`}
+        accessibilityRole="button"
+      >
+        <View
+          style={[
+            styles.searchResultBadge,
+            { backgroundColor: getCategoryColor(item.category) },
+          ]}
+        >
+          <Text style={styles.searchResultBadgeText}>
+            {t(`category.${item.category}`)}
+          </Text>
+        </View>
+        <View style={styles.searchResultBody}>
+          <Text style={styles.searchResultDescription} numberOfLines={2}>
+            {item.description}
+          </Text>
+          <View style={styles.searchResultMeta}>
+            {item.folio ? (
+              <Text style={styles.searchResultFolio}>{item.folio}</Text>
+            ) : null}
+            <Text style={styles.searchResultTime}>
+              {formatTimeAgo(item.created_at)}
+            </Text>
+          </View>
+        </View>
+      </Pressable>
+    ),
+    [t, handleSearchResultPress, getCategoryColor, formatTimeAgo],
+  );
+
   // Desktop web: 3-column layout
   if (isDesktopWeb) {
     return (
@@ -268,6 +393,71 @@ export default function MapScreen() {
         />
 
         <View style={styles.mapColumn}>
+          {/* Search bar */}
+          <View style={styles.searchContainer}>
+            <TextInput
+              ref={searchInputRef}
+              style={styles.searchInput}
+              placeholder={t('map.searchPlaceholder')}
+              placeholderTextColor={colors.neutral400}
+              value={searchQuery}
+              onChangeText={handleSearchChange}
+              onFocus={handleSearchFocus}
+              onBlur={handleSearchBlur}
+              accessibilityLabel={t('map.searchPlaceholder')}
+              returnKeyType="search"
+              clearButtonMode="while-editing"
+            />
+            {searchQuery.length > 0 && Platform.OS !== 'ios' && (
+              <Pressable
+                style={styles.searchClearButton}
+                onPress={handleSearchClear}
+                accessibilityLabel={t('common.close')}
+                accessibilityRole="button"
+              >
+                <Text style={styles.searchClearText}>x</Text>
+              </Pressable>
+            )}
+          </View>
+
+          {/* Search results dropdown */}
+          {showSearchDropdown && (
+            <View style={styles.searchDropdown}>
+              {searchLoading && (
+                <View style={styles.searchLoadingRow}>
+                  <ActivityIndicator
+                    size="small"
+                    color={colors.primary}
+                    accessibilityLabel={t('common.loading')}
+                  />
+                </View>
+              )}
+              {!searchLoading && searchError && (
+                <View style={styles.searchMessageRow}>
+                  <Text style={styles.searchMessageText}>
+                    {t('map.searchError')}
+                  </Text>
+                </View>
+              )}
+              {!searchLoading && !searchError && searchResults.length === 0 && (
+                <View style={styles.searchMessageRow}>
+                  <Text style={styles.searchMessageText}>
+                    {t('map.searchNoResults')}
+                  </Text>
+                </View>
+              )}
+              {!searchLoading && searchResults.length > 0 && (
+                <FlatList
+                  data={searchResults}
+                  keyExtractor={(item) => item.id}
+                  renderItem={renderSearchResult}
+                  style={styles.searchResultsList}
+                  keyboardShouldPersistTaps="handled"
+                />
+              )}
+            </View>
+          )}
+
           {/* Layer toggle tabs */}
           <View style={styles.layerToggleBar}>
             {(['pins', 'heatmap', 'clusters'] as const).map((mode) => (
@@ -354,6 +544,71 @@ export default function MapScreen() {
   // Mobile / tablet: original layout
   return (
     <View style={styles.container}>
+      {/* Search bar */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          ref={searchInputRef}
+          style={styles.searchInput}
+          placeholder={t('map.searchPlaceholder')}
+          placeholderTextColor={colors.neutral400}
+          value={searchQuery}
+          onChangeText={handleSearchChange}
+          onFocus={handleSearchFocus}
+          onBlur={handleSearchBlur}
+          accessibilityLabel={t('map.searchPlaceholder')}
+          returnKeyType="search"
+          clearButtonMode="while-editing"
+        />
+        {searchQuery.length > 0 && Platform.OS !== 'ios' && (
+          <Pressable
+            style={styles.searchClearButton}
+            onPress={handleSearchClear}
+            accessibilityLabel={t('common.close')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.searchClearText}>x</Text>
+          </Pressable>
+        )}
+      </View>
+
+      {/* Search results dropdown */}
+      {showSearchDropdown && (
+        <View style={styles.searchDropdown}>
+          {searchLoading && (
+            <View style={styles.searchLoadingRow}>
+              <ActivityIndicator
+                size="small"
+                color={colors.primary}
+                accessibilityLabel={t('common.loading')}
+              />
+            </View>
+          )}
+          {!searchLoading && searchError && (
+            <View style={styles.searchMessageRow}>
+              <Text style={styles.searchMessageText}>
+                {t('map.searchError')}
+              </Text>
+            </View>
+          )}
+          {!searchLoading && !searchError && searchResults.length === 0 && (
+            <View style={styles.searchMessageRow}>
+              <Text style={styles.searchMessageText}>
+                {t('map.searchNoResults')}
+              </Text>
+            </View>
+          )}
+          {!searchLoading && searchResults.length > 0 && (
+            <FlatList
+              data={searchResults}
+              keyExtractor={(item) => item.id}
+              renderItem={renderSearchResult}
+              style={styles.searchResultsList}
+              keyboardShouldPersistTaps="handled"
+            />
+          )}
+        </View>
+      )}
+
       <FilterBar
         selectedCategories={selectedCategories}
         selectedStatuses={selectedStatuses}
@@ -492,5 +747,119 @@ const styles = StyleSheet.create({
   mapColumn: {
     flex: 1,
     position: 'relative' as const,
+  },
+  // Search bar
+  searchClearButton: {
+    alignItems: 'center',
+    height: 44,
+    justifyContent: 'center',
+    marginLeft: spacing.sm,
+    minWidth: 44,
+  },
+  searchClearText: {
+    color: colors.neutral500,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.body.fontSize,
+  },
+  searchContainer: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderBottomColor: colors.neutral200,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    zIndex: 20,
+    ...shadowStyles.card,
+  },
+  searchDropdown: {
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
+    borderTopWidth: 0,
+    borderWidth: 1,
+    left: 0,
+    maxHeight: 400,
+    position: 'absolute',
+    right: 0,
+    top: 61,
+    zIndex: 19,
+    ...shadowStyles.elevated,
+  },
+  searchInput: {
+    backgroundColor: colors.neutral100,
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.input,
+    borderWidth: 1,
+    color: colors.secondary,
+    flex: 1,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.body.fontSize,
+    height: 44,
+    paddingHorizontal: spacing.md,
+  },
+  searchLoadingRow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+  },
+  searchMessageRow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  searchMessageText: {
+    color: colors.neutral500,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.small.fontSize,
+  },
+  searchResultBadge: {
+    borderRadius: borderRadius.tag,
+    marginRight: spacing.sm,
+    marginTop: 2,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 2,
+  },
+  searchResultBadgeText: {
+    color: colors.white,
+    fontFamily: typography.caption.fontFamily,
+    fontSize: typography.caption.fontSize,
+    fontWeight: typography.caption.fontWeight,
+  },
+  searchResultBody: {
+    flex: 1,
+  },
+  searchResultDescription: {
+    color: colors.secondary,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.small.fontSize,
+    lineHeight: typography.small.fontSize * typography.small.lineHeight,
+  },
+  searchResultFolio: {
+    color: colors.neutral500,
+    fontFamily: typography.fontFamily.mono,
+    fontSize: typography.caption.fontSize,
+  },
+  searchResultMeta: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.xs,
+  },
+  searchResultRow: {
+    alignItems: 'flex-start',
+    borderBottomColor: colors.neutral200,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  searchResultTime: {
+    color: colors.neutral400,
+    fontFamily: typography.caption.fontFamily,
+    fontSize: typography.caption.fontSize,
+  },
+  searchResultsList: {
+    maxHeight: 400,
   },
 });

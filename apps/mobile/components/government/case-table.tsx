@@ -3,7 +3,7 @@
  * Desktop table view of cases with sortable columns
  */
 
-import { memo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@lomito/ui/components/badge';
@@ -44,6 +44,47 @@ export const CaseTable = memo(function CaseTable({
     'id' | 'category' | 'date' | 'urgency' | 'expiration'
   >('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const sortedCases = useMemo(() => {
+    const URGENCY_ORDER: Record<string, number> = {
+      critical: 4,
+      high: 3,
+      medium: 2,
+      low: 1,
+    };
+
+    return [...cases].sort((a, b) => {
+      let comparison = 0;
+      switch (sortColumn) {
+        case 'id':
+          comparison = (a.folio ?? '').localeCompare(b.folio ?? '');
+          break;
+        case 'category':
+          comparison = a.category.localeCompare(b.category);
+          break;
+        case 'urgency':
+          comparison =
+            (URGENCY_ORDER[a.urgency] ?? 0) - (URGENCY_ORDER[b.urgency] ?? 0);
+          break;
+        case 'expiration': {
+          const aEscalated = a.escalatedAt
+            ? new Date(a.escalatedAt).getTime()
+            : 0;
+          const bEscalated = b.escalatedAt
+            ? new Date(b.escalatedAt).getTime()
+            : 0;
+          comparison = aEscalated - bEscalated;
+          break;
+        }
+        case 'date':
+        default:
+          comparison =
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          break;
+      }
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [cases, sortColumn, sortDirection]);
 
   function handleHeaderPress(
     column: 'id' | 'category' | 'date' | 'urgency' | 'expiration',
@@ -149,7 +190,7 @@ export const CaseTable = memo(function CaseTable({
         </View>
 
         {/* Rows */}
-        {cases.map((caseItem) => {
+        {sortedCases.map((caseItem) => {
           const urgencyStyle = urgencyColors[caseItem.urgency];
           const categoryColor = colors.category[caseItem.category].pin;
           const categoryBgColor = colors.category[caseItem.category].background;

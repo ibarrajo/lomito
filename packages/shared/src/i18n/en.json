@@ -139,7 +139,10 @@
     "emailAuthority": "Email authority",
     "callAuthority": "Call authority",
     "visitWebsite": "Visit website",
-    "website": "Website"
+    "website": "Website",
+    "searchPlaceholder": "Search cases...",
+    "searchNoResults": "No cases found",
+    "searchError": "Search failed"
   },
   "report": {
     "newReport": "New report",
@@ -425,7 +428,14 @@
     "signOutError": "Failed to sign out",
     "sectionPreferences": "Preferences",
     "sectionAbout": "About",
-    "sectionLegal": "Legal"
+    "sectionLegal": "Legal",
+    "deleteAccount": "Delete Account",
+    "deleteAccountTitle": "Delete your account?",
+    "deleteAccountWarning": "This action is permanent and cannot be undone. Your reports will be anonymized but not deleted. Your profile and personal data will be permanently removed.",
+    "deleteAccountConfirm": "Type DELETE to confirm",
+    "deleteAccountConfirmWord": "DELETE",
+    "deleteAccountButton": "Permanently delete account",
+    "deleteAccountError": "Failed to delete account. Please try again."
   },
   "escalation": {
     "escalate": "Escalate to authorities",

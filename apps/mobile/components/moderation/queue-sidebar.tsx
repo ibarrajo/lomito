@@ -17,7 +17,7 @@ import type {
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, es } from 'date-fns/locale';
 import type { Locale } from 'date-fns';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
 interface QueueItem {
   id: string;
@@ -49,13 +49,15 @@ export const QueueSidebar = memo(function QueueSidebar({
   const { t, i18n } = useTranslation();
   const locale = i18n.language === 'es' ? es : enUS;
 
-  const filteredCases = searchQuery
-    ? cases.filter(
-        (c) =>
-          c.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          c.description.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
-    : cases;
+  const filteredCases = useMemo(() => {
+    if (!searchQuery) return cases;
+    const query = searchQuery.toLowerCase();
+    return cases.filter(
+      (c) =>
+        c.id.toLowerCase().includes(query) ||
+        c.description.toLowerCase().includes(query),
+    );
+  }, [cases, searchQuery]);
 
   return (
     <View style={styles.container}>

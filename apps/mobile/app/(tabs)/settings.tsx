@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  Modal,
+  TextInput as RNTextInput,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import {
@@ -7,10 +15,12 @@ import {
   spacing,
   typography,
   borderRadius,
+  shadowStyles,
 } from '@lomito/ui/src/theme/tokens';
-import { H1, H2, Body, Caption, AppModal } from '@lomito/ui';
+import { H1, H2, H3, Body, Caption, AppModal } from '@lomito/ui';
 import { useAuth } from '../../hooks/use-auth';
 import { useUserProfile } from '../../hooks/use-user-profile';
+import { useDeleteAccount } from '../../hooks/use-delete-account';
 import { NotificationPrefs } from '../../components/settings/notification-prefs';
 import { LanguagePicker } from '../../components/settings/language-picker';
 import { isFeatureEnabled } from '@lomito/shared';
@@ -25,6 +35,14 @@ export default function SettingsScreen() {
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const [errorModal, setErrorModal] = useState<string | null>(null);
 
+  // Delete account state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const { deleteAccount, loading: deleteLoading } = useDeleteAccount();
+
+  const confirmWord = t('settings.deleteAccountConfirmWord');
+  const isDeleteConfirmed = deleteConfirmText === confirmWord;
+
   const handleSignOut = () => {
     setShowSignOutConfirm(true);
   };
@@ -37,6 +55,23 @@ export default function SettingsScreen() {
     } catch (error) {
       console.error('Error signing out:', error);
       setErrorModal(t('settings.signOutError'));
+    }
+  };
+
+  const handleDeleteAccount = () => {
+    setDeleteConfirmText('');
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDeleteAccount = async () => {
+    if (!isDeleteConfirmed) return;
+    try {
+      await deleteAccount();
+      // Navigation is handled inside the hook after successful deletion
+    } catch {
+      setShowDeleteConfirm(false);
+      setDeleteConfirmText('');
+      setErrorModal(t('settings.deleteAccountError'));
     }
   };
 
@@ -149,7 +184,7 @@ export default function SettingsScreen() {
           </View>
 
           {/* Sign Out Button */}
-          <View style={styles.signOutContainer}>
+          <View style={styles.actionButtonContainer}>
             <Pressable
               style={styles.signOutButton}
               onPress={handleSignOut}
@@ -161,9 +196,24 @@ export default function SettingsScreen() {
               </Text>
             </Pressable>
           </View>
+
+          {/* Delete Account Button */}
+          <View style={styles.actionButtonContainer}>
+            <Pressable
+              style={styles.deleteAccountButton}
+              onPress={handleDeleteAccount}
+              accessibilityLabel={t('settings.deleteAccount')}
+              accessibilityRole="button"
+            >
+              <Text style={styles.deleteAccountButtonText}>
+                {t('settings.deleteAccount')}
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
 
+      {/* Sign out confirmation modal */}
       <AppModal
         visible={showSignOutConfirm}
         title={t('settings.signOut')}
@@ -178,6 +228,7 @@ export default function SettingsScreen() {
         onClose={() => setShowSignOutConfirm(false)}
       />
 
+      {/* Error modal */}
       <AppModal
         visible={!!errorModal}
         title={t('common.error')}
@@ -187,6 +238,80 @@ export default function SettingsScreen() {
         ]}
         onClose={() => setErrorModal(null)}
       />
+
+      {/* Delete account confirmation modal */}
+      <Modal
+        visible={showDeleteConfirm}
+        transparent
+        animationType="fade"
+        onRequestClose={() => {
+          if (!deleteLoading) {
+            setShowDeleteConfirm(false);
+            setDeleteConfirmText('');
+          }
+        }}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <H3 style={styles.modalTitle}>
+              {t('settings.deleteAccountTitle')}
+            </H3>
+            <Body style={styles.modalWarning}>
+              {t('settings.deleteAccountWarning')}
+            </Body>
+            <Text style={styles.confirmLabel}>
+              {t('settings.deleteAccountConfirm')}
+            </Text>
+            <RNTextInput
+              value={deleteConfirmText}
+              onChangeText={setDeleteConfirmText}
+              placeholder={confirmWord}
+              placeholderTextColor={colors.neutral400}
+              autoCapitalize="characters"
+              autoCorrect={false}
+              editable={!deleteLoading}
+              accessibilityLabel={t('settings.deleteAccountConfirm')}
+              style={[
+                styles.confirmInput,
+                isDeleteConfirmed && styles.confirmInputValid,
+              ]}
+            />
+            <View style={styles.modalActions}>
+              <Pressable
+                style={styles.cancelButton}
+                onPress={() => {
+                  setShowDeleteConfirm(false);
+                  setDeleteConfirmText('');
+                }}
+                disabled={deleteLoading}
+                accessibilityLabel={t('common.cancel')}
+                accessibilityRole="button"
+              >
+                <Text style={styles.cancelButtonText}>
+                  {t('common.cancel')}
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.confirmDeleteButton,
+                  (!isDeleteConfirmed || deleteLoading) &&
+                    styles.confirmDeleteButtonDisabled,
+                ]}
+                onPress={confirmDeleteAccount}
+                disabled={!isDeleteConfirmed || deleteLoading}
+                accessibilityLabel={t('settings.deleteAccountButton')}
+                accessibilityRole="button"
+              >
+                <Text style={styles.confirmDeleteButtonText}>
+                  {deleteLoading
+                    ? t('common.submitting')
+                    : t('settings.deleteAccountButton')}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -195,6 +320,58 @@ const styles = StyleSheet.create({
   accountInfo: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
+  },
+  actionButtonContainer: {
+    marginTop: spacing.md,
+  },
+  cancelButton: {
+    alignItems: 'center',
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.button,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+  },
+  cancelButtonText: {
+    ...typography.button,
+    color: colors.neutral700,
+  },
+  confirmDeleteButton: {
+    alignItems: 'center',
+    backgroundColor: colors.error,
+    borderRadius: borderRadius.button,
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+  },
+  confirmDeleteButtonDisabled: {
+    backgroundColor: colors.neutral400,
+  },
+  confirmDeleteButtonText: {
+    ...typography.button,
+    color: colors.white,
+  },
+  confirmInput: {
+    backgroundColor: colors.white,
+    borderColor: colors.neutral200,
+    borderRadius: borderRadius.input,
+    borderWidth: 1,
+    color: colors.neutral900,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.body.fontSize,
+    height: 48,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  confirmInputValid: {
+    borderColor: colors.error,
+    borderWidth: 2,
+  },
+  confirmLabel: {
+    ...typography.small,
+    color: colors.neutral700,
+    marginTop: spacing.md,
   },
   container: {
     backgroundColor: colors.neutral100,
@@ -208,6 +385,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: spacing.xl,
     paddingVertical: spacing.xl,
+  },
+  deleteAccountButton: {
+    alignItems: 'center',
+    backgroundColor: colors.errorBackground,
+    borderColor: colors.error,
+    borderRadius: borderRadius.button,
+    borderWidth: 1,
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+  },
+  deleteAccountButtonText: {
+    ...typography.button,
+    color: colors.error,
   },
   desktopHeader: {
     marginBottom: spacing.xl,
@@ -226,6 +416,34 @@ const styles = StyleSheet.create({
   innerContentDesktop: {
     maxWidth: 720,
     width: '100%',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  modalCard: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.card,
+    maxWidth: 400,
+    padding: spacing.lg,
+    width: '100%',
+    ...shadowStyles.elevated,
+  },
+  modalOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(31, 35, 40, 0.5)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.lg,
+  },
+  modalTitle: {
+    color: colors.neutral900,
+    marginBottom: spacing.sm,
+  },
+  modalWarning: {
+    color: colors.neutral700,
+    marginBottom: spacing.sm,
   },
   navLink: {
     borderBottomColor: colors.neutral200,
@@ -267,8 +485,5 @@ const styles = StyleSheet.create({
   signOutButtonText: {
     ...typography.button,
     color: colors.error,
-  },
-  signOutContainer: {
-    marginTop: spacing.lg,
   },
 });

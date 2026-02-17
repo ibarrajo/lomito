@@ -139,7 +139,10 @@
     "emailAuthority": "Enviar correo a autoridad",
     "callAuthority": "Llamar a autoridad",
     "visitWebsite": "Visitar sitio web",
-    "website": "Sitio web"
+    "website": "Sitio web",
+    "searchPlaceholder": "Buscar casos...",
+    "searchNoResults": "No se encontraron casos",
+    "searchError": "Error en la búsqueda"
   },
   "report": {
     "newReport": "Nuevo reporte",
@@ -425,7 +428,14 @@
     "signOutError": "Error al cerrar sesión",
     "sectionPreferences": "Preferencias",
     "sectionAbout": "Acerca de",
-    "sectionLegal": "Legal"
+    "sectionLegal": "Legal",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteAccountTitle": "¿Eliminar tu cuenta?",
+    "deleteAccountWarning": "Esta acción es permanente y no se puede deshacer. Tus reportes serán anonimizados pero no eliminados. Tu perfil y datos personales serán eliminados permanentemente.",
+    "deleteAccountConfirm": "Escribe ELIMINAR para confirmar",
+    "deleteAccountConfirmWord": "ELIMINAR",
+    "deleteAccountButton": "Eliminar cuenta permanentemente",
+    "deleteAccountError": "No se pudo eliminar la cuenta. Intenta de nuevo."
   },
   "escalation": {
     "escalate": "Escalar a autoridades",
