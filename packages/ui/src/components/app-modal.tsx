@@ -62,6 +62,10 @@ export function AppModal({
     opacity: opacity.value,
   }));
 
+  // On web, use View for overlay to avoid nested <button> elements.
+  // On native, use Pressable for proper touch handling.
+  const Overlay = Platform.OS === 'web' ? View : Pressable;
+
   return (
     <Modal
       visible={visible}
@@ -69,38 +73,36 @@ export function AppModal({
       animationType="none"
       onRequestClose={onClose}
     >
-      <Pressable
+      <Overlay
         style={styles.overlay}
-        onPress={onClose}
+        {...(Platform.OS !== 'web' && { onPress: onClose })}
         accessibilityLabel="Close modal"
       >
         <Animated.View style={[styles.card, animatedStyle]}>
-          <Pressable onPress={(e) => e.stopPropagation()}>
-            <H2 style={styles.title}>{title}</H2>
-            {message && (
-              <Body style={styles.message} color={colors.neutral700}>
-                {message}
-              </Body>
-            )}
-            <View style={styles.actions}>
-              {actions.map((action, index) => (
-                <Button
-                  key={index}
-                  variant={
-                    action.variant ??
-                    (index === actions.length - 1 ? 'primary' : 'ghost')
-                  }
-                  onPress={action.onPress}
-                  accessibilityLabel={action.label}
-                  style={index > 0 ? styles.actionSpacing : undefined}
-                >
-                  {action.label}
-                </Button>
-              ))}
-            </View>
-          </Pressable>
+          <H2 style={styles.title}>{title}</H2>
+          {message && (
+            <Body style={styles.message} color={colors.neutral700}>
+              {message}
+            </Body>
+          )}
+          <View style={styles.actions}>
+            {actions.map((action, index) => (
+              <Button
+                key={index}
+                variant={
+                  action.variant ??
+                  (index === actions.length - 1 ? 'primary' : 'ghost')
+                }
+                onPress={action.onPress}
+                accessibilityLabel={action.label}
+                style={index > 0 ? styles.actionSpacing : undefined}
+              >
+                {action.label}
+              </Button>
+            ))}
+          </View>
         </Animated.View>
-      </Pressable>
+      </Overlay>
     </Modal>
   );
 }
