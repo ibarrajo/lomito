@@ -12,7 +12,7 @@ import {
   Pressable,
   Platform,
 } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import { H1, Body } from '@lomito/ui/components/typography';
@@ -30,6 +30,7 @@ import { useUserProfile } from '../../hooks/use-user-profile';
 
 export default function ModerationScreen() {
   const { t } = useTranslation();
+  const router = useRouter();
   const { cases, loading, error, refetch } = useModerationQueue();
   const { isDesktop } = useBreakpoint();
   const { profile, loading: profileLoading } = useUserProfile();
@@ -60,6 +61,13 @@ export default function ModerationScreen() {
   const selectedCase = selectedCaseId
     ? cases.find((c) => c.id === selectedCaseId)
     : null;
+
+  // Redirect unauthorized users to map tab
+  useEffect(() => {
+    if (!profileLoading && !isAuthorized) {
+      router.replace('/(tabs)');
+    }
+  }, [profileLoading, isAuthorized, router]);
 
   const handleSelectCase = useCallback((caseId: string) => {
     setSelectedCaseId(caseId);
@@ -122,12 +130,13 @@ export default function ModerationScreen() {
     };
   }, [isDesktop, handleVerifySelected, handleRejectSelected]);
 
-  if (!profileLoading && !isAuthorized) {
+  // Show loading skeleton while checking authorization or when unauthorized (before redirect)
+  if (profileLoading || !isAuthorized) {
     return (
       <View style={styles.container}>
         <Stack.Screen options={{ title: t('moderation.queue') }} />
-        <View style={styles.accessDenied}>
-          <Body color={colors.error}>{t('common.accessDenied')}</Body>
+        <View style={styles.loadingContainer}>
+          <Skeleton width={200} height={24} borderRadius={8} />
         </View>
       </View>
     );
@@ -450,12 +459,6 @@ export default function ModerationScreen() {
 }
 
 const styles = StyleSheet.create({
-  accessDenied: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
   container: {
     backgroundColor: colors.white,
     flex: 1,
@@ -489,6 +492,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   loadingContainer: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.lg,
   },

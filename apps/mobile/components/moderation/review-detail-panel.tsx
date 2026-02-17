@@ -207,7 +207,9 @@ export function ReviewDetailPanel({
                 {t('moderation.coordinates')}
               </BodySmall>
               <BodySmall style={styles.coordinates}>
-                {latitude.toFixed(6)}, {longitude.toFixed(6)}
+                {caseData.location?.coordinates
+                  ? `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+                  : t('moderation.noLocation')}
               </BodySmall>
             </View>
           </View>

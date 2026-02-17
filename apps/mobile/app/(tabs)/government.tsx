@@ -5,7 +5,7 @@
  * Mobile: KPI cards + card list
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   View,
   FlatList,
@@ -15,7 +15,7 @@ import {
   Pressable,
   Text,
 } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { H1, Body } from '@lomito/ui/components/typography';
 import { Skeleton } from '@lomito/ui/components/skeleton';
@@ -49,6 +49,7 @@ type FilterStatus =
 export default function GovernmentScreen() {
   const { t } = useTranslation();
   const { isDesktop } = useBreakpoint();
+  const router = useRouter();
   const { profile, loading: profileLoading } = useUserProfile();
   const isAuthorized =
     profile?.role === 'government' || profile?.role === 'admin';
@@ -68,6 +69,13 @@ export default function GovernmentScreen() {
   const selectedCase = selectedCaseId
     ? cases.find((c) => c.id === selectedCaseId)
     : null;
+
+  // Redirect unauthorized users to map tab
+  useEffect(() => {
+    if (!profileLoading && !isAuthorized) {
+      router.replace('/(tabs)');
+    }
+  }, [profileLoading, isAuthorized, router]);
 
   // Calculate KPIs
   const kpis = useMemo(() => {
@@ -151,12 +159,13 @@ export default function GovernmentScreen() {
     { key: 'resolved', label: t('status.resolved') },
   ];
 
-  if (!profileLoading && !isAuthorized) {
+  // Show loading skeleton while checking authorization or when unauthorized (before redirect)
+  if (profileLoading || !isAuthorized) {
     return (
       <View style={styles.container}>
         <Stack.Screen options={{ title: t('government.portal') }} />
-        <View style={styles.accessDenied}>
-          <Body color={colors.error}>{t('common.accessDenied')}</Body>
+        <View style={styles.loadingContainer}>
+          <Skeleton width={200} height={24} borderRadius={8} />
         </View>
       </View>
     );
@@ -453,12 +462,6 @@ export default function GovernmentScreen() {
 }
 
 const styles = StyleSheet.create({
-  accessDenied: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
   container: {
     backgroundColor: colors.white,
     flex: 1,
@@ -541,6 +544,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   loadingContainer: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.lg,
   },

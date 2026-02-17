@@ -152,8 +152,10 @@ export function CaseDetailPanel({
           <View style={styles.metaRow}>
             <Caption style={styles.metaLabel}>{t('case.location')}:</Caption>
             <Caption style={styles.metaValue}>
-              {location?.coordinates?.[1]?.toFixed(5) ?? '0.00000'},{' '}
-              {location?.coordinates?.[0]?.toFixed(5) ?? '0.00000'}
+              {location?.coordinates?.[1] !== undefined &&
+              location?.coordinates?.[0] !== undefined
+                ? `${location.coordinates[1].toFixed(5)}, ${location.coordinates[0].toFixed(5)}`
+                : t('case.noLocation')}
             </Caption>
           </View>
         </View>

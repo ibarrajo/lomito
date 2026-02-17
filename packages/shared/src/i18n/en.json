@@ -252,6 +252,7 @@
     "created": "Created",
     "description": "Description",
     "location": "Location",
+    "noLocation": "No location data",
     "shareCase": "Share this Case",
     "shareWhatsApp": "Share on WhatsApp",
     "shareTwitter": "Share on X",
@@ -352,7 +353,8 @@
     "keyboardShortcuts": "Keyboard Shortcuts",
     "pressV": "Press V to verify",
     "pressR": "Press R to reject",
-    "selectCase": "Select a case to review"
+    "selectCase": "Select a case to review",
+    "noLocation": "No location data"
   },
   "flag": {
     "report": "Flag report",
