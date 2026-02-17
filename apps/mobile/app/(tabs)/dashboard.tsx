@@ -17,14 +17,17 @@ import {
 import { useRouter } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
 import { ClusterLayer } from '../../components/map/cluster-layer';
+import { PoiLayer } from '../../components/map/poi-layer';
 import { JurisdictionLayer } from '../../components/map/jurisdiction-layer';
 import { JurisdictionInfoModal } from '../../components/map/jurisdiction-info-modal';
+import { PoiDetailModal } from '../../components/map/poi-detail-modal';
 import { CaseSummaryCard } from '../../components/map/case-summary-card';
 import { FilterBar } from '../../components/map/filter-bar';
 import { MapFilterSidebar } from '../../components/map/map-filter-sidebar';
 import { MapActivityPanel } from '../../components/map/map-activity-panel';
 import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
+import { usePois } from '../../hooks/use-pois';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
 import { useAnalytics } from '../../hooks/use-analytics';
 import { useSearchCases } from '../../hooks/use-search-cases';
@@ -43,6 +46,8 @@ import type {
   CaseStatus,
   AnimalType,
   UrgencyLevel,
+  PoiType,
+  PointOfInterest,
 } from '@lomito/shared/types/database';
 import type { SearchResult } from '../../hooks/use-search-cases';
 
@@ -83,6 +88,41 @@ export default function MapScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
   const searchInputRef = useRef<TextInput>(null);
+
+  const [showGovOffices, setShowGovOffices] = useState(false);
+  const [showShelters, setShowShelters] = useState(false);
+  const [showClinics, setShowClinics] = useState(false);
+
+  const [selectedPoi, setSelectedPoi] = useState<PointOfInterest | null>(null);
+
+  const toggleGovOffices = useCallback(
+    () => setShowGovOffices((prev) => !prev),
+    [],
+  );
+  const toggleShelters = useCallback(
+    () => setShowShelters((prev) => !prev),
+    [],
+  );
+  const toggleClinics = useCallback(() => setShowClinics((prev) => !prev), []);
+
+  const enabledPoiTypes = useMemo<PoiType[]>(() => {
+    const types: PoiType[] = [];
+    if (showGovOffices) types.push('government_office');
+    if (showShelters) types.push('animal_shelter');
+    if (showClinics) types.push('vet_clinic');
+    return types;
+  }, [showGovOffices, showShelters, showClinics]);
+
+  const { data: poiData } = usePois({
+    bounds: mapBounds,
+    enabledTypes: enabledPoiTypes,
+  });
+
+  const showPois = enabledPoiTypes.length > 0;
+
+  const handlePoiPress = useCallback((poi: PointOfInterest) => {
+    setSelectedPoi(poi);
+  }, []);
 
   const {
     results: searchResults,
@@ -390,6 +430,12 @@ export default function MapScreen() {
           onToggleCategory={toggleCategory}
           onToggleStatus={toggleStatus}
           onReset={clearFilters}
+          showGovOffices={showGovOffices}
+          showShelters={showShelters}
+          showClinics={showClinics}
+          onToggleGovOffices={toggleGovOffices}
+          onToggleShelters={toggleShelters}
+          onToggleClinics={toggleClinics}
         />
 
         <View style={styles.mapColumn}>
@@ -507,6 +553,12 @@ export default function MapScreen() {
             cases={geoJSONData}
             displayMode={displayMode}
             onPinPress={handlePinPress}
+            jurisdictionData={jurisdictions}
+            showJurisdictions={showBoundaries}
+            onJurisdictionPress={handleJurisdictionPress}
+            poiData={poiData}
+            showPois={showPois}
+            onPoiPress={handlePoiPress}
           >
             <JurisdictionLayer
               data={jurisdictions}
@@ -536,6 +588,12 @@ export default function MapScreen() {
           jurisdictionId={selectedJurisdiction?.id ?? ''}
           jurisdictionName={selectedJurisdiction?.name ?? ''}
           onClose={() => setSelectedJurisdiction(null)}
+        />
+
+        <PoiDetailModal
+          visible={!!selectedPoi}
+          poi={selectedPoi}
+          onClose={() => setSelectedPoi(null)}
         />
       </View>
     );
@@ -633,11 +691,27 @@ export default function MapScreen() {
       <MapView
         onRegionDidChange={handleRegionChange}
         {...(Platform.OS === 'web'
-          ? { cases: geoJSONData, onPinPress: handlePinPress }
+          ? {
+              cases: geoJSONData,
+              onPinPress: handlePinPress,
+              jurisdictionData: jurisdictions,
+              showJurisdictions: showBoundaries,
+              onJurisdictionPress: handleJurisdictionPress,
+              poiData,
+              showPois,
+              onPoiPress: handlePoiPress,
+            }
           : {})}
       >
         {Platform.OS !== 'web' && (
-          <ClusterLayer cases={geoJSONData} onPinPress={handlePinPress} />
+          <>
+            <ClusterLayer cases={geoJSONData} onPinPress={handlePinPress} />
+            <PoiLayer
+              data={poiData}
+              visible={showPois}
+              onPress={handlePoiPress}
+            />
+          </>
         )}
         <JurisdictionLayer
           data={jurisdictions}
@@ -668,6 +742,12 @@ export default function MapScreen() {
         jurisdictionId={selectedJurisdiction?.id ?? ''}
         jurisdictionName={selectedJurisdiction?.name ?? ''}
         onClose={() => setSelectedJurisdiction(null)}
+      />
+
+      <PoiDetailModal
+        visible={!!selectedPoi}
+        poi={selectedPoi}
+        onClose={() => setSelectedPoi(null)}
       />
     </View>
   );

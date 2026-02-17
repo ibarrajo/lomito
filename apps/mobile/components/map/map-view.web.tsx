@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import { TIJUANA_CENTER, DEFAULT_ZOOM } from '../../lib/mapbox.web';
 import type { ReactNode } from 'react';
+import type { PointOfInterest } from '@lomito/shared/types/database';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface Region {
@@ -30,6 +31,15 @@ interface MapViewProps {
   onMapReady?: () => void;
   onRegionDidChange?: (region: Region) => void;
   onPinPress?: (caseId: string) => void;
+  jurisdictionData?: GeoJSON.FeatureCollection | null;
+  showJurisdictions?: boolean;
+  onJurisdictionPress?: (
+    jurisdictionId: string,
+    jurisdictionName: string,
+  ) => void;
+  poiData?: GeoJSON.FeatureCollection | null;
+  showPois?: boolean;
+  onPoiPress?: (poi: PointOfInterest) => void;
 }
 
 export function MapView({
@@ -38,17 +48,27 @@ export function MapView({
   cases,
   displayMode = 'clusters',
   onPinPress,
+  jurisdictionData,
+  showJurisdictions,
+  onJurisdictionPress,
+  poiData,
+  showPois,
+  onPoiPress,
 }: MapViewProps) {
   const { t } = useTranslation();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const onPinPressRef = useRef(onPinPress);
   const casesRef = useRef(cases);
+  const onJurisdictionPressRef = useRef(onJurisdictionPress);
+  const onPoiPressRef = useRef(onPoiPress);
   const hasToken = Boolean(mapboxgl.accessToken);
 
   // Keep refs up to date
   onPinPressRef.current = onPinPress;
   casesRef.current = cases;
+  onJurisdictionPressRef.current = onJurisdictionPress;
+  onPoiPressRef.current = onPoiPress;
 
   useEffect(() => {
     if (!hasToken || !mapContainerRef.current || mapRef.current) return;
@@ -212,6 +232,155 @@ export function MapView({
         'unclustered-points',
       );
 
+      // Jurisdiction boundary layers
+      map.addSource('jurisdictions-source', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+      });
+
+      map.addLayer({
+        id: 'jurisdictions-fill',
+        type: 'fill',
+        source: 'jurisdictions-source',
+        paint: {
+          'fill-color': '#1E293B', // colors.secondary
+          'fill-opacity': 0.15,
+        },
+        layout: {
+          visibility: 'none',
+        },
+      });
+
+      map.addLayer({
+        id: 'jurisdictions-line',
+        type: 'line',
+        source: 'jurisdictions-source',
+        paint: {
+          'line-color': '#1E293B',
+          'line-width': 2,
+          'line-opacity': 0.6,
+        },
+        layout: {
+          visibility: 'none',
+        },
+      });
+
+      map.addLayer({
+        id: 'jurisdictions-labels',
+        type: 'symbol',
+        source: 'jurisdictions-source',
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': 14,
+          'text-font': ['Public Sans SemiBold', 'Arial Unicode MS Bold'],
+          'text-allow-overlap': false,
+          visibility: 'none',
+        },
+        paint: {
+          'text-color': '#1E293B',
+          'text-halo-color': '#FFFFFF',
+          'text-halo-width': 1.5,
+        },
+      });
+
+      // POI source and layers
+      map.addSource('pois-source', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+      });
+
+      map.addLayer({
+        id: 'pois-circles',
+        type: 'circle',
+        source: 'pois-source',
+        paint: {
+          'circle-color': [
+            'match',
+            ['get', 'poi_type'],
+            'government_office',
+            '#2563EB',
+            'animal_shelter',
+            '#059669',
+            'vet_clinic',
+            '#F59E0B',
+            '#64748B',
+          ],
+          'circle-radius': 10,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#FFFFFF',
+        },
+        layout: {
+          visibility: 'none',
+        },
+      });
+
+      map.addLayer({
+        id: 'pois-labels',
+        type: 'symbol',
+        source: 'pois-source',
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': 11,
+          'text-font': ['Public Sans SemiBold', 'Arial Unicode MS Bold'],
+          'text-offset': [0, 1.5],
+          'text-anchor': 'top',
+          'text-allow-overlap': false,
+          visibility: 'none',
+        },
+        paint: {
+          'text-color': '#1E293B',
+          'text-halo-color': '#FFFFFF',
+          'text-halo-width': 1,
+        },
+      });
+
+      // Click handler for POI circles
+      map.on('click', 'pois-circles', (e) => {
+        const feature = e.features?.[0];
+        if (feature?.properties) {
+          onPoiPressRef.current?.(
+            feature.properties as unknown as PointOfInterest,
+          );
+        }
+      });
+
+      map.on('mouseenter', 'pois-circles', () => {
+        const canvas = map.getCanvas() as unknown as {
+          style: { cursor: string };
+        };
+        canvas.style.cursor = 'pointer';
+      });
+      map.on('mouseleave', 'pois-circles', () => {
+        const canvas = map.getCanvas() as unknown as {
+          style: { cursor: string };
+        };
+        canvas.style.cursor = '';
+      });
+
+      // Click handler for jurisdiction boundaries
+      map.on('click', 'jurisdictions-fill', (e) => {
+        const feature = e.features?.[0];
+        if (feature?.properties?.id && feature?.properties?.name) {
+          onJurisdictionPressRef.current?.(
+            feature.properties.id as string,
+            feature.properties.name as string,
+          );
+        }
+      });
+
+      map.on('mouseenter', 'jurisdictions-fill', () => {
+        const canvas = map.getCanvas() as unknown as {
+          style: { cursor: string };
+        };
+        canvas.style.cursor = 'pointer';
+      });
+      map.on('mouseleave', 'jurisdictions-fill', () => {
+        const canvas = map.getCanvas() as unknown as {
+          style: { cursor: string };
+        };
+        canvas.style.cursor = '';
+      });
+
       // Click handler for unclustered points
       map.on('click', 'unclustered-points', (e) => {
         const feature = e.features?.[0];
@@ -350,6 +519,60 @@ export function MapView({
         break;
     }
   }, [displayMode]);
+
+  // Update jurisdiction GeoJSON data when jurisdictionData prop changes
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const source = mapRef.current.getSource('jurisdictions-source') as
+      | mapboxgl.GeoJSONSource
+      | undefined;
+    if (source) {
+      source.setData(
+        jurisdictionData ?? { type: 'FeatureCollection', features: [] },
+      );
+    }
+  }, [jurisdictionData]);
+
+  // Toggle jurisdiction layer visibility when showJurisdictions prop changes
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded()) return;
+
+    const visibility = showJurisdictions ? 'visible' : 'none';
+    for (const layerId of [
+      'jurisdictions-fill',
+      'jurisdictions-line',
+      'jurisdictions-labels',
+    ]) {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', visibility);
+      }
+    }
+  }, [showJurisdictions]);
+
+  // Update POI GeoJSON data when poiData prop changes
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const source = mapRef.current.getSource('pois-source') as
+      | mapboxgl.GeoJSONSource
+      | undefined;
+    if (source) {
+      source.setData(poiData ?? { type: 'FeatureCollection', features: [] });
+    }
+  }, [poiData]);
+
+  // Toggle POI layer visibility when showPois prop changes
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded()) return;
+
+    const visibility = showPois ? 'visible' : 'none';
+    for (const layerId of ['pois-circles', 'pois-labels']) {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', visibility);
+      }
+    }
+  }, [showPois]);
 
   if (!hasToken) {
     return (

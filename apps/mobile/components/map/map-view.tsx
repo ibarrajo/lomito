@@ -10,6 +10,7 @@ import MapboxGL, {
   STREET_STYLE_URL,
 } from '../../lib/mapbox';
 import type { ReactNode } from 'react';
+import type { PointOfInterest } from '@lomito/shared/types/database';
 
 interface Region {
   bounds: {
@@ -28,6 +29,16 @@ interface MapViewProps {
   onMapReady?: () => void;
   onRegionDidChange?: (region: Region) => void;
   onPinPress?: (caseId: string) => void;
+  // Web-only props — accepted here so shared call sites type-check; native uses children instead
+  jurisdictionData?: GeoJSON.FeatureCollection | null;
+  showJurisdictions?: boolean;
+  onJurisdictionPress?: (
+    jurisdictionId: string,
+    jurisdictionName: string,
+  ) => void;
+  poiData?: GeoJSON.FeatureCollection | null;
+  showPois?: boolean;
+  onPoiPress?: (poi: PointOfInterest) => void;
 }
 
 export function MapView({

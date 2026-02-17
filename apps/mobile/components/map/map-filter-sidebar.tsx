@@ -25,6 +25,12 @@ interface MapFilterSidebarProps {
   onToggleCategory: (category: CaseCategory | 'all') => void;
   onToggleStatus: (status: CaseStatus | 'all') => void;
   onReset: () => void;
+  showGovOffices: boolean;
+  showShelters: boolean;
+  showClinics: boolean;
+  onToggleGovOffices: () => void;
+  onToggleShelters: () => void;
+  onToggleClinics: () => void;
 }
 
 export const MapFilterSidebar = memo(function MapFilterSidebar({
@@ -33,6 +39,12 @@ export const MapFilterSidebar = memo(function MapFilterSidebar({
   onToggleCategory,
   onToggleStatus,
   onReset,
+  showGovOffices,
+  showShelters,
+  showClinics,
+  onToggleGovOffices,
+  onToggleShelters,
+  onToggleClinics,
 }: MapFilterSidebarProps) {
   const { t } = useTranslation();
 
@@ -122,6 +134,89 @@ export const MapFilterSidebar = memo(function MapFilterSidebar({
               </Pressable>
             );
           })}
+        </View>
+
+        {/* Divider */}
+        <View style={styles.divider} />
+
+        {/* OVERLAYS section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>{t('map.overlays')}</Text>
+
+          <Pressable
+            style={styles.filterRow}
+            onPress={onToggleGovOffices}
+            accessibilityLabel={t(
+              showGovOffices ? 'map.hideGovOffices' : 'map.showGovOffices',
+            )}
+            accessibilityRole="button"
+            accessibilityState={{ selected: showGovOffices }}
+          >
+            <View style={styles.filterRowContent}>
+              <View
+                style={[styles.dot, { backgroundColor: colors.poi.government }]}
+              />
+              <Text style={styles.filterLabel}>{t('map.showGovOffices')}</Text>
+            </View>
+            {showGovOffices && (
+              <Check
+                size={iconSizes.inline}
+                color={colors.primary}
+                strokeWidth={2.5}
+              />
+            )}
+          </Pressable>
+
+          <Pressable
+            style={styles.filterRow}
+            onPress={onToggleShelters}
+            accessibilityLabel={t(
+              showShelters ? 'map.hideShelters' : 'map.showShelters',
+            )}
+            accessibilityRole="button"
+            accessibilityState={{ selected: showShelters }}
+          >
+            <View style={styles.filterRowContent}>
+              <View
+                style={[styles.dot, { backgroundColor: colors.poi.shelter }]}
+              />
+              <Text style={styles.filterLabel}>{t('map.showShelters')}</Text>
+            </View>
+            {showShelters && (
+              <Check
+                size={iconSizes.inline}
+                color={colors.primary}
+                strokeWidth={2.5}
+              />
+            )}
+          </Pressable>
+
+          <Pressable
+            style={styles.filterRow}
+            onPress={onToggleClinics}
+            accessibilityLabel={t(
+              showClinics ? 'map.hideClinics' : 'map.showClinics',
+            )}
+            accessibilityRole="button"
+            accessibilityState={{ selected: showClinics }}
+          >
+            <View style={styles.filterRowContent}>
+              <View
+                style={[
+                  styles.dot,
+                  { backgroundColor: colors.poi.vetStandard },
+                ]}
+              />
+              <Text style={styles.filterLabel}>{t('map.showClinics')}</Text>
+            </View>
+            {showClinics && (
+              <Check
+                size={iconSizes.inline}
+                color={colors.primary}
+                strokeWidth={2.5}
+              />
+            )}
+          </Pressable>
         </View>
       </ScrollView>
 

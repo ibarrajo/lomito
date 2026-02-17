@@ -12,9 +12,9 @@ import { Body } from '@lomito/ui/src/components/typography';
 import { colors, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { supabase } from '../../lib/supabase';
 import mapboxgl from 'mapbox-gl';
+import { TIJUANA_CENTER } from '../../lib/mapbox.web';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const TIJUANA_CENTER: [number, number] = [-117.0382, 32.5149];
 const TIJUANA_ZOOM = 11;
 const LIGHT_STYLE = 'mapbox://styles/mapbox/light-v11';
 
@@ -58,7 +58,7 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: LIGHT_STYLE,
-      center: TIJUANA_CENTER,
+      center: [TIJUANA_CENTER.longitude, TIJUANA_CENTER.latitude],
       zoom: TIJUANA_ZOOM,
       // Non-interactive: disable all user interactions
       scrollZoom: false,

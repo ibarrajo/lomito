@@ -89,6 +89,15 @@ export const colors = {
     },
   },
 
+  // POI overlay colors
+  poi: {
+    government: '#2563EB',
+    shelter: '#059669',
+    vetStandard: '#F59E0B',
+    vetEmergency: '#DC2626',
+    vetHours24: '#7C3AED',
+  },
+
   // Status/semantic colors
   error: '#DC2626',
   errorDark: '#B91C1C',

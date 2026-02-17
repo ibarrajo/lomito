@@ -67,6 +67,8 @@ export type VerificationStatus =
   | 'contact_confirmed'
   | 'unresponsive';
 export type SubmissionStatus = 'pending' | 'approved' | 'rejected';
+export type PoiType = 'government_office' | 'animal_shelter' | 'vet_clinic';
+export type VetSubtype = 'standard' | 'emergency' | 'hours_24';
 
 export interface NotificationPreferences {
   push_enabled: boolean;
@@ -231,12 +233,29 @@ export interface InboundEmail {
   received_at: string;
 }
 
+export interface PointOfInterest {
+  id: string;
+  poi_type: PoiType;
+  vet_subtype: VetSubtype | null;
+  name: string;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  url: string | null;
+  hours: string | null;
+  capacity: number | null;
+  lng: number;
+  lat: number;
+  jurisdiction_id: string | null;
+}
+
 // Supabase Database type for client typing
 export interface Database {
   public: {
+    Views: Record<string, never>;
     Tables: {
       profiles: {
-        Row: Profile;
+        Row: Profile & Record<string, unknown>;
         Insert: Omit<
           Profile,
           'created_at' | 'updated_at' | 'notification_preferences'
@@ -246,18 +265,20 @@ export interface Database {
           notification_preferences?: NotificationPreferences | null;
         };
         Update: Partial<Omit<Profile, 'id' | 'created_at' | 'updated_at'>>;
+        Relationships: [];
       };
       jurisdictions: {
-        Row: Jurisdiction;
+        Row: Jurisdiction & Record<string, unknown>;
         Insert: Omit<Jurisdiction, 'id' | 'created_at' | 'updated_at'> & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
         Update: Partial<Omit<Jurisdiction, 'id' | 'created_at' | 'updated_at'>>;
+        Relationships: [];
       };
       jurisdiction_authorities: {
-        Row: JurisdictionAuthority;
+        Row: JurisdictionAuthority & Record<string, unknown>;
         Insert: Omit<
           JurisdictionAuthority,
           'id' | 'created_at' | 'updated_at'
@@ -269,9 +290,10 @@ export interface Database {
         Update: Partial<
           Omit<JurisdictionAuthority, 'id' | 'created_at' | 'updated_at'>
         >;
+        Relationships: [];
       };
       authority_submissions: {
-        Row: AuthoritySubmission;
+        Row: AuthoritySubmission & Record<string, unknown>;
         Insert: Omit<AuthoritySubmission, 'id' | 'created_at'> & {
           id?: string;
           created_at?: string;
@@ -279,9 +301,10 @@ export interface Database {
         Update: Partial<
           Omit<AuthoritySubmission, 'id' | 'submitted_by' | 'created_at'>
         >;
+        Relationships: [];
       };
       cases: {
-        Row: Case;
+        Row: Case & Record<string, unknown>;
         Insert: Omit<
           Case,
           | 'id'
@@ -333,17 +356,19 @@ export interface Database {
           incident_at?: string | null;
           updated_at?: string;
         };
+        Relationships: [];
       };
       case_media: {
-        Row: CaseMedia;
+        Row: CaseMedia & Record<string, unknown>;
         Insert: Omit<CaseMedia, 'id' | 'created_at'> & {
           id?: string;
           created_at?: string;
         };
         Update: Partial<Omit<CaseMedia, 'id' | 'case_id' | 'created_at'>>;
+        Relationships: [];
       };
       case_timeline: {
-        Row: CaseTimeline;
+        Row: CaseTimeline & Record<string, unknown>;
         Insert: {
           case_id: string;
           actor_id: string | null;
@@ -353,14 +378,16 @@ export interface Database {
           created_at?: string;
         };
         Update: never;
+        Relationships: [];
       };
       case_subscriptions: {
-        Row: CaseSubscription;
+        Row: CaseSubscription & Record<string, unknown>;
         Insert: Omit<CaseSubscription, 'created_at'> & { created_at?: string };
         Update: never;
+        Relationships: [];
       };
       donations: {
-        Row: Donation;
+        Row: Donation & Record<string, unknown>;
         Insert: Omit<
           Donation,
           'id' | 'created_at' | 'status' | 'payment_url'
@@ -371,22 +398,46 @@ export interface Database {
           payment_url?: string | null;
         };
         Update: Partial<Omit<Donation, 'id' | 'created_at'>>;
+        Relationships: [];
       };
       case_flags: {
-        Row: CaseFlag;
+        Row: CaseFlag & Record<string, unknown>;
         Insert: Omit<CaseFlag, 'id' | 'created_at'> & {
           id?: string;
           created_at?: string;
         };
         Update: never;
+        Relationships: [];
       };
       inbound_emails: {
-        Row: InboundEmail;
+        Row: InboundEmail & Record<string, unknown>;
         Insert: Omit<InboundEmail, 'id' | 'received_at'> & {
           id?: string;
           received_at?: string;
         };
         Update: never;
+        Relationships: [];
+      };
+      points_of_interest: {
+        Row: PointOfInterest & {
+          location: unknown;
+          verified: boolean;
+          created_at: string;
+          updated_at: string;
+        } & Record<string, unknown>;
+        Insert: Omit<PointOfInterest, 'id' | 'lng' | 'lat'> & {
+          id?: string;
+          location: unknown;
+          verified?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<PointOfInterest, 'id' | 'lng' | 'lat'>> & {
+          location?: unknown;
+          verified?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
     };
     Enums: {
@@ -403,6 +454,8 @@ export interface Database {
       dependency_category: DependencyCategory;
       verification_status: VerificationStatus;
       submission_status: SubmissionStatus;
+      poi_type: PoiType;
+      vet_subtype: VetSubtype;
     };
     Functions: {
       get_dashboard_stats: {
@@ -418,6 +471,16 @@ export interface Database {
           total_donations: number;
           avg_resolution_days: number;
         };
+      };
+      get_pois_in_bounds: {
+        Args: {
+          p_west: number;
+          p_south: number;
+          p_east: number;
+          p_north: number;
+          p_types: string[];
+        };
+        Returns: PointOfInterest[];
       };
     };
   };
