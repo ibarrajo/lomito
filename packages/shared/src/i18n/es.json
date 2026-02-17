@@ -128,6 +128,7 @@
     "clusterCount": "{{count}}",
     "showBoundaries": "Mostrar límites",
     "hideBoundaries": "Ocultar límites",
+    "boundariesTooltip": "Mostrar límites de municipios y delegaciones",
     "jurisdictionInfo": "Jurisdicción: {{name}}",
     "filters": "Filtros",
     "resetFilters": "Restablecer",

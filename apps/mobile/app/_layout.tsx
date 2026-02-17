@@ -16,13 +16,19 @@ import { useAuth } from '../hooks/use-auth';
 import { useUserProfile } from '../hooks/use-user-profile';
 import { useNotifications } from '../hooks/use-notifications';
 import { PerformanceMonitor } from '../lib/performance';
-import { initAnalytics, trackPageView } from '../lib/analytics';
+import {
+  initAnalytics,
+  trackPageView,
+  identifyUser,
+  setUserProperties,
+  resetAnalytics,
+} from '../lib/analytics';
 import { AppShell } from '../components/navigation/app-shell';
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
   // Only fetch profile when authenticated — avoids blocking public routes
-  const { loading: profileLoading } = useUserProfile(!!session);
+  const { profile, loading: profileLoading } = useUserProfile(!!session);
   const segments = useSegments();
   const router = useRouter();
   const pathname = usePathname();
@@ -53,6 +59,19 @@ function RootLayoutNav() {
       trackPageView(pathname);
     }
   }, [pathname]);
+
+  // Identify user in analytics when authenticated with profile data
+  useEffect(() => {
+    if (session?.user?.id && profile) {
+      identifyUser(session.user.id);
+      setUserProperties({
+        role: profile.role,
+        ...(profile.municipality ? { municipality: profile.municipality } : {}),
+      });
+    } else if (!session) {
+      resetAnalytics();
+    }
+  }, [session, profile]);
 
   // Wait for both auth and profile to be ready before redirecting
   const isReady = !loading && (!session || !profileLoading);

@@ -47,6 +47,10 @@ interface Ga4Event {
   params?: Record<string, string>;
 }
 
+interface Ga4UserProperties {
+  [key: string]: { value: string };
+}
+
 // ---------------------------------------------------------------------------
 // PostHog instance (module-level singleton, lazily initialized)
 // ---------------------------------------------------------------------------
@@ -58,6 +62,8 @@ let posthog: PostHog | null = null;
 // ---------------------------------------------------------------------------
 
 let ga4ClientId: string | null = null;
+let ga4UserId: string | null = null;
+let ga4UserProperties: Ga4UserProperties | null = null;
 let ga4Queue: Ga4Event[] = [];
 let ga4FlushTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -101,8 +107,28 @@ export async function initAnalytics(): Promise<void> {
  * Call this after a successful login.
  */
 export function identifyUser(userId: string): void {
+  ga4UserId = userId;
   if (!posthog) return;
   posthog.identify(userId);
+}
+
+/**
+ * Sets user properties that are attached to subsequent GA4/PostHog events.
+ * Call after login when profile data is available.
+ *
+ * @param properties - Flat key/value pairs (e.g. { role: 'citizen', municipality: 'Tijuana' })
+ */
+export function setUserProperties(properties: Record<string, string>): void {
+  // PostHog: set person properties
+  if (posthog) {
+    posthog.identify(ga4UserId ?? undefined, properties);
+  }
+
+  // GA4: convert to { key: { value: "..." } } format
+  ga4UserProperties = {};
+  for (const [key, value] of Object.entries(properties)) {
+    ga4UserProperties[key] = { value };
+  }
 }
 
 /**
@@ -110,6 +136,8 @@ export function identifyUser(userId: string): void {
  * PostHog generates a new anonymous ID; GA4 client ID is preserved.
  */
 export function resetAnalytics(): void {
+  ga4UserId = null;
+  ga4UserProperties = null;
   if (!posthog) return;
   posthog.reset();
 }
@@ -216,7 +244,12 @@ function flushGa4(): void {
       Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
       apikey: SUPABASE_ANON_KEY,
     },
-    body: JSON.stringify({ client_id: clientId, events }),
+    body: JSON.stringify({
+      client_id: clientId,
+      ...(ga4UserId ? { user_id: ga4UserId } : {}),
+      ...(ga4UserProperties ? { user_properties: ga4UserProperties } : {}),
+      events,
+    }),
   }).catch((err: unknown) => {
     if (__DEV__) {
       console.warn('[Analytics] GA4 send failed:', err);
@@ -240,6 +273,8 @@ function generateUUID(): string {
 export function _resetForTesting(): void {
   posthog = null;
   ga4ClientId = null;
+  ga4UserId = null;
+  ga4UserProperties = null;
   ga4Queue = [];
   cancelGa4Timer();
 }

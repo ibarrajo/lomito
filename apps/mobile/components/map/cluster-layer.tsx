@@ -99,22 +99,38 @@ export const ClusterLayer = memo(function ClusterLayer({
             ['get', 'category'],
             'abuse',
             colors.category.abuse.pin,
+            'injured',
+            colors.category.injured.pin,
             'stray',
             colors.category.stray.pin,
             'missing',
             colors.category.missing.pin,
-            colors.neutral500, // default
+            'zoonotic',
+            colors.category.zoonotic.pin,
+            'dead_animal',
+            colors.category.dead_animal.pin,
+            'dangerous_dog',
+            colors.category.dangerous_dog.pin,
+            'distress',
+            colors.category.distress.pin,
+            'illegal_sales',
+            colors.category.illegal_sales.pin,
+            'wildlife',
+            colors.category.wildlife.pin,
+            'noise_nuisance',
+            colors.category.noise_nuisance.pin,
+            colors.neutral500, // default fallback
           ] as unknown as string,
-          circleRadius: 12,
+          circleRadius: 14,
           circleStrokeWidth: [
             'case',
             ['==', ['get', 'status'], 'resolved'],
-            3,
+            4,
             ['==', ['get', 'status'], 'verified'],
-            2,
+            3,
             ['==', ['get', 'status'], 'in_progress'],
-            2,
-            2, // default for pending
+            3,
+            3, // default for pending
           ] as unknown as number,
           circleStrokeColor: [
             'case',
@@ -128,7 +144,7 @@ export const ClusterLayer = memo(function ClusterLayer({
             colors.neutral400,
             ['==', ['get', 'status'], 'archived'],
             colors.neutral400,
-            'rgba(255, 255, 255, 0.9)', // default for pending
+            'rgba(255, 255, 255, 1)', // default for pending
           ] as unknown as string,
           circleOpacity: [
             'case',

@@ -58,6 +58,10 @@ serve(async (req: Request) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         client_id: body.client_id,
+        ...(body.user_id ? { user_id: body.user_id } : {}),
+        ...(body.user_properties
+          ? { user_properties: body.user_properties }
+          : {}),
         events: body.events,
       }),
     });

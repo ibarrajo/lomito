@@ -14,6 +14,8 @@ export interface AnalyticsEvent {
 
 export interface AnalyticsPayload {
   client_id: string;
+  user_id?: string;
+  user_properties?: Record<string, { value: string }>;
   events: AnalyticsEvent[];
 }
 

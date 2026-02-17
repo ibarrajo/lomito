@@ -128,6 +128,7 @@
     "clusterCount": "{{count}}",
     "showBoundaries": "Show boundaries",
     "hideBoundaries": "Hide boundaries",
+    "boundariesTooltip": "Show municipality and delegation boundaries",
     "jurisdictionInfo": "Jurisdiction: {{name}}",
     "filters": "Filters",
     "resetFilters": "Reset",

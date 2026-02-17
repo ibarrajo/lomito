@@ -14,7 +14,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 import { MapView } from '../../components/map/map-view';
 import { ClusterLayer } from '../../components/map/cluster-layer';
 import { PoiLayer } from '../../components/map/poi-layer';
@@ -73,6 +73,10 @@ export default function MapScreen() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseSummary | null>(null);
   const [showBoundaries, setShowBoundaries] = useState(false);
+  const [showBoundariesTooltip, setShowBoundariesTooltip] = useState(false);
+  const boundariesTooltipTimerRef = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
   const [mapBounds, setMapBounds] = useState<{
     west: number;
     south: number;
@@ -301,6 +305,15 @@ export default function MapScreen() {
     };
   }, [fetchCases]);
 
+  // Refetch cases when screen regains focus (e.g., returning from report creation)
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchCases();
+    });
+    return unsubscribe;
+  }, [navigation, fetchCases]);
+
   const geoJSONData = useMemo<
     GeoJSON.FeatureCollection<
       GeoJSON.Point,
@@ -351,7 +364,22 @@ export default function MapScreen() {
   }, [router]);
 
   const handleToggleBoundaries = useCallback(() => {
-    setShowBoundaries((prev) => !prev);
+    setShowBoundaries((prev) => {
+      const next = !prev;
+      // Show tooltip briefly when activating boundaries
+      if (next) {
+        setShowBoundariesTooltip(true);
+        if (boundariesTooltipTimerRef.current)
+          clearTimeout(boundariesTooltipTimerRef.current);
+        boundariesTooltipTimerRef.current = setTimeout(
+          () => setShowBoundariesTooltip(false),
+          2500,
+        );
+      } else {
+        setShowBoundariesTooltip(false);
+      }
+      return next;
+    });
   }, []);
 
   const handleRegionChange = useCallback(
@@ -565,18 +593,32 @@ export default function MapScreen() {
           </View>
 
           {/* Jurisdiction toggle button */}
-          <Pressable
-            style={styles.jurisdictionToggle}
-            onPress={handleToggleBoundaries}
-            accessibilityLabel={
-              showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')
-            }
-            accessibilityRole="button"
-          >
-            <Text style={styles.jurisdictionToggleText}>
-              {showBoundaries ? '🗺️' : '🗺️'}
-            </Text>
-          </Pressable>
+          <View style={styles.jurisdictionToggleWrapper}>
+            {showBoundariesTooltip && (
+              <View style={styles.jurisdictionTooltip}>
+                <Text style={styles.jurisdictionTooltipText}>
+                  {t('map.boundariesTooltip')}
+                </Text>
+              </View>
+            )}
+            <Pressable
+              style={[
+                styles.jurisdictionToggle,
+                showBoundaries && styles.jurisdictionToggleActive,
+              ]}
+              onPress={handleToggleBoundaries}
+              accessibilityLabel={
+                showBoundaries
+                  ? t('map.hideBoundaries')
+                  : t('map.showBoundaries')
+              }
+              accessibilityRole="button"
+            >
+              <Text style={styles.jurisdictionToggleText}>
+                {showBoundaries ? '🗺️' : '🗺️'}
+              </Text>
+            </Pressable>
+          </View>
 
           <MapView
             onRegionDidChange={handleRegionChange}
@@ -710,18 +752,30 @@ export default function MapScreen() {
       />
 
       {/* Jurisdiction toggle button */}
-      <Pressable
-        style={styles.jurisdictionToggle}
-        onPress={handleToggleBoundaries}
-        accessibilityLabel={
-          showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')
-        }
-        accessibilityRole="button"
-      >
-        <Text style={styles.jurisdictionToggleText}>
-          {showBoundaries ? '🗺️' : '🗺️'}
-        </Text>
-      </Pressable>
+      <View style={styles.jurisdictionToggleWrapper}>
+        {showBoundariesTooltip && (
+          <View style={styles.jurisdictionTooltip}>
+            <Text style={styles.jurisdictionTooltipText}>
+              {t('map.boundariesTooltip')}
+            </Text>
+          </View>
+        )}
+        <Pressable
+          style={[
+            styles.jurisdictionToggle,
+            showBoundaries && styles.jurisdictionToggleActive,
+          ]}
+          onPress={handleToggleBoundaries}
+          accessibilityLabel={
+            showBoundaries ? t('map.hideBoundaries') : t('map.showBoundaries')
+          }
+          accessibilityRole="button"
+        >
+          <Text style={styles.jurisdictionToggleText}>
+            {showBoundaries ? '🗺️' : '🗺️'}
+          </Text>
+        </Pressable>
+      </View>
 
       <MapView
         onRegionDidChange={handleRegionChange}
@@ -825,15 +879,35 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     height: 44,
     justifyContent: 'center',
-    position: 'absolute',
-    right: spacing.md,
-    top: 80,
     width: 44,
-    zIndex: 10,
     ...shadowStyles.card,
+  },
+  jurisdictionToggleActive: {
+    backgroundColor: colors.primaryLight,
+    borderColor: colors.primary,
+    borderWidth: 2,
   },
   jurisdictionToggleText: {
     fontSize: iconSizes.default,
+  },
+  jurisdictionToggleWrapper: {
+    alignItems: 'flex-end',
+    position: 'absolute',
+    right: spacing.md,
+    top: 80,
+    zIndex: 10,
+  },
+  jurisdictionTooltip: {
+    backgroundColor: colors.secondary,
+    borderRadius: borderRadius.tag,
+    marginBottom: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  jurisdictionTooltipText: {
+    color: colors.white,
+    fontSize: typography.caption.fontSize,
+    fontWeight: '600',
   },
   layerToggleBar: {
     backgroundColor: colors.white,
