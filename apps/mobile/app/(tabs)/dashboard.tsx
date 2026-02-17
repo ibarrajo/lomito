@@ -25,6 +25,7 @@ import { CaseSummaryCard } from '../../components/map/case-summary-card';
 import { FilterBar } from '../../components/map/filter-bar';
 import { MapFilterSidebar } from '../../components/map/map-filter-sidebar';
 import { MapActivityPanel } from '../../components/map/map-activity-panel';
+import { DataFreshnessIndicator } from '../../components/map/data-freshness-indicator';
 import { useMapFilters } from '../../hooks/use-map-filters';
 import { useJurisdictions } from '../../hooks/use-jurisdictions';
 import { usePois } from '../../hooks/use-pois';
@@ -68,6 +69,8 @@ export default function MapScreen() {
   const { isDesktop } = useBreakpoint();
   const [cases, setCases] = useState<CaseSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date>(() => new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseSummary | null>(null);
   const [showBoundaries, setShowBoundaries] = useState(false);
   const [mapBounds, setMapBounds] = useState<{
@@ -208,67 +211,94 @@ export default function MapScreen() {
     zoom: mapZoom,
   });
 
-  const fetchCases = useCallback(async () => {
-    try {
-      setIsLoading(true);
+  const fetchCases = useCallback(
+    async (triggeredByRealtime = false) => {
+      try {
+        if (triggeredByRealtime) {
+          setIsRefreshing(true);
+        } else {
+          setIsLoading(true);
+        }
 
-      // Build filter arrays from selected categories/statuses
-      const filterCategories =
-        selectedCategories !== 'all' ? [selectedCategories] : null;
-      const filterStatuses =
-        selectedStatuses !== 'all' ? [selectedStatuses] : null;
+        // Build filter arrays from selected categories/statuses
+        const filterCategories =
+          selectedCategories !== 'all' ? [selectedCategories] : null;
+        const filterStatuses =
+          selectedStatuses !== 'all' ? [selectedStatuses] : null;
 
-      // Use RPC function to get cases with GeoJSON locations
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = (await (supabase as any).rpc(
-        'get_cases_for_map',
-        {
-          limit_count: 100,
-          filter_categories: filterCategories,
-          filter_statuses: filterStatuses,
-        },
-      )) as {
-        data: Array<{
-          id: string;
-          category: string;
-          animal_type: string;
-          description: string;
-          status: string;
-          urgency: string;
-          location_geojson: { type: 'Point'; coordinates: [number, number] };
-          created_at: string;
-        }> | null;
-        error: { message: string } | null;
-      };
+        // Use RPC function to get cases with GeoJSON locations
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = (await (supabase as any).rpc(
+          'get_cases_for_map',
+          {
+            limit_count: 100,
+            filter_categories: filterCategories,
+            filter_statuses: filterStatuses,
+          },
+        )) as {
+          data: Array<{
+            id: string;
+            category: string;
+            animal_type: string;
+            description: string;
+            status: string;
+            urgency: string;
+            location_geojson: { type: 'Point'; coordinates: [number, number] };
+            created_at: string;
+          }> | null;
+          error: { message: string } | null;
+        };
 
-      if (error) {
-        console.error('Error fetching cases:', error);
-        return;
+        if (error) {
+          console.error('Error fetching cases:', error);
+          return;
+        }
+
+        if (data) {
+          // Map the RPC result to our CaseSummary type
+          const mappedCases = data.map((row) => ({
+            id: row.id,
+            category: row.category as CaseCategory,
+            animal_type: row.animal_type as AnimalType,
+            description: row.description,
+            status: row.status as CaseStatus,
+            urgency: row.urgency as UrgencyLevel,
+            location: row.location_geojson,
+            created_at: row.created_at,
+          }));
+          setCases(mappedCases);
+          setLastUpdated(new Date());
+        }
+      } catch (error) {
+        console.error('Unexpected error fetching cases:', error);
+      } finally {
+        setIsLoading(false);
+        setIsRefreshing(false);
       }
-
-      if (data) {
-        // Map the RPC result to our CaseSummary type
-        const mappedCases = data.map((row) => ({
-          id: row.id,
-          category: row.category as CaseCategory,
-          animal_type: row.animal_type as AnimalType,
-          description: row.description,
-          status: row.status as CaseStatus,
-          urgency: row.urgency as UrgencyLevel,
-          location: row.location_geojson,
-          created_at: row.created_at,
-        }));
-        setCases(mappedCases);
-      }
-    } catch (error) {
-      console.error('Unexpected error fetching cases:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [selectedCategories, selectedStatuses]);
+    },
+    [selectedCategories, selectedStatuses],
+  );
 
   useEffect(() => {
     fetchCases();
+  }, [fetchCases]);
+
+  // Subscribe to realtime case changes
+  useEffect(() => {
+    const channel = supabase
+      .channel('cases-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'cases' },
+        () => {
+          fetchCases(true);
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [fetchCases]);
 
   const geoJSONData = useMemo<
@@ -567,6 +597,11 @@ export default function MapScreen() {
             />
           </MapView>
 
+          <DataFreshnessIndicator
+            lastUpdated={lastUpdated}
+            isRefreshing={isRefreshing}
+          />
+
           {selectedCase && (
             <CaseSummaryCard
               caseData={selectedCase}
@@ -719,6 +754,11 @@ export default function MapScreen() {
           onPress={handleJurisdictionPress}
         />
       </MapView>
+
+      <DataFreshnessIndicator
+        lastUpdated={lastUpdated}
+        isRefreshing={isRefreshing}
+      />
 
       {selectedCase && (
         <CaseSummaryCard
