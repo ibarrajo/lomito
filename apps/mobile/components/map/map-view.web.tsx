@@ -5,7 +5,7 @@
 
 /// <reference lib="dom" />
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
@@ -63,6 +63,7 @@ export function MapView({
   const onJurisdictionPressRef = useRef(onJurisdictionPress);
   const onPoiPressRef = useRef(onPoiPress);
   const hasToken = Boolean(mapboxgl.accessToken);
+  const [webglUnavailable, setWebglUnavailable] = useState(false);
 
   // Keep refs up to date
   onPinPressRef.current = onPinPress;
@@ -73,12 +74,23 @@ export function MapView({
   useEffect(() => {
     if (!hasToken || !mapContainerRef.current || mapRef.current) return;
 
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [TIJUANA_CENTER.longitude, TIJUANA_CENTER.latitude],
-      zoom: DEFAULT_ZOOM,
-    });
+    if (!mapboxgl.supported({ failIfMajorPerformanceCaveat: false })) {
+      setWebglUnavailable(true);
+      return;
+    }
+
+    let map: mapboxgl.Map;
+    try {
+      map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [TIJUANA_CENTER.longitude, TIJUANA_CENTER.latitude],
+        zoom: DEFAULT_ZOOM,
+      });
+    } catch {
+      setWebglUnavailable(true);
+      return;
+    }
 
     mapRef.current = map;
 
@@ -507,7 +519,7 @@ export function MapView({
 
     return () => {
       resizeObserver.disconnect();
-      map.remove();
+      mapRef.current?.remove();
       mapRef.current = null;
     };
   }, [hasToken, onMapReady, onRegionDidChange]);
@@ -615,11 +627,15 @@ export function MapView({
     }
   }, [showPois]);
 
-  if (!hasToken) {
+  if (!hasToken || webglUnavailable) {
     return (
       <View style={styles.placeholder}>
         <Text style={styles.placeholderTitle}>{t('map.title')}</Text>
-        <Text style={styles.placeholderText}>{t('map.placeholderText')}</Text>
+        <Text style={styles.placeholderText}>
+          {webglUnavailable
+            ? t('map.webglUnavailable')
+            : t('map.placeholderText')}
+        </Text>
       </View>
     );
   }

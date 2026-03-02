@@ -21,7 +21,11 @@
     "yes": "Sí",
     "no": "No",
     "ok": "OK",
-    "user": "Usuario"
+    "user": "Usuario",
+    "languages": {
+      "es": "Español",
+      "en": "Inglés"
+    }
   },
   "nav": {
     "map": "Mapa",
@@ -143,6 +147,7 @@
     "categoryLabel": "Categoría",
     "statusLabel": "Estado",
     "placeholderText": "Configura EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN en .env para habilitar el mapa.",
+    "webglUnavailable": "Mapa no disponible — tu navegador o controlador gráfico no admite WebGL. Intenta actualizar tus controladores de gráficos o usar un navegador diferente.",
     "displayPins": "Puntos",
     "displayHeatmap": "Calor",
     "displayClusters": "Grupos",
@@ -447,7 +452,8 @@
     "noLocation": "Sin datos de ubicación",
     "reopen": "Reabrir caso",
     "reopenConfirm": "Esto regresará el caso a estado pendiente",
-    "reopenSuccess": "Caso reabierto"
+    "reopenSuccess": "Caso reabierto",
+    "rejectReasonRequired": "Se requiere un motivo de rechazo"
   },
   "flag": {
     "report": "Señalar reporte",

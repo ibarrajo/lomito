@@ -55,21 +55,32 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
   useEffect(() => {
     if (!hasToken || !mapContainerRef.current || mapRef.current) return;
 
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: LIGHT_STYLE,
-      center: [TIJUANA_CENTER.longitude, TIJUANA_CENTER.latitude],
-      zoom: TIJUANA_ZOOM,
-      // Non-interactive: disable all user interactions
-      scrollZoom: false,
-      boxZoom: false,
-      dragRotate: false,
-      dragPan: false,
-      keyboard: false,
-      doubleClickZoom: false,
-      touchZoomRotate: false,
-      interactive: false,
-    });
+    if (!mapboxgl.supported({ failIfMajorPerformanceCaveat: false })) {
+      setError('webgl-unavailable');
+      return;
+    }
+
+    let map: mapboxgl.Map;
+    try {
+      map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: LIGHT_STYLE,
+        center: [TIJUANA_CENTER.longitude, TIJUANA_CENTER.latitude],
+        zoom: TIJUANA_ZOOM,
+        // Non-interactive: disable all user interactions
+        scrollZoom: false,
+        boxZoom: false,
+        dragRotate: false,
+        dragPan: false,
+        keyboard: false,
+        doubleClickZoom: false,
+        touchZoomRotate: false,
+        interactive: false,
+      });
+    } catch {
+      setError('webgl-unavailable');
+      return;
+    }
 
     mapRef.current = map;
 
@@ -177,7 +188,7 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
     });
 
     return () => {
-      map.remove();
+      mapRef.current?.remove();
       mapRef.current = null;
     };
   }, [hasToken]);
