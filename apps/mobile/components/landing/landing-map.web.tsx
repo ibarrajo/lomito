@@ -8,7 +8,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Body } from '@lomito/ui/src/components/typography';
+import { useTranslation } from 'react-i18next';
+import { Body, BodySmall } from '@lomito/ui/src/components/typography';
 import { colors, borderRadius } from '@lomito/ui/src/theme/tokens';
 import { supabase } from '../../lib/supabase';
 import mapboxgl from 'mapbox-gl';
@@ -46,7 +47,10 @@ interface LandingMapProps {
   height?: number;
 }
 
+const WEBGL_TROUBLESHOOT_URL = 'https://get.webgl.org/troubleshooting/';
+
 export function LandingMap({ height = 400 }: LandingMapProps) {
+  const { t } = useTranslation();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -193,6 +197,32 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
     };
   }, [hasToken]);
 
+  if (error === 'webgl-unavailable' && hasToken) {
+    const staticUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/${TIJUANA_CENTER.longitude},${TIJUANA_CENTER.latitude},${TIJUANA_ZOOM},0/800x400?access_token=${mapboxgl.accessToken}`;
+    return (
+      <View style={[styles.fallback, { height }]}>
+        <img
+          src={staticUrl}
+          alt="Tijuana"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <View style={styles.webglBanner}>
+          <BodySmall style={styles.webglBannerText}>
+            {t('map.webglUnavailable')}
+          </BodySmall>
+          <a
+            href={WEBGL_TROUBLESHOOT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: colors.primary, fontSize: 12 }}
+          >
+            {t('map.webglTroubleshoot')}
+          </a>
+        </View>
+      </View>
+    );
+  }
+
   if (!hasToken || error) {
     return (
       <View style={[styles.fallback, { height }]}>
@@ -230,5 +260,18 @@ const styles = StyleSheet.create({
   fallbackText: {
     color: colors.neutral400,
     fontWeight: '600',
+  },
+  webglBanner: {
+    backgroundColor: 'rgba(30, 41, 59, 0.88)',
+    bottom: 0,
+    gap: 2,
+    left: 0,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    position: 'absolute',
+    right: 0,
+  },
+  webglBannerText: {
+    color: colors.white,
   },
 });

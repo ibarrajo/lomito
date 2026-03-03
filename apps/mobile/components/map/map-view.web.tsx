@@ -10,6 +10,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import { TIJUANA_CENTER, DEFAULT_ZOOM } from '../../lib/mapbox.web';
+import { colors } from '@lomito/ui/src/theme/tokens';
 import type { ReactNode } from 'react';
 import type { PointOfInterest } from '@lomito/shared/types/database';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -627,15 +628,37 @@ export function MapView({
     }
   }, [showPois]);
 
-  if (!hasToken || webglUnavailable) {
+  if (webglUnavailable && hasToken) {
+    const staticUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/${TIJUANA_CENTER.longitude},${TIJUANA_CENTER.latitude},${DEFAULT_ZOOM},0/1280x720?access_token=${mapboxgl.accessToken}`;
+    return (
+      <View style={{ flex: 1 }}>
+        <img
+          src={staticUrl}
+          alt={t('map.title')}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <View style={styles.webglOverlay}>
+          <Text style={styles.webglOverlayText}>
+            {t('map.webglUnavailable')}
+          </Text>
+          <a
+            href="https://get.webgl.org/troubleshooting/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: colors.primary, fontSize: 14 }}
+          >
+            {t('map.webglTroubleshoot')}
+          </a>
+        </View>
+      </View>
+    );
+  }
+
+  if (!hasToken) {
     return (
       <View style={styles.placeholder}>
         <Text style={styles.placeholderTitle}>{t('map.title')}</Text>
-        <Text style={styles.placeholderText}>
-          {webglUnavailable
-            ? t('map.webglUnavailable')
-            : t('map.placeholderText')}
-        </Text>
+        <Text style={styles.placeholderText}>{t('map.placeholderText')}</Text>
       </View>
     );
   }
@@ -665,5 +688,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     marginBottom: 8,
+  },
+  webglOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(30, 41, 59, 0.88)',
+    bottom: 0,
+    gap: 6,
+    justifyContent: 'center',
+    left: 0,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    position: 'absolute',
+    right: 0,
+  },
+  webglOverlayText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
