@@ -21,7 +21,11 @@
     "yes": "Yes",
     "no": "No",
     "ok": "OK",
-    "user": "User"
+    "user": "User",
+    "languages": {
+      "es": "Spanish",
+      "en": "English"
+    }
   },
   "nav": {
     "map": "Map",
@@ -143,6 +147,8 @@
     "categoryLabel": "Category",
     "statusLabel": "Status",
     "placeholderText": "Set EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN in .env to enable the map.",
+    "webglUnavailable": "WebGL is not supported by your browser or graphics driver. This is a static preview.",
+    "webglTroubleshoot": "Troubleshoot WebGL ↗",
     "displayPins": "Pins",
     "displayHeatmap": "Heatmap",
     "displayClusters": "Clusters",
@@ -447,7 +453,8 @@
     "noLocation": "No location data",
     "reopen": "Reopen case",
     "reopenConfirm": "This will return the case to pending status",
-    "reopenSuccess": "Case reopened"
+    "reopenSuccess": "Case reopened",
+    "rejectReasonRequired": "A rejection reason is required"
   },
   "flag": {
     "report": "Flag report",
