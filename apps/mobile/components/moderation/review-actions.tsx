@@ -25,6 +25,7 @@ interface UseReviewActionsResult {
   setConfirmReject: (confirm: { caseId: string } | null) => void;
   rejectReason: string;
   setRejectReason: (reason: string) => void;
+  rejectReasonError: string | null;
   confirmRejectAction: () => Promise<void>;
   confirmFlag: { caseId: string } | null;
   setConfirmFlag: (confirm: { caseId: string } | null) => void;
@@ -53,6 +54,9 @@ export function useReviewActions(
     null,
   );
   const [rejectReason, setRejectReason] = useState('');
+  const [rejectReasonError, setRejectReasonError] = useState<string | null>(
+    null,
+  );
   const [confirmFlag, setConfirmFlag] = useState<{ caseId: string } | null>(
     null,
   );
@@ -86,16 +90,23 @@ export function useReviewActions(
 
   function handleReject(caseId: string): void {
     setRejectReason('');
+    setRejectReasonError(null);
     setConfirmReject({ caseId });
   }
 
   async function confirmRejectAction(): Promise<void> {
     if (!confirmReject) return;
 
+    if (rejectReason.trim() === '') {
+      setRejectReasonError(t('moderation.rejectReasonRequired'));
+      return;
+    }
+
     try {
       await rejectCase(confirmReject.caseId, rejectReason);
       setConfirmReject(null);
       setRejectReason('');
+      setRejectReasonError(null);
       setModal({
         title: t('common.done'),
         message: t('moderation.rejectSuccess'),
@@ -104,6 +115,7 @@ export function useReviewActions(
     } catch (err) {
       setConfirmReject(null);
       setRejectReason('');
+      setRejectReasonError(null);
       setModal({
         title: t('common.error'),
         message: t('moderation.actionError'),
@@ -175,6 +187,13 @@ export function useReviewActions(
     }
   }
 
+  function handleRejectReasonChange(reason: string): void {
+    setRejectReason(reason);
+    if (rejectReasonError !== null) {
+      setRejectReasonError(null);
+    }
+  }
+
   return {
     handleVerify,
     handleReject,
@@ -189,7 +208,8 @@ export function useReviewActions(
     confirmReject,
     setConfirmReject,
     rejectReason,
-    setRejectReason,
+    setRejectReason: handleRejectReasonChange,
+    rejectReasonError,
     confirmRejectAction,
     confirmFlag,
     setConfirmFlag,

@@ -20,8 +20,8 @@ describe('feature flags', () => {
     }
   });
 
-  it('should have donations enabled by default', () => {
-    expect(isFeatureEnabled('donations')).toBe(true);
+  it('should have donations disabled by default', () => {
+    expect(isFeatureEnabled('donations')).toBe(false);
   });
 
   it('should have smsLogin disabled by default', () => {

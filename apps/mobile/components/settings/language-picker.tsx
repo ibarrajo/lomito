@@ -13,11 +13,6 @@ type Language = 'es' | 'en';
 
 const STORAGE_KEY = '@lomito/language';
 
-const languageNames: Record<Language, string> = {
-  es: 'Español',
-  en: 'English',
-};
-
 export function LanguagePicker() {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState<Language>(
@@ -54,7 +49,7 @@ export function LanguagePicker() {
         accessibilityRole="radio"
         accessibilityState={{ checked: currentLanguage === 'es' }}
       >
-        <Text style={styles.languageName}>{languageNames.es}</Text>
+        <Text style={styles.languageName}>{t('common.languages.es')}</Text>
         <View
           style={[
             styles.radioCircle,
@@ -72,7 +67,7 @@ export function LanguagePicker() {
         accessibilityRole="radio"
         accessibilityState={{ checked: currentLanguage === 'en' }}
       >
-        <Text style={styles.languageName}>{languageNames.en}</Text>
+        <Text style={styles.languageName}>{t('common.languages.en')}</Text>
         <View
           style={[
             styles.radioCircle,

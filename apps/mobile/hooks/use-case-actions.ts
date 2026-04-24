@@ -45,24 +45,20 @@ export function useCaseActions(): UseCaseActionsResult {
       setLoading(true);
       setError(null);
 
-      // Set rejection reason as session variable for the DB trigger.
-      // Cast required: set_rejection_reason is pending in generated types until
-      // migration 20260218100001 is applied and types are regenerated.
-      await (
+      // Single atomic RPC: sets app.rejection_reason session variable and updates
+      // case status to 'rejected' in one transaction, so the status-change trigger
+      // can read the reason and write it to case_timeline.
+      // Cast required: reject_case is pending in generated types until
+      // migration 20260217240000 is applied and types are regenerated.
+      const { error: rpcError } = await (
         supabase.rpc as unknown as (
           fn: string,
           args: Record<string, string>,
-        ) => Promise<unknown>
-      )('set_rejection_reason', { p_reason: reason });
+        ) => Promise<{ error: { message: string } | null }>
+      )('reject_case', { p_case_id: caseId, p_reason: reason });
 
-      // Update case status — trigger writes timeline with reason
-      const { error: updateError } = await supabase
-        .from('cases')
-        .update({ status: 'rejected' } as never)
-        .eq('id', caseId);
-
-      if (updateError) {
-        throw updateError;
+      if (rpcError) {
+        throw rpcError;
       }
     } catch (err) {
       console.error('Error rejecting case:', err);

@@ -13,6 +13,7 @@ Lomito is an open-source, map-centric platform for reporting and tracking animal
 - **Payments:** Mercado Pago (Mexico: OXXO, SPEI) + Stripe (international).
 - **Analytics:** PostHog (public-facing dashboard, 1M events/month free tier).
 - **i18n:** react-i18next. Spanish (es-MX) primary, English secondary.
+- **Web Hosting:** Cloudflare Pages (deployed via Wrangler).
 
 ## Monorepo Structure
 
@@ -38,10 +39,26 @@ lomito/
 └── package.json          # Root workspace config
 ```
 
+## Commands
+
+```bash
+npm run dev           # Start Expo dev server (mobile + web)
+npm run dev:web       # Start web-only dev server
+npm run lint          # ESLint (--max-warnings 0)
+npm run typecheck     # TypeScript check (tsc --noEmit)
+npm run format        # Prettier auto-fix
+npm run format:check  # Prettier check (CI uses this)
+npm run test          # Vitest run
+npm run deploy        # Build web + deploy to Cloudflare Pages (main)
+npm run deploy:preview # Build web + deploy to Cloudflare Pages (preview)
+```
+
+**Pre-commit (required):** `npm run format:check && npm run lint && npx tsc --noEmit`
+
 ## Code Conventions
 
 - **Language:** TypeScript strict mode throughout. No `any`. All code, comments, variable names, commit messages, and documentation in **English**.
-- **Spanish appears ONLY in:** `packages/shared/i18n/es.json` and user-facing legal documents in `docs/legal/`.
+- **Spanish appears ONLY in:** `packages/shared/i18n/es.json`.
 - **Naming:** camelCase (variables/functions), PascalCase (components/types), SCREAMING_SNAKE (constants), kebab-case (filenames).
 - **Commits:** Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`). One logical change per commit.
 - **Formatting:** Prettier (semi: true, singleQuote: true, trailingComma: 'all'). ESLint with @typescript-eslint.
@@ -132,8 +149,8 @@ This session is the **orchestrator**. It runs on Opus and is the sole interface 
 
 ## Reference Documents
 
-- `docs/specs/PRD.md` — Full product requirements
-- `docs/specs/ENGINEERING_GUIDE.md` — Architecture, performance, analytics, i18n, kickoff checklist
+- `docs/specs/PROJECT_BRIEF.md` — Project brief and requirements
+- `docs/specs/CASE_LIFECYCLE.md` — Case status lifecycle and transitions
 - `docs/style/DESIGN_TOKENS.md` — Complete design token reference
 - `docs/plans/ISSUES.md` — Blockers needing human input
 - `docs/archive/` — Completed orchestration docs (ORCHESTRATION.md, LAUNCH_PROMPT.md, agent-runner specs)

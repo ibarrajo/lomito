@@ -186,7 +186,9 @@ export function PageFooter() {
           accessibilityRole="button"
         >
           <Text style={styles.languageToggle}>
-            {i18n.language === 'en' ? 'Español' : 'English'}
+            {i18n.language === 'en'
+              ? t('common.languages.es')
+              : t('common.languages.en')}
           </Text>
         </TouchableOpacity>
       </View>

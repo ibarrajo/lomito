@@ -51,6 +51,7 @@ export default function ModerationScreen() {
     setConfirmReject,
     rejectReason,
     setRejectReason,
+    rejectReasonError,
     confirmRejectAction,
     confirmFlag,
     setConfirmFlag,
@@ -268,6 +269,7 @@ export default function ModerationScreen() {
                 onChangeText={setRejectReason}
                 placeholder={t('moderation.rejectReason')}
                 accessibilityLabel={t('moderation.rejectReason')}
+                error={rejectReasonError ?? undefined}
               />
               <View style={styles.modalActions}>
                 <Button
@@ -414,6 +416,7 @@ export default function ModerationScreen() {
               onChangeText={setRejectReason}
               placeholder={t('moderation.rejectReason')}
               accessibilityLabel={t('moderation.rejectReason')}
+              error={rejectReasonError ?? undefined}
             />
             <View style={styles.modalActions}>
               <Button

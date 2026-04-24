@@ -87,6 +87,9 @@ logs/
 docs/stitch-designs/
 docs/data/
 .claude-agent.log
+.claude.local.md
+.claude/settings.local.json
+.vercel-auth.json
 
 # Python / Agent runner
 __pycache__/

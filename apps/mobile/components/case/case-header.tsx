@@ -37,14 +37,14 @@ const URGENCY_COLORS: Record<string, string> = {
 };
 
 export function CaseHeader({ caseData }: CaseHeaderProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const categoryColors = CATEGORY_COLORS[caseData.category];
   const statusColors = STATUS_COLORS[caseData.status];
   const urgencyColor = URGENCY_COLORS[caseData.urgency];
 
   const formattedDate = new Date(caseData.created_at).toLocaleDateString(
-    'es-MX',
+    i18n.language,
     {
       year: 'numeric',
       month: 'long',

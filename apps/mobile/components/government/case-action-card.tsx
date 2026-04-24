@@ -142,8 +142,7 @@ export const CaseActionCard = memo(function CaseActionCard({
           <View style={styles.actions}>
             <Pressable
               style={[styles.actionButton, styles.folioButton]}
-              onPress={(e) => {
-                e.stopPropagation();
+              onPress={() => {
                 onAssignFolio(id);
               }}
               accessibilityLabel={t('government.assignFolio')}
@@ -156,8 +155,7 @@ export const CaseActionCard = memo(function CaseActionCard({
 
             <Pressable
               style={[styles.actionButton, styles.responseButton]}
-              onPress={(e) => {
-                e.stopPropagation();
+              onPress={() => {
                 onPostResponse(id);
               }}
               accessibilityLabel={t('government.postResponse')}
@@ -172,8 +170,7 @@ export const CaseActionCard = memo(function CaseActionCard({
 
             <Pressable
               style={[styles.actionButton, styles.statusButton]}
-              onPress={(e) => {
-                e.stopPropagation();
+              onPress={() => {
                 onUpdateStatus(id);
               }}
               accessibilityLabel={t('government.updateStatus')}
