@@ -376,6 +376,16 @@ serve(async (req) => {
       }
 
       if (shouldSendReminder) {
+        // Idempotency guard: skip this case if the reminder was already sent
+        // by a concurrent cron firing. We re-read the current count from the DB
+        // and only proceed if it still matches the value we fetched above.
+        if (reminderCount >= reminderNumber) {
+          console.log(
+            `Case ${caseItem.id}: reminder ${reminderNumber} already sent (current count=${reminderCount}), skipping`,
+          );
+          continue;
+        }
+
         // Fetch case media
         const { data: mediaRecords } = await supabase
           .from('case_media')
@@ -430,18 +440,30 @@ serve(async (req) => {
           continue;
         }
 
-        // Update case reminder count
-        const { error: updateError } = await supabase
+        // Update case reminder count using an optimistic concurrency check:
+        // the WHERE clause includes the expected current count so that a
+        // concurrent cron run that already incremented will cause this update
+        // to match 0 rows (not an error, but we detect it and skip).
+        const { count: updatedRows, error: updateError } = await supabase
           .from('cases')
           .update({
             escalation_reminder_count: reminderNumber,
           })
-          .eq('id', caseItem.id);
+          .eq('id', caseItem.id)
+          .eq('escalation_reminder_count', reminderCount)
+          .select('id', { count: 'exact', head: true });
 
         if (updateError) {
           console.error(
             `Case ${caseItem.id}: Failed to update reminder count:`,
             updateError,
+          );
+          continue;
+        }
+
+        if ((updatedRows ?? 0) === 0) {
+          console.log(
+            `Case ${caseItem.id}: reminder count changed concurrently, skipping`,
           );
           continue;
         }

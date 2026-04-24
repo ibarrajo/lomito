@@ -14,10 +14,10 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_SERVICE_ROLE_KEY =
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type',
+// donation-webhook is a server-to-server endpoint called by Mercado Pago.
+// No browser Origin is expected, so we do not apply CORS headers here.
+const serverHeaders = {
+  'Content-Type': 'application/json',
 };
 
 interface MercadoPagoPayment {
@@ -38,10 +38,10 @@ async function validateMercadoPagoSignature(
   dataId: string,
 ): Promise<boolean> {
   if (!MERCADO_PAGO_WEBHOOK_SECRET) {
-    console.warn(
-      'MERCADO_PAGO_WEBHOOK_SECRET not configured, skipping signature validation',
+    console.error(
+      'MERCADO_PAGO_WEBHOOK_SECRET is not configured — rejecting request to prevent accepting unsigned webhooks',
     );
-    return true;
+    return false;
   }
 
   const signature = req.headers.get('x-signature');
@@ -98,18 +98,17 @@ async function validateMercadoPagoSignature(
 }
 
 serve(async (req) => {
-  // Handle CORS preflight
+  // This endpoint is server-to-server (Mercado Pago IPN). We do not handle
+  // CORS preflight because no browser will call this route directly.
   if (req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: corsHeaders,
-    });
+    return new Response(null, { status: 405, headers: serverHeaders });
   }
 
   // Only accept POST requests
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: serverHeaders,
     });
   }
 
@@ -123,7 +122,7 @@ serve(async (req) => {
       console.error('Missing topic or id in webhook payload');
       return new Response(JSON.stringify({ error: 'Invalid payload' }), {
         status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: serverHeaders,
       });
     }
 
@@ -133,7 +132,7 @@ serve(async (req) => {
       console.error('Invalid webhook signature');
       return new Response(JSON.stringify({ error: 'Invalid signature' }), {
         status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: serverHeaders,
       });
     }
 
@@ -143,7 +142,7 @@ serve(async (req) => {
         JSON.stringify({ message: 'Ignored non-payment notification' }),
         {
           status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          headers: serverHeaders,
         },
       );
     }
@@ -169,7 +168,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Failed to fetch payment details' }),
         {
           status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          headers: serverHeaders,
         },
       );
     }
@@ -209,7 +208,7 @@ serve(async (req) => {
         JSON.stringify({ error: 'Failed to update donation' }),
         {
           status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          headers: serverHeaders,
         },
       );
     }
@@ -226,14 +225,14 @@ serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: serverHeaders,
       },
     );
   } catch (error) {
     console.error('Unexpected error in webhook:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: serverHeaders,
     });
   }
 });

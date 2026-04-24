@@ -3,20 +3,37 @@
  * Creates a Mercado Pago checkout preference and inserts pending donation record.
  */
 
+// TODO(security): add Turnstile verification before processing donation
+
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type',
-};
+import { corsHeadersFor, isAllowedOrigin } from '../_shared/cors.ts';
 
 const MERCADO_PAGO_ACCESS_TOKEN =
   Deno.env.get('MERCADO_PAGO_ACCESS_TOKEN') ?? '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_SERVICE_ROLE_KEY =
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
+
+/** Maximum individual donation in MXN (100,000 MXN). */
+const MAX_DONATION_AMOUNT_MXN = 100_000;
+
+/** Maximum donation attempts per IP per hour (in-memory, resets on cold start). */
+const MAX_DONATIONS_PER_HOUR = 5;
+
+/** In-memory rate limit store: ip -> list of timestamps. */
+const rateLimitStore = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const windowStart = now - 3_600_000; // 1 hour
+  const hits = (rateLimitStore.get(ip) ?? []).filter((t) => t > windowStart);
+  if (hits.length >= MAX_DONATIONS_PER_HOUR) return true;
+  hits.push(now);
+  rateLimitStore.set(ip, hits);
+  return false;
+}
 
 interface CreateDonationRequest {
   amount: number;
@@ -47,9 +64,23 @@ interface MercadoPagoPreference {
 }
 
 serve(async (req) => {
+  const origin = req.headers.get('Origin');
+  const corsHeaders = corsHeadersFor(origin);
+
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
+    if (!isAllowedOrigin(origin)) {
+      return new Response(null, { status: 403 });
+    }
     return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
+  // Reject requests from non-allowlisted origins
+  if (origin && !isAllowedOrigin(origin)) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   if (req.method !== 'POST') {
@@ -57,6 +88,19 @@ serve(async (req) => {
       status: 405,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
+  }
+
+  // Rate limiting: keyed by caller IP
+  const callerIp =
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  if (callerIp !== 'unknown' && isRateLimited(callerIp)) {
+    return new Response(
+      JSON.stringify({ error: 'Too many donation requests. Try again later.' }),
+      {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
+    );
   }
 
   try {
@@ -67,10 +111,23 @@ serve(async (req) => {
       recurring = false,
     }: CreateDonationRequest = await req.json();
 
-    // Validate input
+    // Validate minimum amount
     if (!amount || amount < 10) {
       return new Response(
         JSON.stringify({ error: 'Minimum donation amount is $10 MXN' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
+      );
+    }
+
+    // Validate maximum amount ceiling
+    if (amount > MAX_DONATION_AMOUNT_MXN) {
+      return new Response(
+        JSON.stringify({
+          error: `Maximum donation amount is $${MAX_DONATION_AMOUNT_MXN.toLocaleString()} MXN`,
+        }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -87,6 +144,53 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
+    }
+
+    // Validate donorId against the JWT when provided
+    const authHeader = req.headers.get('authorization');
+    const jwt = authHeader?.replace('Bearer ', '') ?? null;
+
+    if (donorId) {
+      if (!jwt) {
+        return new Response(
+          JSON.stringify({
+            error: 'Authorization header required when donorId is provided',
+          }),
+          {
+            status: 401,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          },
+        );
+      }
+
+      // Verify JWT and confirm the user owns this donorId
+      const supabaseAnon = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false },
+      });
+      const { data: userData, error: userError } =
+        await supabaseAnon.auth.getUser(jwt);
+
+      if (userError || !userData.user) {
+        return new Response(
+          JSON.stringify({ error: 'Invalid or expired token' }),
+          {
+            status: 401,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          },
+        );
+      }
+
+      if (userData.user.id !== donorId) {
+        return new Response(
+          JSON.stringify({
+            error: 'donorId does not match authenticated user',
+          }),
+          {
+            status: 403,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          },
+        );
+      }
     }
 
     // Initialize Supabase client with service role

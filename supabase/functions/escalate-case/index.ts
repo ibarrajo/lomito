@@ -3,6 +3,7 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { corsHeadersFor, isAllowedOrigin } from '../_shared/cors.ts';
 
 const RESEND_API_URL = 'https://api.resend.com/emails';
 
@@ -210,18 +211,24 @@ function buildEmailHtml(
   `.trim();
 }
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type',
-};
-
 serve(async (req) => {
+  const origin = req.headers.get('Origin');
+  const corsHeaders = corsHeadersFor(origin);
+
   try {
     // CORS preflight
     if (req.method === 'OPTIONS') {
-      return new Response('ok', {
-        headers: corsHeaders,
+      if (!isAllowedOrigin(origin)) {
+        return new Response(null, { status: 403 });
+      }
+      return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    // Reject requests from non-allowlisted origins
+    if (origin && !isAllowedOrigin(origin)) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
       });
     }
 

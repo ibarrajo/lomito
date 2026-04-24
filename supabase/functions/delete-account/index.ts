@@ -4,17 +4,26 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type',
-};
+import { corsHeadersFor, isAllowedOrigin } from '../_shared/cors.ts';
 
 serve(async (req: Request) => {
+  const origin = req.headers.get('Origin');
+  const corsHeaders = corsHeadersFor(origin);
+
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
+    if (!isAllowedOrigin(origin)) {
+      return new Response(null, { status: 403 });
+    }
     return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
+  // Reject requests from non-allowlisted origins
+  if (origin && !isAllowedOrigin(origin)) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   if (req.method !== 'POST') {
@@ -40,6 +49,7 @@ serve(async (req: Request) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+  const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
 
   if (!supabaseUrl || !supabaseServiceKey) {
     return new Response(
@@ -52,10 +62,9 @@ serve(async (req: Request) => {
   }
 
   // Use anon client just to verify the JWT and get the user
-  const supabaseAnon = createClient(
-    supabaseUrl,
-    Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-  );
+  const supabaseAnon = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: { persistSession: false },
+  });
   const { data: userData, error: userError } =
     await supabaseAnon.auth.getUser(token);
 
@@ -68,12 +77,20 @@ serve(async (req: Request) => {
 
   const userId = userData.user.id;
 
-  // Use service role client for all privileged operations
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  // User-scoped client: RLS is enforced on all data-deletion queries.
+  const supabaseUser = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: `Bearer ${token}` } },
+    auth: { persistSession: false },
+  });
+
+  // Service-role client: used ONLY for auth.admin.deleteUser().
+  const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: { persistSession: false },
+  });
 
   try {
-    // 1. Delete case subscriptions
-    const { error: subscriptionsError } = await supabase
+    // 1. Delete case subscriptions (RLS allows user to delete their own rows)
+    const { error: subscriptionsError } = await supabaseUser
       .from('case_subscriptions')
       .delete()
       .eq('user_id', userId);
@@ -83,8 +100,8 @@ serve(async (req: Request) => {
       throw new Error('Failed to delete case subscriptions');
     }
 
-    // 2. Anonymize cases (set reporter_id to NULL, do not delete the cases)
-    const { error: casesError } = await supabase
+    // 2. Anonymize cases (set reporter_id to NULL; RLS limits to own cases)
+    const { error: casesError } = await supabaseUser
       .from('cases')
       .update({ reporter_id: null })
       .eq('reporter_id', userId);
@@ -94,8 +111,8 @@ serve(async (req: Request) => {
       throw new Error('Failed to anonymize cases');
     }
 
-    // 3. Delete the profile
-    const { error: profileError } = await supabase
+    // 3. Delete the profile (RLS allows user to delete their own profile)
+    const { error: profileError } = await supabaseUser
       .from('profiles')
       .delete()
       .eq('id', userId);
@@ -105,9 +122,9 @@ serve(async (req: Request) => {
       throw new Error('Failed to delete profile');
     }
 
-    // 4. Delete the auth user (must be last)
+    // 4. Delete the auth user — requires service role (must be last)
     const { error: deleteUserError } =
-      await supabase.auth.admin.deleteUser(userId);
+      await supabaseAdmin.auth.admin.deleteUser(userId);
 
     if (deleteUserError) {
       console.error('Error deleting auth user:', deleteUserError);
