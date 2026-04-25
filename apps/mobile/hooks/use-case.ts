@@ -120,38 +120,31 @@ export function useCase(caseId: string): UseCaseResult {
   useEffect(() => {
     fetchCase();
 
-    // Set up realtime subscription for timeline updates
+    // Subscribe to timeline updates via a private Broadcast channel populated
+    // by the notify_case_timeline_changed_trg trigger
+    // (migration 20260425030655_realtime_broadcast_case_timeline.sql).
+    //
+    // The previous implementation used postgres_changes, which delivered the
+    // full case_timeline row to every authenticated subscriber regardless of
+    // their relationship to the case (the SELECT RLS policy is permissive by
+    // design to support the public transparency mission of `cases`). The
+    // broadcast carries only id/case_id/action/created_at/event_type — no
+    // JSONB `details`, no actor_id. We re-fetch the full timeline through
+    // the existing query path, which still applies the same RLS.
     const timelineChannel = supabase
-      .channel(`case_timeline:${caseId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'case_timeline',
-          filter: `case_id=eq.${caseId}`,
-        },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            // Add new timeline event to the beginning of the array
-            setTimeline((prev) => [payload.new as CaseTimeline, ...prev]);
-          } else if (payload.eventType === 'UPDATE') {
-            // Update existing timeline event
-            setTimeline((prev) =>
-              prev.map((event) =>
-                event.id === payload.new.id
-                  ? (payload.new as CaseTimeline)
-                  : event,
-              ),
-            );
-          } else if (payload.eventType === 'DELETE') {
-            // Remove deleted timeline event
-            setTimeline((prev) =>
-              prev.filter((event) => event.id !== payload.old.id),
-            );
-          }
-        },
-      )
+      .channel(`case:${caseId}`, { config: { private: true } })
+      .on('broadcast', { event: 'timeline_event' }, async () => {
+        const { data: rows, error: refetchError } = await supabase
+          .from('case_timeline')
+          .select('*')
+          .eq('case_id', caseId)
+          .order('created_at', { ascending: false });
+        if (refetchError) {
+          console.error('[use-case] timeline refetch failed:', refetchError);
+          return;
+        }
+        if (rows) setTimeline(rows);
+      })
       .subscribe();
 
     // Set up realtime subscription for case status changes.
