@@ -116,7 +116,7 @@ export function useAuth() {
             role: 'citizen',
             avatar_url: null,
             push_token: null,
-          } as never,
+          },
           { onConflict: 'id' },
         );
         if (profileError) {

@@ -82,7 +82,7 @@ export async function uploadCaseImage(
       thumbnail_url: thumbnailData.publicUrl,
       type: 'image' as const,
       order: index,
-    } as never)) as { error: unknown };
+    })) as { error: unknown };
 
     if (dbError) {
       console.error('Failed to insert case_media record:', dbError);

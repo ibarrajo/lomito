@@ -98,7 +98,7 @@ export function useNotificationPrefs(): UseNotificationPrefsResult {
                 ...prefs,
                 [key]: value,
               },
-            } as never)
+            })
             .eq('id', user.id);
 
           if (error) {

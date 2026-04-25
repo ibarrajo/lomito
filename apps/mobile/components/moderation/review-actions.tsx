@@ -144,7 +144,7 @@ export function useReviewActions(
         case_id: confirmFlag.caseId,
         reporter_id: user.id,
         reason: 'moderation_flag',
-      } as never);
+      });
 
       if (insertError) {
         throw insertError;

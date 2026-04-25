@@ -84,7 +84,11 @@ export function usePois({
             type: 'Point',
             coordinates: [row.lng, row.lat],
           },
-          properties: row,
+          // The RPC returns poi_type/vet_subtype as plain `string` because
+          // they are text columns in PostGIS-side functions. The server-side
+          // function constrains them to the PoiType / VetSubtype enums, so we
+          // narrow with a cast at the boundary.
+          properties: row as PointOfInterest,
         }));
 
         const collection: PoiFeatureCollection = {

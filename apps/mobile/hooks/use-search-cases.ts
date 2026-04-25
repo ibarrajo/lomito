@@ -54,15 +54,11 @@ export function useSearchCases(): UseSearchCasesReturn {
     setError(null);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error: rpcError } = (await (supabase as any).rpc(
-        'search_cases',
-        {
-          search_query: query.trim(),
-          result_limit: RESULT_LIMIT,
-          result_offset: 0,
-        },
-      )) as {
+      const { data, error: rpcError } = (await supabase.rpc('search_cases', {
+        search_query: query.trim(),
+        result_limit: RESULT_LIMIT,
+        result_offset: 0,
+      })) as unknown as {
         data: Array<{
           id: string;
           category: string;

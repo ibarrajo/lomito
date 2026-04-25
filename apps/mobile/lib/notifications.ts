@@ -55,7 +55,7 @@ export async function registerForPushNotifications(): Promise<string | null> {
       // Type assertion needed until database is fully set up
       const { error } = await supabase
         .from('profiles')
-        .update({ push_token: token } as never)
+        .update({ push_token: token })
         .eq('id', user.id);
 
       if (error) {

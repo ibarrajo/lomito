@@ -36,11 +36,17 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const DEFAULT_PIN_COLOR = '#718096';
 
-interface CaseRow {
-  id: string;
-  category: string;
-  status: string;
-  location_geojson: { type: 'Point'; coordinates: [number, number] };
+type GeoJsonPoint = { type: 'Point'; coordinates: [number, number] };
+
+function isGeoJsonPoint(value: unknown): value is GeoJsonPoint {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'type' in value &&
+    (value as { type: unknown }).type === 'Point' &&
+    'coordinates' in value &&
+    Array.isArray((value as { coordinates: unknown }).coordinates)
+  );
 }
 
 interface LandingMapProps {
@@ -90,19 +96,12 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
 
     map.on('load', async () => {
       try {
-        // Fetch cases via the existing get_cases_for_map RPC
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data, error: rpcError } = (await (supabase as any).rpc(
+        // Fetch cases via the existing get_cases_for_map RPC. Filters are
+        // optional in the SQL signature; omit them entirely for "no filter".
+        const { data, error: rpcError } = await supabase.rpc(
           'get_cases_for_map',
-          {
-            limit_count: 200,
-            filter_categories: null,
-            filter_statuses: null,
-          },
-        )) as {
-          data: CaseRow[] | null;
-          error: { message: string } | null;
-        };
+          { limit_count: 200 },
+        );
 
         if (rpcError) {
           console.error('[LandingMap] RPC error:', rpcError.message);
@@ -110,25 +109,26 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
           return;
         }
 
-        const features: GeoJSON.Feature<GeoJSON.Point>[] = (data ?? [])
-          .filter(
-            (row) =>
-              row.location_geojson?.type === 'Point' &&
-              Array.isArray(row.location_geojson.coordinates),
-          )
-          .map((row) => ({
-            type: 'Feature' as const,
-            geometry: {
-              type: 'Point' as const,
-              coordinates: row.location_geojson.coordinates,
-            },
-            properties: {
-              id: row.id,
-              category: row.category,
-              status: row.status,
-              color: CATEGORY_COLORS[row.category] ?? DEFAULT_PIN_COLOR,
-            },
-          }));
+        const features: GeoJSON.Feature<GeoJSON.Point>[] = (data ?? []).flatMap(
+          (row) => {
+            if (!isGeoJsonPoint(row.location_geojson)) return [];
+            return [
+              {
+                type: 'Feature' as const,
+                geometry: {
+                  type: 'Point' as const,
+                  coordinates: row.location_geojson.coordinates,
+                },
+                properties: {
+                  id: row.id,
+                  category: row.category,
+                  status: row.status,
+                  color: CATEGORY_COLORS[row.category] ?? DEFAULT_PIN_COLOR,
+                },
+              },
+            ];
+          },
+        );
 
         const geojson: GeoJSON.FeatureCollection<GeoJSON.Point> = {
           type: 'FeatureCollection',

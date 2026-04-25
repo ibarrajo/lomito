@@ -67,7 +67,7 @@ export function useCreateCase(): CreateCaseResult {
 
       const { data: newCase, error: insertError } = (await supabase
         .from('cases')
-        .insert(insertData as never)
+        .insert(insertData)
         .select('id')
         .single()) as { data: { id: string } | null; error: unknown };
 

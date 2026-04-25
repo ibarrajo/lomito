@@ -70,7 +70,7 @@ export function PageFooter() {
           {platformLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => router.push(link.route as never)}
+              onPress={() => router.push(link.route)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>
@@ -86,7 +86,7 @@ export function PageFooter() {
           {communityLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => router.push(link.route as never)}
+              onPress={() => router.push(link.route)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>
@@ -100,7 +100,7 @@ export function PageFooter() {
           {legalLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => router.push(link.route as never)}
+              onPress={() => router.push(link.route)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>

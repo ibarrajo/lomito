@@ -22,7 +22,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
       // Update case folio
       const { error: updateError } = await supabase
         .from('cases')
-        .update({ folio } as never)
+        .update({ folio })
         .eq('id', caseId);
 
       if (updateError) {
@@ -45,7 +45,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
           actor_id: user.id,
           action: 'assigned',
           details: { folio },
-        } as never);
+        });
 
       if (timelineError) {
         throw timelineError;
@@ -79,7 +79,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
       // Update government_response_at timestamp
       const { error: updateError } = await supabase
         .from('cases')
-        .update({ government_response_at: new Date().toISOString() } as never)
+        .update({ government_response_at: new Date().toISOString() })
         .eq('id', caseId);
 
       if (updateError) {
@@ -94,7 +94,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
           actor_id: user.id,
           action: 'government_response',
           details: { response: responseText },
-        } as never);
+        });
 
       if (timelineError) {
         throw timelineError;
@@ -119,7 +119,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
 
       const { error: updateError } = await supabase
         .from('cases')
-        .update({ status: newStatus } as never)
+        .update({ status: newStatus })
         .eq('id', caseId);
 
       if (updateError) {

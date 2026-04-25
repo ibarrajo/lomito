@@ -9,6 +9,7 @@ import { Body, Caption } from '@lomito/ui/components/typography';
 import { colors, spacing } from '@lomito/ui/theme/tokens';
 import type {
   CaseTimeline,
+  Json,
   TimelineAction,
 } from '@lomito/shared/types/database';
 
@@ -34,9 +35,13 @@ const ACTION_ICONS: Record<TimelineAction, string> = {
 
 function getTimelineDescription(
   action: TimelineAction,
-  details: Record<string, unknown>,
+  rawDetails: Json | null,
   t: (key: string, options?: Record<string, unknown>) => string,
 ): string {
+  const details: Record<string, unknown> =
+    rawDetails && typeof rawDetails === 'object' && !Array.isArray(rawDetails)
+      ? (rawDetails as Record<string, unknown>)
+      : {};
   switch (action) {
     case 'created':
       return t('timeline.created');

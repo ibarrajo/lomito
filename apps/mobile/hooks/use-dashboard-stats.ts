@@ -41,7 +41,12 @@ export function useDashboardStats(): UseDashboardStatsResult {
       }
 
       if (data) {
-        setStats(data as DashboardStats);
+        // RPC returns Json from supabase-js generated types; this RPC's
+        // server-side function returns a single jsonb object matching
+        // DashboardStats. The runtime guarantee comes from the SQL function
+        // signature, not the TS types — narrow via `unknown` to satisfy strict
+        // checking.
+        setStats(data as unknown as DashboardStats);
       }
     } catch (err) {
       console.error('Unexpected error fetching dashboard stats:', err);

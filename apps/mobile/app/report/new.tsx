@@ -171,7 +171,7 @@ export default function NewReportScreen() {
             await supabase
               .from('case_subscriptions')
               .upsert(
-                { user_id: currentUser.id, case_id: newCaseId } as never,
+                { user_id: currentUser.id, case_id: newCaseId },
                 { onConflict: 'user_id,case_id' },
               );
           }

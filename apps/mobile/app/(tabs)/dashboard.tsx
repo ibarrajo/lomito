@@ -224,34 +224,19 @@ export default function MapScreen() {
           setIsLoading(true);
         }
 
-        // Build filter arrays from selected categories/statuses
+        // Build filter arrays from selected categories/statuses; pass
+        // undefined (omitted) rather than null so the SQL function defaults
+        // to "no filter" (signature is `filter_categories?: string[]`).
         const filterCategories =
-          selectedCategories !== 'all' ? [selectedCategories] : null;
+          selectedCategories !== 'all' ? [selectedCategories] : undefined;
         const filterStatuses =
-          selectedStatuses !== 'all' ? [selectedStatuses] : null;
+          selectedStatuses !== 'all' ? [selectedStatuses] : undefined;
 
-        // Use RPC function to get cases with GeoJSON locations
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data, error } = (await (supabase as any).rpc(
-          'get_cases_for_map',
-          {
-            limit_count: 100,
-            filter_categories: filterCategories,
-            filter_statuses: filterStatuses,
-          },
-        )) as {
-          data: Array<{
-            id: string;
-            category: string;
-            animal_type: string;
-            description: string;
-            status: string;
-            urgency: string;
-            location_geojson: { type: 'Point'; coordinates: [number, number] };
-            created_at: string;
-          }> | null;
-          error: { message: string } | null;
-        };
+        const { data, error } = await supabase.rpc('get_cases_for_map', {
+          limit_count: 100,
+          filter_categories: filterCategories,
+          filter_statuses: filterStatuses,
+        });
 
         if (error) {
           console.error('Error fetching cases:', error);
@@ -259,15 +244,21 @@ export default function MapScreen() {
         }
 
         if (data) {
-          // Map the RPC result to our CaseSummary type
-          const mappedCases = data.map((row) => ({
+          // The RPC's location_geojson column is typed as Json by the
+          // generated types, but the SQL function builds it via
+          // ST_AsGeoJSON(location)::jsonb and so always matches the GeoJSON
+          // Point shape at runtime. Narrow at the boundary.
+          const mappedCases: CaseSummary[] = data.map((row) => ({
             id: row.id,
             category: row.category as CaseCategory,
             animal_type: row.animal_type as AnimalType,
             description: row.description,
             status: row.status as CaseStatus,
             urgency: row.urgency as UrgencyLevel,
-            location: row.location_geojson,
+            location: row.location_geojson as {
+              type: 'Point';
+              coordinates: [number, number];
+            },
             created_at: row.created_at,
           }));
           setCases(mappedCases);
@@ -574,7 +565,7 @@ export default function MapScreen() {
                 ]}
                 onPress={() => setDisplayMode(mode)}
                 accessibilityLabel={t(
-                  `map.display${mode.charAt(0).toUpperCase() + mode.slice(1)}` as never,
+                  `map.display${mode.charAt(0).toUpperCase() + mode.slice(1)}`,
                 )}
                 accessibilityRole="tab"
                 accessibilityState={{ selected: displayMode === mode }}
@@ -586,7 +577,7 @@ export default function MapScreen() {
                   ]}
                 >
                   {t(
-                    `map.display${mode.charAt(0).toUpperCase() + mode.slice(1)}` as never,
+                    `map.display${mode.charAt(0).toUpperCase() + mode.slice(1)}`,
                   )}
                 </Text>
               </Pressable>

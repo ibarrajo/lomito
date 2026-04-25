@@ -81,7 +81,7 @@ export function WebNavbar() {
 
   const navigateTo = useCallback(
     (path: string) => {
-      router.push(path as never);
+      router.push(path);
     },
     [router],
   );

@@ -24,7 +24,7 @@ export function useCaseActions(): UseCaseActionsResult {
 
       const { error: updateError } = await supabase
         .from('cases')
-        .update({ status: newStatus } as never)
+        .update({ status: newStatus })
         .eq('id', caseId);
 
       if (updateError) {
@@ -77,7 +77,7 @@ export function useCaseActions(): UseCaseActionsResult {
 
       const { error: updateError } = await supabase
         .from('cases')
-        .update({ status: 'pending' } as never)
+        .update({ status: 'pending' })
         .eq('id', caseId);
 
       if (updateError) {

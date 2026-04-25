@@ -137,8 +137,7 @@ export default function SubmitAuthorityScreen() {
           reviewed_at: null,
         };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('authority_submissions')
         .insert(submissionData);
 

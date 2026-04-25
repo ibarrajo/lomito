@@ -69,7 +69,7 @@ export function LandingFooter() {
           {platformLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => router.push(link.route as never)}
+              onPress={() => router.push(link.route)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>
@@ -83,7 +83,7 @@ export function LandingFooter() {
           {resourceLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => router.push(link.route as never)}
+              onPress={() => router.push(link.route)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>
@@ -99,7 +99,7 @@ export function LandingFooter() {
               <TouchableOpacity
                 key={link.label}
                 onPress={() => {
-                  if (link.route !== '#') router.push(link.route as never);
+                  if (link.route !== '#') router.push(link.route);
                 }}
                 accessibilityRole="link"
               >
@@ -115,7 +115,7 @@ export function LandingFooter() {
           {legalLinks.map((link) => (
             <TouchableOpacity
               key={link.label}
-              onPress={() => router.push(link.route as never)}
+              onPress={() => router.push(link.route)}
               accessibilityRole="link"
             >
               <Text style={styles.link}>{link.label}</Text>

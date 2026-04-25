@@ -75,7 +75,7 @@ export function PublicWebHeader() {
             <TouchableOpacity
               key={link.path}
               style={[styles.navLink, isActive && styles.navLinkActive]}
-              onPress={() => router.push(link.path as never)}
+              onPress={() => router.push(link.path)}
               accessibilityLabel={link.label}
               accessibilityRole="link"
             >

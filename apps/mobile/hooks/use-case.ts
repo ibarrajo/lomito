@@ -69,9 +69,10 @@ export function useCase(caseId: string): UseCaseResult {
         location_geojson: { type: 'Point'; coordinates: [number, number] };
       };
 
-      const { data: caseRecords, error: caseError } =
-        await // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (supabase as any).rpc('get_case_by_id', { case_uuid: caseId });
+      const { data: caseRecords, error: caseError } = await supabase.rpc(
+        'get_case_by_id',
+        { case_uuid: caseId },
+      );
 
       if (caseError) throw caseError;
 
