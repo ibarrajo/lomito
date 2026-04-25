@@ -12,7 +12,7 @@ Items here need human input before the relevant task can proceed.
 
 ### ISSUE-004: Edge Function secrets deployment
 
-- **Blocks:** Payments (Mercado Pago), analytics (GA4), email notifications (Resend)
+- **Blocks:** Payments (Mercado Pago), email notifications (Resend inbound)
 - **Secrets Status:**
   - RESEND_API_KEY: SET
   - GA4_MEASUREMENT_ID: SET
@@ -21,7 +21,7 @@ Items here need human input before the relevant task can proceed.
   - MERCADO_PAGO_ACCESS_TOKEN: PENDING (need Mercado Pago account)
   - MERCADO_PAGO_WEBHOOK_SECRET: PENDING (need Mercado Pago account)
   - INBOUND_EMAIL_WEBHOOK_SECRET: PENDING (need Resend inbound webhook config)
-- **Edge Functions Deployed (8/8):**
+- **Edge Functions Deployed (10/10):**
   - send-notification
   - track-event
   - escalate-case
@@ -30,8 +30,43 @@ Items here need human input before the relevant task can proceed.
   - create-donation
   - donation-webhook
   - inbound-email
-- **Database Migrations:** All migrations pushed to production
+  - delete-account
+  - (shared module: `_shared`)
+- **Database Migrations:** All migrations pushed to production (latest: `20260424170000_security_hardening.sql`)
 - **Status:** PARTIALLY RESOLVED
+
+### ISSUE-005: MFA rollout policy
+
+- **Blocks:** Forced/optional MFA enrollment for elevated roles
+- **Needed:** Product decision on enrollment policy:
+  - Who is required to enroll (admin only? government + moderator? all elevated roles?)
+  - Grace period for existing accounts
+  - Recovery flow (backup codes vs. support-mediated reset)
+  - UX entry point (forced on first login post-rollout, vs. settings page only)
+- **Status:** OPEN — needs product input before implementation
+
+### ISSUE-006: PII access audit log
+
+- **Blocks:** Compliance traceability for moderator/government PII reads
+- **Needed:** Product + legal decision on audit scope:
+  - Which events log a row (every reporter PII read? only flagged actions like rejection/escalation?)
+  - Retention period
+  - Who can read the audit log (admin only? jurisdiction-scoped?)
+  - Whether to surface "viewed by X" to the reporter
+- **Status:** OPEN — needs product input before schema design
+
+### ISSUE-007: Realtime channel auth-aware publishing
+
+- **Blocks:** RLS-equivalent enforcement on Realtime fan-out
+- **Needed:** Architectural rewrite of how Supabase Realtime publishes case updates so that subscribers only receive payloads they're authorized to see (mirroring RLS at the channel layer). Currently RLS guards the table read, but Realtime broadcasts can leak fields to clients without the same scoping.
+- **Status:** OPEN — own feature branch; touches publisher and all subscribers
+
+### ISSUE-008: Expo SDK 54 upgrade
+
+- **Blocks:** Closing 21 transitive npm vulnerabilities (all gated on the Expo SDK tree)
+- **Context:** `npm audit fix` was reverted in commit `3a33804` because non-breaking patches bumped `mapbox-gl` 3.18.1 → 3.22.0 across the `@types/mapbox-gl@3.4.1` boundary and broke `tsc`. The remaining vulns will not close without a coordinated SDK upgrade.
+- **Needed:** Own feature branch with native testing on iOS, Android, and web. Verify Expo Router v4, Reanimated 4, Mapbox bridge, and EAS build all still work post-upgrade.
+- **Status:** OPEN — non-blocking but the only remaining engineering item that closes the audit list
 
 ## Resolved
 
@@ -46,3 +81,19 @@ Items here need human input before the relevant task can proceed.
 - **Blocks:** P1-T7 (map)
 - **Needed:** Create Mapbox account. Provide `MAPBOX_ACCESS_TOKEN` in `.env`.
 - **Status:** RESOLVED — Token configured in `.env`
+
+### ISSUE-009: Security hardening pass (2026-04-24)
+
+- **Scope shipped across commits `3bc23ec` → `3a33804`:**
+  - Atomic `reject_case` RPC and service-role transition guard bypass
+  - Reject-reason validation, atomic RPC wiring, i18n hardening, locale-aware dates
+  - DB hardening: `search_path` lockdown, `WITH CHECK` clauses, `actor_id` guard
+  - Edge functions: CORS allowlist, webhook fail-closed posture, idempotency keys on `donation-webhook` and `inbound-email`
+  - Auth hardening, Content-Security-Policy header, GitHub Actions pinned to commit SHAs
+- **Verified in production (post-deploy):**
+  - `supabase migration list --linked` → all 38 rows show Local == Remote
+  - CSP header live on `https://lomito.org` (verified via response-header inspection)
+  - Pre-commit triple (`format:check`, `lint`, `tsc --noEmit`) clean on `main`
+  - CI green on `3a33804`
+- **Caveat (defense-in-depth only):** Supabase edge-function gateway strips/overrides app-layer Origin allowlist responses and adds `access-control-allow-origin: *`. Real CSRF defenses (JWT verification, donor-ID/JWT binding, rate limits, amount ceilings) are in place and load-bearing; the Origin allowlist is non-load-bearing. File a Supabase support ticket if true origin enforcement is required.
+- **Status:** RESOLVED
