@@ -287,17 +287,18 @@ export default function MapScreen() {
     fetchCases();
   }, [fetchCases]);
 
-  // Subscribe to realtime case changes
+  // Subscribe to a Broadcast topic that signals "cases changed".
+  // We deliberately do NOT use postgres_changes here because that delivers
+  // raw row payloads (reporter_id, exact PostGIS location, free-text
+  // description) to every authenticated subscriber. The trigger
+  // notify_cases_changed_trg publishes a payload-free notification, and we
+  // re-fetch through an RPC that enforces RLS + field redaction.
   useEffect(() => {
     const channel = supabase
-      .channel('cases-realtime')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'cases' },
-        () => {
-          fetchCases(true);
-        },
-      )
+      .channel('cases:public')
+      .on('broadcast', { event: 'cases_changed' }, () => {
+        fetchCases(true);
+      })
       .subscribe();
 
     return () => {
