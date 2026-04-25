@@ -79,7 +79,7 @@ export function useReviewActions(
         message: t('moderation.verifySuccess'),
       });
       onSuccess?.();
-    } catch (err) {
+    } catch (_err) {
       setConfirmVerify(null);
       setModal({
         title: t('common.error'),
@@ -112,7 +112,7 @@ export function useReviewActions(
         message: t('moderation.rejectSuccess'),
       });
       onSuccess?.();
-    } catch (err) {
+    } catch (_err) {
       setConfirmReject(null);
       setRejectReason('');
       setRejectReasonError(null);
@@ -154,7 +154,7 @@ export function useReviewActions(
         message: t('moderation.flagSuccess'),
       });
       onSuccess?.();
-    } catch (err) {
+    } catch (_err) {
       setConfirmFlag(null);
       setModal({
         title: t('common.error'),
@@ -178,7 +178,7 @@ export function useReviewActions(
         message: t('moderation.reopenSuccess'),
       });
       onSuccess?.();
-    } catch (err) {
+    } catch (_err) {
       setConfirmReopen(null);
       setModal({
         title: t('common.error'),

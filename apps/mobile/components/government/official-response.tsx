@@ -58,7 +58,7 @@ export function OfficialResponse({
       await onSubmit(caseId, response.trim());
       onDismiss();
       setResponse('');
-    } catch (error) {
+    } catch (_error) {
       setModal({
         title: t('common.error'),
         message: t('government.responseError'),
