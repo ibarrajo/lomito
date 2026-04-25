@@ -139,10 +139,10 @@ const styles = StyleSheet.create({
   closeButtonPressable: {
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 20,
-    height: 40,
+    borderRadius: 22,
+    height: 44,
     justifyContent: 'center',
-    width: 40,
+    width: 44,
   },
   container: {
     backgroundColor: 'transparent',

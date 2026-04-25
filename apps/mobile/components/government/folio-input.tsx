@@ -84,7 +84,12 @@ export function FolioInput({
         animationType="fade"
         onRequestClose={handleDismiss}
       >
-        <Pressable style={styles.overlay} onPress={handleDismiss}>
+        <Pressable
+          style={styles.overlay}
+          onPress={handleDismiss}
+          accessibilityRole="button"
+          accessibilityLabel={t('common.close')}
+        >
           <Pressable style={styles.modal} onPress={(e) => e.stopPropagation()}>
             <H3 style={styles.title}>{t('government.assignFolio')}</H3>
             <Body style={styles.description}>

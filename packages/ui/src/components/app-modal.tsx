@@ -34,6 +34,8 @@ interface AppModalProps {
   message?: string;
   actions: ModalAction[];
   onClose: () => void;
+  /** Localized accessibility label for the dismiss-on-overlay-tap region. */
+  closeAccessibilityLabel?: string;
 }
 
 export function AppModal({
@@ -42,6 +44,7 @@ export function AppModal({
   message,
   actions,
   onClose,
+  closeAccessibilityLabel,
 }: AppModalProps) {
   const reduceMotion = useReducedMotion();
   const scale = useSharedValue(reduceMotion ? 1 : 0.95);
@@ -76,7 +79,7 @@ export function AppModal({
       <Overlay
         style={styles.overlay}
         {...(Platform.OS !== 'web' && { onPress: onClose })}
-        accessibilityLabel="Close modal"
+        accessibilityLabel={closeAccessibilityLabel ?? 'Close'}
       >
         <Animated.View style={[styles.card, animatedStyle]}>
           <H2 style={styles.title}>{title}</H2>
