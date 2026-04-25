@@ -55,11 +55,16 @@ Items here need human input before the relevant task can proceed.
   - Whether to surface "viewed by X" to the reporter
 - **Status:** OPEN — needs product input before schema design
 
-### ISSUE-007: Realtime channel auth-aware publishing
+### ISSUE-007: Realtime row-data exposure on case-detail subscriptions
 
-- **Blocks:** RLS-equivalent enforcement on Realtime fan-out
-- **Needed:** Architectural rewrite of how Supabase Realtime publishes case updates so that subscribers only receive payloads they're authorized to see (mirroring RLS at the channel layer). Currently RLS guards the table read, but Realtime broadcasts can leak fields to clients without the same scoping.
-- **Status:** OPEN — own feature branch; touches publisher and all subscribers
+- **Blocks:** Closing the residual Realtime leak on `case_timeline` and `cases` per-case subscriptions
+- **Audit findings (2026-04-24):** The cases SELECT RLS policy is intentionally permissive (`auth.uid() IS NOT NULL`) to support the public reports ticker on lomito.org and the product's transparency mission, so tightening RLS would break public read paths (`recent-reports-ticker.tsx`, `use-government-cases.ts`, `use-subscribed-cases.ts`). Realtime postgres_changes broadcasts therefore deliver full row payloads to every authenticated subscriber.
+- **Already fixed (commit `a0e5070`):** The dashboard's `cases-realtime` postgres_changes subscription was the worst offender — it broadcast every case row to every subscriber for a callback that discarded the payload. Replaced with a Supabase Broadcast channel (`cases:public`) backed by trigger `notify_cases_changed_trg` (migration `20260425005402_realtime_broadcast_cases_changed.sql`), carrying only a timestamp.
+- **Residual scope:** The per-case subscriptions in `apps/mobile/hooks/use-case.ts` still use postgres_changes:
+  - `case_timeline:${caseId}` — applies `payload.new` (the full timeline row including JSONB `details`) directly to state. Server-side filter is `case_id=eq.${caseId}` but a malicious client can subscribe with a different filter and receive other timelines because RLS allows it.
+  - `case_status:${caseId}` — already field-gated in the callback (only `status`, `urgency`, `flag_count`, `folio`, `escalated_at`, `marked_unresponsive`, `government_response_at`, `incident_at`, `updated_at`), but the underlying broadcast still carries the full row.
+- **Needed:** Either (a) similar broadcast triggers that publish only safe fields and have the client re-fetch via `get_case_by_id` RPC, or (b) move PII columns (reporter_id, raw description) to a separate restricted table so the cases broadcast naturally carries only public fields. Option (b) is the cleaner long-term design but requires schema migration + audit of every reader.
+- **Status:** OPEN — narrowed scope after the dashboard fix; remaining work needs product input on the field-level visibility model
 
 ### ISSUE-008: Expo SDK 55+ upgrade (when stable)
 
