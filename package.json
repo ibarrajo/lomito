@@ -25,6 +25,7 @@
     "eas:submit:android": "cd apps/mobile && eas submit --platform android",
     "eas:update": "cd apps/mobile && eas update",
     "build:web:prod": "cd apps/mobile && mv .env.local .env.local.bak 2>/dev/null; npx expo export --platform web --clear; mv .env.local.bak .env.local 2>/dev/null; true",
+    "bundle:check": "./scripts/check-bundle-size.sh",
     "deploy": "npm run build:web:prod && npx wrangler pages deploy --project-name lomito --branch main --commit-dirty=true",
     "deploy:preview": "npm run build:web:prod && npx wrangler pages deploy --project-name lomito --branch preview --commit-dirty=true"
   },

@@ -77,6 +77,24 @@ Items here need human input before the relevant task can proceed.
 - **Needed:** Wait for Expo SDK 55 stable, then upgrade on a feature branch with native testing on iOS, Android, and web. Verify Expo Router, Reanimated, Mapbox bridge, and EAS build all still work post-upgrade.
 - **Status:** OPEN — gated on upstream Expo release; non-actionable until then
 
+### ISSUE-011: Web bundle 15× over CLAUDE.md target (1.7 MB mapbox eagerly loaded)
+
+- **Blocks:** Hitting CLAUDE.md performance budget (web bundle < 500 KB initial; currently ~7.83 MB / 7.47 MB after gzip-equivalent measurement)
+- **Source-map analysis (commit pending):** Top contributors to the 7.5 MB main bundle:
+  - `mapbox-gl` — **1.72 MB (22.5%)** — eagerly imported by `landing-map.web.tsx`, `map-view.web.tsx`, `location-picker.web.tsx`, `lib/mapbox.web.ts`. Used only on map-displaying screens.
+  - `lucide-react-native` — **549 KB (7.2%)** — though every site uses named imports (`import { Mail } from 'lucide-react-native'`), the package's ESM shape doesn't tree-shake under Metro. The whole icon library lands in the bundle.
+  - `[unmapped]` — 694 KB (9.1%) — Metro runtime, polyfills, internal helpers.
+  - `react-dom` — 164 KB (2.1%).
+  - `react-native-reanimated` — ~150 KB across many files.
+- **Needed:**
+  1. Lazy-import `mapbox-gl` via `React.lazy` / dynamic import inside the map components, gated on the route. Estimated saving: 1.5–1.7 MB (single biggest win).
+  2. Investigate per-icon imports for `lucide-react-native` (e.g., the `lucide-react-native/icons/*` deep-import path), or switch to a different icon library that tree-shakes properly. Estimated saving: 400–500 KB.
+  3. Audit `react-native-reanimated` for unused animation modules.
+  4. After above, set a stricter bundle ceiling (start at 4 MB, target 1 MB).
+- **Mitigations shipped:**
+  - `scripts/check-bundle-size.sh` (`npm run bundle:check`) verifies the bundle stays under 8 MB so future regressions are caught locally pre-deploy. Override via `BUNDLE_LIMIT_BYTES` env var. Not yet wired into CI (would need env-var secrets configured for the production-like web build).
+- **Status:** OPEN — meaningful refactor; each item is a separate PR
+
 ## Resolved
 
 ### ISSUE-001: Supabase project credentials
