@@ -29,6 +29,8 @@ const fetchMock = vi.fn(() =>
 vi.stubGlobal('fetch', fetchMock);
 
 import {
+  captureError,
+  initAnalytics,
   trackEvent,
   trackPageView,
   identifyUser,
@@ -37,6 +39,7 @@ import {
   _resetForTesting,
   _getEventQueue,
 } from '../analytics';
+import { _latestPostHog } from 'posthog-react-native';
 
 /** Parse the JSON body from the nth fetch call. */
 function getFetchBody(callIndex = 0): Record<string, unknown> {
@@ -355,6 +358,87 @@ describe('analytics client', () => {
       vi.advanceTimersByTime(2000);
 
       expect(_getEventQueue()).toHaveLength(0);
+    });
+  });
+
+  describe('captureError', () => {
+    let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('logs to console with the context tag and the error', () => {
+      const err = new Error('boom');
+      captureError(err, 'thing_failed');
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      const args = consoleErrorSpy.mock.calls[0];
+      expect(args[0]).toBe('[thing_failed]');
+      expect(args[1]).toBe(err);
+    });
+
+    it('wraps non-Error inputs into Error instances', () => {
+      captureError('string-as-error', 'thing_failed');
+
+      const args = consoleErrorSpy.mock.calls[0];
+      expect(args[1]).toBeInstanceOf(Error);
+      expect((args[1] as Error).message).toBe('string-as-error');
+    });
+
+    it('skips PostHog capture when not initialized', async () => {
+      // _resetForTesting() in outer beforeEach clears the singleton, so
+      // posthog is null here.
+      captureError(new Error('uninit'), 'no_posthog');
+
+      // No way to inspect a non-existent instance directly; the assertion
+      // is that it didn't throw and only console.error fired.
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('emits a caught_error event with context, message, and stack', async () => {
+      await initAnalytics();
+      expect(_latestPostHog).not.toBeNull();
+      _latestPostHog!.capture.mockClear();
+
+      const err = new Error('something exploded');
+      captureError(err, 'reject_case_failed', { caseId: 'case-1' });
+
+      expect(_latestPostHog!.capture).toHaveBeenCalledTimes(1);
+      const call = _latestPostHog!.capture.mock.calls[0] as [
+        string,
+        Record<string, unknown>,
+      ];
+      const [eventName, props] = call;
+      expect(eventName).toBe('caught_error');
+      expect(props).toMatchObject({
+        context: 'reject_case_failed',
+        message: 'something exploded',
+        caseId: 'case-1',
+      });
+      expect(typeof props.stack).toBe('string');
+      // Stack should be truncated to ≤1000 chars to keep payload bounded.
+      expect((props.stack as string).length).toBeLessThanOrEqual(1000);
+    });
+
+    it('truncates very long stack traces', async () => {
+      await initAnalytics();
+      _latestPostHog!.capture.mockClear();
+
+      const err = new Error('big');
+      err.stack = 'x'.repeat(2000);
+      captureError(err, 'huge_stack');
+
+      const call = _latestPostHog!.capture.mock.calls[0] as [
+        string,
+        Record<string, unknown>,
+      ];
+      const props = call[1];
+      expect((props.stack as string).length).toBe(1000);
     });
   });
 });
