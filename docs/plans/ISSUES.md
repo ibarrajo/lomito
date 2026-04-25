@@ -61,12 +61,16 @@ Items here need human input before the relevant task can proceed.
 - **Needed:** Architectural rewrite of how Supabase Realtime publishes case updates so that subscribers only receive payloads they're authorized to see (mirroring RLS at the channel layer). Currently RLS guards the table read, but Realtime broadcasts can leak fields to clients without the same scoping.
 - **Status:** OPEN — own feature branch; touches publisher and all subscribers
 
-### ISSUE-008: Expo SDK 54 upgrade
+### ISSUE-008: Expo SDK 55+ upgrade (when stable)
 
-- **Blocks:** Closing 21 transitive npm vulnerabilities (all gated on the Expo SDK tree)
-- **Context:** `npm audit fix` was reverted in commit `3a33804` because non-breaking patches bumped `mapbox-gl` 3.18.1 → 3.22.0 across the `@types/mapbox-gl@3.4.1` boundary and broke `tsc`. The remaining vulns will not close without a coordinated SDK upgrade.
-- **Needed:** Own feature branch with native testing on iOS, Android, and web. Verify Expo Router v4, Reanimated 4, Mapbox bridge, and EAS build all still work post-upgrade.
-- **Status:** OPEN — non-blocking but the only remaining engineering item that closes the audit list
+- **Blocks:** Closing the remaining 15 transitive npm vulnerabilities
+- **Current state (2026-04-24):** We're already on Expo SDK 54 (`expo: ~54.0.33`). The audit dropped from 32 → 15 on branch `chore/audit-fix-non-breaking` via:
+  - `npm audit fix` (non-breaking patches; closed 12 transitive vulns)
+  - Removed deprecated `@types/mapbox-gl` (mapbox-gl 3.x ships its own bundled types). This permanently fixes the `tsc` boundary issue cited in `3a33804`.
+  - Bumped `@typescript-eslint` v6 → v8 (closed 5 high-severity vulns)
+- **Remaining 15 vulns are all inside the Expo SDK 54 internal tree:** `expo`, `@expo/cli`, `@expo/config`, `@expo/config-plugins`, `@expo/metro-config`, `@expo/prebuild-config`, `expo-asset`, `expo-constants`, `expo-linking`, `expo-notifications`, `expo-router`, plus shared transitives `xcode`, `uuid`, `postcss`, `minimatch`. These will not close without an Expo SDK 55+ stable release upstream.
+- **Needed:** Wait for Expo SDK 55 stable, then upgrade on a feature branch with native testing on iOS, Android, and web. Verify Expo Router, Reanimated, Mapbox bridge, and EAS build all still work post-upgrade.
+- **Status:** OPEN — gated on upstream Expo release; non-actionable until then
 
 ## Resolved
 
