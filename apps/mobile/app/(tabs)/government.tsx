@@ -38,6 +38,7 @@ import { FolioInput } from '../../components/government/folio-input';
 import { OfficialResponse } from '../../components/government/official-response';
 import type { CaseStatus } from '@lomito/shared/types/database';
 import { differenceInDays } from 'date-fns';
+import { captureError } from '../../lib/analytics';
 
 type FilterStatus =
   | 'all'
@@ -137,7 +138,7 @@ export default function GovernmentScreen() {
       await updateStatus(caseId, newStatus);
       await refetch();
     } catch (err) {
-      console.error('Error updating status:', err);
+      captureError(err, 'updating_status_failed');
     }
   }
 

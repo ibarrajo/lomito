@@ -15,6 +15,7 @@ import { supabase } from '../../lib/supabase';
 import mapboxgl from 'mapbox-gl';
 import { TIJUANA_CENTER } from '../../lib/mapbox.web';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { captureError } from '../../lib/analytics';
 
 const TIJUANA_ZOOM = 11;
 const LIGHT_STYLE = 'mapbox://styles/mapbox/light-v11';
@@ -104,7 +105,7 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
         );
 
         if (rpcError) {
-          console.error('[LandingMap] RPC error:', rpcError.message);
+          captureError(rpcError, 'landingmap_rpc_error_failed');
           setError(rpcError.message);
           return;
         }
@@ -182,7 +183,7 @@ export function LandingMap({ height = 400 }: LandingMapProps) {
       } catch (err: unknown) {
         const message =
           err instanceof Error ? err.message : 'Failed to load cases';
-        console.error('[LandingMap] Error loading cases:', message);
+        captureError(message, 'landingmap_loading_cases_failed');
         setError(message);
       }
     });

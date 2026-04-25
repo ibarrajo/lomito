@@ -5,6 +5,7 @@
 
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { captureError } from '../lib/analytics';
 
 type PaymentMethod = 'mercado_pago' | 'oxxo' | 'spei';
 
@@ -59,7 +60,7 @@ export function useDonate(): UseDonateReturn {
       );
 
       if (functionError) {
-        console.error('Error calling create-donation function:', functionError);
+        captureError(functionError, 'calling_create_donation_function_failed');
         setError(functionError.message || 'Failed to create donation');
         return null;
       }
@@ -75,7 +76,7 @@ export function useDonate(): UseDonateReturn {
         externalId: data.externalId,
       };
     } catch (err) {
-      console.error('Unexpected error in createDonation:', err);
+      captureError(err, 'unexpected_in_createdonation');
       setError(err instanceof Error ? err.message : 'Unexpected error');
       return null;
     } finally {

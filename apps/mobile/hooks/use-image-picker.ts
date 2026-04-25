@@ -7,6 +7,7 @@ import { useState, useCallback } from 'react';
 import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { compressImage, type CompressedImage } from '../lib/image-compression';
+import { captureError } from '../lib/analytics';
 
 const MAX_IMAGES = 5;
 
@@ -64,7 +65,7 @@ export function useImagePicker(): ImagePickerResult {
         setImages((prev) => [...prev, compressed]);
       }
     } catch (error) {
-      console.error('Failed to pick image from camera:', error);
+      captureError(error, 'pick_image_from_camera_failed');
     } finally {
       setLoading(false);
     }
@@ -115,7 +116,7 @@ export function useImagePicker(): ImagePickerResult {
         setImages((prev) => [...prev, ...compressed]);
       }
     } catch (error) {
-      console.error('Failed to pick images from gallery:', error);
+      captureError(error, 'pick_images_from_gallery_failed');
     } finally {
       setLoading(false);
     }

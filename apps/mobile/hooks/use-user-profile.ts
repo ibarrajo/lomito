@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type { UserRole } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface UserProfile {
   id: string;
@@ -64,7 +65,7 @@ export function useUserProfile(enabled: boolean = true): UseUserProfileResult {
         if (!mounted || currentFetchId !== fetchId) return;
 
         if (queryError) {
-          console.error('Error fetching user profile:', queryError);
+          captureError(queryError, 'fetching_user_profile_failed');
           setError(queryError.message);
           return;
         }
@@ -74,7 +75,7 @@ export function useUserProfile(enabled: boolean = true): UseUserProfileResult {
         }
       } catch (err) {
         if (!mounted || currentFetchId !== fetchId) return;
-        console.error('Unexpected error fetching profile:', err);
+        captureError(err, 'unexpected_fetching_profile');
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         if (mounted && currentFetchId === fetchId) {

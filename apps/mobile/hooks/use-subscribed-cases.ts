@@ -6,6 +6,7 @@ import type {
   UrgencyLevel,
   CaseStatus,
 } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface SubscribedCase {
   id: string;
@@ -54,7 +55,7 @@ export function useSubscribedCases(): UseSubscribedCasesResult {
         .eq('user_id', user.id);
 
       if (subsError) {
-        console.error('Error fetching subscriptions:', subsError);
+        captureError(subsError, 'fetching_subscriptions_failed');
         setError(subsError.message);
         return;
       }
@@ -80,7 +81,7 @@ export function useSubscribedCases(): UseSubscribedCasesResult {
         .limit(5);
 
       if (queryError) {
-        console.error('Error fetching subscribed cases:', queryError);
+        captureError(queryError, 'fetching_subscribed_cases_failed');
         setError(queryError.message);
         return;
       }
@@ -89,7 +90,7 @@ export function useSubscribedCases(): UseSubscribedCasesResult {
         setCases(data as SubscribedCase[]);
       }
     } catch (err) {
-      console.error('Unexpected error fetching subscribed cases:', err);
+      captureError(err, 'unexpected_fetching_subscribed_cases');
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

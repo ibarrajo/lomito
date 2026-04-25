@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { captureError } from '../lib/analytics';
 
 interface Bounds {
   west: number;
@@ -119,7 +120,7 @@ export function useJurisdictions({
         const errorMessage =
           err instanceof Error ? err.message : 'Failed to fetch jurisdictions';
         setError(errorMessage);
-        console.error('Error fetching jurisdictions:', err);
+        captureError(err, 'fetching_jurisdictions_failed');
       } finally {
         setLoading(false);
       }

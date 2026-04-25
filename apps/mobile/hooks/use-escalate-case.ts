@@ -5,6 +5,7 @@
 
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { captureError } from '../lib/analytics';
 
 interface UseEscalateCaseResult {
   escalateCase: (caseId: string) => Promise<void>;
@@ -36,7 +37,7 @@ export function useEscalateCase(): UseEscalateCaseResult {
         throw new Error(data.error);
       }
     } catch (err) {
-      console.error('Error escalating case:', err);
+      captureError(err, 'escalating_case_failed');
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to escalate case';
       setError(errorMessage);

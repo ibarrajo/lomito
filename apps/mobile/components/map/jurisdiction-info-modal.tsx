@@ -26,6 +26,7 @@ import {
 } from '@lomito/ui/src/theme/tokens';
 import { supabase } from '../../lib/supabase';
 import type { JurisdictionAuthority } from '@lomito/shared/types/database';
+import { captureError } from '../../lib/analytics';
 
 interface JurisdictionInfoModalProps {
   visible: boolean;
@@ -59,13 +60,13 @@ export function JurisdictionInfoModal({
           .order('authority_type', { ascending: true });
 
         if (error) {
-          console.error('Error fetching authorities:', error);
+          captureError(error, 'fetching_authorities_failed');
           return;
         }
 
         setAuthorities(data ?? []);
       } catch (err) {
-        console.error('Unexpected error fetching authorities:', err);
+        captureError(err, 'unexpected_fetching_authorities');
       } finally {
         setLoading(false);
       }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type { CaseStatus } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface UseGovernmentActionsResult {
   assignFolio: (caseId: string, folio: string) => Promise<void>;
@@ -51,7 +52,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
         throw timelineError;
       }
     } catch (err) {
-      console.error('Error assigning folio:', err);
+      captureError(err, 'assigning_folio_failed');
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       throw err;
@@ -100,7 +101,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
         throw timelineError;
       }
     } catch (err) {
-      console.error('Error posting government response:', err);
+      captureError(err, 'posting_government_response_failed');
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       throw err;
@@ -126,7 +127,7 @@ export function useGovernmentActions(): UseGovernmentActionsResult {
         throw updateError;
       }
     } catch (err) {
-      console.error('Error updating case status:', err);
+      captureError(err, 'updating_case_status_failed');
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       throw err;

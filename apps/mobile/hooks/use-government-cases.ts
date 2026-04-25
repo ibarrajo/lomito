@@ -6,6 +6,7 @@ import type {
   UrgencyLevel,
   CaseStatus,
 } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface GovernmentCase {
   id: string;
@@ -78,7 +79,7 @@ export function useGovernmentCases(
       const { data, error: queryError } = await query;
 
       if (queryError) {
-        console.error('Error fetching government cases:', queryError);
+        captureError(queryError, 'fetching_government_cases_failed');
         setError(queryError.message);
         return;
       }
@@ -109,7 +110,7 @@ export function useGovernmentCases(
         setCases(sortedData);
       }
     } catch (err) {
-      console.error('Unexpected error fetching government cases:', err);
+      captureError(err, 'unexpected_fetching_government_cases');
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Platform } from 'react-native';
 import { supabase } from '../lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
+import { captureError } from '../lib/analytics';
 
 interface AuthState {
   session: Session | null;
@@ -120,7 +121,7 @@ export function useAuth() {
           { onConflict: 'id' },
         );
         if (profileError) {
-          console.error('Profile creation fallback failed:', profileError);
+          captureError(profileError, 'profile_creation_fallback_failed');
         }
       }
     },

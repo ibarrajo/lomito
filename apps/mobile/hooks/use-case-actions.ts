@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type { CaseStatus } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface UseCaseActionsResult {
   updateCaseStatus: (caseId: string, newStatus: CaseStatus) => Promise<void>;
@@ -31,7 +32,7 @@ export function useCaseActions(): UseCaseActionsResult {
         throw updateError;
       }
     } catch (err) {
-      console.error('Error updating case status:', err);
+      captureError(err, 'updating_case_status_failed');
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       throw err;
@@ -61,7 +62,7 @@ export function useCaseActions(): UseCaseActionsResult {
         throw rpcError;
       }
     } catch (err) {
-      console.error('Error rejecting case:', err);
+      captureError(err, 'rejecting_case_failed');
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       throw err;
@@ -84,7 +85,7 @@ export function useCaseActions(): UseCaseActionsResult {
         throw updateError;
       }
     } catch (err) {
-      console.error('Error reopening case:', err);
+      captureError(err, 'reopening_case_failed');
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       throw err;

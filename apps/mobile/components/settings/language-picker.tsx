@@ -8,6 +8,7 @@ import {
   typography,
   borderRadius,
 } from '@lomito/ui/src/theme/tokens';
+import { captureError } from '../../lib/analytics';
 
 type Language = 'es' | 'en';
 
@@ -34,7 +35,7 @@ export function LanguagePicker() {
       // Update local state
       setCurrentLanguage(lang);
     } catch (error) {
-      console.error('Failed to change language:', error);
+      captureError(error, 'change_language_failed');
     }
   };
 

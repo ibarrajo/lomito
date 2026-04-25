@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { captureError } from '../lib/analytics';
 
 export interface CaseComment {
   id: string;
@@ -53,7 +54,7 @@ export function useCaseComments(caseId: string): UseCaseCommentsResult {
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Failed to fetch comments:', error);
+        captureError(error, 'fetch_comments_failed');
         return;
       }
 
@@ -94,7 +95,7 @@ export function useCaseComments(caseId: string): UseCaseCommentsResult {
         });
 
         if (error) {
-          console.error('Failed to post comment:', error);
+          captureError(error, 'post_comment_failed');
           throw error;
         }
 
@@ -114,7 +115,7 @@ export function useCaseComments(caseId: string): UseCaseCommentsResult {
       .eq('id', commentId);
 
     if (error) {
-      console.error('Failed to delete comment:', error);
+      captureError(error, 'delete_comment_failed');
       throw error;
     }
 

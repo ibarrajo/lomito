@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { supabase } from './supabase';
+import { captureError } from './analytics';
 
 // Configure notification handler for foreground display
 Notifications.setNotificationHandler({
@@ -59,7 +60,7 @@ export async function registerForPushNotifications(): Promise<string | null> {
         .eq('id', user.id);
 
       if (error) {
-        console.error('Failed to save push token:', error);
+        captureError(error, 'save_push_token_failed');
         return null;
       }
     }
@@ -76,7 +77,7 @@ export async function registerForPushNotifications(): Promise<string | null> {
 
     return token;
   } catch (error) {
-    console.error('Error registering for push notifications:', error);
+    captureError(error, 'registering_for_push_notifications_failed');
     return null;
   }
 }
@@ -89,7 +90,7 @@ export async function getExpoPushToken(): Promise<string | null> {
     );
     return tokenData.data;
   } catch (error) {
-    console.error('Error getting Expo push token:', error);
+    captureError(error, 'getting_expo_push_token_failed');
     return null;
   }
 }

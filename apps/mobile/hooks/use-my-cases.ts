@@ -6,6 +6,7 @@ import type {
   UrgencyLevel,
   CaseStatus,
 } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface MyCase {
   id: string;
@@ -56,7 +57,7 @@ export function useMyCases(): UseMyCasesResult {
         .limit(20);
 
       if (queryError) {
-        console.error('Error fetching my cases:', queryError);
+        captureError(queryError, 'fetching_my_cases_failed');
         setError(queryError.message);
         return;
       }
@@ -65,7 +66,7 @@ export function useMyCases(): UseMyCasesResult {
         setCases(data as MyCase[]);
       }
     } catch (err) {
-      console.error('Unexpected error fetching my cases:', err);
+      captureError(err, 'unexpected_fetching_my_cases');
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

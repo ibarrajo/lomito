@@ -25,6 +25,7 @@ import { NotificationPrefs } from '../../components/settings/notification-prefs'
 import { LanguagePicker } from '../../components/settings/language-picker';
 import { isFeatureEnabled } from '@lomito/shared';
 import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { captureError } from '../../lib/analytics';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ export default function SettingsScreen() {
       await signOut();
       router.replace('/auth/login');
     } catch (error) {
-      console.error('Error signing out:', error);
+      captureError(error, 'signing_out_failed');
       setErrorModal(t('settings.signOutError'));
     }
   };

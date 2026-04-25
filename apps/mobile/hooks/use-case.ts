@@ -13,6 +13,7 @@ import type {
   CaseStatus,
   UrgencyLevel,
 } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 /**
  * Fields from a realtime UPDATE payload on the `cases` table that are safe to
@@ -111,7 +112,7 @@ export function useCase(caseId: string): UseCaseResult {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'FETCH_ERROR';
       setError(errorMessage);
-      console.error('Error fetching case:', err);
+      captureError(err, 'fetching_case_failed');
     } finally {
       setLoading(false);
     }

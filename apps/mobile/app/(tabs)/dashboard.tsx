@@ -50,6 +50,7 @@ import type {
   PoiType,
   PointOfInterest,
 } from '@lomito/shared/types/database';
+import { captureError } from '../../lib/analytics';
 import type { SearchResult } from '../../hooks/use-search-cases';
 
 interface CaseSummary {
@@ -239,7 +240,7 @@ export default function MapScreen() {
         });
 
         if (error) {
-          console.error('Error fetching cases:', error);
+          captureError(error, 'fetching_cases_failed');
           return;
         }
 
@@ -265,7 +266,7 @@ export default function MapScreen() {
           setLastUpdated(new Date());
         }
       } catch (error) {
-        console.error('Unexpected error fetching cases:', error);
+        captureError(error, 'unexpected_fetching_cases');
       } finally {
         setIsLoading(false);
         setIsRefreshing(false);

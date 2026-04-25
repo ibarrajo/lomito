@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './use-auth';
+import { captureError } from '../lib/analytics';
 
 interface FlagCaseResult {
   flagCase: (caseId: string, reason: string) => Promise<void>;
@@ -47,7 +48,7 @@ export function useFlagCase(caseId: string): FlagCaseResult {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to check flag status';
       setError(errorMessage);
-      console.error('Error checking flag status:', err);
+      captureError(err, 'checking_flag_status_failed');
     } finally {
       setLoading(false);
     }
@@ -94,7 +95,7 @@ export function useFlagCase(caseId: string): FlagCaseResult {
         const errorMessage =
           err instanceof Error ? err.message : 'Failed to flag case';
         setError(errorMessage);
-        console.error('Error flagging case:', err);
+        captureError(err, 'flagging_case_failed');
       } finally {
         setLoading(false);
       }

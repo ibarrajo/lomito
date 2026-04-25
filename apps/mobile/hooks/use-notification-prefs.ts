@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import type { NotificationPreferences } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface UseNotificationPrefsResult {
   prefs: NotificationPreferences | null;
@@ -42,7 +43,7 @@ export function useNotificationPrefs(): UseNotificationPrefsResult {
           .single();
 
         if (error) {
-          console.error('Error fetching notification preferences:', error);
+          captureError(error, 'fetching_notification_preferences_failed');
           setPrefs(DEFAULT_PREFS);
           return;
         }
@@ -57,7 +58,7 @@ export function useNotificationPrefs(): UseNotificationPrefsResult {
           setPrefs(profileData.notification_preferences);
         }
       } catch (err) {
-        console.error('Unexpected error fetching preferences:', err);
+        captureError(err, 'unexpected_fetching_preferences');
         setPrefs(DEFAULT_PREFS);
       } finally {
         setLoading(false);
@@ -102,7 +103,7 @@ export function useNotificationPrefs(): UseNotificationPrefsResult {
             .eq('id', user.id);
 
           if (error) {
-            console.error('Error updating notification preferences:', error);
+            captureError(error, 'updating_notification_preferences_failed');
             // Revert optimistic update on error
             setPrefs((prev) => {
               if (!prev) return null;
@@ -113,7 +114,7 @@ export function useNotificationPrefs(): UseNotificationPrefsResult {
             });
           }
         } catch (err) {
-          console.error('Unexpected error updating preferences:', err);
+          captureError(err, 'unexpected_updating_preferences');
           // Revert optimistic update on error
           setPrefs((prev) => {
             if (!prev) return null;

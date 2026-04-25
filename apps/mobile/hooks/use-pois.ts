@@ -7,6 +7,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import type { PoiType, PointOfInterest } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface Bounds {
   west: number;
@@ -112,7 +113,7 @@ export function usePois({
         const errorMessage =
           err instanceof Error ? err.message : 'Failed to fetch POIs';
         setError(errorMessage);
-        console.error('Error fetching POIs:', err);
+        captureError(err, 'fetching_pois_failed');
       } finally {
         setLoading(false);
       }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { captureError } from '../lib/analytics';
 
 export interface DashboardStats {
   total_cases: number;
@@ -35,7 +36,7 @@ export function useDashboardStats(): UseDashboardStatsResult {
       );
 
       if (queryError) {
-        console.error('Error fetching dashboard stats:', queryError);
+        captureError(queryError, 'fetching_dashboard_stats_failed');
         setError(queryError.message);
         return;
       }
@@ -49,7 +50,7 @@ export function useDashboardStats(): UseDashboardStatsResult {
         setStats(data as unknown as DashboardStats);
       }
     } catch (err) {
-      console.error('Unexpected error fetching dashboard stats:', err);
+      captureError(err, 'unexpected_fetching_dashboard_stats');
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

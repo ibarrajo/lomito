@@ -20,6 +20,7 @@ import type {
   Jurisdiction,
   Database,
 } from '@lomito/shared/types/database';
+import { captureError } from '../../lib/analytics';
 
 const REPORT_TYPES = [
   'abuse',
@@ -149,7 +150,7 @@ export default function SubmitAuthorityScreen() {
         onDismiss: () => router.back(),
       });
     } catch (error) {
-      console.error('Error submitting authority:', error);
+      captureError(error, 'submitting_authority_failed');
       setModal({
         title: t('common.error'),
         message: (error as Error).message,

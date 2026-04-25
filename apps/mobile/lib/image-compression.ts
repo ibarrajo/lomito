@@ -5,6 +5,7 @@
 
 import { Platform } from 'react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
+import { captureError } from './analytics';
 
 export interface CompressedImage {
   uri: string;
@@ -118,7 +119,7 @@ export async function compressImage(uri: string): Promise<CompressedImage> {
       height: result.height,
     };
   } catch (error) {
-    console.error('Image compression failed:', error);
+    captureError(error, 'image_compression_failed');
     throw new Error('Failed to compress image');
   }
 }
@@ -176,7 +177,7 @@ export async function generateThumbnail(uri: string): Promise<CompressedImage> {
       height: result.height,
     };
   } catch (error) {
-    console.error('Thumbnail generation failed:', error);
+    captureError(error, 'thumbnail_generation_failed');
     throw new Error('Failed to generate thumbnail');
   }
 }

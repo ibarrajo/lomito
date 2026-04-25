@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { captureError } from '../lib/analytics';
 
 interface UseCaseSubscriptionResult {
   isSubscribed: boolean;
@@ -46,14 +47,14 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
         .maybeSingle();
 
       if (queryError) {
-        console.error('Error checking subscription:', queryError);
+        captureError(queryError, 'checking_subscription_failed');
         setError(queryError.message);
         setIsSubscribed(false);
       } else {
         setIsSubscribed(!!data);
       }
     } catch (err) {
-      console.error('Unexpected error checking subscription:', err);
+      captureError(err, 'unexpected_checking_subscription');
       setError('Unexpected error');
       setIsSubscribed(false);
     } finally {
@@ -85,7 +86,7 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
           .eq('user_id', user.id);
 
         if (deleteError) {
-          console.error('Error unsubscribing:', deleteError);
+          captureError(deleteError, 'unsubscribing_failed');
           setError(deleteError.message);
         } else {
           setIsSubscribed(false);
@@ -103,14 +104,14 @@ export function useCaseSubscription(caseId: string): UseCaseSubscriptionResult {
         });
 
         if (insertError) {
-          console.error('Error subscribing:', insertError);
+          captureError(insertError, 'subscribing_failed');
           setError(insertError.message);
         } else {
           setIsSubscribed(true);
         }
       }
     } catch (err) {
-      console.error('Unexpected error toggling subscription:', err);
+      captureError(err, 'unexpected_toggling_subscription');
       setError('Unexpected error');
     } finally {
       setLoading(false);

@@ -11,6 +11,7 @@ import MapboxGL, {
 } from '../../lib/mapbox';
 import type { ReactNode } from 'react';
 import type { PointOfInterest } from '@lomito/shared/types/database';
+import { captureError } from '../../lib/analytics';
 
 interface Region {
   bounds: {
@@ -71,7 +72,7 @@ export function MapView({
         });
       }
     } catch (err) {
-      console.error('Error handling region change:', err);
+      captureError(err, 'handling_region_change_failed');
     }
   };
 

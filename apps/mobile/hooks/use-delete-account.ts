@@ -6,6 +6,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { supabase } from '../lib/supabase';
+import { captureError } from '../lib/analytics';
 
 interface UseDeleteAccountResult {
   deleteAccount: () => Promise<void>;
@@ -41,7 +42,7 @@ export function useDeleteAccount(): UseDeleteAccountResult {
 
       router.replace('/');
     } catch (err) {
-      console.error('Error deleting account:', err);
+      captureError(err, 'deleting_account_failed');
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to delete account';
       setError(errorMessage);

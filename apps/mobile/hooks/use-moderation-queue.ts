@@ -6,6 +6,7 @@ import type {
   UrgencyLevel,
   CaseStatus,
 } from '@lomito/shared/types/database';
+import { captureError } from '../lib/analytics';
 
 interface ModerationCase {
   id: string;
@@ -49,7 +50,7 @@ export function useModerationQueue(): UseModerationQueueResult {
         .order('created_at', { ascending: false });
 
       if (queryError) {
-        console.error('Error fetching moderation queue:', queryError);
+        captureError(queryError, 'fetching_moderation_queue_failed');
         setError(queryError.message);
         return;
       }
@@ -80,7 +81,7 @@ export function useModerationQueue(): UseModerationQueueResult {
         setCases(transformedCases as ModerationCase[]);
       }
     } catch (err) {
-      console.error('Unexpected error fetching moderation queue:', err);
+      captureError(err, 'unexpected_fetching_moderation_queue');
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

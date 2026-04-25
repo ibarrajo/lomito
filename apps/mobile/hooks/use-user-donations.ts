@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { captureError } from '../lib/analytics';
 
 interface Donation {
   amount: number;
@@ -38,7 +39,7 @@ export function useUserDonations(): UseUserDonationsResult {
         .eq('donor_id', user.id);
 
       if (queryError) {
-        console.error('Error fetching donations:', queryError);
+        captureError(queryError, 'fetching_donations_failed');
         setError(queryError.message);
         return;
       }
@@ -52,7 +53,7 @@ export function useUserDonations(): UseUserDonationsResult {
         setTotalAmount(total);
       }
     } catch (err) {
-      console.error('Unexpected error fetching donations:', err);
+      captureError(err, 'unexpected_fetching_donations');
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

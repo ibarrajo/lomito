@@ -5,6 +5,7 @@
 
 import { supabase } from './supabase';
 import { generateThumbnail } from './image-compression';
+import { captureError } from './analytics';
 
 export interface UploadedImage {
   url: string;
@@ -85,7 +86,7 @@ export async function uploadCaseImage(
     })) as { error: unknown };
 
     if (dbError) {
-      console.error('Failed to insert case_media record:', dbError);
+      captureError(dbError, 'insert_case_media_record_failed');
       // Don't throw here - the upload succeeded, DB insert is secondary
     }
 
@@ -94,7 +95,7 @@ export async function uploadCaseImage(
       thumbnailUrl: thumbnailData.publicUrl,
     };
   } catch (error) {
-    console.error('Image upload failed:', error);
+    captureError(error, 'image_upload_failed');
     throw new Error('Failed to upload image');
   }
 }
