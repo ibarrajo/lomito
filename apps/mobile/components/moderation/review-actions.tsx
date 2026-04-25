@@ -79,7 +79,8 @@ export function useReviewActions(
         message: t('moderation.verifySuccess'),
       });
       onSuccess?.();
-    } catch (_err) {
+    } catch (err) {
+      console.error('Failed to verify case:', err);
       setConfirmVerify(null);
       setModal({
         title: t('common.error'),
@@ -112,7 +113,8 @@ export function useReviewActions(
         message: t('moderation.rejectSuccess'),
       });
       onSuccess?.();
-    } catch (_err) {
+    } catch (err) {
+      console.error('Failed to reject case:', err);
       setConfirmReject(null);
       setRejectReason('');
       setRejectReasonError(null);
@@ -154,7 +156,8 @@ export function useReviewActions(
         message: t('moderation.flagSuccess'),
       });
       onSuccess?.();
-    } catch (_err) {
+    } catch (err) {
+      console.error('Failed to flag case:', err);
       setConfirmFlag(null);
       setModal({
         title: t('common.error'),
@@ -178,7 +181,8 @@ export function useReviewActions(
         message: t('moderation.reopenSuccess'),
       });
       onSuccess?.();
-    } catch (_err) {
+    } catch (err) {
+      console.error('Failed to reopen case:', err);
       setConfirmReopen(null);
       setModal({
         title: t('common.error'),

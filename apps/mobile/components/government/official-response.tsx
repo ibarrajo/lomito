@@ -58,7 +58,8 @@ export function OfficialResponse({
       await onSubmit(caseId, response.trim());
       onDismiss();
       setResponse('');
-    } catch (_error) {
+    } catch (error) {
+      console.error('Failed to submit official response:', error);
       setModal({
         title: t('common.error'),
         message: t('government.responseError'),

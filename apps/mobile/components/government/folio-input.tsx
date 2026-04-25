@@ -60,7 +60,8 @@ export function FolioInput({
       await onSave(caseId, folio.trim());
       onDismiss();
       setFolio('');
-    } catch (_error) {
+    } catch (error) {
+      console.error('Failed to save case folio:', error);
       setModal({
         title: t('common.error'),
         message: t('government.folioError'),

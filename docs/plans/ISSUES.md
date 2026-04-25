@@ -106,3 +106,9 @@ Items here need human input before the relevant task can proceed.
   - CI green on `3a33804`
 - **Caveat (defense-in-depth only):** Supabase edge-function gateway strips/overrides app-layer Origin allowlist responses and adds `access-control-allow-origin: *`. Real CSRF defenses (JWT verification, donor-ID/JWT binding, rate limits, amount ceilings) are in place and load-bearing; the Origin allowlist is non-load-bearing. File a Supabase support ticket if true origin enforcement is required.
 - **Status:** RESOLVED
+
+### ISSUE-010: Silent error swallows in moderation/government catch blocks
+
+- **Audit (2026-04-25):** Six catch blocks across `folio-input.tsx`, `official-response.tsx`, and `review-actions.tsx` (verify, reject, flag, reopen) caught the error, displayed a localized modal to the user, and dropped the error on the floor. Production failures left no signal in console/telemetry. Audit also confirmed no Sentry/logger utility exists; project convention is `console.error` (74 existing usages elsewhere in `apps/mobile`).
+- **Fix:** Added `console.error('<context>:', err)` to all six sites before the modal is shown, matching the existing convention. Renamed catch bindings back from `_err`/`_error` to `err`/`error` since they are now used.
+- **Status:** RESOLVED
