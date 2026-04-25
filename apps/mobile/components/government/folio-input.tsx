@@ -13,6 +13,7 @@ import {
   Text,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { captureError } from '../../lib/analytics';
 import { H3, Body } from '@lomito/ui/components/typography';
 import { AppModal } from '@lomito/ui';
 import {
@@ -61,7 +62,7 @@ export function FolioInput({
       onDismiss();
       setFolio('');
     } catch (error) {
-      console.error('Failed to save case folio:', error);
+      captureError(error, 'save_case_folio_failed');
       setModal({
         title: t('common.error'),
         message: t('government.folioError'),

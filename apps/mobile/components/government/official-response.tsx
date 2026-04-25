@@ -13,6 +13,7 @@ import {
   Text,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { captureError } from '../../lib/analytics';
 import { H3, Body } from '@lomito/ui/components/typography';
 import { AppModal } from '@lomito/ui';
 import {
@@ -59,7 +60,7 @@ export function OfficialResponse({
       onDismiss();
       setResponse('');
     } catch (error) {
-      console.error('Failed to submit official response:', error);
+      captureError(error, 'submit_official_response_failed');
       setModal({
         title: t('common.error'),
         message: t('government.responseError'),

@@ -200,6 +200,39 @@ export function trackEvent(
 }
 
 /**
+ * Reports a caught error to the active error sink.
+ *
+ * - Always logs to console (preserves dev visibility, matches the project's
+ *   existing 74 console.error usages).
+ * - When PostHog is initialized, also fires a `caught_error` event so
+ *   production failures show up in the same product analytics surface as
+ *   the rest of the funnel — no separate Sentry pipeline needed.
+ *
+ * Pass a stable, snake_case `context` string identifying the failure site
+ * (e.g. 'reject_case_failed'). PostHog uses this as the bucket for grouping
+ * error rates over time.
+ */
+export function captureError(
+  error: unknown,
+  context: string,
+  extra?: Record<string, string>,
+): void {
+  const err = error instanceof Error ? error : new Error(String(error));
+
+  console.error(`[${context}]`, err);
+
+  if (!posthog) return;
+  posthog.capture('caught_error', {
+    context,
+    message: err.message,
+    // PostHog accepts arbitrary string properties; truncate stack to keep the
+    // event payload bounded.
+    ...(err.stack ? { stack: err.stack.substring(0, 1000) } : {}),
+    ...extra,
+  });
+}
+
+/**
  * Convenience helper for page-view events (web only).
  * Called automatically by _layout.tsx on every route change.
  * Includes page_location, page_title, and page_referrer for GA4.

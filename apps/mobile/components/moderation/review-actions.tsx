@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
+import { captureError } from '../../lib/analytics';
 import { useCaseActions } from '../../hooks/use-case-actions';
 
 interface UseReviewActionsResult {
@@ -80,7 +81,7 @@ export function useReviewActions(
       });
       onSuccess?.();
     } catch (err) {
-      console.error('Failed to verify case:', err);
+      captureError(err, 'verify_case_failed');
       setConfirmVerify(null);
       setModal({
         title: t('common.error'),
@@ -114,7 +115,7 @@ export function useReviewActions(
       });
       onSuccess?.();
     } catch (err) {
-      console.error('Failed to reject case:', err);
+      captureError(err, 'reject_case_failed');
       setConfirmReject(null);
       setRejectReason('');
       setRejectReasonError(null);
@@ -157,7 +158,7 @@ export function useReviewActions(
       });
       onSuccess?.();
     } catch (err) {
-      console.error('Failed to flag case:', err);
+      captureError(err, 'flag_case_failed');
       setConfirmFlag(null);
       setModal({
         title: t('common.error'),
@@ -182,7 +183,7 @@ export function useReviewActions(
       });
       onSuccess?.();
     } catch (err) {
-      console.error('Failed to reopen case:', err);
+      captureError(err, 'reopen_case_failed');
       setConfirmReopen(null);
       setModal({
         title: t('common.error'),
