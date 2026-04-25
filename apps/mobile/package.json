@@ -46,7 +46,6 @@
     "react-native-worklets": "0.5.1"
   },
   "devDependencies": {
-    "@types/mapbox-gl": "^3.4.1",
     "@types/react": "~19.1.0",
     "typescript": "~5.9.2"
   },
